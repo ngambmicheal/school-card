@@ -32,6 +32,7 @@ export default async function importStudent(
       error: '`mapping` must map at least one field',
     })
 
+  //@ts-ignore
   const f = files.file as formidable.File
 
  
@@ -45,6 +46,7 @@ export default async function importStudent(
 
       const promises: Promise<any>[] = []
 
+      //@ts-ignore
       Papa.parse<Record<string, any>>(filecontent, {
         header: true,
         skipEmptyLines: true,
@@ -52,13 +54,13 @@ export default async function importStudent(
         chunkSize: 25,
         encoding: 'utf8',
 
-        chunk: async (out) => {
-          let data = out.data.map((r) => ({
+        chunk: async (out:any) => {
+          let data = out.data.map((r:any) => ({
             ...applyMapping(r, parsedMapping),
             class_id: fields.class_id,
           }))
 
-          data = data.map((x) => ({
+          data = data.map((x:any) => ({
             ...x,
             class_id : x.class_id, 
             name: x.name
@@ -67,7 +69,7 @@ export default async function importStudent(
           totalCount += data.length
 
           try {
-            const BulkHasOperations = (b) => b && b.s && b.s.currentBatch && b.s.currentBatch.operations && b.s.currentBatch.operations.length > 0;
+            const BulkHasOperations = (b:any) => b && b.s && b.s.currentBatch && b.s.currentBatch.operations && b.s.currentBatch.operations.length > 0;
             const bulk = studentSchema.collection.initializeUnorderedBulkOp(); 
              studentSchema.collection.insertMany(data).then((dd) => {
                  console.log(dd)
@@ -95,7 +97,9 @@ export default async function importStudent(
 
   type ParsedForm = {
     error: Error | string
+    //@ts-ignore
     fields: formidable.Fields
+    //@ts-ignore
     files: formidable.Files
   }
 
@@ -103,7 +107,7 @@ export default async function importStudent(
     const form = formidable({ encoding: 'utf8' })
   
     return new Promise((resolve, reject) => {
-      form.parse(req, (err, fields, files) => {
+      form.parse(req, (err:any, fields:any, files:any) => {
         if (err) reject({ err })
   
         resolve({ error: err, fields, files })
@@ -113,8 +117,8 @@ export default async function importStudent(
   
   function applyMapping(
     data: Record<string, any>,
-    mapping: Record<keyof SoftLead, string>
-  ): Partial<SoftLead> {
+    mapping: Record<keyof any, string>
+  ): Partial<any> {
     return Object.fromEntries(
       Object.entries(mapping).map(([leadField, csvField]) => {
         const parsed = stripBomFromKeys(data)

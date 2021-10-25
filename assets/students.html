@@ -6,6 +6,27 @@
   </head>
   <body>
     <h1>User List</h1>
+
+    <table>
+        <thead>
+          <tr>
+            <th>Nom</th>
+            {{#each subjects}}
+              <th>{{this.name}}</th>
+            {{/each}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+          <tr>
+            <td>{{this.name}}</td>
+            {{#each subjects}}
+              <td></td>
+            {{/each}}
+          </tr>
+          {{/each}}
+        </tbody>
+    </table>
     <ul>
       {{#each users}}
       <li>Name: {{this.name}}</li>

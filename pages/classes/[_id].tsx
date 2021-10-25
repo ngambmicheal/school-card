@@ -4,6 +4,7 @@ import ClasseInterface from "../../models/classe"
 import StudentInterface from "../../models/student";
 import api from "../../services/api";
 import Modal from 'react-modal';
+import Link from 'next/link'
 import { customStyles } from "../../services/constants";
 import ExamInterface from "../../models/exam";
 import getCsvColumns from '../../utils/getCsvColumns'
@@ -104,13 +105,14 @@ export default function ClasseDetails(){
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Age</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {exams.map(exam => {
                     return <tr key={exam._id}>
                         <td> {exam.name} </td>
+                        <td> <Link href={`/exams/${exam._id}`} >View</Link> </td>
                     </tr>
                     })
                 }   
@@ -131,6 +133,7 @@ export default function ClasseDetails(){
             <table className='table table-hover'>
                 <thead>
                     <tr>
+                        <th>No </th>
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Email</th>
@@ -138,11 +141,12 @@ export default function ClasseDetails(){
                     </tr>
                 </thead>
                 <tbody>
-                    {students.map(student => {
+                    {students.map((student, index) => {
                     return <tr key={student._id}>
+                        <td> {index + 1} </td>
                         <td> {student.name} </td>
-                        <td>{student.name}</td>
                         <td>{student.phone}</td>
+                        <td>{student.email}</td>
                     </tr>
                     })
                 }   

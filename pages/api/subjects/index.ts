@@ -11,8 +11,8 @@ export default function handler(
     const subjects = subjectSchema.find().populate('school').then(subjects => {
                                             res.json({data:subjects, status:true});
                                         })
-                                        .catch(() => {
-                                            res.json({message:'Could not be sent s', success:false });
+                                        .catch((e) => {
+                                            res.json({message:e.message, success:false });
                                         })  
 
 }

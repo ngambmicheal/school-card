@@ -7,6 +7,7 @@ import mg from '../../../services/mg';
 
 import * as  pdf from 'pdf-creator-node';
 import fs from 'fs'
+import { subjectSchema } from '../../../models/subject';
 const html = fs.readFileSync("assets/students.html", "utf8");
 
 
@@ -20,13 +21,15 @@ export default async function handler(
     const students = await studentSchema.find(req.query);
     const exams = await examSchema.find(req.query);
 
-    const filtered = students.map(student => {
-        let dt:any = {name:student.name}
-        exams.map(exam => {
-            dt[exam.name]  = '';
-        });
-        return dt;
-    })
+    // const filtered = students.map(student => {
+    //     let dt:any = {name:student.name}
+    //     exams.map(exam => {
+    //         dt[exam.name]  = '';
+    //     });
+    //     return dt;
+    // })
+
+    const subjects = await subjectSchema.find();
 
     try{
 
@@ -52,17 +55,18 @@ export default async function handler(
         var document = {
             html: html,
             data: {
-              users: filtered,
+              users: students.map(s => ({name:s.name, id:s._id }) ),
+              subjects: subjects.map(s => ({name:s.name, id:s._id}))
             },
             path: "./output.pdf",
             type: "",
           };
 
           pdf.create(document, options)
-          .then((res) => {
+          .then((res : any)  => {
             console.log(res);
           })
-          .catch((error) => {
+          .catch((error : any) => {
             console.error(error);
           });
     }

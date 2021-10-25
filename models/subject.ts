@@ -21,4 +21,5 @@ const SubjectSchema = new mg.Schema({
    }
 )
 
+schoolSchema
 export const subjectSchema = mg.models.Subject || mg.model('Subject', SubjectSchema)
