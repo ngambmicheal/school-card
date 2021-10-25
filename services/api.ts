@@ -1,0 +1,63 @@
+import a from 'axios';
+import ClasseInterface from '../models/classe';
+import ExamInterface from '../models/exam';
+import SchoolInterface from '../models/school';
+import StudentInterface from '../models/student';
+import SubjectInterface from '../models/subject';
+
+const axios = a.create()
+
+export class Api{
+
+    //classes
+    getClasses(){ return axios.get('/api/classes');   }
+    saveClasse(data:ClasseInterface){    return axios.post('/api/classes/store', data)}
+    getClasse(classeId?:any){ return axios.get(`/api/classes/${classeId}`)}
+    getClasseStudents(classeId?:any) {return axios.get(`/api/classes/students?class_id=${classeId}`)}
+    getClasseExams(classeId?:any) {return axios.get(`/api/exams?class_id=${classeId}`)}
+
+    //students
+    getStudents() {  return axios.get('/api/students');  }
+    saveStudent(data:StudentInterface) { return axios.post('/api/students/store', data); }
+    importStudents(data:any) {
+        var formData = new FormData();
+        formData.append('file', data.file)
+        formData.append('mapping', JSON.stringify(data.mapping))
+        formData.append('class_id',data.class_id)
+
+        return axios.post('/api/students/import', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }) }
+
+    //subjects
+    getSubjects() {  return axios.get('/api/subjects');  }
+    saveSubjects(data:SubjectInterface) { return axios.post('/api/subjects/store', data); }
+    getSubject(subjectId?:any){ return axios.get(`/api/subjects/${subjectId}`) }
+    getSubjectCourses(subjectId?:any){ return axios.get(`/api/courses?subject=${subjectId}`) }
+
+    
+    //schools
+    getSchools() {  return axios.get('/api/schools');  }
+    saveSchools(data:SchoolInterface) { return axios.post('/api/schools/store', data); }
+    getSchool(schoolId?:any){ return axios.get(`/api/schools/${schoolId}`) }
+    getSchoolCourses(schoolId?:any){ return axios.get(`/api/courses?school=${schoolId}`) }
+
+    //subjects
+    getCourses() {  return axios.get('/api/courses');  }
+    saveCourses(data:SubjectInterface) { return axios.post('/api/courses/store', data); }
+    getCourse(courseId?:any){ return axios.get(`/api/courses/${courseId}`) }
+
+    //subjects
+    getExams() {  return axios.get('/api/exams');  }
+    saveExam(data:ExamInterface) { return axios.post('/api/exams/store', data); }
+
+
+    downloadToCsv(classeId:any) { return axios.post(`/api/classes/export-csv`, {class_id: classeId})}
+    downloadToPdf(classeId:any) { return axios.post(`/api/classes/export-pdf`, {class_id: classeId})}
+}
+
+const api = new Api();
+export default api;
+
