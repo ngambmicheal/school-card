@@ -38,6 +38,8 @@ export default function Students(){
                     <tr>
                         <th>Id</th>
                         <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
                         <th>Class</th>
                         <th>Action</th>
                     </tr>
@@ -47,6 +49,8 @@ export default function Students(){
                        return  <tr key={student._id}>
                             <td>{student._id}</td>
                             <td>{student.name}</td>
+                            <td>{student.phone}</td>
+                            <td>{student.email}</td>
                             <td>{student.class_id?.name} </td>
                             <td><Link href={`students/${student._id}`}>Voir</Link></td>
                         </tr>

@@ -5,7 +5,7 @@ export default interface ClasseInterface {
     _id?:string,
     id?:string,
     name:string,
-    school?:SchoolInterface
+    school?:SchoolInterface | string
 }
 
 

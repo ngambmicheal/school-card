@@ -132,13 +132,17 @@ export default function ClasseDetails(){
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Age</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Age</th> 
                     </tr>
                 </thead>
                 <tbody>
                     {students.map(student => {
                     return <tr key={student._id}>
                         <td> {student.name} </td>
+                        <td>{student.name}</td>
+                        <td>{student.phone}</td>
                     </tr>
                     })
                 }   
@@ -188,6 +192,18 @@ export function CreateStudentModal({modalIsOpen, closeModal, save, class_id}:Cre
                 <div className='form-group'>
                     <label>Name </label>
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
+                </div>
+                <div className='form-group'>
+                    <label>Phone </label>
+                    <input className='form-control' name='phone' value={student?.phone} onChange={handleChange}></input>
+                </div>
+                <div className='form-group'>
+                    <label>Email </label>
+                    <input className='form-control' name='email' value={student?.email} onChange={handleChange}></input>
+                </div>
+                <div className='form-group'>
+                    <label>Date </label>
+                    <input className='form-control' name='date' value={student?.date} onChange={handleChange}></input>
                 </div>
 
                 <div className='from-group'>

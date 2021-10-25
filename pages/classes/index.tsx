@@ -5,13 +5,20 @@ import api from "../../services/api";
 import ClasseInterface from "../../models/classe";
 import Modal from 'react-modal';
 import { customStyles } from "../../services/constants";
+import SchoolInterface from "../../models/school";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
+    const [schools, setSchools] = useState<SchoolInterface[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     useEffect(() => {
         getClasses()
+
+
+        api.getSchools().then(({data:{data}}) => {
+            setSchools(data)
+        })
     }, []);
 
 
@@ -38,6 +45,7 @@ export default function Classes(){
                     <tr>
                         <th>Id</th>
                         <th>Name</th>
+                        <th>School</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -46,6 +54,7 @@ export default function Classes(){
                        return  <tr key={classe._id}>
                             <td>{classe._id}</td>
                             <td>{classe.name}</td>
+                            <td>{classe.school?.name}</td>
                             <td><Link href={`classes/${classe._id}`}>Voir</Link></td>
                         </tr>
                     })
@@ -53,7 +62,7 @@ export default function Classes(){
                 </tbody>
             </table>
 
-            <CreateClassModal closeModal={closeModal} save={saveClasse} modalIsOpen={modalIsOpen} />
+            <CreateClassModal closeModal={closeModal} save={saveClasse} modalIsOpen={modalIsOpen} schools={schools} />
         </>
     )
 }
@@ -61,10 +70,11 @@ export default function Classes(){
 type CreateClassModalProps = {
     modalIsOpen:boolean,
     closeModal: () => void,
-    save:(student:any) => void
+    save:(student:any) => void,
+    schools: SchoolInterface[]
 }
-export function CreateClassModal({modalIsOpen, closeModal, save}:CreateClassModalProps){
-    const [classe, setClasse] = useState<ClasseInterface>({ name:''});
+export function CreateClassModal({modalIsOpen, closeModal, save, schools}:CreateClassModalProps){
+    const [classe, setClasse] = useState<ClasseInterface>({ name:'', school:''});
 
     function handleChange(e:any) {
         const key = e.target.name
@@ -93,6 +103,17 @@ export function CreateClassModal({modalIsOpen, closeModal, save}:CreateClassModa
                     <label>Name </label>
                     <input className='form-control' name='name' value={classe?.name} onChange={handleChange}></input>
                 </div>
+
+
+                <div className='form-group'>
+                    <label>School</label>
+                    <select className='form-control' name='school' value={classe?.school} onChange={handleChange} >
+                        {schools.map(school => {
+                            return (<option key={school._id} value={school._id}> {school.name} </option>)
+                        })}
+                    </select>
+                </div>
+
 
                 <div className='from-group'>
                     <button onClick={() =>save(classe)} className='btn btn-success'>Save</button>

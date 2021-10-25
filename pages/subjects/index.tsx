@@ -5,13 +5,19 @@ import api from "../../services/api";
 import SubjectInterface from "../../models/subject";
 import { customStyles } from "../../services/constants";
 import Modal from 'react-modal';
+import SchoolInterface from "../../models/school";
 
 export default function Subjects(){
     const [subjects, setSubjects] = useState<Subject[]>([])
+    const [schools, setSchools] = useState<SchoolInterface[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     useEffect(() => {
         getSubjects();
+
+        api.getSchools().then(({data:{data}}) => {
+            setSchools(data)
+        })
     }, []);
 
     const getSubjects = () => {
@@ -37,6 +43,7 @@ export default function Subjects(){
                     <tr>
                         <th>Id</th>
                         <th>Name</th>
+                        <th>School</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -45,6 +52,7 @@ export default function Subjects(){
                        return  <tr key={subject._id}>
                             <td>{subject._id}</td>
                             <td>{subject.name}</td>
+                            <td>{subject.school?.name}</td>
                             <td><Link href={`subjects/${subject._id}`}>Voir</Link></td>
                         </tr>
                     })
@@ -52,7 +60,7 @@ export default function Subjects(){
                 </tbody>
             </table>
 
-            <CreateSubjectModal modalIsOpen={modalIsOpen} closeModal={closeModal} save={saveSubject}  /> 
+            <CreateSubjectModal modalIsOpen={modalIsOpen} closeModal={closeModal} save={saveSubject} schools={schools}  /> 
         </>
     )
 }
@@ -61,10 +69,11 @@ type CreateSubjectModalProps = {
     modalIsOpen:boolean,
     class_id?:any,
     closeModal: () => void,
-    save:(student:any) => void
+    save:(student:any) => void,
+    schools: SchoolInterface[]
 }
-export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id}:CreateSubjectModalProps){
-    const [student, setStudent] = useState<SubjectInterface>({name:''});
+export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, schools}:CreateSubjectModalProps){
+    const [student, setStudent] = useState<SubjectInterface>({name:'', school:''});
 
     function handleChange(e:any) {
         const key = e.target.name
@@ -94,8 +103,17 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id}:Cre
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
                 </div>
 
+                <div className='form-group'>
+                    <label>School</label>
+                    <select className='form-control' name='school' value={student?.school} onChange={handleChange} >
+                        {schools.map(school => {
+                            return (<option key={school._id} value={school._id}> {school.name} </option>)
+                        })}
+                    </select>
+                </div>
+
                 <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success'>Save</button>
+                    <button onClick={() =>save(student)} className='btn btn-success' disabled={!student.school}>Save</button>
                 </div>
             </div>
           </Modal>

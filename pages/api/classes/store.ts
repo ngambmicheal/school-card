@@ -14,7 +14,7 @@ export default function handler(
 
     const {name} = req.body;
 
-    const classe = new classeSchema({name:name})
+    const classe = new classeSchema(req.body)
     classe.save().then(()=>{
         res.status(200).json({data:classe, success:true, message:'done'});
     }).catch(() => {
