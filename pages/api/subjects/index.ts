@@ -8,7 +8,7 @@ export default function handler(
   res: NextApiResponse<any>
 ) { 
 
-    const subjects = subjectSchema.find(req.query).populate('school').then(subjects => {
+    const subjects = subjectSchema.find(req.query).populate('school').populate('competence').populate('courses').then(subjects => {
                                             res.json({data:subjects, status:true});
                                         })
                                         .catch((e) => {

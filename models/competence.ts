@@ -1,10 +1,12 @@
 import mg from "../services/mg"
 import SchoolInterface, { schoolSchema } from "./school"
+import SubjectInterface, { subjectSchema } from "./subject"
 
 export default interface CompetenceInterface{
     _id?:string,
     name:string,
     school?:string | SchoolInterface,
+    subjects?:SubjectInterface[]
 }
 
 const CompetenceSchema = new mg.Schema({
@@ -13,8 +15,13 @@ const CompetenceSchema = new mg.Schema({
     school:  {
         type:mg.Schema.Types.ObjectId,
         ref:'School',
-        required:true
     },
+    subjects: [
+        {
+            type:mg.Schema.Types.ObjectId,
+            ref:'Subject',
+        }
+    ]
    },
    {
    timestamps:true
@@ -22,4 +29,5 @@ const CompetenceSchema = new mg.Schema({
 )
 
 schoolSchema
+subjectSchema
 export const competenceSchema = mg.models.Competence || mg.model('Competence', CompetenceSchema)

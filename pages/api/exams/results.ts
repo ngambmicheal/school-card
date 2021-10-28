@@ -15,14 +15,14 @@ export default function handler(
 
     examSchema.findOne({_id:exam_id}).then((exam)=>{
         studentSchema.find({class_id:exam.class_id}).then((students) => {
-            // students.map(student => {
-            //     examResultSchema.update({exam_id, student:student._id}, {}, {upsert:true}).then(results => {
-            //         //res.json({data:results, status:true});
-            //     })
-            //     .catch((e) => {
-            //         res.json({message:e.message, success:false });
-            //     })  
-            // })
+            students.map(student => {
+                examResultSchema.update({exam_id, student:student._id}, {}, {upsert:true}).then(results => {
+                    //res.json({data:results, status:true});
+                })
+                .catch((e) => {
+                    res.json({message:e.message, success:false });
+                })  
+            })
         }).finally(() => {
             examResultSchema.find({exam_id}).populate('student').then(results => {
                 res.json({data:results, status:true});

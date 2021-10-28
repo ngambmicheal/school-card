@@ -59,7 +59,7 @@ export default function Subjects(){
                             <td>{subject._id}</td>
                             <td>{subject.name}</td>
                             <td>{subject.school?.name}</td>
-                            <td><Link href={`subjects/${subject._id}`}>Voir</Link></td>
+                            <td><Link href={`/subjects/${subject._id}`}>Voir</Link></td>
                         </tr>
                     })
                     }

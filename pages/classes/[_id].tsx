@@ -111,6 +111,7 @@ export default function ClasseDetails(){
                     return <tr key={exam._id}>
                         <td> {exam.name} </td>
                         <td> <Link href={`/exams/${exam._id}`} >View</Link> </td>
+                        <td> <Link href={`/exams/ui/${exam._id}`} >UI</Link> </td>
                     </tr>
                     })
                 }   
