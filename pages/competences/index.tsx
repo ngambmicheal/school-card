@@ -1,28 +1,28 @@
 import { useEffect, useState } from "react"
-import Subject from "../../models/subject"
+import Competence from "../../models/competence"
 import Link from 'next/link';
 import api from "../../services/api";
-import SubjectInterface from "../../models/subject";
+import CompetenceInterface from "../../models/competence";
 import { customStyles } from "../../services/constants";
 import Modal from 'react-modal';
 import SchoolInterface from "../../models/school";
 
-export default function Subjects(){
-    const [subjects, setSubjects] = useState<Subject[]>([])
+export default function Competences(){
+    const [competences, setCompetences] = useState<Competence[]>([])
     const [schools, setSchools] = useState<SchoolInterface[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     useEffect(() => {
-        getSubjects();
+        getCompetences();
 
-        api.getSchools().then(({data:{data}} : any) => {
+        api.getSchools().then(({data:{data}, status} : any) => {
             setSchools(data)
         })
     }, []);
 
-    const getSubjects = () => {
-        api.getSubjects().then(({data:{data}} : any) => {
-            setSubjects(s =>data)
+    const getCompetences = () => {
+        api.getCompetences().then(({data:{data}} :any) => {
+            setCompetences(s =>data)
         })
     }
 
@@ -30,14 +30,18 @@ export default function Subjects(){
         setModalIsOpen(s => false);
     }
 
-    const saveSubject = (subject:any) => {
-        api.saveSubjects(subject).then(() => getSubjects())
+    const saveCompetence = (competence:any) => {
+        api.saveCompetences(competence).then(() => getCompetences())
         closeModal();
+    }
+
+    const deleteCompetence = (id:any) => {
+        api.deleteCompetence(id).then(() => getCompetences())
     }
 
     return (
         <>
-            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une matiere </button>
+            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une Competence </button>
             <table className='table '>
                 <thead>
                     <tr>
@@ -48,32 +52,32 @@ export default function Subjects(){
                     </tr>
                 </thead>
                 <tbody>
-                    {subjects.map(subject => {
-                       return  <tr key={subject._id}>
-                            <td>{subject._id}</td>
-                            <td>{subject.name}</td>
-                            <td>{subject.school?.name}</td>
-                            <td><Link href={`subjects/${subject._id}`}>Voir</Link></td>
+                    {competences.map(competence => {
+                       return  <tr key={competence._id}>
+                            <td>{competence._id}</td>
+                            <td>{competence.name}</td>
+                            <td>{competence.school?.name}</td>
+                            <td><Link href={`competences/${competence._id}`}>Voir</Link> | <a href='javascript:void(0)'  onClick={() =>deleteCompetence(competence._id)}>Delete</a> </td>
                         </tr>
                     })
                     }
                 </tbody>
             </table>
 
-            <CreateSubjectModal modalIsOpen={modalIsOpen} closeModal={closeModal} save={saveSubject} schools={schools}  /> 
+            <CreateCompetenceModal modalIsOpen={modalIsOpen} closeModal={closeModal} save={saveCompetence} schools={schools}  /> 
         </>
     )
 }
 
-type CreateSubjectModalProps = {
+type CreateCompetenceModalProps = {
     modalIsOpen:boolean,
     class_id?:any,
     closeModal: () => void,
     save:(student:any) => void,
     schools: SchoolInterface[]
 }
-export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, schools}:CreateSubjectModalProps){
-    const [student, setStudent] = useState<SubjectInterface>({name:'', school:''});
+export function CreateCompetenceModal({modalIsOpen, closeModal, save, class_id, schools}:CreateCompetenceModalProps){
+    const [student, setStudent] = useState<CompetenceInterface>({name:'', school:''});
 
     function handleChange(e:any) {
         const key = e.target.name

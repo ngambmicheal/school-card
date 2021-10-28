@@ -20,7 +20,7 @@ export default function Students(){
     }
 
     const getStudents= () => {
-        api.getStudents().then(({data:{data}}:any) => {
+        api.getStudents().then(({data:{data}} :any) => {
             setStudents(s =>data)
         })
     }

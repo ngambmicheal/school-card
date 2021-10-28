@@ -20,8 +20,6 @@ import {
     UseFormSetValue,
   } from 'react-hook-form'
 
-Modal.setAppElement();
-
 
 export default function ClasseDetails(){
     const [classe, setClasse] = useState<ClasseInterface>()
@@ -35,7 +33,7 @@ export default function ClasseDetails(){
 
     useEffect(()=>{
         if(classeId){
-            api.getClasse(classeId).then(({data:{data}}) => {
+            api.getClasse(classeId).then(({data:{data}} : any) => {
                 setClasse(data);
             })
             getStudents();
@@ -49,7 +47,7 @@ export default function ClasseDetails(){
     }
 
     const getStudents = () => {
-        api.getClasseStudents(classeId).then(({data:{data}}) =>{
+        api.getClasseStudents(classeId).then(({data:{data}} : any) =>{
             setStudents(data)
         })
     }
@@ -72,7 +70,7 @@ export default function ClasseDetails(){
     }
 
     const getExams = () => {
-        api.getClasseExams(classeId).then(({data:{data}}) =>{
+        api.getClasseExams(classeId).then(({data:{data}} : any) =>{
             setExams(data)
         })
     }
@@ -394,10 +392,8 @@ export function UploadFile(props: UploadFileStepProps) {
           <td>{field}</td>
           <td>
             <select className='form-control'
-              // @ts-expect-error
               value={values}
               onChange={(e) =>
-                // @ts-expect-error
                 setValue({[field]:e.target.value})
               }
             >
@@ -438,7 +434,7 @@ export function UploadFile(props: UploadFileStepProps) {
           toast({
             status: 'success',
             title: 'Successfully imported leads',
-            description: `Loaded ${data.loadedCount} / ${data.totalCount}`,
+            description: `Loaded `,
           })
   
           setTimeout(() => router.push('/soft-leads'), 2000)

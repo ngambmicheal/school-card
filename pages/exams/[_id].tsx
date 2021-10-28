@@ -23,19 +23,19 @@ export default function examDetails(){
 
     useEffect(()=>{
         if(examId){
-            api.getExam(examId).then(({data:{data}}) => {
+            api.getExam(examId).then(({data:{data}} : any) => {
                 setExam(data)
             })
 
-            api.getExamResults(examId).then(({data:{data}}) => {
+            api.getExamResults(examId).then(({data:{data}} : any) => {
                 setResults(data)
             })
 
-            api.getSubjects().then(({data:{data}}) => {
+            api.getSubjects().then(({data:{data}} : any) => {
                 setSubjects(s => data);
             })
 
-            api.getStudents().then(({data:{data}}) => {
+            api.getStudents().then(({data:{data}} : any) => {
                 setStudents(s => data);
             } )
 

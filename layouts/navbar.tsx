@@ -12,6 +12,7 @@ export default function Navbar({user, logout}:NavbarProps){
         <Link href='/schools' ><a className='nav-link'>Schools</a></Link>
         <Link href='/classes' ><a className='nav-link'>Classes</a></Link>
         <Link href='/students' ><a className='nav-link'>Eleves</a></Link>
+        <Link href='/competences'><a className='nav-link'>Competences</a></Link>
         <Link href='/subjects'><a className='nav-link'>Subjects</a></Link>
         <div className='collapse navbar-collapse'>
             <ul className='navbar-nav mr-auto'>

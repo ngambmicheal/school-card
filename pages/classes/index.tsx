@@ -16,7 +16,7 @@ export default function Classes(){
         getClasses()
 
 
-        api.getSchools().then(({data:{data}}) => {
+        api.getSchools().then(({data:{data}} : any) => {
             setSchools(data)
         })
     }, []);
@@ -27,7 +27,7 @@ export default function Classes(){
     }
 
     const getClasses= () => {
-        api.getClasses().then(({data:{data}}:any) => {
+        api.getClasses().then(({data:{data}} :any) => {
             setClasses(s =>data)
         })
     }
@@ -50,7 +50,7 @@ export default function Classes(){
                     </tr>
                 </thead>
                 <tbody>
-                    {classes.map(classe => {
+                    {classes.map((classe:any) => {
                        return  <tr key={classe._id}>
                             <td>{classe._id}</td>
                             <td>{classe.name}</td>
@@ -107,6 +107,7 @@ export function CreateClassModal({modalIsOpen, closeModal, save, schools}:Create
 
                 <div className='form-group'>
                     <label>School</label>
+
                     <select className='form-control' name='school' value={classe?.school} onChange={handleChange} >
                         {schools.map(school => {
                             return (<option key={school._id} value={school._id}> {school.name} </option>)

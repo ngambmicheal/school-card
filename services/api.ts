@@ -1,5 +1,6 @@
 import a from 'axios';
 import ClasseInterface from '../models/classe';
+import CompetenceInterface from '../models/competence';
 import ExamInterface from '../models/exam';
 import SchoolInterface from '../models/school';
 import StudentInterface from '../models/student';
@@ -36,6 +37,13 @@ export class Api{
     saveSubjects(data:SubjectInterface) { return axios.post('/api/subjects/store', data); }
     getSubject(subjectId?:any){ return axios.get(`/api/subjects/${subjectId}`) }
     getSubjectCourses(subjectId?:any){ return axios.get(`/api/courses?subject=${subjectId}`) }
+
+      //competences
+    getCompetences() {  return axios.get('/api/competences');  }
+    saveCompetences(data:CompetenceInterface) { return axios.post('/api/competences/store', data); }
+    getCompetence(competenceId?:any){ return axios.get(`/api/competences/${competenceId}`) }
+    getCompetenceSubjects(competenceId?:any){ return axios.get(`/api/subjects?competence=${competenceId}`) }
+    deleteCompetence(id:any) { return axios.post('/api/competences/delete', {_id:id})}
 
     
     //schools

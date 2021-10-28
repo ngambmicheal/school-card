@@ -17,7 +17,7 @@ export default function subjectDetails(){
 
     useEffect(()=>{
         if(subjectId){
-            api.getSubject(subjectId).then(({data:{data}}) => {
+            api.getSubject(subjectId).then(({data:{data}} : any) => {
                 setSubject(data)
             })
 
@@ -26,7 +26,7 @@ export default function subjectDetails(){
     }, [subjectId])
 
     const getCourses= () => {
-        api.getSubjectCourses(subjectId).then(({data:{data}}:any) => {
+        api.getSubjectCourses(subjectId).then(({data:{data}} : any) => {
             setCourses(s =>data)
         })
     }

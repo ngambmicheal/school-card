@@ -15,7 +15,7 @@ export default function Schools(){
     }, []);
 
     const getSchools = () => {
-        api.getSchools().then(({data:{data}}:any) => {
+        api.getSchools().then(({data:{data}} :any) => {
             setSchools(s =>data)
         })
     }
