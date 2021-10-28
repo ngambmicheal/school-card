@@ -10,14 +10,16 @@ export default interface StudentInterface{
     email?:string, 
     date?:string,
     class_id ?:string | ClasseInterface,
-    competence: string | CompetenceInterface
 }
 
 const StudentSchema = new mg.Schema({
     name: {type:String, required:true},
     details: {type:String},
-    class_id : { type:String},
-    competence: { type:String},
+    class_id : {
+        type:mg.Schema.Types.ObjectId,
+        ref:'Classe',
+        require:true
+    },
     surname: {type:String},
     phone: {type:String},
     date: {type:String},
@@ -29,4 +31,5 @@ const StudentSchema = new mg.Schema({
 )
 
 
+classeSchema
 export const studentSchema = mg.models.Student || mg.model('Student', StudentSchema)

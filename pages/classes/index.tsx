@@ -99,16 +99,17 @@ export function CreateClassModal({modalIsOpen, closeModal, save, schools}:Create
             <div className='modal-body'>
             <h2 >Hello</h2>
             <button onClick={closeModal}>close</button>
-                <div className='form-group'>
+                <div className='form-group my-3'>
                     <label>Name </label>
                     <input className='form-control' name='name' value={classe?.name} onChange={handleChange}></input>
                 </div>
 
 
-                <div className='form-group'>
+                <div className='form-group my-3'>
                     <label>School</label>
 
                     <select className='form-control' name='school' value={classe?.school} onChange={handleChange} >
+                        <option value=''> Choisir </option>
                         {schools.map(school => {
                             return (<option key={school._id} value={school._id}> {school.name} </option>)
                         })}
@@ -117,7 +118,7 @@ export function CreateClassModal({modalIsOpen, closeModal, save, schools}:Create
 
 
                 <div className='from-group'>
-                    <button onClick={() =>save(classe)} className='btn btn-success'>Save</button>
+                    <button onClick={() =>save(classe)} className='btn btn-success' disabled={!classe.school}>Save</button>
                 </div>
             </div>
           </Modal>
