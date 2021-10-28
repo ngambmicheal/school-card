@@ -69,12 +69,12 @@ export default async function importStudent(
           totalCount += data.length
 
           try {
-            const BulkHasOperations = (b:any) => b && b.s && b.s.currentBatch && b.s.currentBatch.operations && b.s.currentBatch.operations.length > 0;
-            const bulk = studentSchema.collection.initializeUnorderedBulkOp(); 
-             studentSchema.collection.insertMany(data).then((dd) => {
+            //const BulkHasOperations = (b:any) => b && b.s && b.s.currentBatch && b.s.currentBatch.operations && b.s.currentBatch.operations.length > 0;
+            //const bulk = studentSchema.collection.initializeUnorderedBulkOp(); 
+             studentSchema.insertMany(data).then((dd) => {
                  console.log(dd)
              })
-             BulkHasOperations(bulk) && bulk.execute();
+             //BulkHasOperations(bulk) && bulk.execute();
             //promises.push(p)
           } catch (e) {
             console.error(e)
