@@ -24,7 +24,7 @@ export default function Classes(){
     }
 
     const getClasses= () => {
-        api.getClasses().then(({data:{data}} : any:any) => {
+        api.getClasses().then(({data:{data}} : any) => {
             setClasses(s =>data)
         })
     }
