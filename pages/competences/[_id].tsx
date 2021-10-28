@@ -40,6 +40,10 @@ export default function Subjects(){
         closeModal();
     }
 
+    const deleteSubject = (id:any) => {
+        api.deleteSubject(id).then(() => getSubjects())
+    }
+
     return (
         <>
         <h3> Competence : {competence?.name} </h3>
@@ -59,7 +63,7 @@ export default function Subjects(){
                             <td>{subject._id}</td>
                             <td>{subject.name}</td>
                             <td>{subject.school?.name}</td>
-                            <td><Link href={`/subjects/${subject._id}`}>Voir</Link></td>
+                            <td><Link href={`/subjects/${subject._id}`}>Voir</Link> | <a href='javascript:void(0)'  onClick={() =>deleteSubject(subject._id)}>Delete</a> </td>
                         </tr>
                     })
                     }

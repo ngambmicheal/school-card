@@ -24,7 +24,7 @@ export default function handler(
                 })  
             })
         }).finally(() => {
-            examResultSchema.find({exam_id}).populate('student').then(results => {
+            examResultSchema.find({exam_id}).sort({name:1}).populate('student').then(results => {
                 res.json({data:results, status:true});
             })
         })
