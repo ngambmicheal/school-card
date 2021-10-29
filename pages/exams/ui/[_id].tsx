@@ -99,31 +99,52 @@ export default function examDetails(){
     )
 }
 
+const reducer = (previousValue:any, currentValue:any) => parseInt(previousValue??0) + parseInt(currentValue??0)
+
 export function ExamResult({ result, competences}:{competences:CompetenceInterface[], result:ExamResultInterface|any}){
 
     const [total, setTotal] = useState(0);
     const [res, setRes] = useState(result);
+    const [hasLoaded, setHasLoaded] = useState(false);
 
     useEffect(() => {
-        getTotal();
-        api.updateExamResult(res)
+        getTotals()
+        if(hasLoaded){
+            getTotal();
+            api.updateExamResult(res)
+            calculateSubTotal()
+        }
+        setHasLoaded(true);
     }, [res])
 
     const getTotal = () => {
        const tot:any =  Object.values(res).reduce((a:any, b:any) => {
-           if(a && typeof a !== 'number'){
-               a = 0; 
-               console.log(a)
-           }
            const c = parseInt(b);
            if(c && typeof c !== NaN && c.toString().length<3){
                console.log(c)
                 return a + c; 
            }
            else return a + 0; 
-       });
+       },0);
        setTotal(s => tot)
     }
+
+    const calculateSubTotal = () => {
+        setHasLoaded(false) 
+
+        getTotals();
+
+        setHasLoaded(true)
+    }
+
+    const getTotals = () => {
+        competences.map(c => {
+            c.subjects?.map(s => {
+                res[`total_${s._id}`] = s.courses?.map(cc => res[`subject_${cc._id}`]).reduce(reducer,0);
+            })
+        })
+    }
+
     
     const handleChange = (e) => {
         const key = e.target.name
@@ -143,7 +164,7 @@ export function ExamResult({ result, competences}:{competences:CompetenceInterfa
                         {subject.courses?.map(course => {
                                 return course._id && <td key={course._id}> <input type='number' name={`subject_${course._id}`} style={{width:'50px'}} value={res[`subject_${course._id}`]} onChange={handleChange} />  </td>
                         })}
-                    <th> Total </th>
+                    <th> {res[`total_${subject._id}`]} </th>
                     </>
                 )
             })
