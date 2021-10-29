@@ -15,8 +15,8 @@ export default function handler(
     const classes = classeSchema.find().populate('school').then(classes => {
                                             res.json({data:classes, status:true});
                                         })
-                                        .catch(() => {
-                                            res.json({message:'Could not be sent s', success:false });
+                                        .catch((e) => {
+                                            res.json({message:e.message, success:false });
                                         })  
 
 }
