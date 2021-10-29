@@ -27,5 +27,5 @@ const ClasseSchema = new mg.Schema({
     }
 )
 
-
+schoolSchema
 export const classeSchema = mg.models.Classe || mg.model('Classe', ClasseSchema)
