@@ -63,7 +63,8 @@ export default async function importStudent(
           data = data.map((x:any) => ({
             ...x,
             class_id : x.class_id, 
-            name: x.name
+            name: x.name,
+            email:x.email
           }))
 
           totalCount += data.length

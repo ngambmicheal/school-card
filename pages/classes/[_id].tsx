@@ -364,7 +364,7 @@ export function UploadFile(props: UploadFileStepProps) {
           </thead>
           <tbody>
             {generateColumns({
-              leadFields: ['name'],
+              leadFields: ['name', 'email'],
               foundFields: csvColumns,
               setValue,
               values: values,

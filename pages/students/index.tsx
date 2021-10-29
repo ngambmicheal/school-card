@@ -36,7 +36,6 @@ export default function Students(){
             <table className='table '>
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Email</th>
@@ -47,7 +46,6 @@ export default function Students(){
                 <tbody>
                     {students.map(student => {
                        return  <tr key={student._id}>
-                            <td>{student._id}</td>
                             <td>{student.name}</td>
                             <td>{student.phone}</td>
                             <td>{student.email}</td>

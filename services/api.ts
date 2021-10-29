@@ -52,6 +52,7 @@ export class Api{
     saveSchools(data:SchoolInterface) { return axios.post('/api/schools/store', data); }
     getSchool(schoolId?:any){ return axios.get(`/api/schools/${schoolId}`) }
     getSchoolCourses(schoolId?:any){ return axios.get(`/api/courses?school=${schoolId}`) }
+    getSchoolClasses(schoolId?:any){ return axios.get(`/api/classes?school=${schoolId}`) }
 
     //subjects
     getCourses() {  return axios.get('/api/courses');  }

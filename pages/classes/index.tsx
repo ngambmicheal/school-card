@@ -43,7 +43,6 @@ export default function Classes(){
             <table className='table '>
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Name</th>
                         <th>School</th>
                         <th>Action</th>
@@ -52,7 +51,6 @@ export default function Classes(){
                 <tbody>
                     {classes.map((classe:any) => {
                        return  <tr key={classe._id}>
-                            <td>{classe._id}</td>
                             <td>{classe.name}</td>
                             <td>{classe.school?.name}</td>
                             <td><Link href={`classes/${classe._id}`}>Voir</Link></td>

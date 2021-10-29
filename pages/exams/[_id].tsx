@@ -45,9 +45,8 @@ export default function examDetails(){
     return (
         <>
             <div className='py-3'>
-                <h3>Matiere :  </h3>
+                <h3>Examen  :  {exam?.name} </h3>
             </div>
-            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une sous matiere </button>
             <table className='table '>
                 <thead>
                     <tr>
