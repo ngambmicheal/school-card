@@ -14,12 +14,12 @@ export default function handler(
     const {class_id} = req.query
     studentSchema.find().then(students => {
         res.json({students, success:false });
-            // students.map(s => {
-            //     console.log(s.class_id)
-            //     studentSchema.findOneAndUpdate({_id:s._ids}, {class_id:s.class_id}).then((ss) => 
-            //     console.log(ss)
-            //     )
-            // })
+            students.map(s => {
+                console.log(s.class_id)
+                studentSchema.findOneAndUpdate({_id:s._id}, {class_id:s.class_id}).then((ss) => 
+                console.log(ss)
+                )
+            })
         })
         .catch((e) => {
             res.json({message:e.message, success:false });

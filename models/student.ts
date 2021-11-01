@@ -18,7 +18,6 @@ const StudentSchema = new mg.Schema({
     class_id : {
         type:mg.Schema.Types.ObjectId,
         ref:'Classe',
-        require:true
     },
     surname: {type:String},
     phone: {type:String},
