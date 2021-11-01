@@ -58,7 +58,7 @@ export default function examDetails(){
     }, [results])
 
     const printResults = () => {
-
+        window.open('/api/exams/results/'+examId, '_blank')
     }
 
     useEffect(() => {
