@@ -8,6 +8,7 @@ export default interface SubjectInterface{
     name:string,
     school?:string | SchoolInterface,
     competence?:string | CompetenceInterface,
+    slug?:string,
     courses?:CourseInterface[]
 }
 

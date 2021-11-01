@@ -6,12 +6,14 @@ export default interface CompetenceInterface{
     _id?:string,
     name:string,
     school?:string | SchoolInterface,
+    slug?:string,
     subjects?:SubjectInterface[]
 }
 
 const CompetenceSchema = new mg.Schema({
     name: {type:String, required:true},
     details: {type:String},
+    slug:{type:String},
     school:  {
         type:mg.Schema.Types.ObjectId,
         ref:'School',

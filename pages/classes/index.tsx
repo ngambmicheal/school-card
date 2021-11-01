@@ -6,10 +6,12 @@ import ClasseInterface from "../../models/classe";
 import Modal from 'react-modal';
 import { customStyles } from "../../services/constants";
 import SchoolInterface from "../../models/school";
+import SectionInterface from "../../models/section";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
     const [schools, setSchools] = useState<SchoolInterface[]>([])
+    const [sections, setSections] = useState<SectionInterface[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     useEffect(() => {
@@ -18,6 +20,10 @@ export default function Classes(){
 
         api.getSchools().then(({data:{data}} : any) => {
             setSchools(data)
+        })
+
+        api.getSections().then(({data:{data}} : any) => {
+            setSections(data)
         })
     }, []);
 
@@ -45,6 +51,7 @@ export default function Classes(){
                     <tr>
                         <th>Name</th>
                         <th>School</th>
+                        <th>Section</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -53,6 +60,7 @@ export default function Classes(){
                        return  <tr key={classe._id}>
                             <td>{classe.name}</td>
                             <td>{classe.school?.name}</td>
+                            <td>{classe.section?.name}</td>
                             <td><Link href={`classes/${classe._id}`}>Voir</Link></td>
                         </tr>
                     })
@@ -60,7 +68,7 @@ export default function Classes(){
                 </tbody>
             </table>
 
-            <CreateClassModal closeModal={closeModal} save={saveClasse} modalIsOpen={modalIsOpen} schools={schools} />
+            <CreateClassModal closeModal={closeModal} save={saveClasse} modalIsOpen={modalIsOpen} schools={schools} sections={sections} />
         </>
     )
 }
@@ -69,9 +77,10 @@ type CreateClassModalProps = {
     modalIsOpen:boolean,
     closeModal: () => void,
     save:(student:any) => void,
-    schools: SchoolInterface[]
+    schools: SchoolInterface[],
+    sections: SectionInterface[],
 }
-export function CreateClassModal({modalIsOpen, closeModal, save, schools}:CreateClassModalProps){
+export function CreateClassModal({modalIsOpen, closeModal, save, schools, sections}:CreateClassModalProps){
     const [classe, setClasse] = useState<ClasseInterface>({ name:'', school:''});
 
     function handleChange(e:any) {
@@ -106,9 +115,20 @@ export function CreateClassModal({modalIsOpen, closeModal, save, schools}:Create
                 <div className='form-group my-3'>
                     <label>School</label>
 
-                    <select className='form-control' name='school' value={classe?.school} onChange={handleChange} >
+                    <select className='form-control' name='school'  onChange={handleChange} >
                         <option value=''> Choisir </option>
                         {schools.map(school => {
+                            return (<option key={school._id} value={school._id}> {school.name} </option>)
+                        })}
+                    </select>
+                </div>
+
+                <div className='form-group my-3'>
+                    <label>Section</label>
+
+                    <select className='form-control' name='section'  onChange={handleChange} >
+                        <option value=''> Choisir </option>
+                        {sections.filter(s => s.school?._id == classe.school).map(school => {
                             return (<option key={school._id} value={school._id}> {school.name} </option>)
                         })}
                     </select>

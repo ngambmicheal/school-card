@@ -1,28 +1,28 @@
 import { useEffect, useState } from "react"
-import Subject from "../../models/subject"
+import Section from "../../models/section"
 import Link from 'next/link';
 import api from "../../services/api";
-import SubjectInterface from "../../models/subject";
+import SectionInterface from "../../models/section";
 import { customStyles } from "../../services/constants";
 import Modal from 'react-modal';
 import SchoolInterface from "../../models/school";
 
-export default function Subjects(){
-    const [subjects, setSubjects] = useState<Subject[]>([])
+export default function Sections(){
+    const [sections, setSections] = useState<Section[]>([])
     const [schools, setSchools] = useState<SchoolInterface[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     useEffect(() => {
-        getSubjects();
-
+        getSections();
         api.getSchools().then(({data:{data}} : any) => {
             setSchools(data)
         })
+
     }, []);
 
-    const getSubjects = () => {
-        api.getSubjects().then(({data:{data}} : any) => {
-            setSubjects(s =>data)
+    const getSections = () => {
+        api.getSections().then(({data:{data}} :any) => {
+            setSections(s =>data)
         })
     }
 
@@ -30,48 +30,51 @@ export default function Subjects(){
         setModalIsOpen(s => false);
     }
 
-    const saveSubject = (subject:any) => {
-        api.saveSubjects(subject).then(() => getSubjects())
+    const saveSection = (section:any) => {
+        api.saveSections(section).then(() => getSections())
         closeModal();
     }
 
     return (
         <>
-            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une matiere </button>
+            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une section </button>
             <table className='table '>
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>School</th>
+                        <th>Ecole</th>
+                        <th>Type de Bullentin</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {subjects.map(subject => {
-                       return  <tr key={subject._id}>
-                            <td>{subject.name}</td>
-                            <td>{subject.school?.name}</td>
-                            <td><Link href={`subjects/${subject._id}`}>Voir</Link></td>
+                    {sections.map(section => {
+                       return  <tr key={section._id}>
+                            <td>{section.name}</td>
+                            <td>{section.school?.name}</td>
+                            <th>{section.report_type}</th>
+                            <td><Link href={`sections/${section._id}`}>Voir</Link></td>
                         </tr>
                     })
                     }
                 </tbody>
             </table>
 
-            <CreateSubjectModal modalIsOpen={modalIsOpen} closeModal={closeModal} save={saveSubject} schools={schools}  /> 
+            <CreateSectionModal modalIsOpen={modalIsOpen} closeModal={closeModal} save={saveSection} schools={schools}  /> 
         </>
     )
 }
 
-type CreateSubjectModalProps = {
+type CreateSectionModalProps = {
     modalIsOpen:boolean,
     class_id?:any,
     closeModal: () => void,
     save:(student:any) => void,
-    schools: SchoolInterface[]
+    schools:SectionInterface[]
 }
-export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, schools}:CreateSubjectModalProps){
-    const [student, setStudent] = useState<SubjectInterface>({name:'', school:''});
+export function CreateSectionModal({modalIsOpen, closeModal, save, class_id, schools}:CreateSectionModalProps){
+    const [student, setStudent] = useState<SectionInterface>({name:''});
+    const report_types = ['Competence', 'Matiere', 'Maternelle'];
 
     function handleChange(e:any) {
         const key = e.target.name
@@ -101,17 +104,30 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, sch
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
                 </div>
 
-                <div className='form-group'>
+                <div className='form-group my-3'>
                     <label>School</label>
-                    <select className='form-control' name='school' value={student?.school} onChange={handleChange} >
+
+                    <select className='form-control' name='school'  onChange={handleChange} >
+                        <option value=''> Choisir </option>
                         {schools.map(school => {
                             return (<option key={school._id} value={school._id}> {school.name} </option>)
                         })}
                     </select>
                 </div>
 
+                <div className='form-group my-3'>
+                    <label>Type de Bulletin</label>
+
+                    <select className='form-control' name='report_type'  onChange={handleChange} >
+                        <option value=''> Choisir </option>
+                        {report_types.map(type => {
+                            return (<option key={type} value={type}> {type} </option>)
+                        })}
+                    </select>
+                </div>
+
                 <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success' disabled={!student.school}>Save</button>
+                    <button onClick={() =>save(student)} className='btn btn-success'>Save</button>
                 </div>
             </div>
           </Modal>

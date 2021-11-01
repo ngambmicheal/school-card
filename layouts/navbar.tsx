@@ -10,6 +10,7 @@ export default function Navbar({user, logout}:NavbarProps){
         <nav className='navbar navbar-dark bg-dark navbar-expand-lg '>
         <Link href='/' ><a className='nav-link'>Acceuil</a></Link>
         <Link href='/schools' ><a className='nav-link'>Ecoles</a></Link>
+        <Link href='/sections'><a className='nav-link'>Sections</a></Link>
         <Link href='/classes' ><a className='nav-link'>Classes</a></Link>
         <Link href='/students' ><a className='nav-link'>Eleves</a></Link>
         <Link href='/competences'><a className='nav-link'>Competences</a></Link>

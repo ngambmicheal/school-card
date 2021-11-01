@@ -12,7 +12,7 @@ export default function handler(
 
     // const {name} = req.body;
 
-    const classes = classeSchema.find(req.query).populate('school').then(classes => {
+    const classes = classeSchema.find(req.query).populate('school').populate('section').then(classes => {
                                             res.json({data:classes, status:true});
                                         })
                                         .catch((e) => {

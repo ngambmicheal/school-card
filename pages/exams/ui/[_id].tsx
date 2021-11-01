@@ -46,18 +46,24 @@ export default function examDetails(){
         }
     }, [examId])
 
+    const printResults = () => {
+
+    }
+
     return (
         <>
             <div className='py-3'>
                 <h3>Matiere :  </h3>
             </div>
             <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une sous matiere </button>
+            <button className='mx-3 btn btn-success' onClick={() => printResults()} > Imprimer Resultats </button>
+           
             <table className='table table-striped' >
                 <thead>
                     <tr>
                         <th>Nom</th>
                         {competences && competences.map(s=> {
-                            return <th key={s._id} colSpan={s.subjects?.length*4}> {s.name?.substring(0,40)} </th>
+                            return <th key={s._id} colSpan={s.subjects?.length*4}> {s.slug?.substring(0,40)} </th>
                         })}
                         <th>Total</th>
                     </tr>
@@ -67,7 +73,7 @@ export default function examDetails(){
                         </th>
                         {competences && competences.map(competence=> {
                             return competence.subjects?.map(subject => {
-                                return <th key={subject._id} colSpan={subject.courses?.length+1} > {subject.name?.substring(0,30)} </th>
+                                return <th key={subject._id} colSpan={subject.courses?.length+1} > {subject.slug || subject.name?.substring(0,30)} </th>
                             })
                         })}
                     </tr>
@@ -110,30 +116,30 @@ export function ExamResult({ result, competences}:{competences:CompetenceInterfa
     useEffect(() => {
         getTotals()
         if(hasLoaded){
-            getTotal();
-            api.updateExamResult(res)
+            api.updateExamResult(res).then(()=>{
+                getTotal(res);
+
+            })
             calculateSubTotal()
         }
         setHasLoaded(true);
     }, [res])
 
-    const getTotal = () => {
-       const tot:any =  Object.values(res).reduce((a:any, b:any) => {
-           const c = parseInt(b);
-           if(c && typeof c !== NaN && c.toString().length<3){
-               console.log(c)
-                return a + c; 
-           }
-           else return a + 0; 
-       },0);
-       setTotal(s => tot)
+    const getTotal = (result) => {
+        let sum = 0; 
+        for(const el in result){
+            if(el.includes('total_')){
+                sum+=result[el];
+            }
+        }
+       setTotal(s => sum)
     }
 
     const calculateSubTotal = () => {
         setHasLoaded(false) 
 
         getTotals();
-
+ 
         setHasLoaded(true)
     }
 
@@ -162,7 +168,7 @@ export function ExamResult({ result, competences}:{competences:CompetenceInterfa
                 return (
                     <>
                         {subject.courses?.map(course => {
-                                return course._id && <td key={course._id}> <input type='number' name={`subject_${course._id}`} style={{width:'50px'}} value={res[`subject_${course._id}`]} onChange={handleChange} />  </td>
+                                return course._id && <td key={course._id}> <input type='number' name={`subject_${course._id}`} style={{width:'50px'}} value={res[`subject_${course._id}`]} onChange={handleChange} max={course.point} />  </td>
                         })}
                     <th> {res[`total_${subject._id}`]} </th>
                     </>

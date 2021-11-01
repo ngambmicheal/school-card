@@ -1,5 +1,6 @@
 import mg from "../services/mg"
 import SchoolInterface, { schoolSchema } from "./school"
+import { sectionSchema } from "./section"
 
 export default interface ClasseInterface {
     _id?:string,
@@ -20,6 +21,11 @@ const ClasseSchema = new mg.Schema({
         type:mg.Schema.Types.ObjectId,
         ref:'Student'
     }],
+    section:  {
+        type:mg.Schema.Types.ObjectId,
+        ref:'Section',
+        required:true
+    },
      details: {type:String},
     },
     {
@@ -27,5 +33,6 @@ const ClasseSchema = new mg.Schema({
     }
 )
 
-schoolSchema
+schoolSchema 
+sectionSchema
 export const classeSchema = mg.models.Classe || mg.model('Classe', ClasseSchema)

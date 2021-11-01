@@ -54,6 +54,16 @@ export class Api{
     getSchoolCourses(schoolId?:any){ return axios.get(`/api/courses?school=${schoolId}`) }
     getSchoolClasses(schoolId?:any){ return axios.get(`/api/classes?school=${schoolId}`) }
 
+
+    //sections
+    getSections() {  return axios.get('/api/sections');  }
+    saveSections(data:SectionInterface) { return axios.post('/api/sections/store', data); }
+    getSection(sectionId?:any){ return axios.get(`/api/sections/${sectionId}`) }
+    getSectionCourses(sectionId?:any){ return axios.get(`/api/courses?section=${sectionId}`) }
+    getSectionClasses(sectionId?:any){ return axios.get(`/api/classes?section=${sectionId}`) }
+
+
+
     //subjects
     getCourses() {  return axios.get('/api/courses');  }
     saveCourses(data:SubjectInterface) { return axios.post('/api/courses/store', data); }
