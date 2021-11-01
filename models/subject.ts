@@ -9,12 +9,14 @@ export default interface SubjectInterface{
     school?:string | SchoolInterface,
     competence?:string | CompetenceInterface,
     slug?:string,
-    courses?:CourseInterface[]
+    courses?:CourseInterface[],
+    report_type?:string,
 }
 
 const SubjectSchema = new mg.Schema({
     name: {type:String, required:true},
     details: {type:String},
+    report_type:{type:String, required:true},
     school:  {
         type:mg.Schema.Types.ObjectId,
         ref:'School',

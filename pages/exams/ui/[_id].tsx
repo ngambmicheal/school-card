@@ -15,6 +15,7 @@ export default function examDetails(){
     const [exam, setExam] = useState<SubjectInterface>()
     const [courses, setCourses] = useState<CourseInterface[]>([])
     const [competences, setCompetences] = useState<CompetenceInterface[]>([])
+    const [points, setPoints] = useState(0);
 
     const [students, setStudents] = useState<StudentInterface[]>([])
     const [results, setResults] = useState<any>([])
@@ -25,7 +26,6 @@ export default function examDetails(){
 
     useEffect(()=>{
         if(examId){
-
 
             api.getExam(examId).then(({data:{data}} : any) => {
                 setExam(data)
@@ -42,12 +42,87 @@ export default function examDetails(){
             api.getStudents().then(({data:{data}} : any) => {
                 setStudents(s => data);
             } )
-
         }
     }, [examId])
 
+    useEffect(() => {
+        if(results && exam){
+            console.log('thi si sht efile')
+                setExam(inputData => ({
+                    ...inputData,
+                    loaded: 'yes'
+                  }))
+                getTotalPoints();
+                console.log('this is me')
+        }
+    }, [results])
+
     const printResults = () => {
 
+    }
+
+    useEffect(() => {
+        if(exam?._id){
+
+            api.updateExam(exam._id, exam).then(({data:{data}} : any) => {
+                //setExam(data)
+            })
+        }
+    }, [exam])
+
+    const handleChange = (e) => {
+        const key = e.target.name
+        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    
+        setExam(inputData => ({
+          ...inputData,
+          [key]: value
+        }))
+
+        getTotalPoints()
+
+    }
+
+    const getTotalPoints = () => { 
+        let sum = 0; 
+        console.log(sum)
+        for(const el in exam){
+            if(el.includes('point_')){
+                sum+=parseInt(exam[el])??0
+                console.log(exam[el])
+            }
+        }
+       setPoints(s => sum)
+    }
+
+    const getRank = () => {
+            api.getExamResults(examId).then(({data:{data}} : any) => {
+                data.sort((a, b) => {
+                    let lA = getTotal(a); 
+                    let lB = getTotal(b); 
+
+                    if(lA < lB) return 1; 
+                    if(lA > lB) return -1; 
+                    return 0; 
+                } )
+
+                data.map((item, index) => {
+                    item.rank = index+1; 
+                    api.updateExamResult(item);
+                })
+
+                window.location = window.location
+            })
+    }
+
+    const getTotal = (result) => {
+        let sum = 0; 
+        for(const el in result){
+            if(el.includes('total_')){
+                sum+=result[el];
+            }
+        }
+        return sum;
     }
 
     return (
@@ -58,6 +133,8 @@ export default function examDetails(){
             <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une sous matiere </button>
             <button className='mx-3 btn btn-success' onClick={() => printResults()} > Imprimer Resultats </button>
            
+            <button className='mx-3 btn btn-success' onClick={() => getRank()} > get Rank</button>
+           
             <table className='table table-striped' >
                 <thead>
                     <tr>
@@ -66,6 +143,8 @@ export default function examDetails(){
                             return <th key={s._id} colSpan={s.subjects?.length*4}> {s.slug?.substring(0,40)} </th>
                         })}
                         <th>Total</th>
+                        <th>Moyenne</th>
+                        <th>Rang</th>
                     </tr>
                     <tr>
                         <th>
@@ -86,18 +165,24 @@ export default function examDetails(){
                                 return (
                                     <>
                                         {subject.courses?.map(course => {
-                                        return <th key={course._id} > {course.name} </th>
+                                        return <th key={course._id} > 
+                                                    <input type='number' name={`point_${course._id}`} style={{width:'50px'}} value={exam[`point_${course._id}`]} onChange={handleChange}  /> 
+                                                    {course.name} 
+                                                </th>
                                         })}
-                                    <th> Total </th>
+                                    <th> Total</th>
                                     </>
                                 )
                             })
                         })}
+                        <th>{points} </th>
+                        <th>Moyenne</th>
+                        <th>Rank</th>
                     </tr>
                 </thead>
                 <tbody>
                 { results && competences.length && results.map( result=> {
-                    return <ExamResult  key={`exam-${result._id}`} result={result} competences={competences} />
+                    return <ExamResult  key={`exam-${result._id}`} result={result} competences={competences} exam={exam} points={points} />
                 })}
                 </tbody>
             </table>
@@ -107,18 +192,19 @@ export default function examDetails(){
 
 const reducer = (previousValue:any, currentValue:any) => parseInt(previousValue??0) + parseInt(currentValue??0)
 
-export function ExamResult({ result, competences}:{competences:CompetenceInterface[], result:ExamResultInterface|any}){
+export function ExamResult({ result, competences, exam, points}:{competences:CompetenceInterface[], result:ExamResultInterface|any, exam:any, points:any}){
 
     const [total, setTotal] = useState(0);
     const [res, setRes] = useState(result);
     const [hasLoaded, setHasLoaded] = useState(false);
 
+
     useEffect(() => {
         getTotals()
+        getTotal(res);
         if(hasLoaded){
             api.updateExamResult(res).then(()=>{
                 getTotal(res);
-
             })
             calculateSubTotal()
         }
@@ -176,6 +262,8 @@ export function ExamResult({ result, competences}:{competences:CompetenceInterfa
             })
         })}
         <td>{total}</td>
+        <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
+        <th> {res.rank}</th>
     </tr>
 }
 

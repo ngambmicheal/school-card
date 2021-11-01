@@ -72,6 +72,7 @@ export class Api{
     //subjects
     getExams() {  return axios.get('/api/exams');  }
     saveExam(data:ExamInterface) { return axios.post('/api/exams/store', data); }
+    updateExam(id?:any, data:any) { return axios.post('/api/exams/update', data) }
     getExam(examId?:any){ return axios.get(`/api/exams/${examId}`) }
     getExamResults(examId?:any){ return axios.get(`/api/exams/results?exam_id=${examId}`) }
     updateExamResult(data:any){ return axios.post(`/api/exams/update-results`, data)}
