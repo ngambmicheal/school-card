@@ -38,6 +38,7 @@ export  function base64_encode(file:string) {
 export default function resultsActions(competences:CompetenceInterface[], results:any ) {
     const im = path.resolve('public/logo.png')
     const img = base64_encode(im);
+    const totalUsers = 0; 
     console.log(img)
 
     const getSubjectTotal = (subject:SubjectInterface) => {
