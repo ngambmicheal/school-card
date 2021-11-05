@@ -1,5 +1,4 @@
 import CompetenceInterface from "../../models/competence";
-import logo from '../../public/logo.png';
 import path from 'path';
 import fs from 'fs';
 import SubjectInterface from "../../models/subject";
