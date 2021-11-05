@@ -27,6 +27,7 @@ export default async function handler(
 
     var dir = `./tmp/exams/${exam_id}`;
     var zipOutput = fs.createWriteStream(`./public/exams/${exam_id}.zip`);
+    var zipDir = `./public/exams/${exam_id}.zip`;
     var archive = archiver('zip');
 
     if (!fs.existsSync(dir)){
@@ -105,14 +106,12 @@ export default async function handler(
 
     archive.pipe(zipOutput);
     archive.directory(dir, false);
-    archive.finalize();
+    archive.finalize()
 
-    var file = fs.createReadStream(`${dir}.zip`);
-    var stat = fs.statSync(`${dir}.zip`);
+    var file = fs.createReadStream(zipDir);
+    var stat = fs.statSync(zipDir);
     res.setHeader('Content-Length', stat.size);
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader(`Content-Disposition`, `attachment; filename=${exam_id}.zip`);
-    archive.pipe(res);
-    console.log('thie file isreac')
-
+    file.pipe(res);
 }
