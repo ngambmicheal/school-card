@@ -5,13 +5,13 @@ import { examResultSchema } from '../../../../models/examResult';
 import { studentSchema } from '../../../../models/student';
 import * as  pdf from 'pdf-creator-node';
 import fs from 'fs'
-import { competenceSchema } from '../../../../models/competence';
+import CompetenceInterface, { competenceSchema } from '../../../../models/competence';
 import ReactDOMServer from 'react-dom/server';
 import resultsActions from '../../../../assets/jsx/resultsActions';
 const html = fs.readFileSync("assets/result-ui.html", "utf8");
 
 
-const getCompetencesLenght = (competence:CompetenceInterface) => {
+export const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
     competence.subjects && competence.subjects.map(s => {
         total+= s.courses?.length ?? 0  
@@ -28,7 +28,7 @@ export default async function handler(
 
     const {result} = req.query
 
-    const competences =  await competenceSchema.find().populate('school').populate({path:'subjects',populate:{'path':'courses'}})
+    const competences =  await competenceSchema.find({_id:result}).populate('school').populate({path:'subjects',populate:{'path':'courses'}})
 
     examResultSchema.findOne({_id:result}).populate('student').populate('exam_id').then(results => {
         var options = {

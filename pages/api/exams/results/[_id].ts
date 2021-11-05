@@ -8,69 +8,111 @@ import fs from 'fs'
 import { examResultSchema } from '../../../../models/examResult';
 import { competenceSchema } from '../../../../models/competence';
 import { subjectSchema } from '../../../../models/subject';
+import { getCompetencesLenght } from './print-result';
+import resultsActions from '../../../../assets/jsx/resultsActions';
+import ReactDOMServer from 'react-dom/server';
 const html = fs.readFileSync("assets/teacher.html", "utf8");
-
+import archiver from 'archiver';
+  
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) { 
 
-    const {exam_id} = req.query
+    const {_id:exam_id} = req.query
 
-    const results = await examResultSchema.find({exam_id}).sort({rank:1})
+    const totalResults = await examResultSchema.find({exam_id}).populate('student').sort({rank:1})
     const competences =  await competenceSchema.find().populate('school').populate({path:'subjects',populate:{'path':'courses'}})
 
-    try{
+    var dir = `./tmp/exams/${exam_id}`;
+    var zipOutput = fs.createWriteStream(`./public/exams/${exam_id}.zip`);
+    var archive = archiver('zip');
 
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir, { recursive: true });
+    }
+
+    totalResults.map((results) => {
         var options = {
-            format: "A3",
+            format: "A4",
             orientation: "portrait",
             border: "10mm",
             header: {
-                height: "45mm",
-                contents: '<div style="text-align: center;">Author: Shyam Hajare</div>'
+                height: "0mm",
             },
             footer: {
-                height: "28mm",
+                height: "10mm",
                 contents: {
-                    first: 'Cover page',
-                    2: 'Second page', // Any page number is working. 1-based index
-                    default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-                    last: 'Last Page'
+                    // first: 'Cover page',
+                    // 2: 'Second page', // Any page number is working. 1-based index
+                    // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
+                    // last: 'Last Page'
                 }
             }
         };
 
+        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results))
+        html+=`
+                <style>
+                .center{
+                    text-align:center
+                }
+                .table1, .table2{
+                    border-collapse: collapse;
+                    width: 100%;
+                    margin-top: 10px;
+                    margin-bottom: 20px;
+                    font-size:10px;
+                    }
+                    .com, b{
+                    font-weight: bold;
+                    }
+                    .table1 td, .table1 th{
+                    text-align: center;
+                    border: 2px solid #ccc;
+                    }
+
+                    .table2 td, .table2 th{
+                    text-align: center;
+                    }
+
+                    .th{
+                    width:300px;
+                    }
+                </style>
+                `
+
+        const pdfResultsDir = `${dir}/${results._id}.pdf`
         var document = {
             html: html,
             data: {
-              competences : competences.map(s => {
-                    return s
-              }),
-              results : results.map(s => {
-                  return s
-              })
             },
-            path: "./teacher.pdf",
+            path: pdfResultsDir,
             type: "",
           };
 
           pdf.create(document, options)
-          .then((res : any)  => {
-                var file = fs.createReadStream('./teacher.pdf');
-                var stat = fs.statSync('../teacher.pdf');
-                res.setHeader('Content-Length', stat.size);
-                res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
-                file.pipe(res);
+          .then((response : any)  => {
           })
           .catch((error : any) => {
             console.error(error);
+            res.json({message:error.message, success:false });
+            console.log('thisfile isnot react')
           });
-    }
-    catch(e:any) {
-        res.json({message:e.message, success:false });
-    }  
+    })
+   
+
+    archive.pipe(zipOutput);
+    archive.directory(dir, false);
+    archive.finalize();
+
+    var file = fs.createReadStream(`${dir}.zip`);
+    var stat = fs.statSync(`${dir}.zip`);
+    res.setHeader('Content-Length', stat.size);
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader(`Content-Disposition`, `attachment; filename=${exam_id}.zip`);
+    archive.pipe(res);
+    console.log('thie file isreac')
 
 }

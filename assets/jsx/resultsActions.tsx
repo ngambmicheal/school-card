@@ -34,6 +34,16 @@ export  function base64_encode(file:string) {
 }
 
 
+const getTotal = (result:any) => {
+    let sum = 0; 
+    for(const el in result){
+        if(el.includes('subject_')){
+            sum+=result[el];
+        }
+    }
+    return sum; 
+}
+
 
 export default function resultsActions(competences:CompetenceInterface[], results:any ) {
     const im = path.resolve('public/logo.png')
@@ -51,6 +61,8 @@ export default function resultsActions(competences:CompetenceInterface[], result
 
         return {total, app}
     }
+
+    const totalMarks = getTotal(results)
 
     return (
         <>
@@ -228,13 +240,13 @@ export default function resultsActions(competences:CompetenceInterface[], result
             </th>
         </tr>
         <tr>
-            <td>TOTAL : </td>
+            <td>TOTAL : {totalMarks} </td>
         </tr>
         <tr>
             <td>Moyenne : {}/20 </td>
         </tr>
         <tr>
-            <td>Rang : {} / {totalUsers}</td>
+            <td>Rang : {results.rank} / {totalUsers}</td>
         </tr>
     </table>
 
