@@ -10,9 +10,10 @@ import Subjects from "../../subjects";
 import StudentInterface from "../../../models/student";
 import ExamResultInterface from "../../../models/examResult";
 import CompetenceInterface from "../../../models/competence";
+import ExamInterface from "../../../models/exam";
 
 export default function examDetails(){
-    const [exam, setExam] = useState<SubjectInterface>()
+    const [exam, setExam] = useState<ExamInterface>()
     const [courses, setCourses] = useState<CourseInterface[]>([])
     const [competences, setCompetences] = useState<CompetenceInterface[]>([])
     const [points, setPoints] = useState(0);
@@ -128,9 +129,9 @@ export default function examDetails(){
     return (
         <>
             <div className='py-3'>
-                <h3>Matiere :  </h3>
+                <h3>Classe : {exam?.class_id?.name} </h3>
+                <h4>Examen : {exam?.name} </h4>
             </div>
-            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une sous matiere </button>
             <button className='mx-3 btn btn-success' onClick={() => printResults()} > Imprimer Resultats </button>
            
             <button className='mx-3 btn btn-success' onClick={() => getRank()} > get Rank</button>
@@ -178,6 +179,7 @@ export default function examDetails(){
                         <th>{points} </th>
                         <th>Moyenne</th>
                         <th>Rank</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -264,6 +266,7 @@ export function ExamResult({ result, competences, exam, points}:{competences:Com
         <td>{total}</td>
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
+        <th> <Link href={`/exams/ui/print?_id=${res._id}`}>Imprimer</Link> </th>
     </tr>
 }
 

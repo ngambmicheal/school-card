@@ -10,7 +10,7 @@ export default function handler(
 ) { 
 
     const {_id} = req.query
-    examSchema.findOne({_id}).then(exam => {
+    examSchema.findOne({_id}).populate('class_id').then(exam => {
             res.json({data:exam, status:true});
         })
         .catch((e) => {

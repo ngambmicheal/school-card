@@ -75,6 +75,7 @@ export class Api{
     updateExam(id?:any, data:any) { return axios.post('/api/exams/update', data) }
     getExam(examId?:any){ return axios.get(`/api/exams/${examId}`) }
     getExamResults(examId?:any){ return axios.get(`/api/exams/results?exam_id=${examId}`) }
+    getResults(resultsId?:any){ return axios.get(`/api/exams/results/result?result_id=${resultsId}`) }
     updateExamResult(data:any){ return axios.post(`/api/exams/update-results`, data)}
 
 

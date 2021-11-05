@@ -64,7 +64,7 @@ export default async function importStudent(
             ...x,
             class_id : x.class_id, 
             name: x.name,
-            email:x.email
+            email:x.email,
           }))
 
           totalCount += data.length

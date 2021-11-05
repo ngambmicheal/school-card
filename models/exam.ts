@@ -1,8 +1,9 @@
 import mg from "../services/mg"
+import ClasseInterface from "./classe"
 
 export default interface ExamInterface{
     _id?:string,
-    class_id:string,
+    class_id?:string | ClasseInterface,
     name: string
 }
 

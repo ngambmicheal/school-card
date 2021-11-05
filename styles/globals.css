@@ -14,3 +14,33 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.table1, .table2{
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+.com{
+  font-weight: bold;
+}
+.table1 td, .table1 th{
+  text-align: center;
+  border: 2px solid #ccc;
+}
+
+.table2 td, .table2 th{
+  text-align: center;
+}
+
+.th{
+  width:300px;
+}
+
+.full-width{
+  width: 100%;
+}
+
+.second{
+  margin-left: 20%;
+}

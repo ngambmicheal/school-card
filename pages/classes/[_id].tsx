@@ -146,6 +146,7 @@ export default function ClasseDetails(){
                         <td> {student.name} </td>
                         <td>{student.phone}</td>
                         <td>{student.email}</td>
+                        <td>{student.dob}</td>
                     </tr>
                     })
                 }   
@@ -206,7 +207,7 @@ export function CreateStudentModal({modalIsOpen, closeModal, save, class_id}:Cre
                 </div>
                 <div className='form-group'>
                     <label>Date </label>
-                    <input className='form-control' name='date' value={student?.date} onChange={handleChange}></input>
+                    <input className='form-control' name='dob' value={student?.dob} onChange={handleChange}></input>
                 </div>
 
                 <div className='from-group'>
@@ -267,6 +268,7 @@ export function CreateExamModal({modalIsOpen, closeModal, save, class_id}:Create
 export function ImportStudents({modalIsOpen, closeModal, class_id}:any){
     const [file, setFile] = useState<File|null>(null);
     const [values, setValues] = useState();
+    const [submitBtn, setSubmitBtn] = useState(false)
 
     return <>
         <Modal 
@@ -280,10 +282,10 @@ export function ImportStudents({modalIsOpen, closeModal, class_id}:any){
                     <UploadFile file={file} setFile={setFile} values={values}></UploadFile>
                 </div>
                 <div className='row'>
-                    {file && <MapColumns file={file} setValue={setValues} values={values} setFile={setFile} /> }
+                    {file && <MapColumns file={file} setValue={setValues} values={values} setFile={setFile} submitBtn={submitBtn} setSubmitBtn={setSubmitBtn} /> }
                 </div>
                 <div className='row'>
-                    {values && <Submit file={file} setFile={setFile} values={values} class_id={class_id} />}
+                    {values && <Submit file={file} setFile={setFile} values={values} class_id={class_id} submitBtn={submitBtn} />}
                 </div>
             </div>
 
@@ -340,11 +342,13 @@ export function UploadFile(props: UploadFileStepProps) {
   type MapColumnsProps = UploadFileStepProps & {
     file: File,
     setValue: (s:any) => void,
-    values: any
+    values: any,
+    submitBtn:boolean,
+    setSubmitBtn: (s:boolean) => void, 
   }
   
   function MapColumns(props: MapColumnsProps) {
-    const { file, setValue, values } = props
+    const { file, setValue, values, submitBtn, setSubmitBtn } = props
   
     const [csvColumns, setCsvColumns] = useState<string[]>([])
   
@@ -364,11 +368,16 @@ export function UploadFile(props: UploadFileStepProps) {
           </thead>
           <tbody>
             {generateColumns({
-              leadFields: ['name', 'email'],
+              leadFields: ['name', 'email', 'dob', 'phone'],
               foundFields: csvColumns,
               setValue,
               values: values,
+              submitBtn:submitBtn, 
+              setSubmitBtn: setSubmitBtn
             })}
+                    <tr>
+           <td colSpan={2}> <button className='btn btn-success' onClick={() => setSubmitBtn}> Envoyer </button> </td>
+        </tr>
           </tbody>
         </table>
         </>
@@ -379,16 +388,19 @@ export function UploadFile(props: UploadFileStepProps) {
     leadFields: string[]
     foundFields: string[]
     setValue: (s:any) => void,
-    values: any
+    values: any,
+    submitBtn :boolean, 
+    setSubmitBtn : (s:boolean) => void, 
   }
   
   function generateColumns(props: GenerateColumnsProps) {
-    const { leadFields, foundFields, setValue, values } = props
+    const { leadFields, foundFields, setValue, values, setSubmitBtn, submitBtn } = props
   
     return leadFields.map((f) => {
       const field = f.replace(/_/g, ' ')
   
       return (
+        <>
         <tr key={`field/${field}`}>
           <td>{field}</td>
           <td>
@@ -407,52 +419,57 @@ export function UploadFile(props: UploadFileStepProps) {
             </select>
           </td>
         </tr>
+
+        </>
       )
     })
   }
   
-  function Submit(props: UploadFileStepProps & {class_id:any}) {
-    const { values , file, class_id} = props
+  function Submit(props: UploadFileStepProps & {class_id:any, submitBtn:boolean}) {
+    const { values , file, class_id, submitBtn} = props
   
     const router = useRouter()
 
     const toast = useToast()
   
     useEffect(() => {
-      toast({
-        status: 'info',
-        title: 'Importing leads',
-        description: 'this can take a very (very) long time... please be patient',
-        isClosable: true,
-      })
-  
-      api.importStudents({
-          file: file,
-          mapping: values,
-          class_id:class_id,
+      
+      if(submitBtn){
+        toast({
+          status: 'info',
+          title: 'Importing leads',
+          description: 'this can take a very (very) long time... please be patient',
+          isClosable: true,
         })
-        .then((data) => {
-          toast({
-            status: 'success',
-            title: 'Successfully imported leads',
-            description: `Loaded `,
+    
+        api.importStudents({
+            file: file,
+            mapping: values,
+            class_id:class_id,
           })
-  
-          setTimeout(() => router.push('/soft-leads'), 2000)
-        })
-        .catch((e) => {
-          console.log(e)
-          toast({
-            status: 'error',
-            title: typeof e === 'string' ? e : 'Failed to import leads',
-            description: e.error??e.toString(),
-            isClosable: true,
+          .then((data) => {
+            toast({
+              status: 'success',
+              title: 'Successfully imported leads',
+              description: `Loaded `,
+            })
+    
+            setTimeout(() => router.push('/soft-leads'), 2000)
           })
+          .catch((e) => {
+            console.log(e)
+            toast({
+              status: 'error',
+              title: typeof e === 'string' ? e : 'Failed to import leads',
+              description: e.error??e.toString(),
+              isClosable: true,
+            })
 
-        })
+          })
+      }
     }, [
       file,
-      values
+      submitBtn
     ])
   
     return (

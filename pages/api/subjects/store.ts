@@ -17,8 +17,8 @@ export default function handler(
     subject.save().then(()=>{
                     res.status(200).json({data:subject, success:true, message:'done'});
                 })
-                .catch(() => {
-                    res.status(400).json({message:'Could not be sent', success:false });
+                .catch((e) => {
+                    res.status(400).json({message:e.message, success:false });
                 })
 
 }
