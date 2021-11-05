@@ -11,7 +11,6 @@ import { subjectSchema } from '../../../../models/subject';
 import { getCompetencesLenght } from './print-result';
 import resultsActions from '../../../../assets/jsx/resultsActions';
 import ReactDOMServer from 'react-dom/server';
-const html = fs.readFileSync("assets/teacher.html", "utf8");
 import archiver from 'archiver';
   
 

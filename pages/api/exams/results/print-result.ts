@@ -8,8 +8,6 @@ import fs from 'fs'
 import CompetenceInterface, { competenceSchema } from '../../../../models/competence';
 import ReactDOMServer from 'react-dom/server';
 import resultsActions from '../../../../assets/jsx/resultsActions';
-const html = fs.readFileSync("assets/result-ui.html", "utf8");
-
 
 export const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
