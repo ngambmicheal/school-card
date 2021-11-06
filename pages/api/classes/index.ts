@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import ClasseInterface, {classeSchema} from '../../../models/classe';
 import { schoolSchema } from '../../../models/school';
+import { sectionSchema } from '../../../models/section';
 import mg from '../../../services/mg';
 
 
