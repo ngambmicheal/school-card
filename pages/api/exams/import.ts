@@ -6,10 +6,11 @@ import { stripBomFromKeys } from '../../../utils/stripBom'
 import { studentSchema } from '../../../models/student'
 import mg from '../../../services/mg'
 import { competenceSchema } from '../../../models/competence'
-import CourseInterface from '../../../models/course'
-import SubjectInterface from '../../../models/subject'
+import CourseInterface, { courseSchema } from '../../../models/course'
+import SubjectInterface, { subjectSchema } from '../../../models/subject'
 import { examSchema } from '../../../models/exam'
 import { examResultSchema } from '../../../models/examResult'
+import { schoolSchema } from '../../../models/school'
 
 
 export default async function importStudent(
@@ -27,7 +28,7 @@ export default async function importStudent(
   const f = files.file as formidable.File
 
   const exam = await examSchema.findOne({_id:fields.exam_id})
-  const competences = await competenceSchema.find().populate('school').populate({path:'subjects',populate:{'path':'courses'}});
+  const competences = await competenceSchema.find().populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema, populate:{'path':'courses', model:courseSchema}});
   const students = await studentSchema.find({class_id:exam.class_id})
 
   let mapping:any = {};

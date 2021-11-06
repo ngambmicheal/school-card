@@ -13,7 +13,7 @@ export default function handler(
 
     const {result_id} = req.query
 
-    examResultSchema.findOne({_id:result_id}).populate('student').populate('exam_id').then(results => {
+    examResultSchema.findOne({_id:result_id}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema}).then(results => {
         res.json({data:results, status:true});
     })
     .catch((e) => {

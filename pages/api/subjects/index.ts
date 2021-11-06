@@ -1,5 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { competenceSchema } from '../../../models/competence';
+import { courseSchema } from '../../../models/course';
+import { schoolSchema } from '../../../models/school';
 import {subjectSchema} from '../../../models/subject';
 
 
@@ -8,7 +11,8 @@ export default function handler(
   res: NextApiResponse<any>
 ) { 
 
-    const subjects = subjectSchema.find(req.query).populate('school').populate('competence').populate('courses').then(subjects => {
+  console.log(req.query);
+    const subjects = subjectSchema.find(req.query).populate({path:'school', model:schoolSchema}).populate({path:'competence', model:competenceSchema}).populate({path:'courses', model:courseSchema}).then(subjects => {
                                             res.json({data:subjects, status:true});
                                         })
                                         .catch((e) => {

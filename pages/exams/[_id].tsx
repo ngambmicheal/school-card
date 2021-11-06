@@ -9,9 +9,10 @@ import Link from 'next/link'
 import Subjects from "../subjects";
 import StudentInterface from "../../models/student";
 import ExamResultInterface from "../../models/examResult";
+import ExamInterface from "../../models/exam";
 
 export default function examDetails(){
-    const [exam, setExam] = useState<SubjectInterface>()
+    const [exam, setExam] = useState<ExamInterface>()
     const [courses, setCourses] = useState<CourseInterface[]>([])
     const [subjects, setSubjects] = useState<SubjectInterface[]>([])
     const [students, setStudents] = useState<StudentInterface[]>([])
@@ -31,10 +32,6 @@ export default function examDetails(){
                 setResults(data)
             })
 
-            api.getSubjects().then(({data:{data}} : any) => {
-                setSubjects(s => data);
-            })
-
             api.getStudents().then(({data:{data}} : any) => {
                 setStudents(s => data);
             } )
@@ -42,10 +39,19 @@ export default function examDetails(){
         }
     }, [examId])
 
+    useEffect(()=>{
+        if(exam?._id){
+            api.getSchoolSubjects(exam.class_id.school).then(({data:{data}} : any) => {
+                setSubjects(s => data);
+            })
+        }
+    },[exam])
+
     return (
         <>
             <div className='py-3'>
-                <h3>Examen  :  {exam?.name} </h3>
+                <h3>Classe : {exam?.class_id?.name} </h3>
+                <h4>Examen : {exam?.name} </h4>
             </div>
             <table className='table '>
                 <thead>
@@ -71,10 +77,15 @@ export function ExamResult({subject, result, subjects}:{subjects:SubjectInterfac
 
     const [total, setTotal] = useState(0);
     const [res, setRes] = useState(result);
+    const [hasLoaded, setHasLoaded] = useState(false);
+
 
     useEffect(() => {
         getTotal();
-        api.updateExamResult(res)
+        if(hasLoaded){
+            api.updateExamResult(res)
+        }
+        setHasLoaded(true);
     }, [res])
 
     const getTotal = () => {

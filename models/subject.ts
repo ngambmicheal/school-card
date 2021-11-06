@@ -34,7 +34,8 @@ const SubjectSchema = new mg.Schema({
     ]
    },
    {
-   timestamps:true
+   timestamps:true,
+   strict:false
    }
 )
 

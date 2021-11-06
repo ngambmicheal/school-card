@@ -12,7 +12,7 @@ export default function handler(
 ) { 
 
     const {class_id} = req.query
-    studentSchema.find(req.query).populate('class_id').then(students => {
+    studentSchema.find(req.query).populate({path:'class_id', model:classeSchema}).then(students => {
             res.json({data:students, status:true});
         })
         .catch((e) => {

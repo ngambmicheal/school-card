@@ -8,6 +8,10 @@ import fs from 'fs'
 import CompetenceInterface, { competenceSchema } from '../../../../models/competence';
 import ReactDOMServer from 'react-dom/server';
 import resultsActions from '../../../../assets/jsx/resultsActions';
+import { schoolSchema } from '../../../../models/school';
+import { subjectSchema } from '../../../../models/subject';
+import { classeSchema } from '../../../../models/classe';
+import { courseSchema } from '../../../../models/course';
 
 export const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -26,9 +30,9 @@ export default async function handler(
 
     const {result} = req.query
 
-    const competences =  await competenceSchema.find().populate('school').populate({path:'subjects',populate:{'path':'courses'}})
+    const competences =  await competenceSchema.find().populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
-    examResultSchema.findOne({_id:result}).populate('student').populate({path:'exam_id',populate:{'path':'class_id'}}).then(async results => {
+    examResultSchema.findOne({_id:result}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema}}).then(async results => {
         var options = {
             format: "A4",
             orientation: "portrait",

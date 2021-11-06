@@ -12,7 +12,7 @@ export default function handler(
 ) { 
 
     const query = req.query
-    examSchema.find(query).populate('class_id').then(exams => {
+    examSchema.find(query).populate({path:'class_id', model:classeSchema}).then(exams => {
             res.json({data:exams, status:true});
         })
         .catch((e) => {

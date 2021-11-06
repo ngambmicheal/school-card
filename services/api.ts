@@ -45,7 +45,8 @@ export class Api{
     }) }
 
     //subjects
-    getSubjects() {  return axios.get('/api/subjects');  }
+    getSchoolSubjects(school:string){ return axios.get(`/api/subjects?school=${school}`)}
+    getSubjects() {  return axios.get('/api/subjects',);  }
     saveSubjects(data:SubjectInterface) { return axios.post('/api/subjects/store', data); }
     getSubject(subjectId?:any){ return axios.get(`/api/subjects/${subjectId}`) }
     getSubjectCourses(subjectId?:any){ return axios.get(`/api/courses?subject=${subjectId}`) }
