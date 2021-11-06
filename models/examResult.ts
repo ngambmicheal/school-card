@@ -6,7 +6,8 @@ export default interface ExamResultInterface{
     class_id:string,
     name: string,
     student : string | StudentInterface,
-    exam_id: string 
+    exam_id: string ,
+    number:string
 
 }
 
@@ -21,11 +22,13 @@ const ExamResultSchema = new mg.Schema({
     exam_id: {
         type: mg.Schema.Types.ObjectId,
         ref: 'Exam'
-    }
+    },
+    number:{type:String}
    },
    {
    timestamps:true,
-   strict:false
+   strict:false,
+   strictQuery:false
    }
 )
 

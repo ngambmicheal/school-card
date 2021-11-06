@@ -10,6 +10,7 @@ export default interface StudentInterface{
     email?:string, 
     dob?:string,
     class_id ?:string | ClasseInterface,
+    number?:string
 }
 
 const StudentSchema = new mg.Schema({
@@ -25,6 +26,7 @@ const StudentSchema = new mg.Schema({
     email:{type:String},
     sex: {type:String},
     dob: {type:String},
+    number:{type:String},
    },
    {
    timestamps:true,

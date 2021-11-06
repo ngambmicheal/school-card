@@ -3,6 +3,7 @@ import ClasseInterface from '../models/classe';
 import CompetenceInterface from '../models/competence';
 import ExamInterface from '../models/exam';
 import SchoolInterface from '../models/school';
+import SectionInterface from '../models/section';
 import StudentInterface from '../models/student';
 import SubjectInterface from '../models/subject';
 
@@ -31,6 +32,17 @@ export class Api{
           'Content-Type': 'multipart/form-data',
         },
       }) }
+    importResults(data:any) {
+      var formData = new FormData();
+      formData.append('file', data.file)
+      formData.append('mapping', JSON.stringify(data.mapping))
+      formData.append('exam_id',data.exam_id)
+
+      return axios.post('/api/exams/import', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }) }
 
     //subjects
     getSubjects() {  return axios.get('/api/subjects');  }

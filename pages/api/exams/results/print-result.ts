@@ -28,7 +28,7 @@ export default async function handler(
 
     const competences =  await competenceSchema.find().populate('school').populate({path:'subjects',populate:{'path':'courses'}})
 
-    examResultSchema.findOne({_id:result}).populate('student').populate('exam_id').then(async results => {
+    examResultSchema.findOne({_id:result}).populate('student').populate({path:'exam_id',populate:{'path':'class_id'}}).then(async results => {
         var options = {
             format: "A4",
             orientation: "portrait",
@@ -68,7 +68,7 @@ export default async function handler(
                     }
                     .table1 td, .table1 th{
                     text-align: center;
-                    border: 2px solid #ccc;
+                    border: 1px solid #555;
                     }
 
                     .table2 td, .table2 th{

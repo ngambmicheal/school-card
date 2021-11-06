@@ -27,9 +27,11 @@ const ClasseSchema = new mg.Schema({
         required:true
     },
      details: {type:String},
+     teacher:{type:String}
     },
     {
-    timestamps:true
+    timestamps:true,
+    strict:false
     }
 )
 

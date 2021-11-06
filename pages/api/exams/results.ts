@@ -16,7 +16,7 @@ export default function handler(
     examSchema.findOne({_id:exam_id}).then((exam)=>{
         studentSchema.find({class_id:exam.class_id}).then((students) => {
             students.map(student => {
-                examResultSchema.update({exam_id, student:student._id}, {}, {upsert:true}).then(results => {
+                examResultSchema.update({exam_id, student:student._id}, {number:student.number}, {upsert:true}).then(results => {
                     //res.json({data:results, status:true});
                 })
                 .catch((e) => {
@@ -24,7 +24,7 @@ export default function handler(
                 })  
             })
         }).finally(() => {
-            examResultSchema.find({exam_id}).sort({name:1}).populate('student').then(results => {
+            examResultSchema.find({exam_id}).sort({number:1}).populate('student').then(results => {
                 res.json({data:results, status:true});
             })
         })

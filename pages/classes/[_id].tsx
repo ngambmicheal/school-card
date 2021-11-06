@@ -87,6 +87,7 @@ export default function ClasseDetails(){
     const downloadToPdf = () => {
       api.downloadToPdf(classeId)
     }
+    
 
     return (
         <>
@@ -94,9 +95,9 @@ export default function ClasseDetails(){
                 Name : {classe?.name}
             </div>
 
-            <button onClick={downloadToCsv} className='btn btn-secondary mr-3'> Download to CSV </button>
-            <button onClick={downloadToPdf} className='btn btn-secondary ml-2'> Download to Pdf </button>
-
+            <button onClick={downloadToCsv} className='btn btn-secondary mx-3'> Download to CSV </button>
+            <button onClick={downloadToPdf} className='btn btn-secondary mx-2'> Download to Pdf </button>
+            
             <h3 className='mt-3'>Exams  <span className='pull-right'><button className='btn btn-xs btn-success' onClick={() =>setExamIsOpen(s => true)}>Add Exam</button></span></h3>
 
             <table className='table table-hover'>
@@ -368,7 +369,7 @@ export function UploadFile(props: UploadFileStepProps) {
           </thead>
           <tbody>
             {generateColumns({
-              leadFields: ['name', 'email', 'dob', 'phone'],
+              leadFields: ['name', 'email', 'dob', 'phone','number','sex'],
               foundFields: csvColumns,
               setValue,
               values: values,
@@ -376,7 +377,7 @@ export function UploadFile(props: UploadFileStepProps) {
               setSubmitBtn: setSubmitBtn
             })}
                     <tr>
-           <td colSpan={2}> <button className='btn btn-success' onClick={() => setSubmitBtn}> Envoyer </button> </td>
+           <td colSpan={2}> <button className='btn btn-success' onClick={() => setSubmitBtn(true)}> Envoyer </button> </td>
         </tr>
           </tbody>
         </table>
@@ -405,9 +406,9 @@ export function UploadFile(props: UploadFileStepProps) {
           <td>{field}</td>
           <td>
             <select className='form-control'
-              value={values}
+              value={values && values[field]}
               onChange={(e) =>
-                setValue({[field]:e.target.value})
+                setValue({...values, [field]:e.target.value})
               }
             >
               <option value={undefined}></option>

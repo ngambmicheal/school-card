@@ -52,7 +52,7 @@ export default async function handler(
             }
         };
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results))
+        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, totalResults.length))
         html+=`
                 <style>
                 .center{

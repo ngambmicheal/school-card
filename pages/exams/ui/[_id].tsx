@@ -11,6 +11,9 @@ import StudentInterface from "../../../models/student";
 import ExamResultInterface from "../../../models/examResult";
 import CompetenceInterface from "../../../models/competence";
 import ExamInterface from "../../../models/exam";
+import FileUpload, { validateFiles } from "../../../components/dropzone";
+import { toast } from "@chakra-ui/toast";
+import { useForm } from "react-hook-form";
 
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
@@ -21,6 +24,8 @@ export default function examDetails(){
     const [students, setStudents] = useState<StudentInterface[]>([])
     const [results, setResults] = useState<any>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [ImportIsOpen, setImportIsOpen] = useState(false);
+    
 
     const router = useRouter();
     const {_id:examId} = router.query;
@@ -84,6 +89,36 @@ export default function examDetails(){
 
     }
 
+    const importResults = (file:File|null) => {
+        api.importResults({
+            file: file,
+            exam_id:examId,
+          })
+          .then((data) => {
+            toast({
+              status: 'success',
+              title: 'Successfully imported leads',
+              description: `Loaded `,
+            })
+    
+            setTimeout(() => router.push('/soft-leads'), 2000)
+          })
+          .catch((e) => {
+            console.log(e)
+            toast({
+              status: 'error',
+              title: typeof e === 'string' ? e : 'Failed to import leads',
+              description: e.error??e.toString(),
+              isClosable: true,
+            })
+
+          })
+    }   
+
+    const closeImportModal = () => {
+        setImportIsOpen(s => false);
+    }
+
     const getTotalPoints = () => { 
         let sum = 0; 
         console.log(sum)
@@ -98,7 +133,7 @@ export default function examDetails(){
 
     const getRank = () => {
             api.getExamResults(examId).then(({data:{data}} : any) => {
-                data.sort((a, b) => {
+                const sortedData = data.sort((a, b) => {
                     let lA = getTotal(a); 
                     let lB = getTotal(b); 
 
@@ -107,20 +142,22 @@ export default function examDetails(){
                     return 0; 
                 } )
 
-                data.map((item, index) => {
+                sortedData.map((item, index) => {
                     item.rank = index+1; 
                     api.updateExamResult(item);
-                })
 
-                window.location = window.location
+                    if(index==data.lenght){ 
+                        window.location = window.location
+                    }
+                })
             })
     }
 
     const getTotal = (result) => {
         let sum = 0; 
         for(const el in result){
-            if(el.includes('total_')){
-                sum+=result[el];
+            if(el.includes('subject_')){
+                sum+=parseInt(result[el]);
             }
         }
         return sum;
@@ -135,6 +172,8 @@ export default function examDetails(){
             <button className='mx-3 btn btn-success' onClick={() => printResults()} > Imprimer Resultats </button>
            
             <button className='mx-3 btn btn-success' onClick={() => getRank()} > get Rank</button>
+
+            <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button>
            
             <table className='table table-striped' >
                 <thead>
@@ -188,6 +227,8 @@ export default function examDetails(){
                 })}
                 </tbody>
             </table>
+
+            {examId && <ImportStudents modalIsOpen={ImportIsOpen} closeModal={closeImportModal} save={importResults} />}
         </>
     )
 }
@@ -320,3 +361,77 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, subject}:Crea
         </div>
       );
 }
+
+
+
+export function ImportStudents({modalIsOpen, closeModal,save}:{modalIsOpen:boolean,closeModal:()=>void,save:(file:File|null)=>void}){
+    const [file, setFile] = useState<File|null>(null);
+    const [values, setValues] = useState();
+
+    return <>
+        <Modal 
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    style={customStyles}
+                    contentLabel="Add Exam">
+            
+            <div className='modal-body'>
+                <div className='row'>
+                    <UploadFile file={file} setFile={setFile} values={values}></UploadFile>
+                </div>
+                <div className='row'>
+                    {file && <button className='btn btn-success' onClick={()=>save(file)}> Upload </button> }
+                </div>
+
+            </div>
+
+        </Modal>
+    </>
+}
+
+type UploadFileStepProps = {
+    file: File | null
+    setFile: (f: File) => void,
+    values:any
+  }
+  
+export function UploadFile(props: UploadFileStepProps) {
+    const { setFile, file, } = props
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        getValues,
+        formState: { errors },
+      } = useForm<any>({
+        defaultValues: { leadFieldToCsvColumn: {} },
+      })
+  
+    const [debounce, setDebounce] = useState(true)
+  
+    useEffect(() => {
+      setDebounce(false)
+    }, [debounce])
+  
+    return (
+        <FileUpload
+          accept={'.csv'}
+          register={register('file_', { validate: validateFiles })}
+          onChange={(files) => {
+            if (debounce) {
+              setDebounce(false)
+              return
+            }
+  
+            setFile(files[0])
+          }}
+        >
+          <div className="full-width">
+            <button className='btn' style={{width:'80%', height:'80%', minWidth:'150px', minHeight:'150px'}}>
+              {file ? file.name : 'Select File'}
+            </button>
+          </div>
+        </FileUpload>
+    )
+  }
+  

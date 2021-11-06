@@ -23,6 +23,26 @@ const getAppreciation = (value:number, total:number)  => {
         if(value < 21) 
             return 'A+';
     }
+    if(total==30){
+        if(value <= 15) 
+            return 'NA';
+        if(value < 22)
+            return 'ECA';
+        if(value < 26) 
+            return 'A'; 
+        if(value < 31) 
+            return 'A+';
+    }
+    if(total==40){
+        if(value <= 20) 
+            return 'NA';
+        if(value < 30)
+            return 'ECA';
+        if(value < 35) 
+            return 'A'; 
+        if(value < 41) 
+            return 'A+';
+    }
 }
 
 export  function base64_encode(file:string) {
@@ -30,6 +50,14 @@ export  function base64_encode(file:string) {
     var bitmap = fs.readFileSync(file);
     // convert binary data to base64 encoded string
     return new Buffer(bitmap).toString('base64');
+}
+
+export function excludedClass(className:string, course_id:string){
+   
+   if( course_id == "617a3e0add1ff771217ce4ed" && (className.toLocaleLowerCase().includes('cp'))){
+       return false;
+   }
+   else return true;
 }
 
 
@@ -43,21 +71,34 @@ const getTotal = (result:any) => {
     return sum; 
 }
 
+const getTotalExam = (result:any) => {
+    let sum = 0; 
+    for(const el in result){
+        if(el.includes('point_')){
+            sum+=parseInt(result[el]);
+        }
+    }
+    return sum; 
+}
+
 
 export default function resultsActions(competences:CompetenceInterface[], results:any, totalUsers:number ) {
 
     const getSubjectTotal = (subject:SubjectInterface) => {
         let total = 0 ; 
+        let pointTotal = 0;
         subject.courses?.map(c => {
             total+=parseInt(results[`subject_${c._id}`]??0);
+            pointTotal+=parseInt(results.exam_id[`point_${c._id}`]??0);
         })
 
-        const app = getAppreciation(total, 20);
+        const app = getAppreciation(total, pointTotal);
 
-        return {total, app}
+        return {total, app, pointTotal}
     }
 
     const totalMarks = getTotal(results)
+    const totalPoints = getTotalExam(results?.exam_id)
 
     return (
         <>
@@ -66,8 +107,8 @@ export default function resultsActions(competences:CompetenceInterface[], result
         <th className='center' style={{width:'33%'}}>
               <b>REPUBLIQUE DU CAMEROUN</b> <br />
                 <i> Paix - Travail - Patrie </i> <br />
-             <b>GROUPE SCOLAIRE BILINGUE PRIVE  <br />
-             LAIC LA SEMENCE</b>  <br />
+             <b>GROUPE SCOLAIRE BILINGUE <br/> 
+             PRIVE LAIC LA SEMENCE</b>  <br />
              <i>BP: 1661 DOUALA BANGUE</i> <br />
              <i>TEL: (237) 33 08 95 82/699717529</i> <br />
         </th>
@@ -85,27 +126,29 @@ export default function resultsActions(competences:CompetenceInterface[], result
 </table>
 
 <div className='center' >
-    BULLETIN D'EVALUATION 2021/2022
+    BULLETIN D'EVALUATION - {results.exam_id?.name} - 2021/2022
 </div>
 
 <div>
 <table className='table1'>
  <thead>
      <tr>
-         <th>NOMS ET PRENOMS</th>
-         <th colSpan={3}>{ results.student?.name }</th>
+         <th colSpan={2}>NOMS ET PRENOMS</th>
+         <th colSpan={4}>{ results.student?.name }</th>
      </tr>
      <tr>
-         <th>DATE DE NAISSANCE</th>
-         <th className='th'></th>
-         <th>SEXE</th>
-         <th></th>
+         <th colSpan={2}>DATE DE NAISSANCE</th>
+         <th colSpan={2}>{results.student?.dob}</th>
+         <th colSpan={1}>SEXE</th>
+         <th>{results.student?.sex}</th>
      </tr>
      <tr>
-         <th>CLASSE</th>
-         <th className='th'>  </th>
+         <th colSpan={1}>CLASSE</th>
+         <th > {results.exam_id?.class_id?.name} </th>
+         <th>Effectif</th>
+         <th>{totalUsers}</th>
          <th>ENSEIGNANT</th>
-         <th className='th'></th>
+         <th >{results.exam_id?.class_id?.teacher}</th>
      </tr>
  </thead>
 </table>
@@ -153,15 +196,17 @@ export default function resultsActions(competences:CompetenceInterface[], result
                                  return (
                                      <> 
                                          {subject.courses?.map((course, courseIndex) => {
+
+                                             const isExcluded = !excludedClass(results.exam_id.class_id?.name, subject._id);
                                          return( 
                                              <>
                                              <tr>
                                                  {!subjectIndex && !courseIndex&& <td rowSpan={getCompetencesLenght(competence)}> {competence.name} </td> }
                                                  {!courseIndex && <td rowSpan={(subject.courses?.length??1)+1}> {subject.name}  </td>  }
-                                                 <td>{course.name} </td>
-                                                 <td>{results.exam_id?.[`point_${course._id}`]}</td>
-                                                 <td>{results[`subject_${course._id}`] ?? 0}</td> 
-                                                 {!courseIndex && <td rowSpan={(subject.courses?.length??1)+1}> {to.app}  </td>  }
+                                                 <td>{!isExcluded ? course.name :''} </td>
+                                                 <td>{ !isExcluded ?results.exam_id?.[`point_${course._id}`] :'--'}</td>
+                                                 <td>{ !isExcluded ?results[`subject_${course._id}`] ?? 0 : '--'}</td> 
+                                                 {!courseIndex && <td rowSpan={(subject.courses?.length??1)+1}> { !isExcluded ?to.app :'--'}  </td>  }
                                                  </tr>
                                              </>
                                          )
@@ -169,8 +214,8 @@ export default function resultsActions(competences:CompetenceInterface[], result
 
                                              <tr>
                                                  <th>Total </th>
-                                                 <th> </th>
-                                                 <th>{to.total}</th> 
+                                                 <th> {!isExcluded ?to.pointTotal:'--'}</th>
+                                                 <th>{!isExcluded ?to.total:'--'}</th> 
                                              </tr>
                                      </>
                                  )
@@ -222,23 +267,26 @@ export default function resultsActions(competences:CompetenceInterface[], result
  </table>
 
     <div className='center'>
-        <p style={{fontSize:'12px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A+=Expert</p>
+        <p style={{fontSize:'12px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A=Acquis, A+=Expert</p>
     </div>
 
-    <table style={{width:'100%',margin:'10px'}}>
+    <table style={{width:'100%',margin:'20px'}}>
         <tr>
             <th align='center'>
 
             </th>
             <th rowSpan={5}>
                 Observation 
+                <br />
+                <br />
+                {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)}
             </th>
         </tr>
         <tr>
-            <td>TOTAL : {totalMarks} </td>
+            <td>TOTAL : {totalMarks} / {totalPoints} </td>
         </tr>
         <tr>
-            <td>Moyenne : {}/20 </td>
+            <td>Moyenne : { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
         </tr>
         <tr>
             <td>Rang : {results.rank} / {totalUsers}</td>
@@ -248,7 +296,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
     <table style={{width:'100%', 'margin':'20px', marginTop:'30px'}}>
         <tr>
             <th>Visa du parent</th>
-            <th>Visa du parent</th>
+            <th>Visa de L'Enseignant </th>
             <th>Chef de l'etablissement </th>
         </tr>
     </table>
