@@ -26,9 +26,9 @@ export default async function handler(
 
     const {result} = req.query
 
-    const competences =  await competenceSchema.find({_id:result}).populate('school').populate({path:'subjects',populate:{'path':'courses'}})
+    const competences =  await competenceSchema.find().populate('school').populate({path:'subjects',populate:{'path':'courses'}})
 
-    examResultSchema.findOne({_id:result}).populate('student').populate('exam_id').then(results => {
+    examResultSchema.findOne({_id:result}).populate('student').populate('exam_id').then(async results => {
         var options = {
             format: "A4",
             orientation: "portrait",
@@ -47,7 +47,10 @@ export default async function handler(
             }
         };
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results))
+        const total = await examResultSchema.find({exam_id:results.exam_id}).count();
+        console.log(total);
+
+        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, total ))
         html+=`
                 <style>
                 .center{

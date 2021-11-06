@@ -1,7 +1,7 @@
 import CompetenceInterface from "../../models/competence";
-import path from 'path';
 import fs from 'fs';
 import SubjectInterface from "../../models/subject";
+import { logo } from "./image";
 
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -37,18 +37,14 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=result[el];
+            sum+=parseInt(result[el]);
         }
     }
     return sum; 
 }
 
 
-export default function resultsActions(competences:CompetenceInterface[], results:any ) {
-    const im = path.resolve('./public/logo.png')
-    const img = base64_encode(im);
-    const totalUsers = 0; 
-    console.log(img)
+export default function resultsActions(competences:CompetenceInterface[], results:any, totalUsers:number ) {
 
     const getSubjectTotal = (subject:SubjectInterface) => {
         let total = 0 ; 
@@ -76,7 +72,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
              <i>TEL: (237) 33 08 95 82/699717529</i> <br />
         </th>
         <th className='' style={{width:'33%'}}>
-            <img src={`data:image/jpeg;base64, ${img}`} height={100} />
+            <img src={`data:image/jpeg;base64, ${logo}`} height={100} />
         </th>
         <th className='center' style={{width:'33%'}}>
             <b> REPUBLIC OF CAMEROON</b>  <br />
@@ -226,12 +222,12 @@ export default function resultsActions(competences:CompetenceInterface[], result
  </table>
 
     <div className='center'>
-    COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A+=Expert
+        <p style={{fontSize:'12px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A+=Expert</p>
     </div>
 
-    <table>
+    <table style={{width:'100%',margin:'10px'}}>
         <tr>
-            <th>
+            <th align='center'>
 
             </th>
             <th rowSpan={5}>
@@ -249,7 +245,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
         </tr>
     </table>
 
-    <table>
+    <table style={{width:'100%', 'margin':'20px', marginTop:'30px'}}>
         <tr>
             <th>Visa du parent</th>
             <th>Visa du parent</th>
