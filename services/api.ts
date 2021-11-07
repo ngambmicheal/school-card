@@ -20,6 +20,7 @@ export class Api{
 
     //students
     getStudents() {  return axios.get('/api/students');  }
+    deleteStudent(studentId:string) { return axios.post('/api/students/delete',{_id:studentId})}
     saveStudent(data:StudentInterface) { return axios.post('/api/students/store', data); }
     importStudents(data:any) {
         var formData = new FormData();

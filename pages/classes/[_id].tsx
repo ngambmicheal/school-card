@@ -57,6 +57,10 @@ export default function ClasseDetails(){
         closeModal();
     }
 
+    const deleteStudent = (studentId:string) => {
+      api.deleteStudent(studentId).then(() => getStudents())
+    }
+
     const importStudent = () => {
 
     }
@@ -138,6 +142,7 @@ export default function ClasseDetails(){
                         <th>Phone</th>
                         <th>Email</th>
                         <th>Age</th> 
+                        <th> Action </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -148,6 +153,7 @@ export default function ClasseDetails(){
                         <td>{student.phone}</td>
                         <td>{student.email}</td>
                         <td>{student.dob}</td>
+                        <td> <a href='javascript:void(0)'  onClick={() =>deleteStudent(student._id)}>Delete</a></td>
                     </tr>
                     })
                 }   
