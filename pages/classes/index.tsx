@@ -43,6 +43,10 @@ export default function Classes(){
         closeModal();
     }
 
+    const deleteClasse = (studentId:string) => {
+        api.deleteClasse(studentId).then(() => getClasses())
+    }
+
     return (
         <>
             <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une classe </button>
@@ -61,7 +65,7 @@ export default function Classes(){
                             <td>{classe.name}</td>
                             <td>{classe.school?.name}</td>
                             <td>{classe.section?.name}</td>
-                            <td><Link href={`classes/${classe._id}`}>Voir</Link></td>
+                            <td><Link href={`classes/${classe._id}`}>Voir</Link> |  <a href='javascript:void(0)'  onClick={() =>deleteClasse(classe._id)}>Delete</a></td>
                         </tr>
                     })
                     }

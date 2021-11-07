@@ -129,8 +129,8 @@ export default function ClasseDetails(){
 
             <h3 className='mt-3'>Students  
                 <span className='pull-right'>
-                    <button className='btn btn-xs btn-success' onClick={() =>setModalIsOpen(s => true)}>Add Student</button>
-                    <button className='btn btn-xs btn-success' onClick={() =>setImportIsOpen(s => true)}> <i className='fa fa-upload'></i> Importer Eleve</button>
+                    <button className='btn btn-xs btn-success mx-3' onClick={() =>setModalIsOpen(s => true)}>Add Student</button>
+                    <button className='btn btn-xs btn-success mx-2' onClick={() =>setImportIsOpen(s => true)}> <i className='fa fa-upload'></i> Importer Eleve</button>
                 </span>
             </h3>
 

@@ -17,6 +17,7 @@ export class Api{
     getClasse(classeId?:any){ return axios.get(`/api/classes/${classeId}`)}
     getClasseStudents(classeId?:any) {return axios.get(`/api/classes/students?class_id=${classeId}`)}
     getClasseExams(classeId?:any) {return axios.get(`/api/exams?class_id=${classeId}`)}
+    deleteClasse(classeId:string) { return axios.post('/api/classes/delete',{_id:classeId})}
 
     //students
     getStudents() {  return axios.get('/api/students');  }
