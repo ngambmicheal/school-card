@@ -61,6 +61,10 @@ export default function ClasseDetails(){
       api.deleteStudent(studentId).then(() => getStudents())
     }
 
+    const deleteExam = (examId:string) => {
+      api.deleteExam(examId).then(() => getExams())
+    }
+
     const importStudent = () => {
 
     }
@@ -108,6 +112,8 @@ export default function ClasseDetails(){
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Exam Type Normal </th>
+                        <th>Exam Type Competence</th> 
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -117,6 +123,7 @@ export default function ClasseDetails(){
                         <td> {exam.name} </td>
                         <td> <Link href={`/exams/${exam._id}`} >View</Link> </td>
                         <td> <Link href={`/exams/ui/${exam._id}`} >UI</Link> </td>
+                        <td> <a href='javascript:void(0)'  onClick={() =>deleteExam(exam._id)}>Delete</a> </td>
                     </tr>
                     })
                 }   

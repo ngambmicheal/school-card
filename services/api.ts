@@ -92,6 +92,7 @@ export class Api{
     getExamResults(examId?:any){ return axios.get(`/api/exams/results?exam_id=${examId}`) }
     getResults(resultsId?:any){ return axios.get(`/api/exams/results/result?result_id=${resultsId}`) }
     updateExamResult(data:any){ return axios.post(`/api/exams/update-results`, data)}
+    deleteExam(examId:any){return axios.post('/api/exams/delete', {_id:examId})}
 
 
     downloadToCsv(classeId:any) { return axios.post(`/api/classes/export-csv`, {class_id: classeId})}
