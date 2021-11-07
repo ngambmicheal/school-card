@@ -17,7 +17,7 @@ export default function handler(
     const classe = new classeSchema(req.body)
     classe.save().then(()=>{
         res.status(200).json({data:classe, success:true, message:'done'});
-    }).catch(() => {
-        res.status(400).json({message:'Could not be sent', success:false });
+    }).catch((e) => {
+        res.status(400).json({message:e.message, success:false });
     })  
 }
