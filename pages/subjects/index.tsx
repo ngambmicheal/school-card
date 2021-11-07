@@ -71,7 +71,7 @@ type CreateSubjectModalProps = {
     schools: SchoolInterface[]
 }
 export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, schools}:CreateSubjectModalProps){
-    const [student, setStudent] = useState<SubjectInterface>({name:'', school:''});
+    const [student, setStudent] = useState<SubjectInterface>({name:'', school:'', report_type:'Matiere'});
 
     function handleChange(e:any) {
         const key = e.target.name

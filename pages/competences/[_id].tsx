@@ -84,7 +84,7 @@ type CreateSubjectModalProps = {
     school:any
 }
 export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, school,  competence}:CreateSubjectModalProps){
-    const [student, setStudent] = useState<SubjectInterface>({name:'', competence:competence, school:school });
+    const [student, setStudent] = useState<SubjectInterface>({name:'', competence:competence, school:school,report_type:'Competence' });
 
     function handleChange(e:any) {
         const key = e.target.name
