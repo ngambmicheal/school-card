@@ -35,6 +35,10 @@ export default function Subjects(){
         closeModal();
     }
 
+    const deleteSubject = (subject:any) => {
+        api.deleteSubject(subject).then(() => getSubjects());
+    }
+
     return (
         <>
             <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une matiere </button>
@@ -51,7 +55,7 @@ export default function Subjects(){
                        return  <tr key={subject._id}>
                             <td>{subject.name}</td>
                             <td>{subject.school?.name}</td>
-                            <td><Link href={`subjects/${subject._id}`}>Voir</Link></td>
+                            <td><Link href={`subjects/${subject._id}`}>Voir</Link>  | <a href='javascript:void(0)'  onClick={() =>deleteSubject(subject._id)}>Delete</a>  </td>
                         </tr>
                     })
                     }
