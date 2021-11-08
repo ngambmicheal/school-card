@@ -11,7 +11,7 @@ export default function handler(
   res: NextApiResponse<any>
 ) { 
 
-    const competences = competenceSchema.find().populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema, populate:{'path':'courses', model:courseSchema}}).then(competences => {
+    const competences = competenceSchema.find(req.query).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema, populate:{'path':'courses', model:courseSchema}}).then(competences => {
                                             res.json({data:competences, status:true});
                                         })
                                         .catch((e) => {

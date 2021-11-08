@@ -6,10 +6,12 @@ import ClasseInterface from "../../models/classe";
 import Modal from 'react-modal';
 import { customStyles } from "../../services/constants";
 import { useRouter } from "next/dist/client/router";
+import SectionInterface from "../../models/section";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [sections, setSections] = useState<SectionInterface[]>([])
 
     const router = useRouter()
     const {_id:schoolId} = router.query;
@@ -17,6 +19,11 @@ export default function Classes(){
     useEffect(() => {
         if(schoolId)
         getClasses()
+
+        api.getSections().then(({data:{data}} : any) => {
+            setSections(data)
+        })
+
     }, [schoolId]);
 
 
@@ -58,7 +65,7 @@ export default function Classes(){
                 </tbody>
             </table>
 
-            <CreateClassModal closeModal={closeModal} save={saveClasse} modalIsOpen={modalIsOpen} />
+            <CreateClassModal closeModal={closeModal} save={saveClasse} modalIsOpen={modalIsOpen} sections={sections} schoolId={schoolId}/>
         </>
     )
 }
@@ -66,10 +73,12 @@ export default function Classes(){
 type CreateClassModalProps = {
     modalIsOpen:boolean,
     closeModal: () => void,
-    save:(student:any) => void
+    save:(student:any) => void,
+    sections:SectionInterface[],
+    schoolId:any
 }
-export function CreateClassModal({modalIsOpen, closeModal, save}:CreateClassModalProps){
-    const [classe, setClasse] = useState<ClasseInterface>({ name:''});
+export function CreateClassModal({modalIsOpen, closeModal, save,sections, schoolId}:CreateClassModalProps){
+    const [classe, setClasse] = useState<ClasseInterface>({ name:'', school:schoolId});
 
     function handleChange(e:any) {
         const key = e.target.name
@@ -97,6 +106,17 @@ export function CreateClassModal({modalIsOpen, closeModal, save}:CreateClassModa
                 <div className='form-group'>
                     <label>Name </label>
                     <input className='form-control' name='name' value={classe?.name} onChange={handleChange}></input>
+                </div>
+
+                <div className='form-group my-3'>
+                    <label>Section</label>
+
+                    <select className='form-control' name='section'  onChange={handleChange} >
+                        <option value=''> Choisir </option>
+                        {sections.filter(s => s.school?._id == classe.school).map(school => {
+                            return (<option key={school._id} value={school._id}> {school.name} </option>)
+                        })}
+                    </select>
                 </div>
 
                 <div className='from-group'>

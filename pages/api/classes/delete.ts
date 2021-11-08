@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { classeSchema } from '../../../models/classe';
 import CompetenceInterface, {competenceSchema} from '../../../models/competence';
+import { studentSchema } from '../../../models/student';
 
 
 
@@ -12,6 +13,7 @@ export default function handler(
 
     const {_id} = req.body
     classeSchema.findOneAndDelete({_id}).then(competence => {
+        studentSchema.deleteMany({class_id:_id})
             res.json({data:competence, status:true});
         })
         .catch((e) => {

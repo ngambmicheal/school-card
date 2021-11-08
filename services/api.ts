@@ -68,6 +68,7 @@ export class Api{
     getSchool(schoolId?:any){ return axios.get(`/api/schools/${schoolId}`) }
     getSchoolCourses(schoolId?:any){ return axios.get(`/api/courses?school=${schoolId}`) }
     getSchoolClasses(schoolId?:any){ return axios.get(`/api/classes?school=${schoolId}`) }
+    getSchoolCompetences(schoolId:any){ return axios.get(`/api/competences?school=${schoolId}`)}
 
 
     //sections
@@ -97,6 +98,12 @@ export class Api{
 
     downloadToCsv(classeId:any) { return axios.post(`/api/classes/export-csv`, {class_id: classeId})}
     downloadToPdf(classeId:any) { return axios.post(`/api/classes/export-pdf`, {class_id: classeId})}
+
+
+    sync(){
+      axios.get('/api/competences/sync');
+      axios.get('/api/subjects/sync');
+    }
 }
 
 const api = new Api();

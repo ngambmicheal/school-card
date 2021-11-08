@@ -41,15 +41,19 @@ export default function examDetails(){
                 setResults(data)
             })
 
-            api.getCompetences().then(({data:{data}} : any) => {
-                setCompetences(s => data);
-            })
-
             api.getStudents().then(({data:{data}} : any) => {
                 setStudents(s => data);
             } )
         }
     }, [examId])
+
+    useEffect(() =>{
+        if(exam){
+            api.getSchoolCompetences(exam?.class_id.school).then(({data:{data}} : any) => {
+                setCompetences(s => data);
+            })
+        }
+    }, [exam])
 
     useEffect(() => {
         if(results && exam){
@@ -65,6 +69,10 @@ export default function examDetails(){
 
     const printResults = () => {
         window.open('/api/exams/results/'+examId, '_blank')
+    }
+
+    const printStats = () => {
+        window.open('/api/exams/stats?exam_id='+examId, '_blank')
     }
 
     useEffect(() => {
@@ -174,6 +182,8 @@ export default function examDetails(){
             <button className='mx-3 btn btn-success' onClick={() => getRank()} > get Rank</button>
 
             <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button>
+           
+            <button className='mx-3 btn btn-dark' onClick={() => printStats(true)} > Imprimer Statistics</button>
            
             <table className='table table-striped' >
                 <thead>
