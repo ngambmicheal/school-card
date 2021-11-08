@@ -60,6 +60,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                         <th>
 
                         </th>
+                        <th> </th>
                         {competences && competences.map(competence=> {
                             return competence.subjects?.map(subject => {
                                 return <th key={subject._id} colSpan={subject.courses?.length+1} > {subject.slug || subject.name} </th>

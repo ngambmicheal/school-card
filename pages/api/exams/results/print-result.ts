@@ -30,9 +30,10 @@ export default async function handler(
 
     const {result} = req.query
 
-    const competences =  await competenceSchema.find().populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
-
     examResultSchema.findOne({_id:result}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema}}).then(async results => {
+       
+        const competences =  await competenceSchema.find({school:results.exam_id.class_id.school}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
+
         var options = {
             format: "A4",
             orientation: "portrait",

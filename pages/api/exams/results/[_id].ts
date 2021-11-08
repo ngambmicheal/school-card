@@ -14,6 +14,7 @@ import ReactDOMServer from 'react-dom/server';
 import archiver from 'archiver';
 import { schoolSchema } from '../../../../models/school';
 import { courseSchema } from '../../../../models/course';
+import { classeSchema } from '../../../../models/classe';
   
 
 export default async function handler(
@@ -23,8 +24,10 @@ export default async function handler(
 
     const {_id:exam_id} = req.query
 
+    const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema});
+
     const totalResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})
-    const competences =  await competenceSchema.find().populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
+    const competences =  await competenceSchema.find({school:exam.class_id.school}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
     var dir = `./tmp/exams/${exam_id}`;
     var zipOutput = fs.createWriteStream(`./public/exams/${exam_id}.zip`);
