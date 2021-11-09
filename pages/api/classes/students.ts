@@ -12,7 +12,7 @@ export default function handler(
 ) { 
 
     const {class_id} = req.query
-    studentSchema.find(req.query).sort({name:1}).then(students => {
+    studentSchema.find(req.query).sort({number:1}).then(students => {
             res.json({data:students, status:true});
         })
         .catch((e) => {
