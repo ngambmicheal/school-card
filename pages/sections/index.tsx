@@ -41,7 +41,7 @@ export default function Sections(){
             <table className='table '>
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Nom</th>
                         <th>Ecole</th>
                         <th>Type de Bullentin</th>
                         <th>Action</th>
@@ -97,15 +97,15 @@ export function CreateSectionModal({modalIsOpen, closeModal, save, class_id, sch
             contentLabel="Add Student"
           >
             <div className='modal-body'>
-            <h2 >Hello</h2>
-            <button onClick={closeModal}>close</button>
+            <h2 >Ajouter une section</h2>
+            <button onClick={closeModal}>fermer</button>
                 <div className='form-group'>
-                    <label>Name </label>
+                    <label>Nom </label>
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
                 </div>
 
                 <div className='form-group my-3'>
-                    <label>School</label>
+                    <label>Ecole</label>
 
                     <select className='form-control' name='school'  onChange={handleChange} >
                         <option value=''> Choisir </option>
@@ -127,7 +127,7 @@ export function CreateSectionModal({modalIsOpen, closeModal, save, class_id, sch
                 </div>
 
                 <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success'>Save</button>
+                    <button onClick={() =>save(student)} className='btn btn-success'>Enregistrer</button>
                 </div>
             </div>
           </Modal>
