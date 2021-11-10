@@ -230,7 +230,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
         <p style={{fontSize:'8px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A=Acquis, A+=Expert</p>
     </div>
 
-    <table style={{width:'100%',margin:'10px', fontSize:'10px'}}>
+    <table style={{width:'100%',margin:'10px', fontSize:'12px'}}>
         <tr>
             <th align='center'>
 
