@@ -128,7 +128,6 @@ export default function resultsActions(competences:CompetenceInterface[], result
 <div className='center' >
     BULLETIN D'EVALUATION - {results.exam_id?.name} - 2021/2022
 </div>
-<br />
 
 <div>
 <table className='table1'>

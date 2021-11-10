@@ -1,12 +1,14 @@
 import mg from "../services/mg"
 import SchoolInterface, { schoolSchema } from "./school"
-import { sectionSchema } from "./section"
+import SectionInterface, { sectionSchema } from "./section"
 
 export default interface ClasseInterface {
     _id?:string,
     id?:string,
     name:string,
-    school?:SchoolInterface | string
+    school?:SchoolInterface | string,
+    section?:SectionInterface | string,
+    teacher:string
 }
 
 

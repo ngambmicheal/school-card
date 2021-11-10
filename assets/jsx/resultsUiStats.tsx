@@ -98,9 +98,9 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                                 )
                             })
                         })}
-                        <th>{points} </th>
+                        <th>Totaux / {points} </th>
                         <th>Moyenne</th>
-                        <th>Rank</th>
+                        <th>Rang</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -168,7 +168,7 @@ export function ExamResult({ result, competences, exam, points}:{competences:Com
     const total = getTotal(result);
 
    return  <tr>
-        <td>{result?.student.number}</td>
+        <td>{result?.student?.number}</td>
         <td>{result?.student?.name}</td>
         {competences && competences.map(competence=> {
             return competence.subjects?.map(subject => {

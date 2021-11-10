@@ -56,17 +56,13 @@ export default function Classes(){
                         <th>Name</th>
                         <th>School</th>
                         <th>Section</th>
+                        <th>Teacher </th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {classes.map((classe:any) => {
-                       return  <tr key={classe._id}>
-                            <td>{classe.name}</td>
-                            <td>{classe.school?.name}</td>
-                            <td>{classe.section?.name}</td>
-                            <td><Link href={`classes/${classe._id}`}>Voir</Link> |  <a href='javascript:void(0)'  onClick={() =>deleteClasse(classe._id)}>Delete</a></td>
-                        </tr>
+                       return  <ClasseRow classe={classe} />
                     })
                     }
                 </tbody>
@@ -74,6 +70,26 @@ export default function Classes(){
 
             <CreateClassModal closeModal={closeModal} save={saveClasse} modalIsOpen={modalIsOpen} schools={schools} sections={sections} />
         </>
+    )
+}
+
+export function ClasseRow({classe}:{classe:ClasseInterface}) {
+    const [teacher, setTeacher] = useState(classe.teacher); 
+
+
+    const updateTeacher = (event) => {
+        const tt = event.target.value; 
+        setTeacher(tt);
+        api.updateClasse({_id:classe._id, teacher:tt});
+    }
+    return (
+        <tr key={classe._id}>
+            <td>{classe.name}</td>
+            <td>{classe.school?.name}</td>
+            <td>{classe.section?.name}</td>
+            <td><input  value={classe.teacher} onChange={updateTeacher} /> </td>
+            <td><Link href={`classes/${classe._id}`}>Voir</Link> |  <a href='javascript:void(0)'  onClick={() =>deleteClasse(classe._id)}>Delete</a></td>
+        </tr>
     )
 }
 
