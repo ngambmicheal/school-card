@@ -34,7 +34,7 @@ export default async function handler(
     }
 
         var options = {
-            format: "A2",
+            format: "A3",
             orientation: "landscape",
             border: "1mm",
             header: {
