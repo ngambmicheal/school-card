@@ -66,9 +66,9 @@ export default async function handler(
                 .table1, .table2{
                     border-collapse: collapse;
                     width: 100%;
-                    margin-top: 10px;
-                    margin-bottom: 20px;
-                    font-size:10px;
+                    margin-top: 5px;
+                    margin-bottom: 5px;
+                    font-size:8px;
                     }
                     .com, b{
                     font-weight: bold;

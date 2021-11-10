@@ -224,53 +224,13 @@ export default function resultsActions(competences:CompetenceInterface[], result
                  ) 
              })}
 
-
-        <table className='table1'>
-            <tr>
-                <th>TOTAL DES POINTS</th>
-                <th colSpan={4}>20</th>
-                <th colSpan={4}>30</th>
-                <th colSpan={4}>40</th>
-            </tr>
-            <tr>
-                <th>MOYENNES</th>
-                <th>0-10</th>
-                <th>11-14</th>
-                <th>15-17</th>
-                <th>18-20</th>
-                <th>0-15</th>
-                <th>16.5-21</th>
-                <th>12.5-25.5</th>
-                <th>26-40</th>
-                <th>0-20</th>
-                <th>22-28</th>
-                <th>30-34</th>
-                <th>36-40</th>
-            </tr>
-            <tr>
-                <th>APPRECIATIONS (COTES)</th>
-                <th>NA</th>
-                <th>ECA</th>
-                <th>A</th>
-                <th>A+</th>
-                <th>NA</th>
-                <th>ECA</th>
-                <th>A</th>
-                <th>A+</th>
-                <th>NA</th>
-                <th>ECA</th>
-                <th>A</th>
-                <th>A+</th>
-            </tr>
-        </table>
-     </tbody>
- </table>
-
+    </tbody>
+    </table>
     <div className='center'>
-        <p style={{fontSize:'12px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A=Acquis, A+=Expert</p>
+        <p style={{fontSize:'8px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A=Acquis, A+=Expert</p>
     </div>
 
-    <table style={{width:'100%',margin:'20px'}}>
+    <table style={{width:'100%',margin:'10px', fontSize:'10px'}}>
         <tr>
             <th align='center'>
 
@@ -293,7 +253,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
         </tr>
     </table>
 
-    <table style={{width:'100%', 'margin':'20px', marginTop:'30px'}}>
+    <table style={{width:'100%', 'margin':'10px'}}>
         <tr>
             <th>Visa du parent</th>
             <th>Visa de L'Enseignant </th>
