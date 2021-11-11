@@ -47,7 +47,7 @@ export default async function handler(
                 height: "0mm",
             },
             footer: {
-                height: "10mm",
+                height: "0mm",
                 contents: {
                     // first: 'Cover page',
                     // 2: 'Second page', // Any page number is working. 1-based index
@@ -67,7 +67,7 @@ export default async function handler(
                     border-collapse: collapse;
                     width: 100%;
                     margin-top: 10px;
-                    margin-bottom: 20px;
+                    margin-bottom: 10px;
                     font-size:10px;
                     }
                     .com, b{

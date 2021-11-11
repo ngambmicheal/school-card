@@ -23,8 +23,8 @@ export default async function handler(
     const {exam_id} = req.query
 
     const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema});
-    console.log(exam);
-    const totalResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})
+    const totalResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({number:1}).collation({locale: "en_US", numericOrdering: true})
+    const statsResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})
     const competences =  await competenceSchema.find({school:exam.class_id.school}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
     var dir = `./tmp/stats/${exam_id}`;
@@ -36,12 +36,12 @@ export default async function handler(
         var options = {
             format: "A3",
             orientation: "landscape",
-            border: "10mm",
+            border: "1mm",
             header: {
                 height: "0mm",
             },
             footer: {
-                height: "10mm",
+                height: "1mm",
                 contents: {
                     // first: 'Cover page',
                     // 2: 'Second page', // Any page number is working. 1-based index
@@ -51,7 +51,7 @@ export default async function handler(
             }
         };
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsUiStats(exam, competences, totalResults))
+        let html = ReactDOMServer.renderToStaticMarkup(resultsUiStats(exam, competences, totalResults, statsResults))
         html+=`
                 <style>
                 .center{
@@ -62,7 +62,7 @@ export default async function handler(
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 20px;
-                    font-size:10px;
+                    font-size:6px;
                     }
                     .com, b{
                     font-weight: bold;

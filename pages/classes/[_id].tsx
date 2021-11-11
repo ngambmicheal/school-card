@@ -155,7 +155,7 @@ export default function ClasseDetails(){
                 <tbody>
                     {students.map((student, index) => {
                     return <tr key={student._id}>
-                        <td> {index + 1} </td>
+                        <td> {student.number} </td>
                         <td> {student.name} </td>
                         <td>{student.phone}</td>
                         <td>{student.email}</td>
