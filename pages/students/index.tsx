@@ -32,14 +32,14 @@ export default function Students(){
 
     return (
         <>
-            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une student </button>
+            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter un élève </button>
             <table className='table '>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Phone</th>
+                        <th>Nom</th>
+                        <th>Numéro de téléphone</th>
                         <th>Email</th>
-                        <th>Class</th>
+                        <th>Classe</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -91,15 +91,15 @@ export function CreateClassModal({modalIsOpen, closeModal, save}:CreateClassModa
             contentLabel="Add Classe"
           >
             <div className='modal-body'>
-            <h2 >Hello</h2>
-            <button onClick={closeModal}>close</button>
+            <h2 >Ajouter un élève</h2>
+            <button onClick={closeModal}>fermer</button>
                 <div className='form-group'>
-                    <label>Name </label>
+                    <label>Nom </label>
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
                 </div>
 
                 <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success'>Save</button>
+                    <button onClick={() =>save(student)} className='btn btn-success'>Enregistrer</button>
                 </div>
             </div>
           </Modal>

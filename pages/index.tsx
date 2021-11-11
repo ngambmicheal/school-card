@@ -20,7 +20,7 @@ const Home: NextPage = () => {
     <div className={styles.container}>
         <main className={styles.main}>
           <h4 className={styles.title}>
-            Bienvenue au site.  Choississez Votre Ecole :
+            Bienvenue au site. <br />  Choississez Votre Ecole :
           </h4>
 
 

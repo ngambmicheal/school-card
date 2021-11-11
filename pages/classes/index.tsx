@@ -53,8 +53,8 @@ export default function Classes(){
             <table className='table '>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>School</th>
+                        <th>Nom</th>
+                        <th>Ecole</th>
                         <th>Section</th>
                         <th>Teacher </th>
                         <th>Action</th>
@@ -88,7 +88,7 @@ export function ClasseRow({classe}:{classe:ClasseInterface}) {
             <td>{classe.school?.name}</td>
             <td>{classe.section?.name}</td>
             <td><input  value={classe.teacher} onChange={updateTeacher} /> </td>
-            <td><Link href={`classes/${classe._id}`}>Voir</Link> |  <a href='javascript:void(0)'  onClick={() =>deleteClasse(classe._id)}>Delete</a></td>
+            <td><Link href={`classes/${classe._id}`}>Voir</Link> |  <a href='javascript:void(0)'  onClick={() =>deleteClasse(classe._id)}>Supprimer</a></td>
         </tr>
     )
 }
@@ -124,16 +124,16 @@ export function CreateClassModal({modalIsOpen, closeModal, save, schools, sectio
             contentLabel="Add Classe"
           >
             <div className='modal-body'>
-            <h2 >Hello</h2>
-            <button onClick={closeModal}>close</button>
+            <h2 >Ajouter une classe</h2>
+            <button onClick={closeModal}>fermer</button>
                 <div className='form-group my-3'>
-                    <label>Name </label>
+                    <label>Nom </label>
                     <input className='form-control' name='name' value={classe?.name} onChange={handleChange}></input>
                 </div>
 
 
                 <div className='form-group my-3'>
-                    <label>School</label>
+                    <label>Ecole</label>
 
                     <select className='form-control' name='school'  onChange={handleChange} >
                         <option value=''> Choisir </option>
@@ -156,7 +156,7 @@ export function CreateClassModal({modalIsOpen, closeModal, save, schools, sectio
 
 
                 <div className='from-group'>
-                    <button onClick={() =>save(classe)} className='btn btn-success' disabled={!classe.school}>Save</button>
+                    <button onClick={() =>save(classe)} className='btn btn-success' disabled={!classe.school}>Enregistrer</button>
                 </div>
             </div>
           </Modal>

@@ -41,12 +41,12 @@ export default function Subjects(){
 
     return (
         <>
-            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une matiere </button>
+            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une matière </button>
             <table className='table '>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>School</th>
+                        <th>Nom</th>
+                        <th>Ecole</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -98,15 +98,15 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, sch
             contentLabel="Add Student"
           >
             <div className='modal-body'>
-            <h2 >Hello</h2>
-            <button onClick={closeModal}>close</button>
+            <h2 >Ajouter une matière</h2>
+            <button onClick={closeModal}>fermer</button>
                 <div className='form-group'>
-                    <label>Name </label>
+                    <label>Nom </label>
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
                 </div>
 
                 <div className='form-group'>
-                    <label>School</label>
+                    <label>Ecole</label>
                     <select className='form-control' name='school' value={student?.school} onChange={handleChange} >
                         {schools.map(school => {
                             return (<option key={school._id} value={school._id}> {school.name} </option>)
@@ -115,7 +115,7 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, sch
                 </div>
 
                 <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success' disabled={!student.school}>Save</button>
+                    <button onClick={() =>save(student)} className='btn btn-success' disabled={!student.school}>Enregistrer</button>
                 </div>
             </div>
           </Modal>
