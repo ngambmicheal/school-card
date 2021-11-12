@@ -147,7 +147,7 @@ export default function ClasseDetails(){
                         <th>No </th>
                         <th>Name</th>
                         <th>Phone</th>
-                        <th>Email</th>
+                        <th>Sex</th>
                         <th>Age</th> 
                         <th> Action </th>
                     </tr>
@@ -158,7 +158,7 @@ export default function ClasseDetails(){
                         <td> {student.number} </td>
                         <td> {student.name} </td>
                         <td>{student.phone}</td>
-                        <td>{student.email}</td>
+                        <td>{student.sex}</td>
                         <td>{student.dob}</td>
                         <td> <a href='javascript:void(0)'  onClick={() =>deleteStudent(student._id)}>Delete</a></td>
                     </tr>
@@ -167,7 +167,7 @@ export default function ClasseDetails(){
                 </tbody>
             </table>
 
-            {classeId && <CreateStudentModal modalIsOpen={modalIsOpen} closeModal={closeModal} save={saveStudent} class_id={classeId} /> }
+            {classeId && <CreateStudentModal modalIsOpen={modalIsOpen} closeModal={closeModal} save={saveStudent} class_id={classeId} totalUsers={students.length} /> }
             {classeId && <ImportStudents modalIsOpen={ImportIsOpen} closeModal={closeImportModal} save={importStudent} class_id={classeId} />}
 
         </>
@@ -177,12 +177,13 @@ export default function ClasseDetails(){
 
 type CreateStudentModalProps = {
     modalIsOpen:boolean,
+    totalUsers:number,
     class_id?:any,
     closeModal: () => void,
     save:(student:any) => void
 }
-export function CreateStudentModal({modalIsOpen, closeModal, save, class_id}:CreateStudentModalProps){
-    const [student, setStudent] = useState<StudentInterface>({class_id, name:''});
+export function CreateStudentModal({modalIsOpen, closeModal, save, class_id, totalUsers}:CreateStudentModalProps){
+    const [student, setStudent] = useState<StudentInterface>({class_id, name:'', number:(totalUsers+1).toString()});
 
     function handleChange(e:any) {
         const key = e.target.name
@@ -193,6 +194,13 @@ export function CreateStudentModal({modalIsOpen, closeModal, save, class_id}:Cre
           [key]: value
         }))
       }
+
+      useEffect(()=>{
+        setStudent(inputData => ({
+          ...inputData,
+          number: (totalUsers+1).toString()
+        }))
+      }, [totalUsers]);
 
       
     return (
@@ -208,6 +216,10 @@ export function CreateStudentModal({modalIsOpen, closeModal, save, class_id}:Cre
             <h2 >Hello</h2>
             <button onClick={closeModal}>close</button>
                 <div className='form-group'>
+                    <label>Numero </label>
+                    <input className='form-control' type='number' name='number' value={student?.number} onChange={handleChange}></input>
+                </div>
+                <div className='form-group'>
                     <label>Name </label>
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
                 </div>
@@ -216,14 +228,13 @@ export function CreateStudentModal({modalIsOpen, closeModal, save, class_id}:Cre
                     <input className='form-control' name='phone' value={student?.phone} onChange={handleChange}></input>
                 </div>
                 <div className='form-group'>
-                    <label>Email </label>
-                    <input className='form-control' name='email' value={student?.email} onChange={handleChange}></input>
+                    <label>Sex </label>
+                    <input className='form-control' name='sex' value={student?.sex} onChange={handleChange}></input>
                 </div>
                 <div className='form-group'>
                     <label>Date </label>
                     <input className='form-control' name='dob' value={student?.dob} onChange={handleChange}></input>
                 </div>
-
                 <div className='from-group'>
                     <button onClick={() =>save(student)} className='btn btn-success'>Save</button>
                 </div>
@@ -251,6 +262,7 @@ export function CreateExamModal({modalIsOpen, closeModal, save, class_id}:Create
           [key]: value
         }))
       }
+    
 
       
     return (
