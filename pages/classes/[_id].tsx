@@ -149,19 +149,13 @@ export default function ClasseDetails(){
                         <th>Phone</th>
                         <th>Sex</th>
                         <th>Age</th> 
+                        <th>Lieu</th>
                         <th> Action </th>
                     </tr>
                 </thead>
                 <tbody>
                     {students.map((student, index) => {
-                    return <tr key={student._id}>
-                        <td> {student.number} </td>
-                        <td> {student.name} </td>
-                        <td>{student.phone}</td>
-                        <td>{student.sex}</td>
-                        <td>{student.dob}</td>
-                        <td> <a href='javascript:void(0)'  onClick={() =>deleteStudent(student._id)}>Delete</a></td>
-                    </tr>
+                    return <StudentRow stud={student} key={student._id} deleteStudent={deleteStudent} />
                     })
                 }   
                 </tbody>
@@ -174,6 +168,45 @@ export default function ClasseDetails(){
     )
 }
 
+type StudentProps = {
+  stud:StudentInterface,
+  deleteStudent:(id:string) => void, 
+}
+
+export function StudentRow({stud, deleteStudent}:StudentProps){
+  const [student, setStudent] = useState(stud); 
+  const [hasUpdated, setHasUpdated] = useState(false)
+
+
+  function handleChange(e:any) {
+    const key = e.target.name
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+
+    setStudent(inputData => ({
+      ...inputData,
+      [key]: value
+    }))
+    setHasUpdated(true)
+  }
+
+  const updateStudent = () => {
+    api.updateStudent(student).then(() => {
+      setHasUpdated(false)
+    })
+  }
+
+  return (
+    student._id && <tr >
+            <td>  <input className='form-control' type='number' name='number' value={student?.number} onChange={handleChange} />  </td>
+            <td>  <input className='form-control' type='text' name='name' value={student?.name} onChange={handleChange} />  </td>
+            <td>  <input className='form-control' type='number' name='phone' value={student?.phone} onChange={handleChange}></input></td>
+            <td>  <input className='form-control' type='text' name='sex' value={student?.sex} onChange={handleChange}></input></td>
+            <td>  <input className='form-control' type='text' name='dob' value={student?.dob} onChange={handleChange}></input></td>
+            <td>  <input className='form-control' type='text' name='place' value={student?.place} onChange={handleChange}></input></td>
+            <td>  {hasUpdated && <a href='javascript:void(0)'  onClick={() =>updateStudent()}>Update</a> }  | <a href='javascript:void(0)'  onClick={() =>deleteStudent(student._id)}>Delete</a></td>
+        </tr>
+    )
+}
 
 type CreateStudentModalProps = {
     modalIsOpen:boolean,

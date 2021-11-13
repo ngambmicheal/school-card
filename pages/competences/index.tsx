@@ -46,6 +46,7 @@ export default function Competences(){
                 <thead>
                     <tr>
                         <th>Nom</th>
+                        <th>Slug</th>
                         <th>Ecole</th>
                         <th>Action</th>
                     </tr>
@@ -54,6 +55,7 @@ export default function Competences(){
                     {competences.map(competence => {
                        return  <tr key={competence._id}>
                             <td>{competence.name}</td>
+                            <td>{competence.slug}</td>
                             <td>{competence.school?.name}</td>
                             <td><Link href={`competences/${competence._id}`}>Voir</Link> | <a href='javascript:void(0)'  onClick={() =>deleteCompetence(competence._id)}>Delete</a> </td>
                         </tr>

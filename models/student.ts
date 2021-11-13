@@ -11,7 +11,8 @@ export default interface StudentInterface{
     dob?:string,
     class_id ?:string | ClasseInterface,
     number?:string,
-    sex?:string
+    sex?:string,
+    place?:string
 }
 
 const StudentSchema = new mg.Schema({

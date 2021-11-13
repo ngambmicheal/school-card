@@ -87,7 +87,7 @@ export function ClasseRow({classe}:{classe:ClasseInterface}) {
             <td>{classe.name}</td>
             <td>{classe.school?.name}</td>
             <td>{classe.section?.name}</td>
-            <td><input  value={classe.teacher} onChange={updateTeacher} /> </td>
+            <td><input  value={teacher} onChange={updateTeacher} /> </td>
             <td><Link href={`classes/${classe._id}`}>Voir</Link> |  <a href='javascript:void(0)'  onClick={() =>deleteClasse(classe._id)}>Supprimer</a></td>
         </tr>
     )

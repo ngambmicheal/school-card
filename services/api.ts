@@ -24,6 +24,7 @@ export class Api{
     getStudents() {  return axios.get('/api/students');  }
     deleteStudent(studentId:string) { return axios.post('/api/students/delete',{_id:studentId})}
     saveStudent(data:StudentInterface) { return axios.post('/api/students/store', data); }
+    updateStudent(data:StudentInterface) {return axios.post('/api/students/update', data)}
     importStudents(data:any) {
         var formData = new FormData();
         formData.append('file', data.file)
