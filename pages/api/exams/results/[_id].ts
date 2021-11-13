@@ -57,18 +57,18 @@ export default async function handler(
             }
         };
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, totalResults.length))
+        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, totalResults.length, totalResults))
         html+=`
                 <style>
                 .center{
                     text-align:center
                 }
-                .table1, .table2{
+                .table1, .table2, .table3{
                     border-collapse: collapse;
                     width: 100%;
-                    margin-top: 10px;
-                    margin-bottom: 10px;
-                    font-size:10px;
+                    margin-top: 2px;
+                    margin-bottom: 5px;
+                    font-size:8px;
                     }
                     .com, b{
                     font-weight: bold;
@@ -84,6 +84,10 @@ export default async function handler(
 
                     .th{
                     width:300px;
+                    }
+
+                    .table3 {
+                        font-size:9px;
                     }
                 </style>
                 `
