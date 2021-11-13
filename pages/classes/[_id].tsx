@@ -197,12 +197,12 @@ export function StudentRow({stud, deleteStudent}:StudentProps){
 
   return (
     student._id && <tr >
-            <td>  <input className='form-control' type='number' name='number' value={student?.number} onChange={handleChange} />  </td>
+            <td>  <input style={{width:'50px'}} type='number' name='number' value={student?.number} onChange={handleChange} />  </td>
             <td>  <input className='form-control' type='text' name='name' value={student?.name} onChange={handleChange} />  </td>
-            <td>  <input className='form-control' type='number' name='phone' value={student?.phone} onChange={handleChange}></input></td>
-            <td>  <input className='form-control' type='text' name='sex' value={student?.sex} onChange={handleChange}></input></td>
-            <td>  <input className='form-control' type='text' name='dob' value={student?.dob} onChange={handleChange}></input></td>
-            <td>  <input className='form-control' type='text' name='place' value={student?.place} onChange={handleChange}></input></td>
+            <td>  <input  style={{width:'150px'}} className='form-control' type='number' name='phone' value={student?.phone} onChange={handleChange}></input></td>
+            <td>  <input  style={{width:'50px'}} type='text' name='sex' value={student?.sex} onChange={handleChange}></input></td>
+            <td>  <input  style={{width:'150px'}} className='form-control' type='text' name='dob' value={student?.dob} onChange={handleChange}></input></td>
+            <td>  <input  style={{width:'150px'}} type='text' name='place' value={student?.place} onChange={handleChange}></input></td>
             <td>  {hasUpdated && <a href='javascript:void(0)'  onClick={() =>updateStudent()}>Update</a> }  | <a href='javascript:void(0)'  onClick={() =>deleteStudent(student._id)}>Delete</a></td>
         </tr>
     )

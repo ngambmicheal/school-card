@@ -2,6 +2,7 @@ import CompetenceInterface from "../../models/competence";
 import fs from 'fs';
 import SubjectInterface from "../../models/subject";
 import { logo } from "./image";
+import ExamResultInterface from "../../models/examResult";
 
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -65,7 +66,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseInt(result[el]);
+            sum+=parseFloat(result[el]);
         }
     }
     return sum; 
@@ -75,21 +76,21 @@ const getTotalExam = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('point_')){
-            sum+=parseInt(result[el]);
+            sum+=parseFloat(result[el]);
         }
     }
     return sum; 
 }
 
 
-export default function resultsActions(competences:CompetenceInterface[], results:any, totalUsers:number ) {
+export default function resultsActions(competences:CompetenceInterface[], results:any, totalUsers:number, statsResults:ExamResultInterface[] ) {
 
     const getSubjectTotal = (subject:SubjectInterface) => {
         let total = 0 ; 
         let pointTotal = 0;
         subject.courses?.map(c => {
-            total+=parseInt(results[`subject_${c._id}`]??0);
-            pointTotal+=parseInt(results.exam_id[`point_${c._id}`]??0);
+            total+=parseFloat(results[`subject_${c._id}`]??0);
+            pointTotal+=parseFloat(results.exam_id[`point_${c._id}`]??0);
         })
 
         const app = getAppreciation(total, pointTotal);
@@ -230,36 +231,46 @@ export default function resultsActions(competences:CompetenceInterface[], result
         <p style={{fontSize:'8px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A=Acquis, A+=Expert</p>
     </div>
 
-    <table style={{width:'100%',margin:'10px', fontSize:'12px'}}>
+    <table style={{fontSize:'12px', width:'100%'}} className='table1'>
         <tr>
-            <th align='center'>
-
-            </th>
-            <th rowSpan={5}>
-                Observation 
-                <br />
-                <br />
-                {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)}
-            </th>
+            <th>Total </th>
+            <th> {totalMarks} / {totalPoints} </th>
+            <th>Observations</th>
+            <th colSpan={3}>Conseil de Classe</th>
         </tr>
         <tr>
-            <td>TOTAL : {totalMarks} / {totalPoints} </td>
+            <td>Moyenne</td>
+            <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
+            <td rowSpan={3}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td> Avertissement Conduits </td>
+            <td> <input type='checkbox' /> Oui | <input type='checkbox' /> Non  </td>
         </tr>
         <tr>
-            <td>Moyenne : { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
+            <td>Rang </td>
+            <td>  {results.rank} / {totalUsers} </td>
+            <td> Avertissement Travails </td>
+            <td> <input type='checkbox' /> Oui | <input type='checkbox' /> Non  </td>
         </tr>
         <tr>
-            <td>Rang : {results.rank} / {totalUsers}</td>
+            <td>Moyenne generale</td>
+            <td> { ((( ( getTotal(statsResults[0])/ totalPoints) + getTotal(statsResults[statsResults.length-1])/totalPoints ) / 2) * 20).toFixed(2) }  /20 </td>
+            <td> Encouragements </td>
+            <td> <input type='checkbox' /> Oui | <input type='checkbox' /> Non </td>
+        </tr>
+        <tr>
+            <td>Moyenne du premier</td>
+            <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
+            <td> Visa du Parent</td>
+            <td colSpan={2}> Visa du Chef D'etablissement </td>
+        </tr>
+        <tr>
+            <td>Moyenne du dernier</td>
+            <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
+            <td> </td>
+            <td colSpan={2}> </td>
         </tr>
     </table>
 
-    <table style={{width:'100%', 'margin':'10px'}}>
-        <tr>
-            <th>Visa du parent</th>
-            <th>Visa de L'Enseignant </th>
-            <th>Chef de l'etablissement </th>
-        </tr>
-    </table>
 </>
 );
 }

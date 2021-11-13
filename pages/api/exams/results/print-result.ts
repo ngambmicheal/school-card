@@ -52,17 +52,18 @@ export default async function handler(
             }
         };
 
-        const total = await examResultSchema.find({exam_id:results.exam_id}).count();
-        console.log(total);
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, total ))
+        const totalResults = await examResultSchema.find({exam_id:results.exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1});
+
+        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, totalResults.length, totalResults ))
         html+=`
                 <style>
                 .center{
                     text-align:center
                 }
-                .table1, .table2{
+                .table1, .table2, .table3{
                     border-collapse: collapse;
+                    font-weight:bolder;
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 10px;
@@ -83,6 +84,10 @@ export default async function handler(
                     .th{
                     width:300px;
                     }
+                
+                .table3 td{
+                    height:60px
+                }
                 </style>
                 `
 

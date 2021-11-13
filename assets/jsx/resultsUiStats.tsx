@@ -9,7 +9,7 @@ export const getTotalPoints = (exam:ExamInterface) => {
     console.log(sum)
     for(const el in exam){
         if(el.includes('point_')){
-            sum+=parseInt(exam[el])??0
+            sum+=parseFloat(exam[el])??0
         }
     }
   
@@ -20,7 +20,7 @@ export const getTotal = (result:ExamResultInterface) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseInt(result[el])??0;
+            sum+=parseFloat(result[el]??0);
         }
     }
    return sum; 
@@ -29,7 +29,7 @@ export const getTotal = (result:ExamResultInterface) => {
 export const getTotals = (subject:SubjectInterface, result:ExamResultInterface) => {
     let total = 0; 
             subject.courses?.map(cc => {
-                total+=result[`subject_${cc._id}`] ?? 0; 
+                total+=parseFloat(result[`subject_${cc._id}`] ?? 0); 
             })
     return total; 
 }
@@ -158,7 +158,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
     )
 }
 
-const reducer = (previousValue:any, currentValue:any) => parseInt(previousValue??0) + parseInt(currentValue??0)
+const reducer = (previousValue:any, currentValue:any) => parseFloat(previousValue??0) + parseFloat(currentValue??0)
 
 export function ExamResult({ result, competences, exam, points}:{competences:CompetenceInterface[], result:ExamResultInterface|any, exam:any, points:any}){
 
