@@ -37,12 +37,13 @@ export default async function handler(
         var options = {
             format: "A4",
             orientation: "portrait",
-            border: "10mm",
+            border: "2mm",
             header: {
-                height: "0mm",
+                height: "1mm",
+
             },
             footer: {
-                height: "0mm",
+                height: "1mm",
                 contents: {
                     // first: 'Cover page',
                     // 2: 'Second page', // Any page number is working. 1-based index
@@ -63,11 +64,11 @@ export default async function handler(
                 }
                 .table1, .table2, .table3{
                     border-collapse: collapse;
-                    font-weight:bolder;
+                    font-weight:bold;
                     width: 100%;
-                    margin-top: 10px;
-                    margin-bottom: 10px;
-                    font-size:10px;
+                    margin-top: 2px;
+                    margin-bottom: 5px;
+                    font-size:8px;
                     }
                     .com, b{
                     font-weight: bold;
@@ -85,8 +86,8 @@ export default async function handler(
                     width:300px;
                     }
                 
-                .table3 td{
-                    height:60px
+                .table3 {
+                    font-size:9px;
                 }
                 </style>
                 `

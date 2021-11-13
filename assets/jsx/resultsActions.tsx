@@ -103,25 +103,22 @@ export default function resultsActions(competences:CompetenceInterface[], result
 
     return (
         <>
-    <table className='table2'>
+    <table className='table2' style={{fontSize:'8px'}}>
     <tr>
-        <th className='center' style={{width:'33%'}}>
+        <th className='center' style={{width:'40%'}}>
               <b>REPUBLIQUE DU CAMEROUN</b> <br />
                 <i> Paix - Travail - Patrie </i> <br />
-             <b>GROUPE SCOLAIRE BILINGUE <br/> 
-             PRIVE LAIC LA SEMENCE</b>  <br />
-             <i>BP: 1661 DOUALA BANGUE</i> <br />
-             <i>TEL: (237) 33 08 95 82/699717529</i> <br />
+             <b>GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE</b>  <br />
+             <i>BP: 1661 DOUALA BANGUE , TEL: (237) 33 08 95 82 / 699717529</i> <br />
         </th>
-        <th className='' style={{width:'33%'}}>
-            <img src={`data:image/jpeg;base64, ${logo}`} height={100} />
+        <th className='' style={{width:'20%'}}>
+            <img src={`data:image/jpeg;base64, ${logo}`} height={30} />
         </th>
-        <th className='center' style={{width:'33%'}}>
+        <th className='center' style={{width:'40%'}}>
             <b> REPUBLIC OF CAMEROON</b>  <br />
              <i>Peace - Work - Father/land</i>  <br />
             <b> GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE </b> <br />
-             <i> P.O Box : 1661 DOUALA-BANGUE </i>  <br />
-             <i> Tel : (237) 33089582 </i> <br />
+             <i> P.O Box : 1661 DOUALA-BANGUE , Tel : (237) 33089582 </i> <br />
         </th>
     </tr>
 </table>
@@ -131,7 +128,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
 </div>
 
 <div>
-<table className='table1'>
+<table className='table1' >
  <thead>
      <tr>
          <th colSpan={2}>NOMS ET PRENOMS</th>
@@ -158,10 +155,10 @@ export default function resultsActions(competences:CompetenceInterface[], result
  <table className='table1'>
      <thead>
      <tr>
-         <th rowSpan={2} style={{width:'100px'}}>
+         <th rowSpan={2} style={{width:'50px'}}>
              COMPETENCE
          </th>
-         <th rowSpan={2} className='th'>
+         <th rowSpan={2}  style={{width:'150px'}}>
              SOUS-COMPETENCE
          </th>
          <th >
@@ -201,8 +198,8 @@ export default function resultsActions(competences:CompetenceInterface[], result
                                          return( 
                                              <>
                                              <tr>
-                                                 {!subjectIndex && !courseIndex&& <td rowSpan={getCompetencesLenght(competence)}> {competence.name} </td> }
-                                                 {!courseIndex && <td rowSpan={(subject.courses?.length??1)+1}> {subject.name}  </td>  }
+                                                 {!subjectIndex && !courseIndex&& <th style={{width:'150px'}} rowSpan={getCompetencesLenght(competence)}> {competence.name} </th> }
+                                                 {!courseIndex && <td  style={{width:'150px'}} rowSpan={(subject.courses?.length??1)+1}> {subject.name}  </td>  }
                                                  <td>{!isExcluded ? course.name :''} </td>
                                                  <td>{ !isExcluded ?results.exam_id?.[`point_${course._id}`] :'--'}</td>
                                                  <td>{ !isExcluded ?results[`subject_${course._id}`] ?? 0 : '--'}</td> 
@@ -228,10 +225,10 @@ export default function resultsActions(competences:CompetenceInterface[], result
     </tbody>
     </table>
     <div className='center'>
-        <p style={{fontSize:'8px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A=Acquis, A+=Expert</p>
+        <p style={{fontSize:'7px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A=Acquis, A+=Expert</p>
     </div>
 
-    <table style={{fontSize:'12px', width:'100%'}} className='table1'>
+    <table style={{fontSize:'9px', width:'100%'}} className='table1'>
         <tr>
             <th>Total </th>
             <th> {totalMarks} / {totalPoints} </th>
@@ -243,19 +240,19 @@ export default function resultsActions(competences:CompetenceInterface[], result
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
             <td rowSpan={3}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
             <td> Avertissement Conduits </td>
-            <td> <input type='checkbox' /> Oui | <input type='checkbox' /> Non  </td>
+            <td> {results.ac? 'Oui' : 'Non'} </td>
         </tr>
         <tr>
             <td>Rang </td>
             <td>  {results.rank} / {totalUsers} </td>
             <td> Avertissement Travails </td>
-            <td> <input type='checkbox' /> Oui | <input type='checkbox' /> Non  </td>
+            <td> {results.at? 'Oui' : 'Non'}  </td>
         </tr>
         <tr>
             <td>Moyenne generale</td>
             <td> { ((( ( getTotal(statsResults[0])/ totalPoints) + getTotal(statsResults[statsResults.length-1])/totalPoints ) / 2) * 20).toFixed(2) }  /20 </td>
             <td> Encouragements </td>
-            <td> <input type='checkbox' /> Oui | <input type='checkbox' /> Non </td>
+            <td> {results.en? 'Oui' : 'Non'}  </td>
         </tr>
         <tr>
             <td>Moyenne du premier</td>

@@ -12,7 +12,7 @@ export default function handler(
 
     const {_id} = req.body
     studentSchema.findOneAndDelete({_id}).then(student => {
-        examResultSchema.findOneAndDelete({student_id:_id});
+        examResultSchema.findOneAndDelete({student:_id});
             res.json({data:student, status:true});
         })
         .catch((e) => {
