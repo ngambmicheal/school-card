@@ -198,7 +198,9 @@ export function CreateStudentModal({modalIsOpen, closeModal, save, class_id, tot
       useEffect(()=>{
         setStudent(inputData => ({
           ...inputData,
-          number: (totalUsers+1).toString()
+          number: (totalUsers+1).toString(),
+          name:'',
+          dob:''
         }))
       }, [totalUsers]);
 

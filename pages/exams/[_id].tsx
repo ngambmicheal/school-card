@@ -94,7 +94,7 @@ export function ExamResult({subject, result, subjects}:{subjects:SubjectInterfac
                a = 0; 
                console.log(a)
            }
-           const c = parseInt(b);
+           const c = parseFloat(b);
            if(c && typeof c !== NaN && c.toString().length<3){
                console.log(c)
                 return a + c; 

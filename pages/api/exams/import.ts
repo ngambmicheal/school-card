@@ -147,7 +147,7 @@ export default async function importStudent(
       Object.entries(mapping).map(([leadField, csvField]) => {
         const parsed = stripBomFromKeys(data)
   
-        return [leadField, parseInt(parsed[csvField]??0)]
+        return [leadField, parseFloat(parsed[csvField]??0)]
       })
     )
   }

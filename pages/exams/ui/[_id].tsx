@@ -132,7 +132,7 @@ export default function examDetails(){
         console.log(sum)
         for(const el in exam){
             if(el.includes('point_')){
-                sum+=parseInt(exam[el])??0
+                sum+=parseFloat(exam[el])??0
                 console.log(exam[el])
             }
         }
@@ -165,7 +165,7 @@ export default function examDetails(){
         let sum = 0; 
         for(const el in result){
             if(el.includes('subject_')){
-                sum+=parseInt(result[el]);
+                sum+=parseFloat(result[el]);
             }
         }
         return sum;
@@ -243,7 +243,7 @@ export default function examDetails(){
     )
 }
 
-const reducer = (previousValue:any, currentValue:any) => parseInt(previousValue??0) + parseInt(currentValue??0)
+const reducer = (previousValue:any, currentValue:any) => parseFloat(previousValue??0) + parseFloat(currentValue??0)
 
 export function ExamResult({ result, competences, exam, points}:{competences:CompetenceInterface[], result:ExamResultInterface|any, exam:any, points:any}){
 
