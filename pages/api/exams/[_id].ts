@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { classeSchema } from '../../../models/classe';
 import SubjectInterface, {examSchema} from '../../../models/exam';
+import { sectionSchema } from '../../../models/section';
 
 
 
@@ -11,7 +12,7 @@ export default function handler(
 ) { 
 
     const {_id} = req.query
-    examSchema.findOne({_id}).populate({path:'class_id', model:classeSchema}).then(exam => {
+    examSchema.findOne({_id}).populate({path:'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}).then(exam => {
             res.json({data:exam, status:true});
         })
         .catch((e) => {

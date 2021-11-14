@@ -47,6 +47,7 @@ export default function Subjects(){
                     <tr>
                         <th>Nom</th>
                         <th>Slug</th>
+                        <th>Type</th>
                         <th>Ecole</th>
                         <th>Action</th>
                     </tr>
@@ -55,6 +56,7 @@ export default function Subjects(){
                     {subjects.map(subject => {
                        return  <tr key={subject._id}>
                             <td>{subject.name}</td>
+                            <td>{subject.report_type}</td>
                             <td>{subject.slug}</td>
                             <td>{subject.school?.name}</td>
                             <td><Link href={`subjects/${subject._id}`}>Voir</Link>  | <a href='javascript:void(0)'  onClick={() =>deleteSubject(subject._id)}>Delete</a>  </td>
