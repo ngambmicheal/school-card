@@ -18,7 +18,7 @@ export class Api{
     getClasseStudents(classeId?:any) {return axios.get(`/api/classes/students?class_id=${classeId}`)}
     getClasseExams(classeId?:any) {return axios.get(`/api/exams?class_id=${classeId}`)}
     deleteClasse(classeId:string) { return axios.post('/api/classes/delete',{_id:classeId})}
-    updateClasse(data) { return axios.post('/api/classes/update', data)}
+    updateClasse(data:any) { return axios.post('/api/classes/update', data)}
 
     //students
     getStudents() {  return axios.get('/api/students');  }
@@ -47,9 +47,20 @@ export class Api{
         'Content-Type': 'multipart/form-data',
       },
     }) }
+    importResultsNormal(data:any) {
+      var formData = new FormData();
+      formData.append('file', data.file)
+      formData.append('mapping', JSON.stringify(data.mapping))
+      formData.append('exam_id',data.exam_id)
+
+      return axios.post('/api/exams/import-normal', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }) }
 
     //subjects
-    getSchoolSubjects(school:string){ return axios.get(`/api/subjects?school=${school}`)}
+    getSchoolSubjects(data:{school:string, report_type?:string}){ return axios.get(`/api/subjects?school=${data.school}&report_type=${data.report_type}`)}
     getSubjects() {  return axios.get('/api/subjects',);  }
     saveSubjects(data:SubjectInterface) { return axios.post('/api/subjects/store', data); }
     getSubject(subjectId?:any){ return axios.get(`/api/subjects/${subjectId}`) }

@@ -17,13 +17,11 @@ import { useForm } from "react-hook-form";
 
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
-    const [courses, setCourses] = useState<CourseInterface[]>([])
     const [competences, setCompetences] = useState<CompetenceInterface[]>([])
     const [points, setPoints] = useState(0);
 
     const [students, setStudents] = useState<StudentInterface[]>([])
     const [results, setResults] = useState<any>([])
-    const [modalIsOpen, setModalIsOpen] = useState(false);
     const [ImportIsOpen, setImportIsOpen] = useState(false);
     
 
@@ -238,7 +236,7 @@ export default function examDetails(){
                 </tbody>
             </table>
 
-            {examId && <ImportStudents modalIsOpen={ImportIsOpen} closeModal={closeImportModal} save={importResults} />}
+            {examId && <ImportResults modalIsOpen={ImportIsOpen} closeModal={closeImportModal} save={importResults} />}
         </>
     )
 }
@@ -374,7 +372,7 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, subject}:Crea
 
 
 
-export function ImportStudents({modalIsOpen, closeModal,save}:{modalIsOpen:boolean,closeModal:()=>void,save:(file:File|null)=>void}){
+export function ImportResults({modalIsOpen, closeModal,save}:{modalIsOpen:boolean,closeModal:()=>void,save:(file:File|null)=>void}){
     const [file, setFile] = useState<File|null>(null);
     const [values, setValues] = useState();
 

@@ -10,6 +10,8 @@ import Subjects from "../subjects";
 import StudentInterface from "../../models/student";
 import ExamResultInterface from "../../models/examResult";
 import ExamInterface from "../../models/exam";
+import { toast } from "@chakra-ui/toast";
+import { ImportResults } from "./ui/[_id]";
 
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
@@ -18,6 +20,11 @@ export default function examDetails(){
     const [students, setStudents] = useState<StudentInterface[]>([])
     const [results, setResults] = useState<any>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    const [points, setPoints] = useState(0);
+    const [ImportIsOpen, setImportIsOpen] = useState(false);
+    
+
 
     const router = useRouter();
     const {_id:examId} = router.query;
@@ -41,11 +48,129 @@ export default function examDetails(){
 
     useEffect(()=>{
         if(exam?._id){
-            api.getSchoolSubjects(exam.class_id.school).then(({data:{data}} : any) => {
+            api.getSchoolSubjects({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).then(({data:{data}} : any) => {
                 setSubjects(s => data);
             })
         }
     },[exam])
+
+
+    useEffect(() => {
+        if(results && exam){
+            console.log('thi si sht efile')
+                setExam(inputData => ({
+                    ...inputData,
+                    loaded: 'yes'
+                  }))
+                getTotalPoints();
+                console.log('this is me')
+        }
+    }, [results])
+
+    const printResults = () => {
+        window.open('/api/exams/results-normal/'+examId, '_blank')
+    }
+
+    const printStats = () => {
+        window.open('/api/exams/stats-normal?exam_id='+examId, '_blank')
+    }
+
+    useEffect(() => {
+        if(exam?._id){
+
+            api.updateExam(exam._id, exam).then(({data:{data}} : any) => {
+                //setExam(data)
+            })
+        }
+    }, [exam])
+
+    const handleChange = (e) => {
+        const key = e.target.name
+        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    
+        setExam(inputData => ({
+          ...inputData,
+          [key]: value
+        }))
+
+        getTotalPoints()
+
+    }
+
+    const importResults = (file:File|null) => {
+        api.importResultsNormal({
+            file: file,
+            exam_id:examId,
+          })
+          .then((data) => {
+            toast({
+              status: 'success',
+              title: 'Successfully imported leads',
+              description: `Loaded `,
+            })
+    
+            setTimeout(() => router.push('/soft-leads'), 2000)
+          })
+          .catch((e) => {
+            console.log(e)
+            toast({
+              status: 'error',
+              title: typeof e === 'string' ? e : 'Failed to import leads',
+              description: e.error??e.toString(),
+              isClosable: true,
+            })
+
+          })
+    }   
+
+    const closeImportModal = () => {
+        setImportIsOpen(s => false);
+    }
+
+    const getTotalPoints = () => { 
+        let sum = 0; 
+        console.log(sum)
+        for(const el in exam){
+            if(el.includes('point_')){
+                sum+=parseFloat(exam[el])??0
+                console.log(exam[el])
+            }
+        }
+       setPoints(s => sum)
+    }
+
+    const getRank = () => {
+            api.getExamResults(examId).then(({data:{data}} : any) => {
+                const sortedData = data.sort((a, b) => {
+                    let lA = getTotal(a); 
+                    let lB = getTotal(b); 
+
+                    if(lA < lB) return 1; 
+                    if(lA > lB) return -1; 
+                    return 0; 
+                } )
+
+                sortedData.map((item, index) => {
+                    item.rank = index+1; 
+                    api.updateExamResult(item);
+
+                    if(index==data.lenght){ 
+                        window.location = window.location
+                    }
+                })
+            })
+    }
+
+    const getTotal = (result) => {
+        let sum = 0; 
+        for(const el in result){
+            if(el.includes('subject_')){
+                sum+=parseFloat(result[el]);
+            }
+        }
+        return sum;
+    }
+
 
     return (
         <>
@@ -53,12 +178,22 @@ export default function examDetails(){
                 <h3>Classe : {exam?.class_id?.name} </h3>
                 <h4>Examen : {exam?.name} </h4>
             </div>
+
+            <button className='mx-3 btn btn-success' onClick={() => printResults()} > Imprimer Resultats </button>
+           
+           <button className='mx-3 btn btn-success' onClick={() => getRank()} > get Rank</button>
+
+           <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button>
+          
+           <button className='mx-3 btn btn-dark' onClick={() => printStats(true)} > Imprimer Statistics</button>
+          
+
             <table className='table '>
                 <thead>
                     <tr>
                         <th>Nom</th>
                         {subjects && subjects.map(s=> {
-                            return <th key={s._id}> {s.name} </th>
+                            return <th key={s._id}> <input type='number' name={`point_${s._id}`} style={{width:'50px'}} value={exam[`point_${s._id}`]} onChange={handleChange} /> {s.name} </th>
                         })}
                         <th>Total</th>
                     </tr>
@@ -69,11 +204,13 @@ export default function examDetails(){
                 })}
                 </tbody>
             </table>
+
+            {examId && <ImportResults modalIsOpen={ImportIsOpen} closeModal={closeImportModal} save={importResults} />}
         </>
     )
 }
 
-export function ExamResult({subject, result, subjects}:{subjects:SubjectInterface[], result:ExamResultInterface|any, subject:SubjectInterface}){
+export function ExamResult({result, subjects}:{subjects:SubjectInterface[], result:ExamResultInterface|any, }){
 
     const [total, setTotal] = useState(0);
     const [res, setRes] = useState(result);
