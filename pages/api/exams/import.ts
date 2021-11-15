@@ -68,7 +68,7 @@ export default async function importStudent(
                 ...applyMapping(r, pointMapping)
               }
               examSchema.findOneAndUpdate({_id:fields.exam_id},newResult).then((examUpdate)=>{
-                console.log(examUpdate)
+                //console.log(examUpdate)
               })  
             }
             else{
@@ -78,13 +78,13 @@ export default async function importStudent(
               }
 
               examResultSchema.findOneAndUpdate({exam_id:fields.exam_id, number:r.numero}, newResult).then(result=>{
-                  console.log(result);
+                  //console.log(result);
               })
             }
 
           })
 
-          console.log(data[0]);
+          //console.log(data[0]);
 
           totalCount += data.length
 
@@ -112,7 +112,7 @@ export default async function importStudent(
   )
   }
   catch(e){
-    console.log(e);
+   // console.log(e);
   }
 
   
@@ -146,8 +146,7 @@ export default async function importStudent(
     return Object.fromEntries(
       Object.entries(mapping).map(([leadField, csvField]) => {
         const parsed = stripBomFromKeys(data)
-  
-        return [leadField, parseFloat((parsed[csvField]??0)).toString().replace(',', '.')]
+        return [leadField, parseFloat((parsed[csvField]??0).toString().replace(',', '.'))]
       })
     )
   }
