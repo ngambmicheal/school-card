@@ -73,6 +73,14 @@ export default function examDetails(){
         window.open('/api/exams/stats?exam_id='+examId, '_blank')
     }
 
+    const deleteResult = (resultId:string) => {
+        api.deleteResult(resultId).then(() => {
+            api.getExamResults(examId).then(({data:{data}} : any) => {
+                setResults(data)
+            })
+        })
+    }
+
     useEffect(() => {
         if(exam?._id){
 
@@ -231,7 +239,7 @@ export default function examDetails(){
                 </thead>
                 <tbody>
                 { results && competences.length && results.map( result=> {
-                    return <ExamResult  key={`exam-${result._id}`} result={result} competences={competences} exam={exam} points={points} />
+                    return <ExamResult  key={`exam-${result._id}`} result={result} competences={competences} exam={exam} points={points} deleteResult={deleteResult} />
                 })}
                 </tbody>
             </table>
@@ -243,7 +251,7 @@ export default function examDetails(){
 
 const reducer = (previousValue:any, currentValue:any) => parseFloat(previousValue??0) + parseFloat(currentValue??0)
 
-export function ExamResult({ result, competences, exam, points}:{competences:CompetenceInterface[], result:ExamResultInterface|any, exam:any, points:any}){
+export function ExamResult({ result, competences, exam, points, deleteResult}:{competences:CompetenceInterface[], result:ExamResultInterface|any, exam:any, points:any, deleteResult:(resultId:string)=>void}){
 
     const [total, setTotal] = useState(0);
     const [res, setRes] = useState(result);
@@ -298,6 +306,7 @@ export function ExamResult({ result, competences, exam, points}:{competences:Com
           [key]: value
         }))
     }
+
    return  <tr>
         <td>{result?.student?.name}</td>
         {competences && competences.map(competence=> {
@@ -315,7 +324,7 @@ export function ExamResult({ result, competences, exam, points}:{competences:Com
         <td>{total}</td>
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
-        <th> <Link href={`/exams/ui/print?_id=${res._id}`}>Imprimer</Link> </th>
+        <th> <Link href={`/exams/ui/print?_id=${res._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }
 
