@@ -103,7 +103,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
 
     return (
         <>
-    <table className='table2' style={{fontSize:'8px'}}>
+    <table className='table2' style={{fontSize:'10px'}}>
     <tr>
         <th className='center' style={{width:'40%'}}>
               <b>REPUBLIQUE DU CAMEROUN</b> <br />
@@ -155,10 +155,10 @@ export default function resultsActions(competences:CompetenceInterface[], result
  <table className='table1'>
      <thead>
      <tr>
-         <th rowSpan={2} style={{width:'50px'}}>
+         <th rowSpan={2} style={{width:'150px'}}>
              COMPETENCE
          </th>
-         <th rowSpan={2}  style={{width:'150px'}}>
+         <th rowSpan={2}  style={{width:'250px'}}>
              SOUS-COMPETENCE
          </th>
          <th >
@@ -225,10 +225,10 @@ export default function resultsActions(competences:CompetenceInterface[], result
     </tbody>
     </table>
     <div className='center'>
-        <p style={{fontSize:'7px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A=Acquis, A+=Expert</p>
+        <p style={{fontSize:'9px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A=Acquis, A+=Expert</p>
     </div>
 
-    <table style={{fontSize:'9px', width:'100%'}} className='table1'>
+    <table style={{fontSize:'12px', width:'100%'}} className='table1'>
         <tr>
             <th>Total </th>
             <th> {totalMarks} / {totalPoints} </th>
