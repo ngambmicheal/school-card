@@ -112,7 +112,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
              <i>BP: 1661 DOUALA BANGUE , TEL: (237) 33 08 95 82 / 699717529</i> <br />
         </th>
         <th className='' style={{width:'20%'}}>
-            <img src={`data:image/jpeg;base64, ${logo}`} height={30} />
+            <img src={`data:image/jpeg;base64, ${logo}`} height={5} />
         </th>
         <th className='center' style={{width:'40%'}}>
             <b> REPUBLIC OF CAMEROON</b>  <br />
