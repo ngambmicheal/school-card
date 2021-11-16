@@ -37,7 +37,7 @@ export default async function handler(
         var options = {
             format: "A4",
             orientation: "portrait",
-            border: "2mm",
+            border: "10mm",
             header: {
                 height: "1mm",
 
@@ -66,9 +66,9 @@ export default async function handler(
                     border-collapse: collapse;
                     font-weight:bold;
                     width: 100%;
-                    margin-top: 2px;
+                    margin-top: 5px;
                     margin-bottom: 5px;
-                    font-size:8px;
+                    font-size:9px;
                     }
                     .com, b{
                     font-weight: bold;
@@ -87,7 +87,7 @@ export default async function handler(
                     }
                 
                 .table3 {
-                    font-size:9px;
+                    font-size:10px;
                 }
                 </style>
                 `
