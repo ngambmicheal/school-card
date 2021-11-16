@@ -45,6 +45,7 @@ export default function Subjects(){
             <table className='table '>
                 <thead>
                     <tr>
+                        <th>Id</th>
                         <th>Nom</th>
                         <th>Slug</th>
                         <th>Type</th>
@@ -55,6 +56,7 @@ export default function Subjects(){
                 <tbody>
                     {subjects.map(subject => {
                        return  <tr key={subject._id}>
+                            <td>{subject._id}</td>
                             <td>{subject.name}</td>
                             <td>{subject.report_type}</td>
                             <td>{subject.slug}</td>
