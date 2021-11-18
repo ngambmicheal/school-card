@@ -12,6 +12,7 @@ import { examSchema } from '../../../models/exam'
 import { examResultSchema } from '../../../models/examResult'
 import { schoolSchema } from '../../../models/school'
 import { classeSchema } from '../../../models/classe'
+import { sectionSchema } from '../../../models/section'
 
 
 export default async function importStudent(
@@ -145,7 +146,7 @@ export default async function importStudent(
       Object.entries(mapping).map(([leadField, csvField]) => {
         const parsed = stripBomFromKeys(data)
   
-        return [leadField, parseFloat(parsed[csvField]??0)]
+        return  [leadField, parseFloat((parsed[csvField]??0).toString().replace(',', '.'))]
       })
     )
   }

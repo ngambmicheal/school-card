@@ -7,8 +7,8 @@ import ExamResultInterface from "../../models/examResult";
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
     competence.subjects && competence.subjects.map(s => {
-        total+= s.courses?.length ?? 0  
-        total+=1;
+        total += s.courses?.length ?? 0  
+        total += 1;
     })
     return total; 
 }
@@ -103,32 +103,32 @@ export default function resultsActions(competences:CompetenceInterface[], result
 
     return (
         <>
-    <table className='table2' style={{fontSize:'10px'}}>
+    <table className='table2' style={{fontSize:'14px'}}>
     <tr>
         <th className='center' style={{width:'40%'}}>
               <b>REPUBLIQUE DU CAMEROUN</b> <br />
                 <i> Paix - Travail - Patrie </i> <br />
              <b>GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE</b>  <br />
-             <i>BP: 1661 DOUALA BANGUE , TEL: (237) 33 08 95 82 / 699717529</i> <br />
+             <i>BP: 1661 DOUALA TEL: (237) 33089582/699717529</i> <br />
         </th>
         <th className='' style={{width:'20%'}}>
-            <img src={`data:image/jpeg;base64, ${logo}`} height={50} />
+            <img src={`data:image/jpeg;base64, ${logo}`} height={100} />
         </th>
         <th className='center' style={{width:'40%'}}>
             <b> REPUBLIC OF CAMEROON</b>  <br />
              <i>Peace - Work - Father/land</i>  <br />
             <b> GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE </b> <br />
-             <i> P.O Box : 1661 DOUALA-BANGUE , Tel : (237) 33089582 </i> <br />
+             <i>P.O Box:1661 DOUALA TEL: (237) 33089582/699717529 </i> <br />
         </th>
     </tr>
 </table>
 
-<div className='center' >
+<div className='center' style={{fontSize:'20px', margin:'20px'}} >
     BULLETIN D'EVALUATION - {results.exam_id?.name} - 2021/2022
 </div>
 
 <div>
-<table className='table1' >
+<table className='table1' style={{fontSize:'20px'}} >
  <thead>
      <tr>
          <th colSpan={2}>NOMS ET PRENOMS</th>
@@ -152,17 +152,17 @@ export default function resultsActions(competences:CompetenceInterface[], result
 </table>
 </div>
 
- <table className='table1'>
+ <table className='table1' style={{fontSize:'20px'}}>
      <thead>
      <tr>
-         <th rowSpan={2} style={{width:'150px'}}>
-             COMPETENCE
+         <th rowSpan={2} style={{width:'250px'}}>
+             COMPETENCES
          </th>
-         <th rowSpan={2}  style={{width:'250px'}}>
-             SOUS-COMPETENCE
+         <th rowSpan={2}  style={{width:'350px'}}>
+             SOUS-COMPETENCES
          </th>
          <th >
-             UNITE D'APPRENTISSAGE
+             UNITES D'APPRENTISSAGES
          </th>
          <th colSpan={3}>
              UA1
@@ -170,7 +170,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
      </tr>
      <tr>
          <th>
-             EVALUATION
+             EVALUATIONS
          </th>
          <th>
              MAX 
@@ -183,7 +183,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
          </th>
      </tr>
      </thead>
-     <tbody>
+     <tbody style={{maxHeight:'80%'}}>
      {competences && competences.map(competence=> {
                  return (
                      <>                                    
@@ -225,10 +225,10 @@ export default function resultsActions(competences:CompetenceInterface[], result
     </tbody>
     </table>
     <div className='center'>
-        <p style={{fontSize:'9px'}}>COTES : NA =Non Acquis, ECA=en cours d’Acquisition, A=Acquis, A+=Expert</p>
+        <p style={{fontSize:'13px'}}>COTES : NA = Non Acquis, ECA = en cours d’Acquisition, A = Acquis, A+ = Expert</p>
     </div>
 
-    <table style={{fontSize:'12px', width:'100%'}} className='table1'>
+    <table style={{fontSize:'25px', width:'100%'}} className='table1'>
         <tr>
             <th>Total </th>
             <th> {totalMarks} / {totalPoints} </th>

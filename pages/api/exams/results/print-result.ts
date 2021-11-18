@@ -39,11 +39,11 @@ export default async function handler(
             orientation: "portrait",
             border: "10mm",
             header: {
-                height: "1mm",
+                height: "2mm",
 
             },
             footer: {
-                height: "1mm",
+                height: "19mm",
                 contents: {
                     // first: 'Cover page',
                     // 2: 'Second page', // Any page number is working. 1-based index
