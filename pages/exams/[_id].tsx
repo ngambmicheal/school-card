@@ -13,6 +13,17 @@ import ExamInterface from "../../models/exam";
 import { toast } from "@chakra-ui/toast";
 import { ImportResults } from "./ui/[_id]";
 
+
+export const getSubjectTotal = (result:ExamResultInterface|any) => {
+    let sum = 0; 
+    for(const el in result){
+        if(el.includes('subject_')){
+            sum+=parseFloat(result[el]);
+        }
+    }
+    return sum;
+}
+
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
     const [courses, setCourses] = useState<CourseInterface[]>([])
@@ -97,6 +108,14 @@ export default function examDetails(){
 
     }
 
+    const deleteResult = (resultId:string) => {
+        api.deleteResult(resultId).then(() => {
+            api.getExamResults(examId).then(({data:{data}} : any) => {
+                setResults(data)
+            })
+        })
+    }
+
     const importResults = (file:File|null) => {
         api.importResultsNormal({
             file: file,
@@ -154,22 +173,14 @@ export default function examDetails(){
                     item.rank = index+1; 
                     api.updateExamResult(item);
 
-                    if(index==data.lenght){ 
+                    if(index==data.lenght-1){ 
                         window.location = window.location
                     }
                 })
             })
     }
 
-    const getTotal = (result) => {
-        let sum = 0; 
-        for(const el in result){
-            if(el.includes('subject_')){
-                sum+=parseFloat(result[el]);
-            }
-        }
-        return sum;
-    }
+
 
 
     return (
@@ -195,12 +206,15 @@ export default function examDetails(){
                         {subjects && subjects.map(s=> {
                             return <th key={s._id}> <input type='number' name={`point_${s._id}`} style={{width:'50px'}} value={exam[`point_${s._id}`]} onChange={handleChange} /> {s.name} </th>
                         })}
-                        <th>Total</th>
+                        <th>Total / {points} </th>
+                        <th>Moyenne</th>
+                        <th>Rank</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                 { results && subjects.length && results.map( result=> {
-                    return <ExamResult  key={`exam-${result._id}`} result={result} subjects={subjects} />
+                    return <ExamResult  key={`exam-${result._id}`} result={result} subjects={subjects} points={points} deleteResult={deleteResult} />
                 })}
                 </tbody>
             </table>
@@ -210,7 +224,7 @@ export default function examDetails(){
     )
 }
 
-export function ExamResult({result, subjects}:{subjects:SubjectInterface[], result:ExamResultInterface|any, }){
+export function ExamResult({result, subjects, points, deleteResult}:{subjects:SubjectInterface[], result:ExamResultInterface|any, points:number, deleteResult:(resultId:string)=>void }){
 
     const [total, setTotal] = useState(0);
     const [res, setRes] = useState(result);
@@ -218,28 +232,13 @@ export function ExamResult({result, subjects}:{subjects:SubjectInterface[], resu
 
 
     useEffect(() => {
-        getTotal();
+        setTotal(getSubjectTotal(res))
         if(hasLoaded){
             api.updateExamResult(res)
         }
         setHasLoaded(true);
     }, [res])
 
-    const getTotal = () => {
-       const tot:any =  Object.values(res).reduce((a:any, b:any) => {
-           if(a && typeof a !== 'number'){
-               a = 0; 
-               console.log(a)
-           }
-           const c = parseFloat(b);
-           if(c && typeof c !== NaN && c.toString().length<3){
-               console.log(c)
-                return a + c; 
-           }
-           else return a + 0; 
-       });
-       setTotal(s => tot)
-    }
     
     const handleChange = (e) => {
         const key = e.target.name
@@ -256,6 +255,9 @@ export function ExamResult({result, subjects}:{subjects:SubjectInterface[], resu
             return subject._id && <td key={subject._id}> <input type='number' name={`subject_${subject._id}`} style={{width:'50px'}} value={res[`subject_${subject._id}`]} onChange={handleChange} />  </td>
         })}
         <td>{total}</td>
+        <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
+        <th> {res.rank}</th>
+        <th> <Link href={`/exams/ui/print?_id=${res._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }
 

@@ -160,7 +160,7 @@ export default function examDetails(){
                     item.rank = index+1; 
                     api.updateExamResult(item);
 
-                    if(index==data.lenght){ 
+                    if(index==data.lenght-1){ 
                         window.location = window.location
                     }
                 })
