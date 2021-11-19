@@ -161,8 +161,8 @@ export default function examDetails(){
     const getRank = () => {
             api.getExamResults(examId).then(({data:{data}} : any) => {
                 const sortedData = data.sort((a, b) => {
-                    let lA = getTotal(a); 
-                    let lB = getTotal(b); 
+                    let lA = getSubjectTotal(a); 
+                    let lB = getSubjectTotal(b); 
 
                     if(lA < lB) return 1; 
                     if(lA > lB) return -1; 
