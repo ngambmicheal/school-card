@@ -202,6 +202,7 @@ export default function examDetails(){
             <table className='table '>
                 <thead>
                     <tr>
+                        <th>Numero</th>
                         <th>Nom</th>
                         {subjects && subjects.map(s=> {
                             return <th key={s._id}> <input type='number' name={`point_${s._id}`} style={{width:'50px'}} value={exam[`point_${s._id}`]} onChange={handleChange} /> {s.name} </th>
@@ -250,6 +251,7 @@ export function ExamResult({result, subjects, points, deleteResult}:{subjects:Su
         }))
     }
    return  <tr>
+        <td>{result?.student?.number}</td>
         <td>{result?.student?.name}</td>
         {subjects.map(subject => {
             return subject._id && <td key={subject._id}> <input type='number' name={`subject_${subject._id}`} style={{width:'50px'}} value={res[`subject_${subject._id}`]} onChange={handleChange} />  </td>
