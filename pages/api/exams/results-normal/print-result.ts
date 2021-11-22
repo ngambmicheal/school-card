@@ -12,6 +12,8 @@ import { schoolSchema } from '../../../../models/school';
 import { subjectSchema } from '../../../../models/subject';
 import { classeSchema } from '../../../../models/classe';
 import { courseSchema } from '../../../../models/course';
+import resultsNormalActions from '../../../../assets/jsx/resultsNormalActions';
+import { sectionSchema } from '../../../../models/section';
 
 export const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -30,9 +32,9 @@ export default async function handler(
 
     const {result} = req.query
 
-    examResultSchema.findOne({_id:result}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema}}).then(async results => {
+    examResultSchema.findOne({_id:result}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{path:'section',model:sectionSchema}}}).then(async results => {
        
-        const competences =  await competenceSchema.find({school:results.exam_id.class_id.school}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
+    const subjects =  await subjectSchema.find({school:results.exam_id.class_id.school, report_type:results.exam_id.class_id.section.report_type}).populate({path:'school', model:schoolSchema});
 
         var options = {
             format: "A4",
@@ -54,9 +56,9 @@ export default async function handler(
         };
 
 
-        const totalResults = await(await examResultSchema.find({exam_id:results.exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
+        const totalResults = await examResultSchema.find({exam_id:results.exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1});
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, totalResults.length, totalResults ))
+        let html = ReactDOMServer.renderToStaticMarkup(resultsNormalActions(subjects, results, totalResults.length, totalResults ))
         html+=`
                 <style>
                 .center{
@@ -96,10 +98,6 @@ export default async function handler(
         var document = {
             html: html,
             data: {
-              competences : competences.map(s => {
-                    s.s_l = getCompetencesLenght(s)
-                    return s;
-              }),
               results : results
             },
             path: "./teacher.pdf",

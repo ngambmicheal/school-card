@@ -3,22 +3,16 @@ import fs from 'fs';
 import SubjectInterface from "../../models/subject";
 import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
+import { getSubjectTotal } from "../../pages/exams/[_id]";
 
-const getCompetencesLenght = (competence:CompetenceInterface) => {
-    let total = 0; 
-    competence.subjects && competence.subjects.map(s => {
-        total += s.courses?.length ?? 0  
-        total += 1;
-    })
-    return total; 
-}
+
 
 const getAppreciation = (value:number, total:number)  => {
     if(total==20){
         if(value < 11) 
             return 'NA';
         if(value < 15)
-            return 'ECA';
+            return 'SIA';
         if(value < 18) 
             return 'A'; 
         if(value < 21) 
@@ -83,20 +77,8 @@ const getTotalExam = (result:any) => {
 }
 
 
-export default function resultsNormalActions(competences:CompetenceInterface[], results:any, totalUsers:number, statsResults:ExamResultInterface[] ) {
+export default function resultsNormalActions(subjects:SubjectInterface[], results:any, totalUsers:number, statsResults:ExamResultInterface[] ) {
 
-    const getSubjectTotal = (subject:SubjectInterface) => {
-        let total = 0 ; 
-        let pointTotal = 0;
-        subject.courses?.map(c => {
-            total+=parseFloat(results[`subject_${c._id}`]??0);
-            pointTotal+=parseFloat(results.exam_id[`point_${c._id}`]??0);
-        })
-
-        const app = getAppreciation(total, pointTotal);
-
-        return {total, app, pointTotal}
-    }
 
     const totalMarks = getTotal(results)
     const totalPoints = getTotalExam(results?.exam_id)
@@ -152,121 +134,84 @@ export default function resultsNormalActions(competences:CompetenceInterface[], 
 </table>
 </div>
 
- <table className='table1' style={{fontSize:'20px'}}>
-     <thead>
-     <tr>
-         <th rowSpan={2} style={{width:'250px'}}>
-             COMPETENCES
-         </th>
-         <th rowSpan={2}  style={{width:'350px'}}>
-             SOUS-COMPETENCES
-         </th>
-         <th >
-             UNITES D'APPRENTISSAGES
-         </th>
-         <th colSpan={3}>
-             UA1
-         </th>
-     </tr>
-     <tr>
-         <th>
-             EVALUATIONS
-         </th>
-         <th>
-             MAX 
-         </th>
-         <th>
-             NOTES
-         </th>
-         <th>
-             COTE
-         </th>
-     </tr>
-     </thead>
-     <tbody style={{maxHeight:'80%'}}>
-     {competences && competences.map(competence=> {
-                 return (
-                     <>                                    
-                         {
-                             competence.subjects?.map((subject, subjectIndex) => {
+            <table className='table1' style={{fontSize:'20px'}}>
+                <thead>
+                <tr>
+                    <th  colSpan={2}>
+                        SUBJECTS
+                    </th>
+                    <th  >
+                        MAX
+                    </th>
+                    <th >
+                        NOTES
+                    </th>
+                    <th colSpan={2}>
+                        APPRECIATION CODE
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
 
-                                const to = getSubjectTotal(subject);
-                                const isExcluded = !excludedClass(results.exam_id.class_id?.name, subject._id);
-                                 return (
-                                     <> 
-                                         {subject.courses?.map((course, courseIndex) => {
-                                         return( 
-                                             <>
-                                             <tr>
-                                                 {!subjectIndex && !courseIndex&& <th style={{width:'150px'}} rowSpan={getCompetencesLenght(competence)}> {competence.name} </th> }
-                                                 {!courseIndex && <td  style={{width:'150px'}} rowSpan={(subject.courses?.length??1)+1}> {subject.name}  </td>  }
-                                                 <td>{!isExcluded ? course.name :''} </td>
-                                                 <td>{ !isExcluded ?results.exam_id?.[`point_${course._id}`] :'--'}</td>
-                                                 <td>{ !isExcluded ?results[`subject_${course._id}`] ?? 0 : '--'}</td> 
-                                                 {!courseIndex && <td rowSpan={(subject.courses?.length??1)+1}> { !isExcluded ?to.app :'--'}  </td>  }
-                                                 </tr>
-                                             </>
-                                         )
-                                         })}
-
-                                             <tr>
-                                                 <th>Total </th>
-                                                 <th> {!isExcluded ?to.pointTotal:'--'}</th>
-                                                 <th>{!isExcluded ?to.total:'--'}</th> 
-                                             </tr>
-                                     </>
-                                 )
-                             })
-                         }
-                     </>
-                 ) 
-             })}
-
-    </tbody>
-    </table>
-    <div className='center'>
-        <p style={{fontSize:'13px'}}>COTES : NA = Non Acquis, ECA = en cours d’Acquisition, A = Acquis, A+ = Expert</p>
-    </div>
-
-    <table style={{fontSize:'25px', width:'100%'}} className='table1'>
-        <tr>
-            <th>Total </th>
-            <th> {totalMarks} / {totalPoints} </th>
-            <th>Observations</th>
-            <th colSpan={3}>Conseil de Classe</th>
-        </tr>
-        <tr>
-            <td>Moyenne</td>
-            <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td rowSpan={3}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
-            <td> Avertissement Conduits </td>
-            <td> {results.ac? 'Oui' : 'Non'} </td>
-        </tr>
-        <tr>
-            <td>Rang </td>
-            <td>  {results.rank} / {totalUsers} </td>
-            <td> Avertissement Travails </td>
-            <td> {results.at? 'Oui' : 'Non'}  </td>
-        </tr>
-        <tr>
-            <td>Moyenne generale</td>
-            <td> { ((( ( getTotal(statsResults[0])/ totalPoints) + getTotal(statsResults[statsResults.length-1])/totalPoints ) / 2) * 20).toFixed(2) }  /20 </td>
-            <td> Encouragements </td>
-            <td> {results.en? 'Oui' : 'Non'}  </td>
-        </tr>
-        <tr>
-            <td>Moyenne du premier</td>
-            <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
-            <td> Visa du Parent</td>
-            <td colSpan={2}> Visa du Chef D'etablissement </td>
-        </tr>
-        <tr>
-            <td>Moyenne du dernier</td>
-            <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
-            <td> </td>
-            <td colSpan={2}> </td>
-        </tr>
-    </table>
+                    {subjects?.map((subject, subjectIndex) => {
+                        return (
+                            <> 
+                                    <tr>
+                                        <td colSpan={2}> {subject.name} </td>
+                                        <td>{results.exam_id?.[`point_${subject._id}`]}</td>
+                                        <td>{results[`subject_${subject._id}`] ?? 0}</td> 
+                                        <td>{getAppreciation((results[`subject_${subject._id}`] ?? 0), 20)}</td>
+                                        </tr>
+                                    </>
+                                )
+                            })}
+                        <tr style={{fontSize:'23px'}}>
+                            <th rowSpan={6} style={{width:'200px'}}></th>
+                            <th>Total </th>
+                            <th>{totalPoints}</th>
+                            <th>{getSubjectTotal(results)}</th> 
+                            <th rowSpan={6}>
+                                <div className='center'>
+                                        <p style={{fontSize:'13px'}}>APPRECIATION CODES : 
+                                        <br />
+                                            NA = Not Acquired, 
+                                        <br />
+                                            SIA = Skill in Acquisition
+                                            <br />
+                                            A = Acquired, 
+                                            <br />
+                                            A+ = Expert
+                                        </p>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr style={{fontSize:'23px'}}>
+                        <td>Average</td>
+                        <td></td>
+                        <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
+                        </tr>
+                        <tr style={{fontSize:'23px'}}>
+                            <td>Rank </td>
+                            <td> </td>
+                            <td>  {results.rank} / {totalUsers} </td>
+                        </tr>
+                        <tr style={{fontSize:'23px'}}>
+                            <td>General Average</td>
+                            <td></td>
+                            <td> { ((( ( getTotal(statsResults[0])/ totalPoints) + getTotal(statsResults[statsResults.length-1])/totalPoints ) / 2) * 20).toFixed(2) }  /20 </td>
+                        </tr>
+                        <tr style={{fontSize:'23px'}}>
+                            <td>Higher Average</td>
+                            <td> </td>
+                            <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
+                        </tr>
+                    <tr style={{fontSize:'23px'}}>
+                        <td>Lowest Average</td>
+                        <td> </td>
+                        <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
+                    </tr>
+                </tbody>
+            </table>
 
 </>
 );

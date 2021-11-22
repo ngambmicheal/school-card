@@ -15,6 +15,7 @@ import archiver from 'archiver';
 import { schoolSchema } from '../../../../models/school';
 import { courseSchema } from '../../../../models/course';
 import { classeSchema } from '../../../../models/classe';
+import { getTotal, getTotalPoints, getTotals } from '../../../../assets/jsx/resultsUiStats';
   
 
 export default async function handler(
@@ -26,7 +27,7 @@ export default async function handler(
 
     const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema});
 
-    const totalResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})
+    const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
     const competences =  await competenceSchema.find({school:exam.class_id.school}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
     var dir = `./tmp/exams/${exam_id}`;
