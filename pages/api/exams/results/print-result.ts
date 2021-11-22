@@ -12,6 +12,7 @@ import { schoolSchema } from '../../../../models/school';
 import { subjectSchema } from '../../../../models/subject';
 import { classeSchema } from '../../../../models/classe';
 import { courseSchema } from '../../../../models/course';
+import { getTotal } from '../../../../assets/jsx/resultsUiStats';
 
 export const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
