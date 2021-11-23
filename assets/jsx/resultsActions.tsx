@@ -184,7 +184,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
      </tr>
      </thead>
      <tbody style={{maxHeight:'80%'}}>
-     {competences && competences.map(competence=> {
+     {competences && competences.map((competence, competenceIndex) => {
                  return (
                      <>                                    
                          {
@@ -197,6 +197,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
                                          {subject.courses?.map((course, courseIndex) => {
                                          return( 
                                              <>
+                                             { ( competenceIndex==4 && subjectIndex==0 && courseIndex==0) && <><tr style={{border:'0px !important' }}><td colSpan={7}><br /><div style={{pageBreakAfter:"always"}}></div></td></tr></>}
                                              <tr>
                                                  {!subjectIndex && !courseIndex&& <th style={{width:'150px'}} rowSpan={getCompetencesLenght(competence)}> {competence.name} </th> }
                                                  {!courseIndex && <td  style={{width:'150px'}} rowSpan={(subject.courses?.length??1)+1}> {subject.name}  </td>  }
