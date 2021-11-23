@@ -194,6 +194,7 @@ export default function examDetails(){
             <table className='table table-striped' >
                 <thead>
                     <tr>
+                        <th>Numero</th>
                         <th>Nom</th>
                         {competences && competences.map(s=> {
                             return <th key={s._id} colSpan={s.subjects?.length*4}> {s.slug?.substring(0,40)} </th>
@@ -206,6 +207,7 @@ export default function examDetails(){
                         <th>
 
                         </th>
+                        <th></th>
                         {competences && competences.map(competence=> {
                             return competence.subjects?.map(subject => {
                                 return <th key={subject._id} colSpan={subject.courses?.length+1} > {subject.slug || subject.name?.substring(0,30)} </th>
@@ -216,6 +218,7 @@ export default function examDetails(){
                         <th>
 
                         </th>
+                        <th></th>
                         {competences && competences.map(competence=> {
                             return competence.subjects?.map(subject => {
                                 return (
@@ -308,6 +311,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
     }
 
    return  <tr>
+        <td>{result?.student?.number}</td>
         <td>{result?.student?.name}</td>
         {competences && competences.map(competence=> {
             return competence.subjects?.map(subject => {

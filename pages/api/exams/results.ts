@@ -24,7 +24,7 @@ export default function handler(
                 })  
             })
         }).finally(() => {
-            examResultSchema.find({exam_id}).sort({number:1}).populate({path:'student', model:studentSchema}).then(results => {
+            examResultSchema.find({exam_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true}).then(results => {
                 res.json({data:results, status:true});
             })
         })
