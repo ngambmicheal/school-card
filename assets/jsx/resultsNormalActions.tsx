@@ -7,16 +7,16 @@ import { getSubjectTotal } from "../../pages/exams/[_id]";
 
 
 
-const getAppreciation = (value:number, total:number)  => {
+const getAppreciation = (value:number, total:number, displayName:boolean=false)  => {
     if(total==20){
         if(value < 11) 
-            return 'NA';
+            return displayName? 'Not Acquired' :'NA';
         if(value < 15)
-            return 'SIA';
+            return displayName ? 'SIA': 'SIA';
         if(value < 18) 
-            return 'A'; 
+            return displayName? 'Acquired': 'A'; 
         if(value < 21) 
-            return 'A+';
+            return displayName? 'Expert' : 'A+';
     }
     if(total==30){
         if(value <= 15) 
@@ -166,11 +166,11 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
                                 )
                             })}
                         <tr style={{fontSize:'23px'}}>
-                            <th rowSpan={6} style={{width:'200px'}}></th>
+                            <th rowSpan={7} style={{width:'200px'}}></th>
                             <th>Total </th>
                             <th>{totalPoints}</th>
                             <th>{getSubjectTotal(results)}</th> 
-                            <th rowSpan={6}>
+                            <th rowSpan={7}>
                                 <div className='center'>
                                         <p style={{fontSize:'13px'}}>APPRECIATION CODES : 
                                         <br />
@@ -209,6 +209,34 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
                         <td>Lowest Average</td>
                         <td> </td>
                         <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
+                    </tr>
+                    <tr style={{fontSize:'23px'}}>
+                        <td>Observation</td>
+                        <td> </td>
+                        <td> {getAppreciation(((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20),20,true)}  </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table className='table1' width='100%' style={{marginTop:'20px', fontSize:'20px'}}>
+                <thead>
+                    <tr>
+                        <th> Teacher's Signature</th>
+                        <th> Parent's Signature</th>
+                        <th> Headmaster's Signature</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style={{height:'100px'}}>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+                            
+                        </td>
                     </tr>
                 </tbody>
             </table>
