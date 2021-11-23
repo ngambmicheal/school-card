@@ -165,81 +165,53 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
                                     </>
                                 )
                             })}
-                        <tr style={{fontSize:'23px'}}>
-                            <th rowSpan={7} style={{width:'200px'}}></th>
-                            <th>Total </th>
-                            <th>{totalPoints}</th>
-                            <th>{getSubjectTotal(results)}</th> 
-                            <th rowSpan={7}>
-                                <div className='center'>
-                                        <p style={{fontSize:'13px'}}>APPRECIATION CODES : 
-                                        <br />
-                                            NA = Not Acquired, 
-                                        <br />
-                                            SIA = Skill in Acquisition
-                                            <br />
-                                            A = Acquired, 
-                                            <br />
-                                            A+ = Expert
-                                        </p>
-                                </div>
-                            </th>
-                        </tr>
-                        <tr style={{fontSize:'23px'}}>
-                        <td>Average</td>
-                        <td></td>
-                        <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-                        </tr>
-                        <tr style={{fontSize:'23px'}}>
-                            <td>Rank </td>
-                            <td> </td>
-                            <td>  {results.rank} / {totalUsers} </td>
-                        </tr>
-                        <tr style={{fontSize:'23px'}}>
-                            <td>General Average</td>
-                            <td></td>
-                            <td> { ((( ( getTotal(statsResults[0])/ totalPoints) + getTotal(statsResults[statsResults.length-1])/totalPoints ) / 2) * 20).toFixed(2) }  /20 </td>
-                        </tr>
-                        <tr style={{fontSize:'23px'}}>
-                            <td>Higher Average</td>
-                            <td> </td>
-                            <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
-                        </tr>
-                    <tr style={{fontSize:'23px'}}>
-                        <td>Lowest Average</td>
-                        <td> </td>
-                        <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
-                    </tr>
-                    <tr style={{fontSize:'23px'}}>
-                        <td>Observation</td>
-                        <td> </td>
-                        <td> {getAppreciation(((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20),20,true)}  </td>
-                    </tr>
                 </tbody>
             </table>
 
-            <table className='table1' width='100%' style={{marginTop:'20px', fontSize:'20px'}}>
-                <thead>
-                    <tr>
-                        <th> Teacher's Signature</th>
-                        <th> Parent's Signature</th>
-                        <th> Headmaster's Signature</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr style={{height:'100px'}}>
-                        <td>
+        
+            <div className='center'>
+        <p style={{fontSize:'13px'}}>COTES : NA = Not Acquired, SIA= Skill In Acquisition, A = Acquired, A+ = Expert</p>
+    </div>
 
-                        </td>
-                        <td>
-
-                        </td>
-                        <td>
-                            
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <table style={{fontSize:'25px', width:'100%'}} className='table1'>
+        <tr>
+            <th>Total </th>
+            <th> {totalMarks} / {totalPoints} </th>
+            <th>Observations</th>
+            <th colSpan={3}>Conseil de Classe</th>
+        </tr>
+        <tr>
+            <td>Average</td>
+            <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
+            <td rowSpan={3}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td> Conduct Warning</td>
+            <td> {results.ac? 'Oui' : 'Non'} </td>
+        </tr>
+        <tr>
+            <td>Rank </td>
+            <td>  {results.rank} / {totalUsers} </td>
+            <td> Work Warning</td>
+            <td> {results.at? 'Oui' : 'Non'}  </td>
+        </tr>
+        <tr>
+            <td>General Average</td>
+            <td> { ((( ( getTotal(statsResults[0])/ totalPoints) + getTotal(statsResults[statsResults.length-1])/totalPoints ) / 2) * 20).toFixed(2) }  /20 </td>
+            <td> Encouragements </td>
+            <td> {results.en? 'Oui' : 'Non'}  </td>
+        </tr>
+        <tr>
+            <td>Highest Average</td>
+            <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
+            <td> Parent's Signature</td>
+            <td colSpan={2}> Teacher's Signature </td>
+        </tr>
+        <tr>
+            <td>Lower Average</td>
+            <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
+            <td> </td>
+            <td colSpan={2}> </td>
+        </tr>
+    </table>
 
 </>
 );
