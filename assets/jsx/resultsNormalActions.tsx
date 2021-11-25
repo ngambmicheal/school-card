@@ -4,6 +4,7 @@ import SubjectInterface from "../../models/subject";
 import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import { getSubjectTotal } from "../../pages/exams/[_id]";
+import { getGeneralAverage } from "./resultsActions";
 
 
 
@@ -195,7 +196,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
         </tr>
         <tr>
             <td>General Average</td>
-            <td> { ((( ( getTotal(statsResults[0])/ totalPoints) + getTotal(statsResults[statsResults.length-1])/totalPoints ) / 2) * 20).toFixed(2) }  /20 </td>
+            <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td>
             <td> Encouragements </td>
             <td> {results.en? 'Oui' : 'Non'}  </td>
         </tr>

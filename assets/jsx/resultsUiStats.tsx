@@ -3,6 +3,7 @@ import CompetenceInterface from "../..//models/competence";
 import ExamInterface from "../../models/exam";
 import { useState } from "react";
 import SubjectInterface from "../../models/subject";
+import { getGeneralAverage } from "./resultsActions";
 
 export const getTotalPoints = (exam:ExamInterface) => { 
     let sum = 0; 
@@ -150,7 +151,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                     </tr>
                     <tr>
                         <td> Moyenne General de la classe</td>
-                        <td> { ((( ( getTotal(statsResults[0])/ points) + getTotal(statsResults[statsResults.length-1])/points ) / 2) * 20).toFixed(2) }  </td>
+                        <td> { getGeneralAverage(statResults, points).toFixed(2) }  </td>
                     </tr>
                 </table>
         </div>

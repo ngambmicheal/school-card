@@ -13,6 +13,15 @@ const getCompetencesLenght = (competence:CompetenceInterface) => {
     return total; 
 }
 
+export const getGeneralAverage = (results:ExamResultInterface[], totalPoints:number) => {
+    let total=0; 
+    results.forEach(result => {
+        total+=(getTotal(result)/totalPoints)
+    })
+
+    return (total / results.length) * 20;
+}
+
 const getAppreciation = (value:number, total:number)  => {
     if(total==20){
         if(value < 11) 
@@ -251,7 +260,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
         </tr>
         <tr>
             <td>Moyenne generale</td>
-            <td> { ((( ( getTotal(statsResults[0])/ totalPoints) + getTotal(statsResults[statsResults.length-1])/totalPoints ) / 2) * 20).toFixed(2) }  /20 </td>
+            <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td>
             <td> Encouragements </td>
             <td> {results.en? 'Oui' : 'Non'}  </td>
         </tr>

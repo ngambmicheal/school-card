@@ -225,7 +225,7 @@ export default function examDetails(){
                                     <>
                                         {subject.courses?.map(course => {
                                         return <th key={course._id} > 
-                                                    <input type='number' name={`point_${course._id}`} style={{width:'50px'}} value={exam[`point_${course._id}`]} onChange={handleChange}  /> 
+                                                    <input  name={`point_${course._id}`} style={{width:'50px'}} value={exam[`point_${course._id}`]} onChange={handleChange}  /> 
                                                     {course.name} 
                                                 </th>
                                         })}
@@ -318,7 +318,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
                 return (
                     <>
                         {subject.courses?.map(course => {
-                                return course._id && <td key={course._id}> <input type='number' name={`subject_${course._id}`} style={{width:'50px'}} value={res[`subject_${course._id}`]} onChange={handleChange} max={course.point} />  </td>
+                                return course._id && <td key={course._id}> <input name={`subject_${course._id}`} style={{width:'50px'}} value={res[`subject_${course._id}`]} onChange={handleChange} max={course.point} />  </td>
                         })}
                     <th> {res[`total_${subject._id}`]} </th>
                     </>
