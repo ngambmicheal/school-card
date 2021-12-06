@@ -47,7 +47,7 @@ export default function examDetails(){
 
     useEffect(() =>{
         if(exam){
-            api.getSchoolCompetences({school:exam?.class_id.school,report_type:exam.class_id.section.report_type}).then(({data:{data}} : any) => {
+            api.getSchoolCompetences({school:exam?.class_id.school, report_type:exam.class_id.section.report_type}).then(({data:{data}} : any) => {
                 setCompetences(s => data);
             })
         }
@@ -318,7 +318,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
                 return (
                     <>
                         {subject.courses?.map(course => {
-                                return course._id && <td key={course._id}> <input name={`subject_${course._id}`} style={{width:'50px'}} value={res[`subject_${course._id}`]} onChange={handleChange} max={course.point} />  </td>
+                                return course._id && <td key={course._id}> <input type='checkbox' name={`subject_${course._id}`} style={{width:'50px'}} value={res[`subject_${course._id}`]} onChange={handleChange} max={course.point} />  </td>
                         })}
                     <th> {res[`total_${subject._id}`]} </th>
                     </>

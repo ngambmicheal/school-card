@@ -81,7 +81,7 @@ export class Api{
     getSchool(schoolId?:any){ return axios.get(`/api/schools/${schoolId}`) }
     getSchoolCourses(schoolId?:any){ return axios.get(`/api/courses?school=${schoolId}`) }
     getSchoolClasses(schoolId?:any){ return axios.get(`/api/classes?school=${schoolId}`) }
-    getSchoolCompetences(schoolId:any){ return axios.get(`/api/competences?school=${schoolId}`)}
+    getSchoolCompetences(data:{school:string, report_type?:string}){ return axios.get(`/api/competences?school=${data.school}&report_type=${data.report_type}`)}
 
 
     //sections

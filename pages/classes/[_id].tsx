@@ -112,6 +112,7 @@ export default function ClasseDetails(){
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Exam Type Maternelle</th>
                         <th>Exam Type Normal </th>
                         <th>Exam Type Competence</th> 
                         <th>Action</th>
@@ -121,6 +122,7 @@ export default function ClasseDetails(){
                     {exams.map(exam => {
                     return <tr key={exam._id}>
                         <td> {exam.name} </td>
+                        <td> <Link href={`/exams/mat/${exam._id}`}>Mat</Link></td>
                         <td> <Link href={`/exams/${exam._id}`} >View</Link> </td>
                         <td> <Link href={`/exams/ui/${exam._id}`} >UI</Link> </td>
                         <td> <a href='javascript:void(0)'  onClick={() =>deleteExam(exam._id)}>Delete</a> </td>

@@ -40,19 +40,13 @@ export default async function handler(
             orientation: "portrait",
             border: "10mm",
             header: {
-                height: "3.5mm",
+                height: "2mm",
 
-                contents: {
-                    2: '<span style="margin-bottom: 40%; color: red;">tgt</span>',
-                    // 2: 'Second page', // Any page number is working. 1-based index
-                    // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-                    // last: 'Last Page'
-                }
             },
             footer: {
-                height: "10mm",
+                height: "0mm",
                 contents: {
-                    first: '<span style="margin-bottom: 40%; color: red;"></span>',
+                    // first: 'Cover page',
                     // 2: 'Second page', // Any page number is working. 1-based index
                     // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
                     // last: 'Last Page'
@@ -74,7 +68,7 @@ export default async function handler(
                     font-weight:bold;
                     width: 100%;
                     margin-top: 5px;
-                    margin-bottom: 0px;
+                    margin-bottom: 5px;
                     font-size:9px;
                     }
                     .com, b{
@@ -95,10 +89,6 @@ export default async function handler(
                 
                 .table3 {
                     font-size:10px;
-                }
-                .bord {
-                    border: 1px solid red;
-                    position: absolute;
                 }
                 </style>
                 `
