@@ -27,6 +27,7 @@ export default function ClasseDetails(){
     const [exams, setExams] = useState<ExamInterface[]>([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [examIsOpen, setExamIsOpen] = useState(false);
+    const [dynamicExamIsOpen, setDynamicExamIsOpen] = useState(false);
     const [ImportIsOpen, setImportIsOpen] = useState(false);
     const router = useRouter()
     const {_id:classeId} = router.query;
@@ -106,7 +107,10 @@ export default function ClasseDetails(){
             <button onClick={downloadToCsv} className='btn btn-secondary mx-3'> Download to CSV </button>
             <button onClick={downloadToPdf} className='btn btn-secondary mx-2'> Download to Pdf </button>
             
-            <h3 className='mt-3'>Exams  <span className='pull-right'><button className='btn btn-xs btn-success' onClick={() =>setExamIsOpen(s => true)}>Add Exam</button></span></h3>
+            <h3 className='mt-3'>Exams  
+            <span className='pull-right'><button className='btn btn-xs btn-success' onClick={() =>setExamIsOpen(s => true)}>Add Exam</button></span>
+            <span className='px-13'><button className='btn btn-xs btn-success' onClick={() =>setDynamicExamIsOpen(s => true)}>Print Dynamic</button></span>
+            </h3>
 
             <table className='table table-hover'>
                 <thead>
@@ -133,6 +137,8 @@ export default function ClasseDetails(){
             </table>
 
             {classeId && <CreateExamModal modalIsOpen={examIsOpen} closeModal={closeExamModal} save={saveExam} class_id={classeId} /> }
+            {classeId && <DynamicExamModal exams={exams} modalIsOpen={dynamicExamIsOpen} closeModal={closeExamModal} save={saveExam} class_id={classeId} /> }
+
 
 
 
@@ -327,6 +333,59 @@ export function CreateExamModal({modalIsOpen, closeModal, save, class_id}:Create
         </div>
       );
 }
+
+type DynamicExamModalProps = {
+  modalIsOpen:boolean,
+  class_id?:any,
+  closeModal: () => void,
+  save:(student:any) => void, 
+  exams:ExamInterface[]
+}
+export function DynamicExamModal({modalIsOpen, closeModal, save, class_id, exams}:DynamicExamModalProps){
+  const [exam, setExam] = useState<ExamInterface>({class_id, name:''});
+
+  function handleChange(e:any) {
+      const key = e.target.name
+      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+  
+      setExam(inputData => ({
+        ...inputData,
+        [key]: value
+      }))
+    }
+  
+
+    
+  return (
+      <div>
+
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="select Exams"
+        >
+          <div className='modal-body'>
+          <h2 >Hello</h2>
+            <table style={{width:'100%'}}>
+              <tr>
+                <th></th>
+                <th>Exam</th>
+              </tr>
+             {exams.map(exam => {
+               return  (<tr>
+                <th><input type='checkbox'></input></th>
+                <th>{exam.name}</th>
+              </tr>
+               )
+             })} 
+            </table>
+          </div>
+        </Modal>
+      </div>
+    );
+}
+
 
 export function ImportStudents({modalIsOpen, closeModal, class_id}:any){
     const [file, setFile] = useState<File|null>(null);

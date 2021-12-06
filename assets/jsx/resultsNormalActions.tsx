@@ -111,7 +111,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
 </div>
 
 <div>
-<table className='table1' style={{fontSize:'20px'}} >
+<table className='table1' style={{fontSize:'20px', marginBottom:'40px'}} >
  <thead>
      <tr>
          <th colSpan={2}>NOMS ET PRENOMS</th>
@@ -157,7 +157,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
                     {subjects?.map((subject, subjectIndex) => {
                         return (
                             <> 
-                                    <tr>
+                                    <tr height='20%'>
                                         <td colSpan={2}> {subject.name} </td>
                                         <td>{results.exam_id?.[`point_${subject._id}`]}</td>
                                         <td>{results[`subject_${subject._id}`] ?? 0}</td> 

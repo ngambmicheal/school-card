@@ -7,6 +7,7 @@ import { customStyles } from "../../services/constants";
 import Modal from 'react-modal';
 import SchoolInterface from "../../models/school";
 
+export const report_types = ['Competence', 'Matiere', 'Maternelle','Nursery', 'Special'];
 export default function Sections(){
     const [sections, setSections] = useState<Section[]>([])
     const [schools, setSchools] = useState<SchoolInterface[]>([])
@@ -74,7 +75,7 @@ type CreateSectionModalProps = {
 }
 export function CreateSectionModal({modalIsOpen, closeModal, save, class_id, schools}:CreateSectionModalProps){
     const [student, setStudent] = useState<SectionInterface>({name:''});
-    const report_types = ['Competence', 'Matiere', 'Maternelle'];
+
 
     function handleChange(e:any) {
         const key = e.target.name

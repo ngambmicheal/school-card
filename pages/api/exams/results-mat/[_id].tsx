@@ -17,6 +17,7 @@ import { courseSchema } from '../../../../models/course';
 import { classeSchema } from '../../../../models/classe';
 import { sectionSchema } from '../../../../models/section';
 import { getTotal, getTotalPoints, getTotals } from '../../../../assets/jsx/resultsUiStats';
+import resultsMatActions from '../../../../assets/jsx/resultsMatActions';
   
 
 export default async function handler(
@@ -60,7 +61,7 @@ export default async function handler(
             }
         };
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, totalResults.length, totalResults))
+        let html = ReactDOMServer.renderToStaticMarkup(resultsMatActions(competences, results, totalResults.length, totalResults))
         html+=`
                 <style>
                 .center{

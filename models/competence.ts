@@ -6,6 +6,7 @@ export default interface CompetenceInterface{
     _id?:string,
     name:string,
     school?:string | SchoolInterface,
+    report_type?:string,
     slug?:string,
     subjects?:SubjectInterface[]
 }
@@ -26,7 +27,8 @@ const CompetenceSchema = new mg.Schema({
     ]
    },
    {
-   timestamps:true
+   timestamps:true,
+   strict:false
    }
 )
 

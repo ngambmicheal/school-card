@@ -44,3 +44,15 @@ a {
 .second{
   margin-left: 20%;
 }
+
+.bg-grey{
+  background-color: #ccc !important;
+}
+
+td{
+  text-align: center;
+}
+
+input[type='checkbox']{
+  transform: scale(2);
+}

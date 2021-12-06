@@ -73,6 +73,7 @@ export class Api{
     getCompetence(competenceId?:any){ return axios.get(`/api/competences/${competenceId}`) }
     getCompetenceSubjects(competenceId?:any){ return axios.get(`/api/subjects?competence=${competenceId}`) }
     deleteCompetence(id:any) { return axios.post('/api/competences/delete', {_id:id})}
+    updateCompentence(data:any){ return axios.post('/api/competences/update', data) }
 
     
     //schools

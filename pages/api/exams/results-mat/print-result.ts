@@ -14,6 +14,7 @@ import { classeSchema } from '../../../../models/classe';
 import { courseSchema } from '../../../../models/course';
 import { getTotal } from '../../../../assets/jsx/resultsUiStats';
 import { sectionSchema } from '../../../../models/section';
+import resultsMatActions from '../../../../assets/jsx/resultsMatActions';
 
 export const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -51,7 +52,7 @@ export default async function handler(
                 }
             },
             footer: {
-                height: "12mm",
+                height: "10mm",
                 contents: {
                     first: '',
                     // 2: 'Second page', // Any page number is working. 1-based index
@@ -64,7 +65,7 @@ export default async function handler(
 
         const totalResults = await(await examResultSchema.find({exam_id:results.exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, totalResults.length, totalResults ))
+        let html = ReactDOMServer.renderToStaticMarkup(resultsMatActions(competences, results, totalResults.length, totalResults ))
         html+=`
                 <style>
                 .center{

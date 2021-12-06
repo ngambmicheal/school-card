@@ -6,6 +6,7 @@ import CompetenceInterface from "../../models/competence";
 import { customStyles } from "../../services/constants";
 import Modal from 'react-modal';
 import SchoolInterface from "../../models/school";
+import { report_types } from "../sections";
 
 export default function Competences(){
     const [competences, setCompetences] = useState<Competence[]>([])
@@ -39,6 +40,14 @@ export default function Competences(){
         api.deleteCompetence(id).then(() => getCompetences())
     }
 
+    function handleChange(e:any, competence_id:string) {
+        const key = e.target.name
+        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    
+        api.updateCompentence({_id:competence_id, report_type:e.target.value})
+      }
+
+
     return (
         <>
             <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une Competence </button>
@@ -46,6 +55,7 @@ export default function Competences(){
                 <thead>
                     <tr>
                         <th>Nom</th>
+                        <th>Type de Bulletin</th>
                         <th>Slug</th>
                         <th>Ecole</th>
                         <th>Action</th>
@@ -55,6 +65,14 @@ export default function Competences(){
                     {competences.map(competence => {
                        return  <tr key={competence._id}>
                             <td>{competence.name}</td>
+                            <td>
+                                <select className='form-control' name='report_type'  onChange={e => handleChange(e, competence._id)} >
+                                    <option value=''> Choisir </option>
+                                    {report_types.map(type => {
+                                        return (<option key={type} value={type} selected={type==competence.report_type}> {type} </option>)
+                                    })}
+                                </select>
+                            </td>
                             <td>{competence.slug}</td>
                             <td>{competence.school?.name}</td>
                             <td><Link href={`competences/${competence._id}`}>Voir</Link> | <a href='javascript:void(0)'  onClick={() =>deleteCompetence(competence._id)}>Delete</a> </td>
