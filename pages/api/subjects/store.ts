@@ -17,7 +17,7 @@ export default function handler(
     subject.save().then(()=>{
                     res.status(200).json({data:subject, success:true, message:'done'});
                 })
-                .catch((e) => {
+                .catch((e:any) => {
                     res.status(400).json({message:e.message, success:false });
                 })
 

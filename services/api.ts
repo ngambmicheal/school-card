@@ -6,6 +6,7 @@ import SchoolInterface from '../models/school';
 import SectionInterface from '../models/section';
 import StudentInterface from '../models/student';
 import SubjectInterface from '../models/subject';
+import TermInterface from '../models/terms';
 
 const axios = a.create()
 
@@ -106,9 +107,20 @@ export class Api{
     getExam(examId?:any){ return axios.get(`/api/exams/${examId}`) }
     getExamResults(examId?:any){ return axios.get(`/api/exams/results?exam_id=${examId}`) }
     getResults(resultsId?:any){ return axios.get(`/api/exams/results/result?result_id=${resultsId}`) }
+    getTermResults(termId:string,studentId:string){ return axios.get(`/api/exams/results/dynamic?term_id=${termId}&student_id=${studentId}`)}
     deleteResult(resultsId:any){ return axios.post(`/api/exams/results/delete`, {_id:resultsId})}
     updateExamResult(data:any){ return axios.post(`/api/exams/update-results`, data)}
     deleteExam(examId:any){return axios.post('/api/exams/delete', {_id:examId})}
+
+    //terms 
+    getTerms(classeId?:string) { return axios.get(`/api/terms?class=${classeId}`)}
+    saveTerm(data:TermInterface) { return axios.post('/api/terms/store', data);}
+    deleteTerm(){
+
+    }
+    calculateTerm(term_id:string){
+      return axios.post(`/api/terms/calculate`, {term_id} )
+    }
 
 
     downloadToCsv(classeId:any) { return axios.post(`/api/classes/export-csv`, {class_id: classeId})}

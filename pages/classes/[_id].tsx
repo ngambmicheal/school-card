@@ -19,12 +19,14 @@ import {
     UseFormRegister,
     UseFormSetValue,
   } from 'react-hook-form'
+import TermInterface from "../../models/terms";
 
 
 export default function ClasseDetails(){
     const [classe, setClasse] = useState<ClasseInterface>()
     const [students, setStudents] = useState<StudentInterface[]>([]);
     const [exams, setExams] = useState<ExamInterface[]>([]);
+    const [terms, setTerms] = useState<TermInterface[]>([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [examIsOpen, setExamIsOpen] = useState(false);
     const [dynamicExamIsOpen, setDynamicExamIsOpen] = useState(false);
@@ -39,6 +41,7 @@ export default function ClasseDetails(){
             })
             getStudents();
             getExams();
+            getTerms();
         }
     }, [classeId])
     
@@ -74,6 +77,10 @@ export default function ClasseDetails(){
         setExamIsOpen(s => false);
     }
 
+    const closeDynamicExamModal = () => {
+      setDynamicExamIsOpen(s => false);
+  }
+
     const closeImportModal = () => {
         setImportIsOpen(s => false);
     }
@@ -82,6 +89,20 @@ export default function ClasseDetails(){
         api.getClasseExams(classeId).then(({data:{data}} : any) =>{
             setExams(data)
         })
+    }
+
+    const getTerms = () => {
+      api.getTerms(classeId).then(({data:{data}}:any) => {
+        setTerms(data)
+      })
+    }
+
+    const deleteTerm = (term_id:any) => {
+      api.deleteTerm(term_id)
+    }
+
+    const calculateTerm = (term_id:string) => {
+      api.calculateTerm(term_id)
     }
 
     const saveExam = (exam:any) => {
@@ -109,16 +130,15 @@ export default function ClasseDetails(){
             
             <h3 className='mt-3'>Exams  
             <span className='pull-right'><button className='btn btn-xs btn-success' onClick={() =>setExamIsOpen(s => true)}>Add Exam</button></span>
-            <span className='px-13'><button className='btn btn-xs btn-success' onClick={() =>setDynamicExamIsOpen(s => true)}>Print Dynamic</button></span>
             </h3>
 
             <table className='table table-hover'>
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Exam Type Maternelle</th>
-                        <th>Exam Type Normal </th>
-                        <th>Exam Type Competence</th> 
+                        {classe?.section?.report_type =='Maternelle' && <th>Exam Type Maternelle</th> }
+                        {classe?.section?.report_type =='Matiere' && <th>Exam Type Normal </th> }
+                        {classe?.section?.report_type =='Competence' && <th>Exam Type Competence</th>  }
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -126,9 +146,9 @@ export default function ClasseDetails(){
                     {exams.map(exam => {
                     return <tr key={exam._id}>
                         <td> {exam.name} </td>
-                        <td> <Link href={`/exams/mat/${exam._id}`}>Mat</Link></td>
-                        <td> <Link href={`/exams/${exam._id}`} >View</Link> </td>
-                        <td> <Link href={`/exams/ui/${exam._id}`} >UI</Link> </td>
+                        {classe?.section?.report_type =='Maternelle' &&  <td> <Link href={`/exams/mat/${exam._id}`}>Mat</Link></td> }
+                        {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/${exam._id}`} >View</Link> </td> }
+                        {classe?.section?.report_type =='Competence' &&  <td> <Link href={`/exams/ui/${exam._id}`} >UI</Link> </td> }
                         <td> <a href='javascript:void(0)'  onClick={() =>deleteExam(exam._id)}>Delete</a> </td>
                     </tr>
                     })
@@ -136,8 +156,38 @@ export default function ClasseDetails(){
                 </tbody>
             </table>
 
+            <hr />
+
+            <h3 className='mt-3'> Trimestre </h3>
+            { exams.length && <span className='px-13'><button className='btn btn-xs btn-success' onClick={() =>setDynamicExamIsOpen(s => true)}> Ajouter Trimestre </button></span> }
+
+            <table className='table table-hover'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        {classe?.section?.report_type =='Maternelle' && <th>Exam Type Maternelle</th> }
+                        {classe?.section?.report_type =='Matiere' && <th>Exam Type Normal </th> }
+                        {classe?.section?.report_type == 'Competence' && <th>Exam Type Competence</th> }
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {terms.map(term => {
+                    return <tr key={term._id}>
+                        <td> {term.name} </td>
+                        {classe?.section?.report_type =='Maternelle' && <td> <Link href={`/api/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?term_id=${term._id}`}>Mat</Link></td> }
+                        {classe?.section?.report_type =='Matiere' && <td> <Link href={`/api/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?term_id=${term._id}`} >View</Link> </td> }
+                        {classe?.section?.report_type =='Competence' && <td> <Link href={`/api/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?term_id=${term._id}`} >UI</Link> </td>}
+                        <td> <a href='javascript:void(0)'  onClick={() =>calculateTerm(term._id)}>Calculer</a> | <a href='javascript:void(0)'  onClick={() =>deleteTerm(term._id)}>Delete</a> </td>
+                    </tr>
+                    })
+                }   
+                </tbody>
+            </table>
+
             {classeId && <CreateExamModal modalIsOpen={examIsOpen} closeModal={closeExamModal} save={saveExam} class_id={classeId} /> }
-            {classeId && <DynamicExamModal exams={exams} modalIsOpen={dynamicExamIsOpen} closeModal={closeExamModal} save={saveExam} class_id={classeId} /> }
+            {classeId && <DynamicExamModal exams={exams} modalIsOpen={dynamicExamIsOpen} closeModal={closeDynamicExamModal} save={saveExam} class_id={classeId} /> }
 
 
 
@@ -163,7 +213,7 @@ export default function ClasseDetails(){
                 </thead>
                 <tbody>
                     {students.map((student, index) => {
-                    return <StudentRow stud={student} key={student._id} deleteStudent={deleteStudent} />
+                    return <StudentRow stud={student} key={student._id} deleteStudent={deleteStudent} terms={terms} />
                     })
                 }   
                 </tbody>
@@ -179,9 +229,10 @@ export default function ClasseDetails(){
 type StudentProps = {
   stud:StudentInterface,
   deleteStudent:(id:string) => void, 
+  terms:TermInterface[]
 }
 
-export function StudentRow({stud, deleteStudent}:StudentProps){
+export function StudentRow({stud, deleteStudent, terms}:StudentProps){
   const [student, setStudent] = useState(stud); 
   const [hasUpdated, setHasUpdated] = useState(false)
 
@@ -204,14 +255,20 @@ export function StudentRow({stud, deleteStudent}:StudentProps){
   }
 
   return (
-    student._id && <tr >
+    <tr >
             <td>  <input style={{width:'50px'}} type='number' name='number' value={student?.number} onChange={handleChange} />  </td>
             <td>  <input className='form-control' type='text' name='name' value={student?.name} onChange={handleChange} />  </td>
             <td>  <input  style={{width:'150px'}} className='form-control' type='number' name='phone' value={student?.phone} onChange={handleChange}></input></td>
             <td>  <input  style={{width:'50px'}} type='text' name='sex' value={student?.sex} onChange={handleChange}></input></td>
             <td>  <input  style={{width:'150px'}} className='form-control' type='text' name='dob' value={student?.dob} onChange={handleChange}></input></td>
             <td>  <input  style={{width:'150px'}} type='text' name='place' value={student?.place} onChange={handleChange}></input></td>
-            <td>  {hasUpdated && <a href='javascript:void(0)'  onClick={() =>updateStudent()}>Update</a> }  | <a href='javascript:void(0)'  onClick={() =>deleteStudent(student._id)}>Delete</a></td>
+            <td>  {hasUpdated && <a href='javascript:void(0)'  onClick={() =>updateStudent()}>Update</a> }  | 
+                      <a href='javascript:void(0)'  onClick={() =>deleteStudent(student._id)}>Delete</a> | 
+
+                      {terms.map((term, index) => {
+                          return <> <a href={`/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?_id=${term._id}&student_id=${student._id}`} target='_blank'> Term {index+1} </a>  | </>
+                      })}
+            </td>
         </tr>
     )
 }
@@ -342,18 +399,29 @@ type DynamicExamModalProps = {
   exams:ExamInterface[]
 }
 export function DynamicExamModal({modalIsOpen, closeModal, save, class_id, exams}:DynamicExamModalProps){
-  const [exam, setExam] = useState<ExamInterface>({class_id, name:''});
+  const [examSelected, setExamSelected] = useState<string[]>([]);
+  const [name, setName] = useState('')
+
+  function handleExamChange(e:any) {
+      const key:string = e.target.name
+      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+      const ex = value? [...examSelected, key] : examSelected.filter(e => e != key)
+      setExamSelected(ex)
+    }
 
   function handleChange(e:any) {
-      const key = e.target.name
-      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    const key = e.target.name
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+    setName(value)
+  }
+    
   
-      setExam(inputData => ({
-        ...inputData,
-        [key]: value
-      }))
-    }
-  
+  const generate = () => {
+    const report_type:string = exams[0].class_id?.section?.report_type||'Competence';
+    api.saveTerm({report_type, exams:examSelected, name, class:exams[0].class_id?._id }).then(()=>{
+      closeModal()
+    })
+  }
 
     
   return (
@@ -366,20 +434,30 @@ export function DynamicExamModal({modalIsOpen, closeModal, save, class_id, exams
           contentLabel="select Exams"
         >
           <div className='modal-body'>
-          <h2 >Hello</h2>
-            <table style={{width:'100%'}}>
+          <h2 >Ajoute Trimestre</h2>
+          <div>
+            <div className='form-group'>
+              <input type='' className='form-control' onChange={handleChange} />
+            </div>
+            <table style={{width:'100%'}} className='table1'>
               <tr>
-                <th></th>
+                <th>Select</th>
                 <th>Exam</th>
               </tr>
              {exams.map(exam => {
                return  (<tr>
-                <th><input type='checkbox'></input></th>
-                <th>{exam.name}</th>
-              </tr>
+                        <td><input type='checkbox' name={exam._id} onChange={handleExamChange}></input></td>
+                        <td>{exam.name}</td>
+                      </tr>
                )
              })} 
             </table>
+            </div>
+
+            <br />
+
+            <button className='btn btn-success' onClick={generate} disabled={!examSelected.length}> Generer </button>
+            <button className='btn btn-dark' onClick={closeModal}>close</button>
           </div>
         </Modal>
       </div>

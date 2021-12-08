@@ -26,7 +26,6 @@ const ClasseSchema = new mg.Schema({
     section:  {
         type:mg.Schema.Types.ObjectId,
         ref:'Section',
-        required:true
     },
      details: {type:String},
      teacher:{type:String}

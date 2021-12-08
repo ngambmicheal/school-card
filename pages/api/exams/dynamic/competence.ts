@@ -17,6 +17,8 @@ import { courseSchema } from '../../../../models/course';
 import { classeSchema } from '../../../../models/classe';
 import { sectionSchema } from '../../../../models/section';
 import { getTotal, getTotalPoints, getTotals } from '../../../../assets/jsx/resultsUiStats';
+import resultsDynamicActions from '../../../../assets/jsx/resultsDynamicActions';
+import TermInterface, { termSchema } from '../../../../models/terms';
   
 
 export default async function handler(
@@ -24,23 +26,23 @@ export default async function handler(
   res: NextApiResponse<any>
 ) { 
 
-    const {_id:exam_id} = req.query
+    const {term_id} = req.query
 
-    const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema, 'populate':{path:'section', sectionSchema}});
+    const term:TermInterface = await termSchema.findOne({_id:term_id}).populate({path:'class', model:classeSchema})
+    const exams = await examSchema.find({_id:{$in:term.exams}})
+    const totalResults = await (await examResultSchema.find({term_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
+    const competences =  await competenceSchema.find({school:term.class.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
-    const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
-    const competences =  await competenceSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
-
-    var dir = `./tmp/exams/${exam_id}`;
-    var zipOutput = fs.createWriteStream(`./public/exams/${exam_id}.zip`);
-    var zipDir = `./public/exams/${exam_id}.zip`;
+    var dir = `./tmp/terms/${term_id}`;
+    var zipOutput = fs.createWriteStream(`./public/exams/${term_id}.zip`);
+    var zipDir = `./public/terms/${term_id}.zip`;
     var archive = archiver('zip');
 
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir, { recursive: true });
     }
 
-    totalResults.map((results) => {
+    totalResults.map(async (results) => {
         var options = {
             format: "A4",
             orientation: "portrait",
@@ -59,7 +61,9 @@ export default async function handler(
             }
         };
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, totalResults.length, totalResults))
+        const examResults =  await examResultSchema.find({student:results.student_id, exam_id:{ $in: term.exams}})
+
+        let html = ReactDOMServer.renderToStaticMarkup(resultsDynamicActions(competences, results, totalResults.length, totalResults, examResults, exams, term))
         html+=`
                 <style>
                 .center{
