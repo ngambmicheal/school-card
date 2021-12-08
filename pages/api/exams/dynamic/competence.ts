@@ -34,7 +34,7 @@ export default async function handler(
     const competences =  await competenceSchema.find({school:term.class.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
     var dir = `./tmp/terms/${term_id}`;
-    var zipOutput = fs.createWriteStream(`./public/exams/${term_id}.zip`);
+    var zipOutput = fs.createWriteStream(`./public/terms/${term_id}.zip`);
     var zipDir = `./public/terms/${term_id}.zip`;
     var archive = archiver('zip');
 
@@ -126,6 +126,6 @@ export default async function handler(
     var stat = fs.statSync(zipDir);
     res.setHeader('Content-Length', stat.size);
     res.setHeader('Content-Type', 'application/zip');
-    res.setHeader(`Content-Disposition`, `attachment; filename=${exam_id}.zip`);
+    res.setHeader(`Content-Disposition`, `attachment; filename=${term_id}.zip`);
     file.pipe(res);
 }

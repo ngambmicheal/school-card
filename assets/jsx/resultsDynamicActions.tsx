@@ -135,11 +135,11 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 </table>
 
 <div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION - {results.exam_id?.name} - 2021/2022
+    BULLETIN D'EVALUATION - {term.name} - 2021/2022
 </div>
 
 <div>
-<table className='table1' style={{fontSize:'20px'}} >
+<table className='table1' style={{fontSize:'10px'}} >
  <thead>
      <tr>
          <th colSpan={2}>NOMS ET PRENOMS</th>
@@ -163,7 +163,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 </table>
 </div>
 
- <table className='table1' style={{fontSize:'20px'}}>
+ <table className='table1' style={{fontSize:'10px'}}>
      <thead>
      <tr>
          <th rowSpan={2} style={{width:'250px'}}>
@@ -172,11 +172,11 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
          <th rowSpan={2}  style={{width:'350px'}}>
              SOUS-COMPETENCES
          </th>
-         <th >
+         <th colSpan={2}>
              UNITES D'APPRENTISSAGES
          </th>
          {exams.map((exam, index) => {
-            return <th colSpan={2}>
+            return <th>
                 UA{index+1}
             </th>
             })
@@ -191,14 +191,9 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
              MAX 
          </th>
          {exams.map((exam, index) => {
-                        return <>
-                                <th>
+                        return< th>
                                     NOTES
                                 </th>
-                                <th>
-                                    COTE
-                                </th>
-                            </>
                         })
                     }
          <th>
@@ -227,16 +222,14 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
                                                  {!subjectIndex && !courseIndex&& <th style={{width:'150px'}} rowSpan={getCompetencesLenght(competence)}> {competence.name} </th> }
                                                  {!courseIndex && <td  style={{width:'150px'}} rowSpan={(subject.courses?.length??1)+1}> {subject.name}  </td>  }
                                                  <td>{!isExcluded ? course.name :''} </td>
-
+                                                 <td>{ !isExcluded ?exams[0][`point_${course._id}`] :'--'}</td>
                                                  {examResults.map((result, index) => {
                                                     return <>
                                                                 <td>{result[`subject_${course._id}`] ?? 0}</td> 
-                                                                <td>{result.exam_id?.[`point_${course._id}`]}</td>
                                                             </>
                                                     })
                                                 }
 
-                                                 <td>{ !isExcluded ?results.exam_id?.[`point_${course._id}`] :'--'}</td>
                                                  <td>{ !isExcluded ?results[`subject_${course._id}`] ?? 0 : '--'}</td> 
                                                  {!courseIndex && <td rowSpan={(subject.courses?.length??1)+1}> { !isExcluded ?to.app :'--'}  </td>  }
                                                  </tr>
@@ -247,9 +240,15 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
                                              <tr>
                                                  <th>Total </th>
                                                  <th> {!isExcluded ?to.pointTotal:'--'}</th>
+                                                 {examResults.map((result, index) => {
+                                                    return <>
+                                                                <td>{result[`total_${subject._id}`] ?? 0}</td> 
+                                                            </>
+                                                    })
+                                                }
                                                  <th>{!isExcluded ?to.total:'--'}</th> 
                                              </tr>
-                                             { ( competenceIndex==2 && (subjectIndex +1  == competence.subjects?.length) )&& <><tr style={{border:'none !important' }}><td colSpan={7}></td></tr></>}
+                                             { ( competenceIndex==2 && (subjectIndex +1  == competence.subjects?.length) )&& <><tr style={{border:'none !important', pageBreakAfter:'always' }}><td colSpan={0} style={{border:'white 1px inset'}} > <div style={{pageBreakAfter:'always' }}> </div ></td></tr></>}
                                      </>
                                  )
                              })
@@ -267,7 +266,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 
     <div className='bord'></div>
 
-    <table style={{fontSize:'25px', width:'100%'}} className='table1'>
+    <table style={{fontSize:'15px', width:'100%'}} className='table1'>
         <tr>
             <th>Total </th>
             <th> {totalMarks} / {totalPoints} </th>
