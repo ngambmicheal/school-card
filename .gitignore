@@ -13,6 +13,8 @@
 /out/
 /public/exams
 
+*.zip
+
 # production
 /build
 
