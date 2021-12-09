@@ -6,12 +6,14 @@ import ExamResultInterface from "../../models/examResult";
 import { getSubjectTotal } from "../../pages/exams/[_id]";
 import { getGeneralAverage } from "./resultsActions";
 
+let comT:string[] = [];
 
-
-const getAppreciation = (value:number, total:number, displayName:boolean=false)  => {
+const getAppreciation = (value:number, total:number, displayName:boolean=false, competenceName:string='')  => {
     if(total==20){
-        if(value < 11) 
+        if(value < 11){ 
+            if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return displayName? 'Not Acquired' :'NA';
+        }
         if(value < 15)
             return displayName ? 'SIA': 'SIA';
         if(value < 18) 
@@ -83,6 +85,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
 
     const totalMarks = getTotal(results)
     const totalPoints = getTotalExam(results?.exam_id)
+    const average = (totalMarks / totalPoints) * 20;
 
     return (
         <>
@@ -157,11 +160,11 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
                     {subjects?.map((subject, subjectIndex) => {
                         return (
                             <> 
-                                    <tr height='20%'>
+                                    <tr>
                                         <td colSpan={2}> {subject.name} </td>
                                         <td>{results.exam_id?.[`point_${subject._id}`]}</td>
                                         <td>{results[`subject_${subject._id}`] ?? 0}</td> 
-                                        <td>{getAppreciation((results[`subject_${subject._id}`] ?? 0), 20)}</td>
+                                        <td>{getAppreciation((results[`subject_${subject._id}`] ?? 0), 20, false, subject.name)}</td>
                                         </tr>
                                     </>
                                 )
@@ -184,33 +187,51 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
         <tr>
             <td>Average</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td rowSpan={3}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td rowSpan={4}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
             <td> Conduct Warning</td>
-            <td> {results.ac? 'Oui' : 'Non'} </td>
+            <td  style={{fontSize:'15px'}}>  <input type='checkbox' /> Yes <input type='checkbox' /> No  </td>
         </tr>
         <tr>
             <td>Rank </td>
             <td>  {results.rank} / {totalUsers} </td>
             <td> Work Warning</td>
-            <td> {results.at? 'Oui' : 'Non'}  </td>
+            <td> {average<12? 'Yes' : 'No'}   </td>
         </tr>
         <tr>
             <td>General Average</td>
             <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td>
             <td> Encouragements </td>
-            <td> {results.en? 'Oui' : 'Non'}  </td>
+            <td>  {average>12? 'Yes' : 'No'}   </td>
         </tr>
         <tr>
             <td>Highest Average</td>
             <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
-            <td> Parent's Signature</td>
-            <td colSpan={2}> Teacher's Signature </td>
+            <td> Roll of Honor</td>
+            <td  style={{fontSize:'15px'}}> <input type='checkbox' /> Yes <input type='checkbox' /> No</td>
         </tr>
         <tr>
             <td>Lower Average</td>
             <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
             <td> </td>
             <td colSpan={2}> </td>
+        </tr>
+        <tr>
+            <td colSpan={2}> Teacher's Visa</td>
+            <td>Parent's Visa</td>
+            <td>Principal Visa</td>
+        </tr>
+        <tr>
+            <td style={{minHeight:'100px', fontSize:'14px'}}> 
+                <i>Efforts should be done in the following</i>
+                <br />
+                <ul >
+                    {comT.map(s => {
+                        return <li>{s}</li>
+                    })}
+                </ul>
+            </td>
+            <td></td>
+            <td></td>
         </tr>
     </table>
 

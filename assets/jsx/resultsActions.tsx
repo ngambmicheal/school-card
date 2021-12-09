@@ -102,7 +102,7 @@ const getTotalExam = (result:any) => {
 
 export default function resultsActions(competences:CompetenceInterface[], results:any, totalUsers:number, statsResults:ExamResultInterface[] ) {
 
-    const getSubjectTotal = (subject:SubjectInterface, competence:CompetenceInterface) => {
+    const getSubjectTotal = (subject:SubjectInterface) => {
         let total = 0 ; 
         let pointTotal = 0;
         subject.courses?.map(c => {
@@ -110,7 +110,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
             pointTotal+=parseFloat(results.exam_id[`point_${c._id}`]??0);
         })
 
-        const app = getAppreciation(total, pointTotal, competence.slug);
+        const app = getAppreciation(total, pointTotal, subject.slug);
 
         return {total, app, pointTotal}
     }
@@ -208,7 +208,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
                          {
                              competence.subjects?.map((subject, subjectIndex) => {
 
-                                const to = getSubjectTotal(subject, competence);
+                                const to = getSubjectTotal(subject);
                                 const isExcluded = !excludedClass(results.exam_id.class_id?.name, subject._id);
                                  return (
                                      <> 
@@ -243,7 +243,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
 
     </tbody>
     </table>
-    <div className="bord" style={{borderTop: '2px solid #555'}}></div>
+
     <div className='center'>
         <p style={{fontSize:'13px'}}>COTES : NA = Non Acquis, ECA = en cours d’Acquisition, A = Acquis, A+ = Expert</p>
     </div>
@@ -262,7 +262,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
             <td rowSpan={4}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
             <td> Avertissement Conduites </td>
-            <td>  <input type='checkbox' /> Oui <input type='checkbox' /> Non  </td>
+            <td style={{fontSize:'15px'}}>  <input type='checkbox' /> Oui <input type='checkbox' /> Non  </td>
         </tr>
         <tr>
             <td>Rang </td>
@@ -280,7 +280,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
             <td>Moyenne du premier</td>
             <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
             <td> Tableau d'honneur </td>
-            <td> <input type='checkbox' /> Oui <input type='checkbox' /> Non</td>
+            <td style={{fontSize:'15px'}}> <input type='checkbox' /> Oui <input type='checkbox' /> Non</td>
         </tr>
         <tr>
             <td>Moyenne du dernier</td>
