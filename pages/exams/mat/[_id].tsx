@@ -297,12 +297,21 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
     
     const handleChange = (e) => {
         const key = e.target.name
-        const value = e.target.type === 'checkbox' ? e.target.value : e.target.value
+        const value =  e.target.type === 'checkbox' ? e.target.value : e.target.value
     
-        setRes(inputData => ({
-          ...inputData,
-          [key]: value
-        }))
+        if(res[key]==value){
+            setRes(inputData => ({
+                ...inputData,
+                [key]: ''
+              }))
+        }   
+        else {
+            setRes(inputData => ({
+                ...inputData,
+                [key]: value
+              }))
+        }
+
     }
 
    return  <tr>
