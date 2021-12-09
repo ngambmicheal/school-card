@@ -22,10 +22,14 @@ export const getGeneralAverage = (results:ExamResultInterface[], totalPoints:num
     return (total / results.length) * 20;
 }
 
-const getAppreciation = (value:number, total:number)  => {
+let comT:string[] = [];
+
+const getAppreciation = (value:number, total:number, competenceName:string='')  => {
     if(total==20){
-        if(value < 11) 
+        if(value < 11){
+            if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return 'NA';
+        }
         if(value < 15)
             return 'ECA';
         if(value < 18) 
@@ -34,8 +38,10 @@ const getAppreciation = (value:number, total:number)  => {
             return 'A+';
     }
     if(total==30){
-        if(value <= 15) 
+        if(value <= 15){
+            if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return 'NA';
+        } 
         if(value < 22)
             return 'ECA';
         if(value < 26) 
@@ -44,8 +50,10 @@ const getAppreciation = (value:number, total:number)  => {
             return 'A+';
     }
     if(total==40){
-        if(value <= 20) 
+        if(value <= 20){
+            if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return 'NA';
+        } 
         if(value < 30)
             return 'ECA';
         if(value < 35) 
@@ -94,7 +102,7 @@ const getTotalExam = (result:any) => {
 
 export default function resultsActions(competences:CompetenceInterface[], results:any, totalUsers:number, statsResults:ExamResultInterface[] ) {
 
-    const getSubjectTotal = (subject:SubjectInterface) => {
+    const getSubjectTotal = (subject:SubjectInterface, competence:CompetenceInterface) => {
         let total = 0 ; 
         let pointTotal = 0;
         subject.courses?.map(c => {
@@ -102,13 +110,14 @@ export default function resultsActions(competences:CompetenceInterface[], result
             pointTotal+=parseFloat(results.exam_id[`point_${c._id}`]??0);
         })
 
-        const app = getAppreciation(total, pointTotal);
+        const app = getAppreciation(total, pointTotal, competence.slug);
 
         return {total, app, pointTotal}
     }
 
     const totalMarks = getTotal(results)
     const totalPoints = getTotalExam(results?.exam_id)
+    const average = (totalMarks / totalPoints) * 20;
 
     return (
         <>
@@ -199,7 +208,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
                          {
                              competence.subjects?.map((subject, subjectIndex) => {
 
-                                const to = getSubjectTotal(subject);
+                                const to = getSubjectTotal(subject, competence);
                                 const isExcluded = !excludedClass(results.exam_id.class_id?.name, subject._id);
                                  return (
                                      <> 
@@ -245,39 +254,57 @@ export default function resultsActions(competences:CompetenceInterface[], result
         <tr>
             <th>Total </th>
             <th> {totalMarks} / {totalPoints} </th>
-            <th>Observations</th>
+            <th>Cotes</th>
             <th colSpan={3}>Conseil de Classe</th>
         </tr>
         <tr>
             <td>Moyenne</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td rowSpan={3}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
-            <td> Avertissement Conduits </td>
-            <td> {results.ac? 'Oui' : 'Non'} </td>
+            <td rowSpan={4}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td> Avertissement Conduites </td>
+            <td>  <input type='checkbox' /> Oui <input type='checkbox' /> Non  </td>
         </tr>
         <tr>
             <td>Rang </td>
             <td>  {results.rank} / {totalUsers} </td>
             <td> Avertissement Travails </td>
-            <td> {results.at? 'Oui' : 'Non'}  </td>
+            <td> {average<12? 'Oui' : 'Non'}  </td>
         </tr>
         <tr>
             <td>Moyenne generale</td>
             <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td>
             <td> Encouragements </td>
-            <td> {results.en? 'Oui' : 'Non'}  </td>
+            <td> {average>12? 'Oui' : 'Non'}  </td>
         </tr>
         <tr>
             <td>Moyenne du premier</td>
             <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
-            <td> Visa du Parent</td>
-            <td colSpan={2}> Visa du Chef D'etablissement </td>
+            <td> Tableau d'honneur </td>
+            <td> <input type='checkbox' /> Oui <input type='checkbox' /> Non</td>
         </tr>
         <tr>
             <td>Moyenne du dernier</td>
             <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
             <td> </td>
             <td colSpan={2}> </td>
+        </tr>
+        <tr>
+            <td colSpan={2}> Observation de l'enseignant</td>
+            <td>Visa parent</td>
+            <td>Visa du chef d'etablissement</td>
+        </tr>
+        <tr>
+            <td style={{minHeight:'100px', fontSize:'14px'}}> 
+                <i>Des efforts s'imposent dans les competence suivantes</i>
+                <br />
+                <ul >
+                    {comT.map(s => {
+                        return <li>{s}</li>
+                    })}
+                </ul>
+            </td>
+            <td></td>
+            <td></td>
         </tr>
     </table>
 

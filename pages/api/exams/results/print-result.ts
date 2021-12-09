@@ -105,6 +105,9 @@ export default async function handler(
                     border: 1px solid red;
                     position: absolute;
                 }
+                input[type='checkbox']{
+                    transform: scale(2);
+                  }
                 </style>
                 `
 

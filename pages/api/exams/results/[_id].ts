@@ -91,6 +91,9 @@ export default async function handler(
                     .table3 {
                         font-size:9px;
                     }
+                    input[type='checkbox']{
+                        transform: scale(2);
+                      }
                 </style>
                 `
 
