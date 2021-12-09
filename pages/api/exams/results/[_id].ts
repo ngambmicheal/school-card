@@ -67,7 +67,7 @@ export default async function handler(
                 }
                 .table1, .table2, .table3{
                     border-collapse: collapse;
-                    width: 100%;
+                    width: 100%; 
                     margin-top: 2px;
                     margin-bottom: 5px;
                     font-size:8px;
@@ -77,7 +77,7 @@ export default async function handler(
                     }
                     .table1 td, .table1 th{
                     text-align: center;
-                    border: 2px solid #ccc;
+                    border: 1px solid #555;
                     }
 
                     .table2 td, .table2 th{
