@@ -46,6 +46,7 @@ export default function Competences(){
     
         api.updateCompentence({_id:competence_id, report_type:e.target.value})
       }
+      
 
 
     return (

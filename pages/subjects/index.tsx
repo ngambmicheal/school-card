@@ -55,14 +55,7 @@ export default function Subjects(){
                 </thead>
                 <tbody>
                     {subjects.map(subject => {
-                       return  <tr key={subject._id}>
-                            <td>{subject._id}</td>
-                            <td>{subject.name}</td>
-                            <td>{subject.report_type}</td>
-                            <td>{subject.slug}</td>
-                            <td>{subject.school?.name}</td>
-                            <td><Link href={`subjects/${subject._id}`}>Voir</Link>  | <a href='javascript:void(0)'  onClick={() =>deleteSubject(subject._id)}>Delete</a>  </td>
-                        </tr>
+                       return <SubjectRow subj={subject} deleteSubject={deleteSubject} />
                     })
                     }
                 </tbody>
@@ -73,21 +66,62 @@ export default function Subjects(){
     )
 }
 
+type SubjectProps = {
+    subj:SubjectInterface,
+    deleteSubject:(id:string) => void, 
+  }
+
+  
+export function SubjectRow({subj, deleteSubject}:SubjectProps){
+    const [subject, setSubject] = useState(subj); 
+    const [hasUpdated, setHasUpdated] = useState(false)
+  
+  
+    function handleChange(e:any) {
+      const key = e.target.name
+      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+  
+      setSubject(inputData => ({
+        ...inputData,
+        [key]: value
+      }))
+      setHasUpdated(true)
+    }
+  
+    const updateSubject = () => {
+      api.updateSubject(subject).then(() => {
+        setHasUpdated(false)
+      })
+    }
+  
+    return (
+        <tr key={subject._id}>
+            <td>{subject._id}</td>
+            <td>  <input className='form-control' type='text' name='name' value={subject?.name} onChange={handleChange} />  </td>
+            <td>  <input className='form-control' type='text' name='slug' value={subject?.slug} onChange={handleChange} />  </td>
+            <td>{subject.report_type}</td>
+            <td>{subject.school?.name}</td>
+            <td> {hasUpdated && <a href='javascript:void(0)'  onClick={() =>updateSubject()}>Update | </a> }<Link href={`subjects/${subject._id}`}>Voir</Link>  | <a href='javascript:void(0)'  onClick={() =>deleteSubject(subject._id)}>Delete</a>  </td>
+        </tr>
+      )
+  }
+
+
 type CreateSubjectModalProps = {
     modalIsOpen:boolean,
     class_id?:any,
     closeModal: () => void,
-    save:(student:any) => void,
+    save:(subject:any) => void,
     schools: SchoolInterface[]
 }
 export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, schools}:CreateSubjectModalProps){
-    const [student, setStudent] = useState<SubjectInterface>({name:'', school:'', report_type:'Matiere'});
+    const [subject, setSubject] = useState<SubjectInterface>({name:'', school:'', report_type:'Matiere'});
 
     function handleChange(e:any) {
         const key = e.target.name
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
     
-        setStudent(inputData => ({
+        setSubject(inputData => ({
           ...inputData,
           [key]: value
         }))
@@ -101,19 +135,19 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, sch
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
             style={customStyles}
-            contentLabel="Add Student"
+            contentLabel="Add Subject"
           >
             <div className='modal-body'>
             <h2 >Ajouter une matière</h2>
             <button onClick={closeModal}>fermer</button>
                 <div className='form-group'>
                     <label>Nom </label>
-                    <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
+                    <input className='form-control' name='name' value={subject?.name} onChange={handleChange}></input>
                 </div>
 
                 <div className='form-group'>
                     <label>Ecole</label>
-                    <select className='form-control' name='school' value={student?.school} onChange={handleChange} >
+                    <select className='form-control' name='school' value={subject?.school} onChange={handleChange} >
                         {schools.map(school => {
                             return (<option key={school._id} value={school._id}> {school.name} </option>)
                         })}
@@ -121,7 +155,7 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, sch
                 </div>
 
                 <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success' disabled={!student.school}>Enregistrer</button>
+                    <button onClick={() =>save(subject)} className='btn btn-success' disabled={!subject.school}>Enregistrer</button>
                 </div>
             </div>
           </Modal>

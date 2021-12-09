@@ -67,6 +67,7 @@ export class Api{
     getSubject(subjectId?:any){ return axios.get(`/api/subjects/${subjectId}`) }
     getSubjectCourses(subjectId?:any){ return axios.get(`/api/courses?subject=${subjectId}`) }
     deleteSubject(id:any) { return axios.post('/api/subjects/delete', {_id:id})}
+    updateSubject(data:SubjectInterface) {return axios.post('/api/subjects/update', data)}
 
       //competences
     getCompetences() {  return axios.get('/api/competences');  }
