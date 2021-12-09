@@ -14,6 +14,10 @@ import { classeSchema } from '../../../../models/classe';
 import { courseSchema } from '../../../../models/course';
 import { getTotal } from '../../../../assets/jsx/resultsUiStats';
 import { sectionSchema } from '../../../../models/section';
+import serverPath from '../../../../services/serverpath';
+
+fs.createReadStream(serverPath('teacher.pdf'))
+const url = serverPath('teacher.pdf');
 
 export const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -114,14 +118,14 @@ export default async function handler(
               }),
               results : results
             },
-            path: "./teacher.pdf",
+            path:url,
             type: "",
           };
 
           pdf.create(document, options)
           .then((response : any)  => {
-                var file = fs.createReadStream('./teacher.pdf');
-                var stat = fs.statSync('./teacher.pdf');
+                var file = fs.createReadStream(url);
+                var stat = fs.statSync(url);
                 res.setHeader('Content-Length', stat.size);
                 res.setHeader('Content-Type', 'application/pdf');
                 res.setHeader(`Content-Disposition`, `attachment; filename=${results.student.name}.pdf`);

@@ -223,7 +223,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
                                                  <th> {!isExcluded ?to.pointTotal:'--'}</th>
                                                  <th>{!isExcluded ?to.total:'--'}</th> 
                                              </tr>
-                                             { ( competenceIndex==2 && (subjectIndex +1  == competence.subjects?.length) )&& <><tr style={{border:'none !important' }}><td colSpan={7}></td></tr></>}
+                                             { ( competenceIndex==2 && (subjectIndex +1  == competence.subjects?.length) )&& <><tr style={{border:'none !important', pageBreakAfter:'always' }}><td colSpan={0} style={{border:'white 1px inset'}} > <div style={{pageBreakAfter:'always' }}> </div ></td></tr></>}
                                      </>
                                  )
                              })
