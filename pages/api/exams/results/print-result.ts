@@ -16,8 +16,6 @@ import { getTotal } from '../../../../assets/jsx/resultsUiStats';
 import { sectionSchema } from '../../../../models/section';
 import serverPath from '../../../../services/serverpath';
 
-fs.createReadStream(serverPath('teacher.pdf'))
-const url = serverPath('teacher.pdf');
 
 export const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -33,6 +31,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) { 
+
+    fs.createReadStream(serverPath('teacher.pdf'))
+    const url = serverPath('teacher.pdf');
 
     const {result} = req.query
 
