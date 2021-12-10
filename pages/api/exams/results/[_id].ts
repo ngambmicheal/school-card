@@ -61,40 +61,45 @@ export default async function handler(
 
         let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, totalResults.length, totalResults))
         html+=`
-                <style>
-                .center{
-                    text-align:center
-                }
-                .table1, .table2, .table3{
-                    border-collapse: collapse;
-                    width: 100%; 
-                    margin-top: 2px;
-                    margin-bottom: 5px;
-                    font-size:8px;
-                    }
-                    .com, b{
-                    font-weight: bold;
-                    }
-                    .table1 td, .table1 th{
-                    text-align: center;
-                    border: 1px solid #555;
-                    }
+        <style>
+        .center{
+            text-align:center
+        }
+        .table1, .table2, .table3{
+            border-collapse: collapse;
+            font-weight:bold;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 0px;
+            font-size:9px;
+            }
+            .com, b{
+            font-weight: bold;
+            }
+            .table1 td, .table1 th{
+            text-align: center;
+            border: 1px solid #555;
+            }
 
-                    .table2 td, .table2 th{
-                    text-align: center;
-                    }
+            .table2 td, .table2 th{
+            text-align: center;
+            }
 
-                    .th{
-                    width:300px;
-                    }
-
-                    .table3 {
-                        font-size:9px;
-                    }
-                    input[type='checkbox']{
-                        transform: scale(2);
-                      }
-                </style>
+            .th{
+            width:300px;
+            }
+        
+        .table3 {
+            font-size:10px;
+        }
+        .bord {
+            border: 1px solid red;
+            position: absolute;
+        }
+        input[type='checkbox']{
+            transform: scale(2);
+          }
+        </style>
                 `
 
         const pdfResultsDir = `${dir}/${results._id}.pdf`
