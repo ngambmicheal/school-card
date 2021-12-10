@@ -64,20 +64,7 @@ export default function Competences(){
                 </thead>
                 <tbody>
                     {competences.map(competence => {
-                       return  <tr key={competence._id}>
-                            <td>{competence.name}</td>
-                            <td>
-                                <select className='form-control' name='report_type'  onChange={e => handleChange(e, competence._id)} >
-                                    <option value=''> Choisir </option>
-                                    {report_types.map(type => {
-                                        return (<option key={type} value={type} selected={type==competence.report_type}> {type} </option>)
-                                    })}
-                                </select>
-                            </td>
-                            <td>{competence.slug}</td>
-                            <td>{competence.school?.name}</td>
-                            <td><Link href={`competences/${competence._id}`}>Voir</Link> | <a href='javascript:void(0)'  onClick={() =>deleteCompetence(competence._id)}>Delete</a> </td>
-                        </tr>
+                       return  <CompetenceRow deleteCompetence={deleteCompetence} compt={competence} />
                     })
                     }
                 </tbody>
@@ -143,3 +130,50 @@ export function CreateCompetenceModal({modalIsOpen, closeModal, save, class_id, 
         </div>
       );
 }
+
+
+type CompetenceProps = {
+    compt:CompetenceInterface,
+    deleteCompetence:(id:any) => void, 
+}
+
+
+export function CompetenceRow({compt, deleteCompetence}:CompetenceProps){
+    const [competence, setCompetence] = useState(compt); 
+    const [hasUpdated, setHasUpdated] = useState(false)
+  
+  
+    function handleChange(e:any) {
+      const key = e.target.name
+      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+  
+      setCompetence(inputData => ({
+        ...inputData,
+        [key]: value
+      }))
+      setHasUpdated(true)
+    }
+  
+    const updateCompentence = () => {
+      api.updateCompentence(competence).then(() => {
+        setHasUpdated(false)
+      })
+    }
+  
+    return (
+        <tr key={competence._id}>
+            <td>  <input className='form-control' type='text' name='name' value={competence?.name} onChange={handleChange} />  </td>
+            <td>
+                <select className='form-control' name='report_type'  onChange={handleChange} >
+                    <option value=''> Choisir </option>
+                    {report_types.map(type => {
+                        return (<option key={type} value={type} selected={type==competence.report_type}> {type} </option>)
+                    })}
+                </select>
+            </td>
+            <td>  <input className='form-control' type='text' name='slug' value={competence?.slug} onChange={handleChange} />  </td>
+            <td>{competence.school?.name}</td>
+            <td> {hasUpdated && <a href='javascript:void(0)'  onClick={() =>updateCompentence()}>Update | </a> }<Link href={`competences/${competence._id}`}>Voir</Link> | <a href='javascript:void(0)'  onClick={() =>deleteCompetence(competence._id)}>Delete</a></td>
+        </tr>
+      )
+  }
