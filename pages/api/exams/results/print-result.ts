@@ -32,8 +32,11 @@ export default async function handler(
   res: NextApiResponse<any>
 ) { 
 
-    fs.createReadStream(serverPath('teacher.pdf'))
+    try{
+
+    
     const url = serverPath('teacher.pdf');
+    fs.createWriteStream(url)
 
     const {result} = req.query
 
@@ -128,8 +131,8 @@ export default async function handler(
 
           pdf.create(document, options)
           .then((response : any)  => {
-                var file = fs.createReadStream(url);
                 var stat = fs.statSync(url);
+                const file = fs.createReadStream(url);
                 res.setHeader('Content-Length', stat.size);
                 res.setHeader('Content-Type', 'application/pdf');
                 res.setHeader(`Content-Disposition`, `attachment; filename=${results.student.name}.pdf`);
@@ -145,4 +148,11 @@ export default async function handler(
     .catch((e) => {
         res.json({message:e.message, success:false });
     })  
+
+    }
+    catch(e) {
+        res.json({e})
+    }
+
+
 }
