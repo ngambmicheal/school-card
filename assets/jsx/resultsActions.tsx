@@ -102,6 +102,7 @@ const getTotalExam = (result:any) => {
 
 export default function resultsActions(competences:CompetenceInterface[], results:any, totalUsers:number, statsResults:ExamResultInterface[] ) {
 
+    comT = [];
     const getSubjectTotal = (subject:SubjectInterface) => {
         let total = 0 ; 
         let pointTotal = 0;
