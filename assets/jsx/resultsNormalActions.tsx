@@ -82,6 +82,7 @@ const getTotalExam = (result:any) => {
 
 export default function resultsNormalActions(subjects:SubjectInterface[], results:any, totalUsers:number, statsResults:ExamResultInterface[] ) {
 
+    comT = [];
 
     const totalMarks = getTotal(results)
     const totalPoints = getTotalExam(results?.exam_id)
