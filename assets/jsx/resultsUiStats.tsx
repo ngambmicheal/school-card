@@ -61,6 +61,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                 <thead>
                     <tr>
                         <th></th>
+                        <th></th>
                         {competences && competences.map(s=> {
                             return <th key={s._id} colSpan={s.subjects?.length*4}> {s.slug || s.name} </th>
                         })}
@@ -70,8 +71,9 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                     </tr>
                     <tr>
                         <th>
-                            Numero
+                            N
                         </th>
+                        <th>Nom</th>
                         {competences && competences.map(competence=> {
                             return competence.subjects?.map(subject => {
                                 return <th key={subject._id} colSpan={subject.courses?.length+1} > {subject.slug || subject.name} </th>
@@ -82,16 +84,19 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                         <th>
 
                         </th>
+                        <th>
+
+                        </th>
                         {competences && competences.map(competence=> {
                             return competence.subjects?.map(subject => {
                                 return (
                                     <>
                                         {subject.courses?.map(course => {
                                         return <th key={course._id} > 
-                                                    {course.name} 
+                                                    {course.name.substr(0,3)} 
                                                 </th>
                                         })}
-                                    <th> Total</th>
+                                    <th> Tot</th>
                                     </>
                                 )
                             })
@@ -109,7 +114,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                 </tbody>
             </table>
 
-        <div style={{marginTop:'30px', fontSize:'20px'}}>
+        <div style={{marginTop:'60px', fontSize:'20px'}}>
                 <table>
                     <tr>
                         <th>
@@ -155,6 +160,39 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                     </tr>
                 </table>
         </div>
+
+        <br /> <br /> <br />
+
+        <div style={{pageBreakAfter:"always"}}>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Nom
+                        </th>
+                        <th>
+                            Rang
+                        </th>
+                        <th>
+                            Moyenne
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {statResults.map(statResult => {
+                        const total = getTotal(statResult);
+                        return (
+                            <tr>
+                               <td>{statResult.student?.name}</td>    
+                               <td>{statResult.rank}</td>  
+                               <td>{  ((total / points) * 20).toFixed(2) } / 20</td>
+                            </tr> 
+                        )
+                    })}
+                </tbody>
+            </table>
+        </div>
         </>
     )
 }
@@ -167,6 +205,7 @@ export function ExamResult({ result, competences, exam, points}:{competences:Com
 
    return  <tr>
         <td>{result?.student?.number}</td>
+        <td>{result?.student?.name} </td>
         {competences && competences.map(competence=> {
             return competence.subjects?.map(subject => {
                 return (

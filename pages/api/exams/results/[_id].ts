@@ -27,8 +27,8 @@ export default async function handler(
     const {_id:exam_id} = req.query
 
     const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema, 'populate':{path:'section', sectionSchema}});
-
-    const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
+ 
+    const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).sort({rank:1})).filter(re => getTotal(re) != 0)
     const competences =  await competenceSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
     var dir = `./tmp/exams/${exam_id}`;
@@ -67,7 +67,7 @@ export default async function handler(
                 }
                 .table1, .table2, .table3{
                     border-collapse: collapse;
-                    width: 100%;
+                    width: 100%; 
                     margin-top: 2px;
                     margin-bottom: 5px;
                     font-size:8px;
@@ -77,7 +77,7 @@ export default async function handler(
                     }
                     .table1 td, .table1 th{
                     text-align: center;
-                    border: 2px solid #ccc;
+                    border: 1px solid #555;
                     }
 
                     .table2 td, .table2 th{
@@ -91,6 +91,9 @@ export default async function handler(
                     .table3 {
                         font-size:9px;
                     }
+                    input[type='checkbox']{
+                        transform: scale(2);
+                      }
                 </style>
                 `
 

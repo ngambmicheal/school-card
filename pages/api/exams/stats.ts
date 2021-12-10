@@ -36,12 +36,12 @@ export default async function handler(
         var options = {
             format: "A3",
             orientation: "landscape",
-            border: "1mm",
+            border: "8mm",
             header: {
-                height: "0mm",
+                height: "10mm",
             },
             footer: {
-                height: "1mm",
+                height: "10mm",
                 contents: {
                     // first: 'Cover page',
                     // 2: 'Second page', // Any page number is working. 1-based index
@@ -62,7 +62,7 @@ export default async function handler(
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 20px;
-                    font-size:6px;
+                    font-size:9px;
                     }
                     .com, b{
                     font-weight: bold;
