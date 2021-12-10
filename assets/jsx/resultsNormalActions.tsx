@@ -96,7 +96,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
               <b>REPUBLIQUE DU CAMEROUN</b> <br />
                 <i> Paix - Travail - Patrie </i> <br />
              <b>GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE</b>  <br />
-             <i>BP: 1661 DOUALA TEL: (237) 33089582/699717529</i> <br />
+             <i>BP: 1661 DOUALA TEL: (237) 699717529/33089582</i> <br />
         </th>
         <th className='' style={{width:'20%'}}>
             <img src={`data:image/jpeg;base64, ${logo}`} height={100} />
@@ -105,34 +105,34 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
             <b> REPUBLIC OF CAMEROON</b>  <br />
              <i>Peace - Work - Father/land</i>  <br />
             <b> GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE </b> <br />
-             <i>P.O Box:1661 DOUALA TEL: (237) 33089582/699717529 </i> <br />
+             <i>P.O Box:1661 DOUALA TEL: (237) 699717529/33089582 </i> <br />
         </th>
     </tr>
 </table>
 
-<div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION - {results.exam_id?.name} - 2021/2022
+<div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
+    REPORT CARD : {results.exam_id?.name} 2021/2022
 </div>
 
 <div>
 <table className='table1' style={{fontSize:'20px', marginBottom:'40px'}} >
  <thead>
      <tr>
-         <th colSpan={2}>NOMS ET PRENOMS</th>
+         <th colSpan={2}>NAME AND SURNAME</th>
          <th colSpan={4}>{ results.student?.name }</th>
      </tr>
      <tr>
-         <th colSpan={2}>DATE DE NAISSANCE</th>
+         <th colSpan={2}>DATE OF BIRTH</th>
          <th colSpan={2}>{results.student?.dob}</th>
-         <th colSpan={1}>SEXE</th>
+         <th colSpan={1}>SEX</th>
          <th>{results.student?.sex}</th>
      </tr>
      <tr>
-         <th colSpan={1}>CLASSE</th>
+         <th colSpan={1}>CLASS</th>
          <th > {results.exam_id?.class_id?.name} </th>
-         <th>Effectif</th>
+         <th>Enrolment</th>
          <th>{totalUsers}</th>
-         <th>ENSEIGNANT</th>
+         <th>TEACHER</th>
          <th >{results.exam_id?.class_id?.teacher}</th>
      </tr>
  </thead>
@@ -149,7 +149,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
                         MAX
                     </th>
                     <th >
-                        NOTES
+                        MARKS
                     </th>
                     <th colSpan={2}>
                         APPRECIATION CODE
@@ -175,7 +175,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
 
         
             <div className='center'>
-        <p style={{fontSize:'13px'}}>COTES : NA = Not Acquired, SIA= Skill In Acquisition, A = Acquired, A+ = Expert</p>
+        <p style={{fontSize:'20px', margin:'30px 0'}}>CODES : NA = Not Acquired, SIA= Skill In Acquisition, A = Acquired, A+ = Expert</p>
     </div>
 
     <table style={{fontSize:'25px', width:'100%'}} className='table1'>
@@ -183,7 +183,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
             <th>Total </th>
             <th> {totalMarks} / {totalPoints} </th>
             <th>Observations</th>
-            <th colSpan={3}>Conseil de Classe</th>
+            <th colSpan={3}>Class Council</th>
         </tr>
         <tr>
             <td>Average</td>
@@ -195,44 +195,44 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
         <tr>
             <td>Rank </td>
             <td>  {results.rank} / {totalUsers} </td>
-            <td> Work Warning</td>
+            <td> Warning</td>
             <td> {average<12? 'Yes' : 'No'}   </td>
         </tr>
         <tr>
-            <td>General Average</td>
-            <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td>
+            {/* <td>General Average</td>
+            <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td> */}
+            <td>Highest Average</td>
+            <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
             <td> Encouragements </td>
             <td>  {average>12? 'Yes' : 'No'}   </td>
         </tr>
         <tr>
-            <td>Highest Average</td>
-            <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
-            <td> Roll of Honor</td>
-            <td  style={{fontSize:'15px'}}> <input type='checkbox' /> Yes <input type='checkbox' /> No</td>
-        </tr>
-        <tr>
             <td>Lower Average</td>
             <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
+            <td> Honour Roll</td>
+            <td  style={{fontSize:'15px'}}> <input type='checkbox' /> Yes <input type='checkbox' /> No</td>
+        </tr>
+        {/* <tr>
             <td> </td>
             <td colSpan={2}> </td>
-        </tr>
+        </tr> */}
         <tr>
             <td colSpan={2}> Teacher's Visa</td>
             <td>Parent's Visa</td>
-            <td>Principal Visa</td>
+            <td colSpan={2}>Headteachers Visa</td>
         </tr>
         <tr>
-            <td style={{minHeight:'100px', fontSize:'14px'}}> 
+            <td colSpan={2} style={{minHeight:'100px', fontSize:'14px'}}> 
                 <i>Efforts should be done in the following</i>
                 <br />
-                <ul >
-                    {comT.map(s => {
+                <ul style={{listStyle: 'none', textAlign:'left'}}>
+                    {comT.length > 0 ? comT.map(s => {
                         return <li>{s}</li>
-                    })}
+                    }) : <li style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>Nothing to report</li>}
                 </ul>
             </td>
             <td></td>
-            <td></td>
+            <td colSpan={2}></td>
         </tr>
     </table>
 

@@ -128,7 +128,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
               <b>REPUBLIQUE DU CAMEROUN</b> <br />
                 <i> Paix - Travail - Patrie </i> <br />
              <b>GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE</b>  <br />
-             <i>BP: 1661 DOUALA TEL: (237) 33089582/699717529</i> <br />
+             <i>BP: 1661 DOUALA TEL: (237) 699717529/33089582 </i> <br />
         </th>
         <th className='' style={{width:'20%'}}>
             <img src={`data:image/jpeg;base64, ${logo}`} height={100} />
@@ -137,13 +137,13 @@ export default function resultsActions(competences:CompetenceInterface[], result
             <b> REPUBLIC OF CAMEROON</b>  <br />
              <i>Peace - Work - Father/land</i>  <br />
             <b> GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE </b> <br />
-             <i>P.O Box:1661 DOUALA TEL: (237) 33089582/699717529 </i> <br />
+             <i>P.O Box:1661 DOUALA TEL: (237) 699717529/33089582 </i> <br />
         </th>
     </tr>
 </table>
 
 <div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION - {results.exam_id?.name} - 2021/2022
+    BULLETIN D'EVALUATION : {results.exam_id?.name} 2021/2022
 </div>
 
 <div>
@@ -164,7 +164,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
          <th > {results.exam_id?.class_id?.name} </th>
          <th>Effectif</th>
          <th>{totalUsers}</th>
-         <th>ENSEIGNANT</th>
+         <th>ENSEIGNANT(E)</th>
          <th >{results.exam_id?.class_id?.teacher}</th>
      </tr>
  </thead>
@@ -192,7 +192,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
              EVALUATIONS
          </th>
          <th>
-             MAX 
+             SUR 
          </th>
          <th>
              NOTES
@@ -246,7 +246,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
     </table>
 
     <div className='center'>
-        <p style={{fontSize:'13px'}}>COTES : NA = Non Acquis, ECA = en cours d’Acquisition, A = Acquis, A+ = Expert</p>
+        <p style={{fontSize:'20px', margin:'30px 0'}}>COTES : NA = Non Acquis, ECA = En Cours d’Acquisition, A = Acquis, A+ = Expert</p>
     </div>
 
     <div className='bord'></div>
@@ -256,57 +256,68 @@ export default function resultsActions(competences:CompetenceInterface[], result
             <th>Total </th>
             <th> {totalMarks} / {totalPoints} </th>
             <th>Cotes</th>
-            <th colSpan={3}>Conseil de Classe</th>
+            <th colSpan={2}>Conseil de Classe</th>
         </tr>
         <tr>
             <td>Moyenne</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
             <td rowSpan={4}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
-            <td> Avertissement Conduites </td>
+            <td> Avertissement Conduite </td>
             <td style={{fontSize:'15px'}}>  <input type='checkbox' /> Oui <input type='checkbox' /> Non  </td>
         </tr>
         <tr>
             <td>Rang </td>
             <td>  {results.rank} / {totalUsers} </td>
-            <td> Avertissement Travails </td>
+            <td> Avertissement Travail </td>
             <td> {average<12? 'Oui' : 'Non'}  </td>
         </tr>
         <tr>
-            <td>Moyenne generale</td>
-            <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td>
+            {/* <td>Moyenne generale</td>
+            <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td> */}
+            <td>Moyenne du premier</td>
+            <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
             <td> Encouragements </td>
             <td> {average>12? 'Oui' : 'Non'}  </td>
         </tr>
         <tr>
-            <td>Moyenne du premier</td>
-            <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
+            <td>Moyenne du dernier</td>
+            <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
             <td> Tableau d'honneur </td>
             <td style={{fontSize:'15px'}}> <input type='checkbox' /> Oui <input type='checkbox' /> Non</td>
         </tr>
-        <tr>
-            <td>Moyenne du dernier</td>
-            <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
+        {/* <tr>
             <td> </td>
             <td colSpan={2}> </td>
-        </tr>
+        </tr> */}
         <tr>
-            <td colSpan={2}> Observation de l'enseignant</td>
+            <td colSpan={2}> Observation de l'enseignant(e)</td>
             <td>Visa parent</td>
-            <td>Visa du chef d'etablissement</td>
+            <td colSpan={2}>Visa du chef d'établissement</td>
         </tr>
         <tr>
-            <td style={{minHeight:'100px', fontSize:'14px'}}> 
-                <i>Des efforts s'imposent dans les competence suivantes</i>
+            <td colSpan={2} style={{minHeight:'100px', fontSize:'14px'}}> 
+                <i>Des efforts s'imposent dans les compétences suivantes</i>
                 <br />
-                <ul >
-                    {comT.map(s => {
+                <ul style={{listStyle: 'none', textAlign:'left'}}>
+                    {comT.length > 0 ? comT.map(s => {
                         return <li>{s}</li>
-                    })}
+                    }) : <li style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>RAS</li>}
                 </ul>
             </td>
             <td></td>
-            <td></td>
+            <td colSpan={2}></td>
         </tr>
+        {/* <tr>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+        </tr> */}
     </table>
 
 </>
