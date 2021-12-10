@@ -109,8 +109,8 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
     </tr>
 </table>
 
-<div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION - {results.exam_id?.name} - 2021/2022
+<div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
+    BULLETIN D'EVALUATION : {results.exam_id?.name} 2021/2022
 </div>
 
 <div>
@@ -174,7 +174,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
 
         
             <div className='center'>
-        <p style={{fontSize:'13px'}}>COTES : NA = Not Acquired, SIA= Skill In Acquisition, A = Acquired, A+ = Expert</p>
+        <p style={{fontSize:'20px', margin:'30px 0'}}>COTES : NA = Not Acquired, SIA= Skill In Acquisition, A = Acquired, A+ = Expert</p>
     </div>
 
     <table style={{fontSize:'25px', width:'100%'}} className='table1'>
@@ -198,40 +198,40 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
             <td> {average<12? 'Yes' : 'No'}   </td>
         </tr>
         <tr>
-            <td>General Average</td>
-            <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td>
+            {/* <td>General Average</td>
+            <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td> */}
+            <td>Highest Average</td>
+            <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
             <td> Encouragements </td>
             <td>  {average>12? 'Yes' : 'No'}   </td>
         </tr>
         <tr>
-            <td>Highest Average</td>
-            <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
+            <td>Lower Average</td>
+            <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
             <td> Roll of Honor</td>
             <td  style={{fontSize:'15px'}}> <input type='checkbox' /> Yes <input type='checkbox' /> No</td>
         </tr>
-        <tr>
-            <td>Lower Average</td>
-            <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
+        {/* <tr>
             <td> </td>
             <td colSpan={2}> </td>
-        </tr>
+        </tr> */}
         <tr>
             <td colSpan={2}> Teacher's Visa</td>
             <td>Parent's Visa</td>
-            <td>Principal Visa</td>
+            <td colSpan={2}>Principal Visa</td>
         </tr>
         <tr>
-            <td style={{minHeight:'100px', fontSize:'14px'}}> 
+            <td colSpan={2} style={{minHeight:'100px', fontSize:'14px'}}> 
                 <i>Efforts should be done in the following</i>
                 <br />
-                <ul >
+                <ul style={{ listStyle: 'none', textAlign: 'left' }} >
                     {comT.map(s => {
                         return <li>{s}</li>
                     })}
                 </ul>
             </td>
             <td></td>
-            <td></td>
+            <td colSpan={2}></td>
         </tr>
     </table>
 

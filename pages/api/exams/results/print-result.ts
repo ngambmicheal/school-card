@@ -46,7 +46,7 @@ export default async function handler(
             orientation: "portrait",
             border: "10mm",
             header: {
-                height: "6.5mm",
+                height: "3.5mm",
 
                 contents: {
                     2: '',
