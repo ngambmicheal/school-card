@@ -40,6 +40,10 @@ export default function subjectDetails(){
         closeModal();
     }
 
+    const deleteCourse = (course:any) => {
+        //api.deleteCourse(course).then(() => getCourses());
+    }
+
     return (
         <>
             <div className='py-3'>
@@ -57,12 +61,7 @@ export default function subjectDetails(){
                 </thead>
                 <tbody>
                     {courses.map(course => {
-                       return  <tr key={course._id}>
-                            <td>{course._id}</td>
-                            <td>{course.name}</td>
-                            <td>{course.point}</td>
-                            <td><Link href={`subjects/${course._id}`}>Voir</Link></td>
-                        </tr>
+                       return  <CourseRow crs={course} deleteCourse={deleteCourse} />
                     })
                     }
                 </tbody>
@@ -124,3 +123,40 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, subject}:Crea
         </div>
       );
 }
+
+type CourseProps = {
+    crs:CourseInterface,
+    deleteCourse:(id:string) => void, 
+  }
+
+export function CourseRow({crs, deleteCourse}:CourseProps){
+    const [course, setCourse] = useState(crs); 
+    const [hasUpdated, setHasUpdated] = useState(false)
+  
+  
+    function handleChange(e:any) {
+      const key = e.target.name
+      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
+  
+      setCourse(inputData => ({
+        ...inputData,
+        [key]: value
+      }))
+      setHasUpdated(true)
+    }
+  
+    const updateCourse = () => {
+      api.updateCourse(course).then(() => {
+        setHasUpdated(false)
+      })
+    }
+  
+    return (
+        <tr key={course._id}>
+            <td>{course._id}</td>
+            <td>  <input className='form-control' type='text' name='name' value={course?.name} onChange={handleChange} />  </td>
+            <td>  <input className='form-control' type='text' name='point' value={course?.point} onChange={handleChange} />  </td>
+            <td> {hasUpdated && <a href='javascript:void(0)'  onClick={() =>updateCourse()}>Update | </a> } | <a href='javascript:void(0)'  onClick={() =>deleteCourse(course._id)}>Delete</a>  </td>
+        </tr>
+      )
+  }

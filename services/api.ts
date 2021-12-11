@@ -1,6 +1,7 @@
 import a from 'axios';
 import ClasseInterface from '../models/classe';
 import CompetenceInterface from '../models/competence';
+import CourseInterface from '../models/course';
 import ExamInterface from '../models/exam';
 import SchoolInterface from '../models/school';
 import SectionInterface from '../models/section';
@@ -100,6 +101,8 @@ export class Api{
     getCourses() {  return axios.get('/api/courses');  }
     saveCourses(data:SubjectInterface) { return axios.post('/api/courses/store', data); }
     getCourse(courseId?:any){ return axios.get(`/api/courses/${courseId}`) }
+    updateCourse(data:CourseInterface) { return axios.post('/api/courses/update', data)}
+    deleteCourse(courseId:any){return axios.post('/api/courses/delete', {_id:courseId})}
 
     //subjects
     getExams() {  return axios.get('/api/exams');  }
@@ -110,6 +113,7 @@ export class Api{
     getResults(resultsId?:any){ return axios.get(`/api/exams/results/result?result_id=${resultsId}`) }
     getTermResults(termId:string,studentId:string){ return axios.get(`/api/exams/results/dynamic?term_id=${termId}&student_id=${studentId}`)}
     deleteResult(resultsId:any){ return axios.post(`/api/exams/results/delete`, {_id:resultsId})}
+
     updateExamResult(data:any){ return axios.post(`/api/exams/update-results`, data)}
     deleteExam(examId:any){return axios.post('/api/exams/delete', {_id:examId})}
 
