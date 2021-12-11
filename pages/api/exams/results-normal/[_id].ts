@@ -17,6 +17,7 @@ import { courseSchema } from '../../../../models/course';
 import { classeSchema } from '../../../../models/classe';
 import { sectionSchema } from '../../../../models/section';
 import resultsNormalActions from '../../../../assets/jsx/resultsNormalActions';
+import { getTotal } from '../../../../assets/jsx/resultsNormalUiStats';
   
 
 export default async function handler(
@@ -28,7 +29,7 @@ export default async function handler(
 
     const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema, 'populate':{path:'section', sectionSchema}});
 
-    const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).sort({rank:1}))
+    const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).sort({rank:1})).filter(re => getTotal(re) != 0)
     const subjects =  await subjectSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema});
 
     var dir = `./tmp/exams/${exam_id}`;
