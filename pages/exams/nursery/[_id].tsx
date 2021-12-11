@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 export const nurseryActs = [
     {slug:'A+', name:'Expert'},
     {slug:'A', name:"Acquired"},
-    {slug:'#', name:'Acquiring'},
+    {slug:'B', name:'Acquiring'},
     {slug:'NA',  name:'Not Acquired'}
 ]
 
