@@ -44,6 +44,7 @@ export default function Classes(){
     }
 
     const deleteClasse = (studentId:string) => {
+        if(confirm('Are you sure to delete?'))
         api.deleteClasse(studentId).then(() => getClasses())
     }
 
@@ -62,7 +63,7 @@ export default function Classes(){
                 </thead>
                 <tbody>
                     {classes.map((classe:any) => {
-                       return  <ClasseRow classe={classe} />
+                       return  <ClasseRow classe={classe} deleteClasse={deleteClasse} />
                     })
                     }
                 </tbody>
@@ -73,7 +74,7 @@ export default function Classes(){
     )
 }
 
-export function ClasseRow({classe}:{classe:ClasseInterface}) {
+export function ClasseRow({classe, deleteClasse}:{classe:ClasseInterface,deleteClasse:(id:string)=>void}) {
     const [teacher, setTeacher] = useState(classe.teacher); 
 
 

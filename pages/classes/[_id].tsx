@@ -62,11 +62,13 @@ export default function ClasseDetails(){
     }
 
     const deleteStudent = (studentId:string) => {
+      if(confirm('Are you sure to delete?'))
       api.deleteStudent(studentId).then(() => getStudents())
     }
 
     const deleteExam = (examId:string) => {
-      api.deleteExam(examId).then(() => getExams())
+      if(confirm('Are you sure to delete?'))
+        api.deleteExam(examId).then(() => getExams())
     }
 
     const importStudent = () => {
@@ -98,6 +100,7 @@ export default function ClasseDetails(){
     }
 
     const deleteTerm = (term_id:any) => {
+      if(confirm('Are you sure to delete?'))
       api.deleteTerm(term_id)
     }
 

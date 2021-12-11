@@ -5,7 +5,6 @@ import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
-import { getCompetenceAppreciation } from "./resultsActions";
 
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -26,7 +25,44 @@ export const getGeneralAverage = (results:ExamResultInterface[], totalPoints:num
 }
 
 let comT:string[] = [];
-
+const getCompetenceAppreciation = (value:number, total:number, competenceName:string='')  => {
+    if(total==20){
+        if(value < 11){
+            if(comT.indexOf(competenceName)<0) comT.push(competenceName)
+            return 'NA';
+        }
+        if(value < 15)
+            return 'ECA';
+        if(value < 18) 
+            return 'A'; 
+        if(value < 21) 
+            return 'A+';
+    }
+    if(total==30){
+        if(value <= 15){
+            if(comT.indexOf(competenceName)<0) comT.push(competenceName)
+            return 'NA';
+        } 
+        if(value < 22)
+            return 'ECA';
+        if(value < 26) 
+            return 'A'; 
+        if(value < 31) 
+            return 'A+';
+    }
+    if(total==40){
+        if(value <= 20){
+            if(comT.indexOf(competenceName)<0) comT.push(competenceName)
+            return 'NA';
+        } 
+        if(value < 30)
+            return 'ECA';
+        if(value < 35) 
+            return 'A'; 
+        if(value < 41) 
+            return 'A+';
+    }
+}
 
 export  function base64_encode(file:string) {
     // read binary data
@@ -90,6 +126,9 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
     const totalMarks = getTotal(results)
     const totalPoints = getTotalExam(exams[0])
     const average = (totalMarks / totalPoints) * 20;
+
+    const total1Marks = examResults.length ? getTotal(examResults[0]) : 0;
+    const total2Marks = examResults.length ? getTotal(examResults[1]) : 0;
 
     return (
         <>
@@ -156,7 +195,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
          </th>
          {exams.map((exam, index) => {
             return <th>
-                UA{index+1}
+               {exam.name.substr(0,4)}
             </th>
             })
         }
@@ -253,7 +292,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
         <tr>
             <td>Moyenne</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td rowSpan={4}>  {getCompetenceAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td rowSpan={5}>  {getCompetenceAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
             <td> Avertissement Conduite </td>
             <td style={{fontSize:'15px'}}>  <input type='checkbox' /> Oui <input type='checkbox' /> Non  </td>
         </tr>
@@ -281,6 +320,14 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
             <td> </td>
             <td colSpan={2}> </td>
         </tr> */}
+        {exams.length>1 && <tr>
+            <td>Moyenne de {exams[0].name.substr(0,4)} </td>
+            <td>  { ((total1Marks / totalPoints) * 20).toFixed(2) } /20 </td>
+            <td> </td>
+            <td>Moyenne de {exams[1].name.substr(0,4)} </td>
+            <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
+        </tr>
+        }
         <tr>
             <td colSpan={2}> Observation de l'enseignant(e)</td>
             <td>Visa parent</td>
