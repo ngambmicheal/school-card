@@ -16,8 +16,9 @@ import { schoolSchema } from '../../../../models/school';
 import { courseSchema } from '../../../../models/course';
 import { classeSchema } from '../../../../models/classe';
 import { sectionSchema } from '../../../../models/section';
-import resultsNormalActions from '../../../../assets/jsx/resultsNormalActions';
-import { getTotal } from '../../../../assets/jsx/resultsNormalUiStats';
+import { getTotal, getTotalPoints, getTotals } from '../../../../assets/jsx/resultsUiStats';
+import resultsMatActions from '../../../../assets/jsx/resultsMatActions';
+import resultsNurseryActions from '../../../../assets/jsx/resultsNurseryActions';
   
 
 export default async function handler(
@@ -29,9 +30,8 @@ export default async function handler(
 
     const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema, 'populate':{path:'section', sectionSchema}});
 
-    const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).sort({rank:1}))
-    const subjects =  await subjectSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema});
-
+    const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1}))
+    const competences =  await competenceSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
     var dir = `./tmp/exams/${exam_id}`;
     var zipOutput = fs.createWriteStream(`./public/exams/${exam_id}.zip`);
     var zipDir = `./public/exams/${exam_id}.zip`;
@@ -60,7 +60,7 @@ export default async function handler(
             }
         };
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsNormalActions(subjects, results, totalResults.length, totalResults))
+        let html = ReactDOMServer.renderToStaticMarkup(resultsNurseryActions(competences, results, totalResults.length, totalResults))
         html+=`
                 <style>
                 .center{
@@ -78,7 +78,7 @@ export default async function handler(
                     }
                     .table1 td, .table1 th{
                     text-align: center;
-                    border: 1px solid #555;
+                    border: 2px solid #ccc;
                     }
 
                     .table2 td, .table2 th{
@@ -92,6 +92,10 @@ export default async function handler(
                     .table3 {
                         font-size:9px;
                     }
+
+                    input[type='checkbox']{
+                        transform: scale(2);
+                      }
                 </style>
                 `
 

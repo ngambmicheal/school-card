@@ -12,9 +12,10 @@ import { schoolSchema } from '../../../../models/school';
 import { subjectSchema } from '../../../../models/subject';
 import { classeSchema } from '../../../../models/classe';
 import { courseSchema } from '../../../../models/course';
-import resultsNormalActions from '../../../../assets/jsx/resultsNormalActions';
+import { getTotal } from '../../../../assets/jsx/resultsUiStats';
 import { sectionSchema } from '../../../../models/section';
-import { getTotal } from '../../../../assets/jsx/resultsNormalUiStats';
+import resultsMatActions from '../../../../assets/jsx/resultsMatActions';
+import resultsNurseryActions from '../../../../assets/jsx/resultsNurseryActions';
 
 export const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -33,22 +34,28 @@ export default async function handler(
 
     const {result} = req.query
 
-    examResultSchema.findOne({_id:result}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{path:'section',model:sectionSchema}}}).then(async results => {
+    examResultSchema.findOne({_id:result}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).then(async results => {
        
-    const subjects =  await subjectSchema.find({school:results.exam_id.class_id.school, report_type:results.exam_id.class_id.section.report_type}).populate({path:'school', model:schoolSchema});
+        const competences =  await competenceSchema.find({school:results.exam_id.class_id.school, report_type:results.exam_id.class_id.section.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
         var options = {
             format: "A4",
             orientation: "portrait",
             border: "10mm",
             header: {
-                height: "2mm",
+                height: "6.5mm",
 
+                contents: {
+                    2: '',
+                    // 2: 'Second page', // Any page number is working. 1-based index
+                    // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
+                    // last: 'Last Page'
+                }
             },
             footer: {
-                height: "19mm",
+                height: "10mm",
                 contents: {
-                    // first: 'Cover page',
+                    first: '',
                     // 2: 'Second page', // Any page number is working. 1-based index
                     // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
                     // last: 'Last Page'
@@ -59,7 +66,7 @@ export default async function handler(
 
         const totalResults = await(await examResultSchema.find({exam_id:results.exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1}))
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsNormalActions(subjects, results, totalResults.length, totalResults ))
+        let html = ReactDOMServer.renderToStaticMarkup(resultsNurseryActions(competences, results, totalResults.length, totalResults ))
         html+=`
                 <style>
                 .center{
@@ -69,8 +76,8 @@ export default async function handler(
                     border-collapse: collapse;
                     font-weight:bold;
                     width: 100%;
-                    margin-top: 5px;
-                    margin-bottom: 5px;
+                    margin-top: 10px;
+                    margin-bottom: 0px;
                     font-size:9px;
                     }
                     .com, b{
@@ -92,6 +99,10 @@ export default async function handler(
                 .table3 {
                     font-size:10px;
                 }
+                .bord {
+                    border: 1px solid red;
+                    position: absolute;
+                }
                 </style>
                 `
 
@@ -99,6 +110,10 @@ export default async function handler(
         var document = {
             html: html,
             data: {
+              competences : competences.map(s => {
+                    s.s_l = getCompetencesLenght(s)
+                    return s;
+              }),
               results : results
             },
             path: "./teacher.pdf",

@@ -7,8 +7,8 @@ export type reportType = 'Competence' | 'Maternelle' | 'Matiere' | 'Nursery';
 export default interface TermInterface{
     _id?:string,
     name:string,
-    class?:string|ClasseInterface,
-    exams?:string[] | ExamInterface[],
+    class?:string & ClasseInterface,
+    exams?:string[] & ExamInterface[],
     report_type ?: reportType
 }
 

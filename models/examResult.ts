@@ -5,7 +5,7 @@ export default interface ExamResultInterface{
     _id?:string,
     class_id:string,
     name: string,
-    student : string | StudentInterface,
+    student : string & StudentInterface,
     exam_id: string ,
     number:string
 

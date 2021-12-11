@@ -9,7 +9,7 @@ export default interface StudentInterface{
     phone?:string, 
     email?:string, 
     dob?:string,
-    class_id ?:string | ClasseInterface,
+    class_id ?:string & ClasseInterface,
     number?:string,
     sex?:string,
     place?:string

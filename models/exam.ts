@@ -3,7 +3,7 @@ import ClasseInterface from "./classe"
 
 export default interface ExamInterface{
     _id?:string,
-    class_id?:string | ClasseInterface,
+    class_id?:string & ClasseInterface,
     name: string
 }
 

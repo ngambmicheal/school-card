@@ -4,7 +4,7 @@ import SchoolInterface, { schoolSchema } from "./school"
 export default interface SessionInterface{
     _id?:string,
     name:string,
-    school?:string | SchoolInterface,
+    school?:string & SchoolInterface,
 }
 
 const SessionSchema = new mg.Schema({

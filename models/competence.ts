@@ -5,7 +5,7 @@ import SubjectInterface, { subjectSchema } from "./subject"
 export default interface CompetenceInterface{
     _id?:string,
     name:string,
-    school?:string | SchoolInterface,
+    school?:string & SchoolInterface,
     report_type?:string,
     slug?:string,
     subjects?:SubjectInterface[]

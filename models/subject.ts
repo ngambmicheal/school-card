@@ -6,8 +6,8 @@ import SchoolInterface, { schoolSchema } from "./school"
 export default interface SubjectInterface{
     _id?:string,
     name:string,
-    school?:string | SchoolInterface,
-    competence?:string | CompetenceInterface,
+    school?:string & SchoolInterface,
+    competence?:string & CompetenceInterface,
     slug?:string,
     courses?:CourseInterface[],
     report_type?:string,

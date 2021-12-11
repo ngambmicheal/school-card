@@ -7,7 +7,7 @@ import { reportType } from "./terms"
 export default interface SectionInterface {
     _id?:string,
     name:string,
-    school?:string | SchoolInterface,
+    school?:string & SchoolInterface,
     classes?:ClasseInterface[],
     report_type ?:reportType,
 }

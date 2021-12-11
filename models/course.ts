@@ -4,7 +4,7 @@ import SubjectInterface from "./subject"
 export default interface CourseInterface{
     _id?:string,
     name:string,
-    subject:SubjectInterface,
+    subject:SubjectInterface & string,
     point:number
 }
 

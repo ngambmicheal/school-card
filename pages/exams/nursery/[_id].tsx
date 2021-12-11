@@ -15,10 +15,11 @@ import FileUpload, { validateFiles } from "../../../components/dropzone";
 import { toast } from "@chakra-ui/toast";
 import { useForm } from "react-hook-form";
 
-export const act = [
-    {slug:'A', name:'Acquis'},
-    {slug:'ECA', name:"En Cours d'Acquisition"},
-    {slug:'NA',  name:'Non Acquis'}
+export const nurseryActs = [
+    {slug:'A+', name:'Expert'},
+    {slug:'A', name:"Acquired"},
+    {slug:'#', name:'Acquiring'},
+    {slug:'NA',  name:'Not Acquired'}
 ]
 
 export default function examDetails(){
@@ -55,7 +56,7 @@ export default function examDetails(){
 
     useEffect(() =>{
         if(exam){
-            api.getSchoolCompetences({school:exam?.class_id.school, report_type:exam.class_id.section.report_type}).then(({data:{data}} : any) => {
+            api.getSchoolCompetences({school:exam?.class_id?.school, report_type:exam.class_id?.section?.report_type}).then(({data:{data}} : any) => {
                 setCompetences(s => data);
             })
         }
@@ -74,7 +75,7 @@ export default function examDetails(){
     }, [results])
 
     const printResults = () => {
-        window.open('/api/exams/results-mat/'+examId, '_blank')
+        window.open('/api/exams/results-nursery/'+examId, '_blank')
     }
 
     const printStats = () => {
@@ -195,8 +196,8 @@ export default function examDetails(){
            
             {/* <button className='mx-3 btn btn-success' onClick={() => getRank()} > get Rank</button>
 
-            <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button> */}
-           
+            <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button>
+            */}
             <button className='mx-3 btn btn-dark' onClick={() => printStats(true)} > Imprimer Statistics</button>
            
             <table className='table table-striped' >
@@ -205,7 +206,7 @@ export default function examDetails(){
                         <th>Numero</th>
                         <th>Nom</th>
                         {competences && competences.map(s=> {
-                            return <th key={s._id} colSpan={(s.subjects?.length||0) * act.length}> {s.slug?.substring(0,40) || s.name} </th>
+                            return <th key={s._id} colSpan={(s.subjects?.length||0) * nurseryActs.length}> {s.slug?.substring(0,40) || s.name} </th>
                         })}
                     </tr>
                     <tr>
@@ -215,7 +216,7 @@ export default function examDetails(){
                         <th></th>
                         {competences && competences.map(competence=> {
                             return competence.subjects?.map((subject, index) => {
-                                return <th key={subject._id}  colSpan={act.length} className={index%2==0?'bg-grey':''}> {subject.slug || subject.name?.substring(0,30)} </th>
+                                return <th key={subject._id}  colSpan={nurseryActs.length} className={index%2==0?'bg-grey':''}> {subject.slug || subject.name?.substring(0,30)} </th>
                             })
                         })}
                     </tr>
@@ -227,7 +228,7 @@ export default function examDetails(){
                         {competences && competences.map(competence=> {
                             return competence.subjects?.map((subject, index) => {
                                 return <>
-                                 {act.map( at => {
+                                 {nurseryActs.map( at => {
                                     return <th className={index%2==0?'bg-grey':''}>{at.name}</th>
                                 })}
                                 </>
@@ -321,7 +322,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
             return competence.subjects?.map((subject, index) => {
                 return (
                     <>
-                            {act.map( at => {
+                            {nurseryActs.map( at => {
                                 return <td className={index%2==0?'bg-grey':''}><input type='checkbox' name={`subject_${subject.name}`} checked={at.slug==res[`subject_${subject.name}`]} value={at.slug} onClick={handleChange} /> </td>
                             })}
                     </>
@@ -331,7 +332,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
         <td>{total}</td>
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
-        <th> <Link href={`/exams/mat/print?_id=${res._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
+        <th> <Link href={`/exams/nursery/print?_id=${res._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }
 
