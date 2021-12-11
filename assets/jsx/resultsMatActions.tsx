@@ -142,7 +142,7 @@ export default function resultsMatActions(competences:CompetenceInterface[], res
          <th > {results.exam_id?.class_id?.name} </th>
          <th>Effectif</th>
          <th>{totalUsers}</th>
-         <th>ENSEIGNANT</th>
+         <th>ENSEIGNANT(E)</th>
          <th >{results.exam_id?.class_id?.teacher}</th>
      </tr>
  </thead>

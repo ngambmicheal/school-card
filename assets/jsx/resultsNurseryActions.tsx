@@ -111,34 +111,35 @@ export default function resultsNurseryActions(competences:CompetenceInterface[],
     </tr>
 </table>
 
-<div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION - {results.exam_id?.name} - 2021/2022
+<div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
+    REPORT CARD : {results.exam_id?.name} 2021/2022
 </div>
 
 <div>
-<table className='table1' style={{fontSize:'20px'}} >
+<table className='table1' style={{fontSize:'20px', marginBottom:'40px'}} >
  <thead>
      <tr>
-         <th colSpan={2}>NOMS ET PRENOMS</th>
+         <th colSpan={2}>NAME AND SURNAME</th>
          <th colSpan={4}>{ results.student?.name }</th>
      </tr>
      <tr>
-         <th colSpan={2}>DATE DE NAISSANCE</th>
+         <th colSpan={2}>DATE OF BIRTH</th>
          <th colSpan={2}>{results.student?.dob}</th>
-         <th colSpan={1}>SEXE</th>
+         <th colSpan={1}>SEX</th>
          <th>{results.student?.sex}</th>
      </tr>
      <tr>
-         <th colSpan={1}>CLASSE</th>
+         <th colSpan={1}>CLASS</th>
          <th > {results.exam_id?.class_id?.name} </th>
-         <th>Effectif</th>
+         <th>Enrolment</th>
          <th>{totalUsers}</th>
-         <th>ENSEIGNANT</th>
+         <th>TEACHER</th>
          <th >{results.exam_id?.class_id?.teacher}</th>
      </tr>
  </thead>
 </table>
 </div>
+
 <table className='table1' style={{fontSize:'20px'}} >
                 <thead>
                 <tr>
