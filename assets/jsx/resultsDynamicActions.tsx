@@ -323,7 +323,6 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
         {exams.length>1 && <tr>
             <td>Moyenne de {exams[0].name.substr(0,4)} </td>
             <td>  { ((total1Marks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td> </td>
             <td>Moyenne de {exams[1].name.substr(0,4)} </td>
             <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
         </tr>
