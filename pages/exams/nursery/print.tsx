@@ -105,7 +105,7 @@ export default function coursesPage(){
                 <thead>
                 <tr>
                     <th rowSpan={2} className="th">
-                        DOMAINES
+                        DOMAINS
                     </th>
                     <th rowSpan={2} className="th">
                         ACTIVITY AREAS
@@ -132,7 +132,7 @@ export default function coursesPage(){
                                                             {!subjectIndex && <td rowSpan={(competence.subjects?.length)??1} > {competence.name} </td> }
                                                             <td > {subject.name}  </td>  
                                                             {nurseryActs.map(at => {
-                                                                return <td> {at.slug == results[`subject_${subject.name}`] ? <img src={checkSvg} />:''} </td>
+                                                                return <td> {at.slug == results[`subject_${subject._id}`] ? <img src={checkSvg} />:''} </td>
                                                             })}
                                                         </tr>
                                                 </>

@@ -83,34 +83,11 @@ const getTotal = (result:any) => {
     return sum; 
 }
 
-const getTotalExam = (result:any) => {
-    let sum = 0; 
-    for(const el in result){
-        if(el.includes('point_')){
-            sum+=parseFloat(result[el]);
-        }
-    }
-    return sum; 
-}
-
 
 export default function resultsNurseryActions(competences:CompetenceInterface[], results:any, totalUsers:number, statsResults:ExamResultInterface[] ) {
 
-    const getSubjectTotal = (subject:SubjectInterface) => {
-        let total = 0 ; 
-        let pointTotal = 0;
-        subject.courses?.map(c => {
-            total+=parseFloat(results[`subject_${c._id}`]??0);
-            pointTotal+=parseFloat(results.exam_id[`point_${c._id}`]??0);
-        })
-
-        const app = getAppreciation(total, pointTotal);
-
-        return {total, app, pointTotal}
-    }
-
-    const totalMarks = getTotal(results)
-    const totalPoints = getTotalExam(results?.exam_id)
+    
+    let comT:string[] = []
 
     return (
         <>
@@ -187,13 +164,17 @@ export default function resultsNurseryActions(competences:CompetenceInterface[],
                                 <>                                    
                                     {
                                         competence.subjects?.map((subject, subjectIndex) => {
+                                            if('NA' == results[`subject_${subject._id}`]){
+                                                comT.push(subject.name);
+                                            }
+
                                             return (
                                                 <> 
                                                         <tr>
                                                             {!subjectIndex && <td rowSpan={(competence.subjects?.length)??1} > {competence.name} </td> }
                                                             <td > {subject.name}  </td>  
                                                             {nurseryActs.map(at => {
-                                                                return <td> {at.slug == results[`subject_${subject.name}`] ? <img src={checkSvg} />:''} </td>
+                                                                return <td> {at.slug == results[`subject_${subject._id}`] ? <img src={checkSvg} />:''} </td>
                                                             })}
                                                         </tr>
                                                 </>
@@ -208,8 +189,13 @@ export default function resultsNurseryActions(competences:CompetenceInterface[],
 
 
             <div style={{marginTop:'15px'}}>
-            Term Remarks : : .............................................................................................................................................................................................................................<br /> 
-                            ...............................................................................................................................................................................................................................................................
+                TERM REMARKS : <span> Efforts should be done in the following :  
+                            {comT.length > 0 ? 
+                                    comT.map(s => {
+                                        return <span>{s}, </span>
+                                    }) : 
+                            <span style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>Nothing to report</span> } 
+                        </span>
             </div>
             <br />
             <table style={{width:'100%', marginTop:'5px', fontSize:'20px'}} className='table1'>

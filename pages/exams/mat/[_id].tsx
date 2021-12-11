@@ -322,7 +322,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
                 return (
                     <>
                             {act.map( at => {
-                                return <td className={index%2==0?'bg-grey':''}><input type='checkbox' name={`subject_${subject.name}`} checked={at.slug==res[`subject_${subject.name}`]} value={at.slug} onClick={handleChange} /> </td>
+                                return <td className={index%2==0?'bg-grey':''}><input type='checkbox' name={`subject_${subject._id}`} checked={at.slug==res[`subject_${subject._id}`]} value={at.slug} onClick={handleChange} /> </td>
                             })}
                     </>
                 )
