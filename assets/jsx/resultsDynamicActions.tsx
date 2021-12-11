@@ -5,6 +5,7 @@ import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
+import { getCompetenceAppreciation } from "./resultsActions";
 
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -24,38 +25,8 @@ export const getGeneralAverage = (results:ExamResultInterface[], totalPoints:num
     return (total / results.length) * 20;
 }
 
-const getAppreciation = (value:number, total:number)  => {
-    if(total==20){
-        if(value < 11) 
-            return 'NA';
-        if(value < 15)
-            return 'ECA';
-        if(value < 18) 
-            return 'A'; 
-        if(value < 21) 
-            return 'A+';
-    }
-    if(total==30){
-        if(value <= 15) 
-            return 'NA';
-        if(value < 22)
-            return 'ECA';
-        if(value < 26) 
-            return 'A'; 
-        if(value < 31) 
-            return 'A+';
-    }
-    if(total==40){
-        if(value <= 20) 
-            return 'NA';
-        if(value < 30)
-            return 'ECA';
-        if(value < 35) 
-            return 'A'; 
-        if(value < 41) 
-            return 'A+';
-    }
-}
+let comT:string[] = [];
+
 
 export  function base64_encode(file:string) {
     // read binary data
@@ -92,10 +63,17 @@ const getTotalExam = (result:any) => {
     }
     return sum; 
 }
+ 
 
-
+export const getOnlySubjectTotal = (subject:SubjectInterface, results:ExamResultInterface) => {
+    let total = 0 ; 
+    subject.courses?.map(c => {
+        total+=parseFloat(results[`subject_${c._id}`]??0);
+    })
+    return total
+}
 export default function resultsDynamicActions(competences:CompetenceInterface[], results:any, totalUsers:number, statsResults:ExamResultInterface[], examResults:ExamResultInterface[], exams:ExamInterface[], term:TermInterface ) {
-
+    comT = [];
     const getSubjectTotal = (subject:SubjectInterface) => {
         let total = 0 ; 
         let pointTotal = 0;
@@ -104,13 +82,14 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
             pointTotal+=parseFloat(exams[0][`point_${c._id}`]??0);
         })
 
-        const app = getAppreciation(total, pointTotal);
+        const app = getCompetenceAppreciation(total, pointTotal, subject.slug);
 
         return {total, app, pointTotal}
     }
 
     const totalMarks = getTotal(results)
     const totalPoints = getTotalExam(exams[0])
+    const average = (totalMarks / totalPoints) * 20;
 
     return (
         <>
@@ -163,7 +142,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 </table>
 </div>
 
- <table className='table1' style={{fontSize:'10px'}}>
+ <table className='table1' style={{fontSize:'20px'}}>
      <thead>
      <tr>
          <th rowSpan={2} style={{width:'250px'}}>
@@ -242,7 +221,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
                                                  <th> {!isExcluded ?to.pointTotal:'--'}</th>
                                                  {examResults.map((result, index) => {
                                                     return <>
-                                                                <td>{result[`total_${subject._id}`] ?? 0}</td> 
+                                                                <td>{getOnlySubjectTotal(subject, result) ?? 0}</td> 
                                                             </>
                                                     })
                                                 }
@@ -259,52 +238,80 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 
     </tbody>
     </table>
-    <div className="bord" style={{borderTop: '2px solid #555'}}></div>
+
     <div className='center'>
-        <p style={{fontSize:'13px'}}>COTES : NA = Non Acquis, ECA = en cours d’Acquisition, A = Acquis, A+ = Expert</p>
+        <p style={{fontSize:'20px'}}>COTES : NA = Non Acquis, ECA = en cours d’Acquisition, A = Acquis, A+ = Expert</p>
     </div>
 
-    <div className='bord'></div>
-
-    <table style={{fontSize:'15px', width:'100%'}} className='table1'>
+    <table style={{fontSize:'25px', width:'100%'}} className='table1'>
         <tr>
             <th>Total </th>
             <th> {totalMarks} / {totalPoints} </th>
-            <th>Observations</th>
-            <th colSpan={3}>Conseil de Classe</th>
+            <th>Cotes</th>
+            <th colSpan={2}>Conseil de Classe</th>
         </tr>
         <tr>
             <td>Moyenne</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td rowSpan={3}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
-            <td> Avertissement Conduits </td>
-            <td> {results.ac? 'Oui' : 'Non'} </td>
+            <td rowSpan={4}>  {getCompetenceAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td> Avertissement Conduite </td>
+            <td style={{fontSize:'15px'}}>  <input type='checkbox' /> Oui <input type='checkbox' /> Non  </td>
         </tr>
         <tr>
             <td>Rang </td>
             <td>  {results.rank} / {totalUsers} </td>
-            <td> Avertissement Travails </td>
-            <td> {results.at? 'Oui' : 'Non'}  </td>
+            <td> Avertissement Travail </td>
+            <td> {average<12? 'Oui' : 'Non'}  </td>
         </tr>
         <tr>
-            <td>Moyenne generale</td>
-            <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td>
-            <td> Encouragements </td>
-            <td> {results.en? 'Oui' : 'Non'}  </td>
-        </tr>
-        <tr>
+            {/* <td>Moyenne generale</td>
+            <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td> */}
             <td>Moyenne du premier</td>
             <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
-            <td> Visa du Parent</td>
-            <td colSpan={2}> Visa du Chef D'etablissement </td>
+            <td> Encouragements </td>
+            <td> {average>12? 'Oui' : 'Non'}  </td>
         </tr>
         <tr>
             <td>Moyenne du dernier</td>
             <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
+            <td> Tableau d'honneur </td>
+            <td style={{fontSize:'15px'}}> <input type='checkbox' /> Oui <input type='checkbox' /> Non</td>
+        </tr>
+        {/* <tr>
             <td> </td>
             <td colSpan={2}> </td>
+        </tr> */}
+        <tr>
+            <td colSpan={2}> Observation de l'enseignant(e)</td>
+            <td>Visa parent</td>
+            <td colSpan={2}>Visa du chef d'établissement</td>
         </tr>
+        <tr>
+            <td colSpan={2} style={{minHeight:'100px', fontSize:'14px'}}> 
+                <i>Des efforts s'imposent dans les compétences suivantes</i>
+                <br />
+                <ul style={{listStyle: 'none', textAlign:'left'}}>
+                    {comT.length > 0 ? comT.map(s => {
+                        return <li>{s}</li>
+                    }) : <li style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>RAS</li>}
+                </ul>
+            </td>
+            <td></td>
+            <td colSpan={2}></td>
+        </tr>
+        {/* <tr>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+        </tr> */}
     </table>
+
 
 </>
 );

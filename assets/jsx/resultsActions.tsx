@@ -24,7 +24,7 @@ export const getGeneralAverage = (results:ExamResultInterface[], totalPoints:num
 
 let comT:string[] = [];
 
-const getAppreciation = (value:number, total:number, competenceName:string='')  => {
+export const getCompetenceAppreciation = (value:number, total:number, competenceName:string='')  => {
     if(total==20){
         if(value < 11){
             if(comT.indexOf(competenceName)<0) comT.push(competenceName)
@@ -111,7 +111,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
             pointTotal+=parseFloat(results.exam_id[`point_${c._id}`]??0);
         })
 
-        const app = getAppreciation(total, pointTotal, subject.slug);
+        const app = getCompetenceAppreciation(total, pointTotal, subject.slug);
 
         return {total, app, pointTotal}
     }
@@ -261,7 +261,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
         <tr>
             <td>Moyenne</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td rowSpan={4}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td rowSpan={4}>  {getCompetenceAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
             <td> Avertissement Conduite </td>
             <td style={{fontSize:'15px'}}>  <input type='checkbox' /> Oui <input type='checkbox' /> Non  </td>
         </tr>
