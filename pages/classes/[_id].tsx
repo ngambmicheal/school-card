@@ -137,6 +137,7 @@ export default function ClasseDetails(){
                     <tr>
                         <th>Name</th>
                         {classe?.section?.report_type =='Maternelle' && <th>Exam Type Maternelle</th> }
+                        {classe?.section?.report_type =='Nursery' && <th>Exam Type Nursery</th> }
                         {classe?.section?.report_type =='Matiere' && <th>Exam Type Normal </th> }
                         {classe?.section?.report_type =='Competence' && <th>Exam Type Competence</th>  }
                         <th>Action</th>
@@ -146,9 +147,10 @@ export default function ClasseDetails(){
                     {exams.map(exam => {
                     return <tr key={exam._id}>
                         <td> {exam.name} </td>
-                        {classe?.section?.report_type =='Maternelle' &&  <td> <Link href={`/exams/mat/${exam._id}`}>Mat</Link></td> }
-                        {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/${exam._id}`} >View</Link> </td> }
-                        {classe?.section?.report_type =='Competence' &&  <td> <Link href={`/exams/ui/${exam._id}`} >UI</Link> </td> }
+                        {classe?.section?.report_type =='Maternelle' &&  <td> <Link href={`/exams/mat/${exam._id}`}>Entree les donnees</Link></td> }
+                        {classe?.section?.report_type =='Nursery' &&  <td> <Link href={`/exams/nursery/${exam._id}`}>Fill Marks</Link></td> }
+                        {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/${exam._id}`} >Entree les donnees</Link> </td> }
+                        {classe?.section?.report_type =='Competence' &&  <td> <Link href={`/exams/ui/${exam._id}`} >Entree les donnees</Link> </td> }
                         <td> <a href='javascript:void(0)'  onClick={() =>deleteExam(exam._id)}>Delete</a> </td>
                     </tr>
                     })
@@ -166,6 +168,7 @@ export default function ClasseDetails(){
                     <tr>
                         <th>Name</th>
                         {classe?.section?.report_type =='Maternelle' && <th>Exam Type Maternelle</th> }
+                        {classe?.section?.report_type =='Nursery' && <th>Exam Type Maternelle</th> }
                         {classe?.section?.report_type =='Matiere' && <th>Exam Type Normal </th> }
                         {classe?.section?.report_type == 'Competence' && <th>Exam Type Competence</th> }
                         <th>Action</th>
@@ -177,6 +180,7 @@ export default function ClasseDetails(){
                     return <tr key={term._id}>
                         <td> {term.name} </td>
                         {classe?.section?.report_type =='Maternelle' && <td> <Link href={`/api/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?term_id=${term._id}`}>Mat</Link></td> }
+                        {classe?.section?.report_type =='Nursery' && <td> <Link href={`/api/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?term_id=${term._id}`}>Nursery</Link></td> }
                         {classe?.section?.report_type =='Matiere' && <td> <Link href={`/api/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?term_id=${term._id}`} >View</Link> </td> }
                         {classe?.section?.report_type =='Competence' && <td> <Link href={`/api/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?term_id=${term._id}`} >UI</Link> </td>}
                         <td> <a href='javascript:void(0)'  onClick={() =>calculateTerm(term._id)}>Calculer</a> | <a href='javascript:void(0)'  onClick={() =>deleteTerm(term._id)}>Delete</a> </td>

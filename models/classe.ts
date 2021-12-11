@@ -7,7 +7,7 @@ export default interface ClasseInterface {
     id?:string,
     name:string,
     school?:SchoolInterface | string,
-    section?:SectionInterface | string,
+    section?:SectionInterface ,
     teacher:string
 }
 

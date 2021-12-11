@@ -1,6 +1,7 @@
 import mg from "../services/mg"
 import ClasseInterface, { classeSchema } from "./classe"
 import SchoolInterface, { schoolSchema } from "./school"
+import { reportType } from "./terms"
 
 
 export default interface SectionInterface {
@@ -8,7 +9,7 @@ export default interface SectionInterface {
     name:string,
     school?:string | SchoolInterface,
     classes?:ClasseInterface[],
-    report_type ?:string [],
+    report_type ?:reportType,
 }
 
 
