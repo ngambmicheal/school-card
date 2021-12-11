@@ -120,12 +120,12 @@ export class Api{
     //terms 
     getTerms(classeId?:string) { return axios.get(`/api/terms?class=${classeId}`)}
     saveTerm(data:TermInterface) { return axios.post('/api/terms/store', data);}
-    deleteTerm(){
-
-    }
+    getTermResult(termId:string){ return axios.get(`/api/terms/results?term_id=${termId}`)}
+    deleteTerm(){}
     calculateTerm(term_id:string){
       return axios.post(`/api/terms/calculate`, {term_id} )
     }
+    getTerm(term_id:string) { return axios.get(`/api/terms/${term_id}`)}
 
 
     downloadToCsv(classeId:any) { return axios.post(`/api/classes/export-csv`, {class_id: classeId})}
