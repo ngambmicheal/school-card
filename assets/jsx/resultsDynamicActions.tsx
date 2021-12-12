@@ -138,7 +138,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
               <b>REPUBLIQUE DU CAMEROUN</b> <br />
                 <i> Paix - Travail - Patrie </i> <br />
              <b>GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE</b>  <br />
-             <i>BP: 1661 DOUALA TEL: (237) 33089582/699717529</i> <br />
+             <i>BP: 1661 DOUALA TEL: (237) 699717529/33089582</i> <br />
         </th>
         <th className='' style={{width:'20%'}}>
             <img src={`data:image/jpeg;base64, ${logo}`} height={100} />
@@ -147,17 +147,17 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
             <b> REPUBLIC OF CAMEROON</b>  <br />
              <i>Peace - Work - Father/land</i>  <br />
             <b> GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE </b> <br />
-             <i>P.O Box:1661 DOUALA TEL: (237) 33089582/699717529 </i> <br />
+             <i>P.O Box:1661 DOUALA TEL: (237) 699717529/33089582</i> <br />
         </th>
     </tr>
 </table>
 
 <div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION - {term.name} - 2021/2022
+    BULLETIN D'EVALUATION : {term.name}  2021/2022
 </div>
 
 <div>
-<table className='table1' style={{fontSize:'10px'}} >
+<table className='table1' style={{fontSize:'14px'}} >
  <thead>
      <tr>
          <th colSpan={2}>NOMS ET PRENOMS</th>
@@ -174,14 +174,14 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
          <th > {term?.class?.name} </th>
          <th>Effectif</th>
          <th>{totalUsers}</th>
-         <th>ENSEIGNANT</th>
+         <th>ENSEIGNANT(E)</th>
          <th >{term?.class?.teacher}</th>
      </tr>
  </thead>
 </table>
 </div>
 
- <table className='table1' style={{fontSize:'20px'}}>
+ <table className='table1' style={{fontSize:'15px'}}>
      <thead>
      <tr>
          <th rowSpan={2} style={{width:'250px'}}>
@@ -206,7 +206,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
              EVALUATIONS
          </th>
          <th>
-             MAX 
+             SUR 
          </th>
          {exams.map((exam, index) => {
                         return< th>
@@ -279,10 +279,10 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
     </table>
 
     <div className='center'>
-        <p style={{fontSize:'20px'}}>COTES : NA = Non Acquis, ECA = en cours d’Acquisition, A = Acquis, A+ = Expert</p>
+        <p style={{fontSize:'20px'}}>COTES : NA = Non Acquis, ECA = En Cours d’Acquisition, A = Acquis, A+ = Expert</p>
     </div>
 
-    <table style={{fontSize:'25px', width:'100%'}} className='table1'>
+    <table style={{fontSize:'18px', width:'100%'}} className='table1'>
         <tr>
             <th>Total </th>
             <th> {totalMarks} / {totalPoints} </th>

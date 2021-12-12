@@ -106,7 +106,7 @@ export default function resultsMatActions(competences:CompetenceInterface[], res
               <b>REPUBLIQUE DU CAMEROUN</b> <br />
                 <i> Paix - Travail - Patrie </i> <br />
              <b>GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE</b>  <br />
-             <i>BP: 1661 DOUALA TEL: (237) 33089582/699717529</i> <br />
+             <i>BP: 1661 DOUALA TEL: (237) 699717529/33089582</i> <br />
         </th>
         <th className='' style={{width:'20%'}}>
             <img src={`data:image/jpeg;base64, ${logo}`} height={100} />
@@ -115,13 +115,13 @@ export default function resultsMatActions(competences:CompetenceInterface[], res
             <b> REPUBLIC OF CAMEROON</b>  <br />
              <i>Peace - Work - Father/land</i>  <br />
             <b> GROUPE SCOLAIRE BILINGUE PRIVE LAIC LA SEMENCE </b> <br />
-             <i>P.O Box:1661 DOUALA TEL: (237) 33089582/699717529 </i> <br />
+             <i>P.O Box:1661 DOUALA TEL: (237) 699717529/33089582</i> <br />
         </th>
     </tr>
 </table>
 
 <div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION - {results.exam_id?.name} - 2021/2022
+    BULLETIN D'EVALUATION : {results.exam_id?.name}  2021/2022
 </div>
 
 <div>
@@ -197,7 +197,7 @@ export default function resultsMatActions(competences:CompetenceInterface[], res
 
 
             <div style={{marginTop:'15px'}}>
-                OBSERVATION : <span>  Des efforts s'imposent dans les compétences suivantes :  
+                OBSERVATION : <span>  Des efforts s'imposent dans les domaines suivants :  
                             {comT.length > 0 ? 
                                     comT.map(s => {
                                         return <span>{s}, </span>
@@ -208,7 +208,7 @@ export default function resultsMatActions(competences:CompetenceInterface[], res
             <br />
             <table style={{width:'100%', marginTop:'5px', fontSize:'20px'}} className='table1'>
                 <tr>
-                    <th>L'ENSEIGNANTE</th>
+                    <th>L'ENSEIGNANT(E)</th>
                     <th>LA DIRECTION</th>
                     <th>LE PARENT</th>
                 </tr>
