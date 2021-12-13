@@ -8,7 +8,7 @@ import fs from 'fs'
 import { examResultSchema } from '../../../../models/examResult';
 import { competenceSchema } from '../../../../models/competence';
 import { subjectSchema } from '../../../../models/subject';
-import { getCompetencesLenght } from './print-result';
+import { getCompetencesLenght } from './dynamic-print';
 import resultsActions from '../../../../assets/jsx/resultsActions';
 import ReactDOMServer from 'react-dom/server';
 import archiver from 'archiver';
@@ -35,7 +35,7 @@ export default async function handler(
 
     const zipName = `${replaceAll(' ', '_', exam.class_id.name)}__${exam.name}`
     var dir = `./tmp/exams/${zipName}`;
-    var termsDir = './public/terms';
+    var termsDir = './public/exams';
     var zipOutput = fs.createWriteStream(`./public/exams/${zipName}.zip`);
     var zipDir = `./public/exams/${zipName}.zip`;
     var archive = archiver('zip');

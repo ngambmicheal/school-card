@@ -1,67 +1,59 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { examSchema } from '../../../../models/exam';
+import SubjectInterface, {examSchema} from '../../../../models/exam';
+import { examResultSchema } from '../../../../models/examResult';
 import { studentSchema } from '../../../../models/student';
-
 import * as  pdf from 'pdf-creator-node';
 import fs from 'fs'
-import { examResultSchema } from '../../../../models/examResult';
-import { competenceSchema } from '../../../../models/competence';
-import { subjectSchema } from '../../../../models/subject';
-import { getCompetencesLenght } from './print-result';
-import resultsActions from '../../../../assets/jsx/resultsActions';
+import CompetenceInterface, { competenceSchema } from '../../../../models/competence';
 import ReactDOMServer from 'react-dom/server';
-import archiver from 'archiver';
+import resultsActions from '../../../../assets/jsx/resultsActions';
 import { schoolSchema } from '../../../../models/school';
-import { courseSchema } from '../../../../models/course';
+import { subjectSchema } from '../../../../models/subject';
 import { classeSchema } from '../../../../models/classe';
-import { sectionSchema } from '../../../../models/section';
+import { courseSchema } from '../../../../models/course';
 import resultsNormalActions from '../../../../assets/jsx/resultsNormalActions';
+import { sectionSchema } from '../../../../models/section';
 import { getTotal } from '../../../../assets/jsx/resultsNormalUiStats';
-import { replaceAll } from '../../../../services/utils';
-import resultsDynamicNormalActions from '../../../../assets/jsx/resultsDynamicNormalActions';
 import TermInterface, { termSchema } from '../../../../models/terms';
-  
+import resultsDynamicNormalActions from '../../../../assets/jsx/resultsDynamicNormalActions';
+
+export const getCompetencesLenght = (competence:CompetenceInterface) => {
+    let total = 0; 
+    competence.subjects && competence.subjects.map(s => {
+        total+= s.courses?.length ?? 0  
+        total+=1;
+    })
+    return total; 
+}
+
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) { 
 
-    const {term_id} = req.query
+    const {term_id, student_id} = req.query
 
     const term:TermInterface = await termSchema.findOne({_id:term_id}).populate({path:'class', model:classeSchema})
     const exams = await examSchema.find({_id:{$in:term.exams}})
-    const totalResults = await (await examResultSchema.find({term_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
- 
-    const subjects =  await subjectSchema.find({school:term.class.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema});
+  
+    const examResults =  await examResultSchema.find({student:student_id, exam_id:{ $in: term.exams}})
 
-    const zipName = `${replaceAll(' ', '_', term.class?.name)}__${term.name}`
-    var dir = `./tmp/terms/${zipName}`;
-    var termsDir = './public/terms';
-    var zipOutput = fs.createWriteStream(`./public/terms/${zipName}.zip`);
-    var zipDir = `./public/terms/${zipName}.zip`;
-    var archive = archiver('zip');
+    examResultSchema.findOne({student:student_id, term_id}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{path:'section',model:sectionSchema}}}).then(async results => {
+       
+    const subjects =  await subjectSchema.find({school:term?.class?.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema});
 
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true });
-    }
-
-    if (!fs.existsSync(termsDir)){
-        fs.mkdirSync(termsDir, { recursive: true });
-    }
-
-
-    totalResults.map(async (results) => {
         var options = {
             format: "A4",
             orientation: "portrait",
             border: "10mm",
             header: {
-                height: "0mm",
+                height: "2mm",
+
             },
             footer: {
-                height: "0mm",
+                height: "19mm",
                 contents: {
                     // first: 'Cover page',
                     // 2: 'Second page', // Any page number is working. 1-based index
@@ -71,9 +63,10 @@ export default async function handler(
             }
         };
 
-        const examResults =  await examResultSchema.find({student:results.student._id, exam_id:{ $in: term.exams}})
- 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsDynamicNormalActions(subjects, results, totalResults.length, totalResults, examResults, exams, term))
+
+        const totalResults = await(await examResultSchema.find({term_id}).populate({path:'student', model:studentSchema}).sort({rank:1}))
+
+        let html = ReactDOMServer.renderToStaticMarkup(resultsDynamicNormalActions(subjects, results, totalResults.length, totalResults , examResults, exams, term))
         html+=`
                 <style>
                 .center{
@@ -81,10 +74,11 @@ export default async function handler(
                 }
                 .table1, .table2, .table3{
                     border-collapse: collapse;
+                    font-weight:bold;
                     width: 100%;
-                    margin-top: 2px;
+                    margin-top: 5px;
                     margin-bottom: 5px;
-                    font-size:8px;
+                    font-size:9px;
                     }
                     .com, b{
                     font-weight: bold;
@@ -101,24 +95,32 @@ export default async function handler(
                     .th{
                     width:300px;
                     }
-
-                    .table3 {
-                        font-size:9px;
-                    }
+                
+                .table3 {
+                    font-size:10px;
+                }
                 </style>
                 `
 
-        const pdfResultsDir = `${dir}/${replaceAll(' ', '_', results.student.name)}.pdf`
+
         var document = {
             html: html,
             data: {
+              results : results
             },
-            path: pdfResultsDir,
+            path: "./teacher.pdf",
             type: "",
           };
 
           pdf.create(document, options)
           .then((response : any)  => {
+                var file = fs.createReadStream('./teacher.pdf');
+                var stat = fs.statSync('./teacher.pdf');
+                res.setHeader('Content-Length', stat.size);
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader(`Content-Disposition`, `attachment; filename=${results.student.name}.pdf`);
+                file.pipe(res);
+                console.log('thie file isreac')
           })
           .catch((error : any) => {
             console.error(error);
@@ -126,16 +128,7 @@ export default async function handler(
             console.log('thisfile isnot react')
           });
     })
-   
-
-    archive.pipe(zipOutput);
-    archive.directory(dir, false);
-    archive.finalize()
-
-    var file = fs.createReadStream(zipDir);
-    var stat = fs.statSync(zipDir);
-    res.setHeader('Content-Length', stat.size);
-    res.setHeader('Content-Type', 'application/zip');
-    res.setHeader(`Content-Disposition`, `attachment; filename=${zipName}.zip`);
-    file.pipe(res);
+    .catch((e) => {
+        res.json({message:e.message, success:false });
+    })  
 }
