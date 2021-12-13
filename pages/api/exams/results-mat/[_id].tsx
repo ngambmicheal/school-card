@@ -18,6 +18,7 @@ import { classeSchema } from '../../../../models/classe';
 import { sectionSchema } from '../../../../models/section';
 import { getTotal, getTotalPoints, getTotals } from '../../../../assets/jsx/resultsUiStats';
 import resultsMatActions from '../../../../assets/jsx/resultsMatActions';
+import { replaceAll } from '../../../../services/utils';
   
 
 export default async function handler(
@@ -32,10 +33,10 @@ export default async function handler(
     const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
     const competences =  await competenceSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
-    jrs
-    var dir = `./tmp/exams/${exam_id}`;
-    var zipOutput = fs.createWriteStream(`./public/exams/${exam_id}.zip`);
-    var zipDir = `./public/exams/${exam_id}.zip`;
+    const zipName = `${replaceAll(' ', '_',exam.class_id.name)}__${exam.name}`
+    var dir = `./tmp/exams/${zipName}`;
+    var zipOutput = fs.createWriteStream(`./public/exams/${zipName}.zip`);
+    var zipDir = `./public/exams/${zipName}.zip`;
     var archive = archiver('zip');
 
     if (!fs.existsSync(dir)){
@@ -100,7 +101,7 @@ export default async function handler(
                 </style>
                 `
 
-        const pdfResultsDir = `${dir}/${results._id}.pdf`
+        const pdfResultsDir = `${dir}/${replaceAll(' ', '_',results.student.name)}.pdf`
         var document = {
             html: html,
             data: {
@@ -128,6 +129,6 @@ export default async function handler(
     var stat = fs.statSync(zipDir);
     res.setHeader('Content-Length', stat.size);
     res.setHeader('Content-Type', 'application/zip');
-    res.setHeader(`Content-Disposition`, `attachment; filename=${exam_id}.zip`);
+    res.setHeader(`Content-Disposition`, `attachment; filename=${zipName}.zip`);
     file.pipe(res);
 }

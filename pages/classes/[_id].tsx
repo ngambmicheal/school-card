@@ -273,7 +273,7 @@ export function StudentRow({stud, deleteStudent, terms}:StudentProps){
                       <a href='javascript:void(0)'  onClick={() =>deleteStudent(student._id)}>Delete</a> | 
 
                       {terms.map((term, index) => {
-                          return <> <a href={`/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?_id=${term._id}&student_id=${student._id}`} target='_blank'> Term {index+1} </a>  | </>
+                          return <> <a href={`/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?_id=${term._id}&student_id=${student._id}`} target='_blank'> {term.name} </a>  | </>
                       })}
             </td>
         </tr>

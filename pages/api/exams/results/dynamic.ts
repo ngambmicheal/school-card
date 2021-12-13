@@ -16,7 +16,7 @@ export default async function handler(
     const term = await termSchema.findOne({_id:term_id})
     const exams = await examSchema.find({_id:{$in:term.exams}})
     const results =  await examResultSchema.find({student:student_id, exam_id:{ $in: term.exams}})
-    const termResult = await examResultSchema.findOne({term_id})
+    const termResult = await examResultSchema.findOne({term_id, student:student_id})
 
     res.json({data:{term, results, exams, termResult}, status:true})
 

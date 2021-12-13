@@ -69,7 +69,7 @@ export default function examDetails(){
     }
 
     const printStats = () => {
-        window.open(`/api/term/stats/${term?.report_type?.toLocaleLowerCase()}?term_id=${examId}`, '_blank')
+        window.open(`/api/exams/dynamic/${term?.report_type?.toLocaleLowerCase()}-stats?term_id=${examId}`, '_blank')
     }
 
     const deleteResult = (resultId:string) => {

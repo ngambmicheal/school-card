@@ -4,15 +4,18 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import * as  pdf from 'pdf-creator-node';
 import fs from 'fs'
 import ReactDOMServer from 'react-dom/server';
-import resultsUiStats from '../../../assets/jsx/resultsUiStats';
-import { examSchema } from '../../../models/exam';
-import { examResultSchema } from '../../../models/examResult';
-import { schoolSchema } from '../../../models/school';
-import { competenceSchema } from '../../../models/competence';
-import { studentSchema } from '../../../models/student';
-import { subjectSchema } from '../../../models/subject';
-import { courseSchema } from '../../../models/course';
-import { classeSchema } from '../../../models/classe';
+import resultsUiStats from '../../../../assets/jsx/resultsUiStats';
+import { examSchema } from '../../../../models/exam';
+import { examResultSchema } from '../../../../models/examResult';
+import { schoolSchema } from '../../../../models/school';
+import { competenceSchema } from '../../../../models/competence';
+import { studentSchema } from '../../../../models/student';
+import { subjectSchema } from '../../../../models/subject';
+import { courseSchema } from '../../../../models/course';
+import { classeSchema } from '../../../../models/classe';
+import { replaceAll } from '../../../../services/utils';
+import { termSchema } from '../../../../models/terms';
+import { sectionSchema } from '../../../../models/section';
   
 
 export default async function handler(
@@ -20,14 +23,15 @@ export default async function handler(
   res: NextApiResponse<any>
 ) { 
 
-    const {exam_id} = req.query
+    const {term_id} = req.query
 
-    const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema});
-    const totalResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({number:1}).collation({locale: "en_US", numericOrdering: true})
-    const statsResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})
-    const competences =  await competenceSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
+    const term = await termSchema.findOne({_id:term_id}).populate({path:'class', model:classeSchema, populate:{path:'section', model:sectionSchema}}).populate({path:'exams', model:examSchema});
+    const totalResults = await examResultSchema.find({term_id}).populate({path:'student', model:studentSchema}).sort({number:1}).collation({locale: "en_US", numericOrdering: true})
+    const statsResults = await examResultSchema.find({term_id}).populate({path:'student', model:studentSchema}).sort({rank:1})
+    const competences =  await competenceSchema.find({school:term.class.school, report_type:term.class.section.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
-    var dir = `./tmp/stats/${exam_id}`;
+    var dir = `./tmp/stats`;
+    const zipName = `${replaceAll(' ', '_', term.class.name)}__${term.name}`
 
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir, { recursive: true });
@@ -51,6 +55,8 @@ export default async function handler(
             }
         };
 
+        let exam = term.exams[0];
+        exam.name = term.name;
         let html = ReactDOMServer.renderToStaticMarkup(resultsUiStats(exam, competences, totalResults, statsResults))
         html+=`
                 <style>
@@ -82,7 +88,7 @@ export default async function handler(
                 </style>
                 `
 
-        const pdfResultsDir = `${dir}/${exam_id}.pdf`
+        const pdfResultsDir = `${dir}/${zipName}.pdf`
         var document = {
             html: html,
             data: {
@@ -93,11 +99,11 @@ export default async function handler(
 
           pdf.create(document, options)
           .then((response : any)  => {
-            var file = fs.createReadStream(`${dir}/${exam_id}.pdf`);
-            var stat = fs.statSync(`${dir}/${exam_id}.pdf`);
+            var file = fs.createReadStream(`${dir}/${zipName}.pdf`);
+            var stat = fs.statSync(`${dir}/${zipName}.pdf`);
             res.setHeader('Content-Length', stat.size);
             res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader(`Content-Disposition`, `attachment; filename=stats.pdf`);
+            res.setHeader(`Content-Disposition`, `attachment; filename=${zipName}.pdf`);
             file.pipe(res);
           })
           .catch((error : any) => {

@@ -38,16 +38,16 @@ export default async function handler(
     const exams = await examSchema.find({_id:{$in:term.exams}})
     const examResults =  await examResultSchema.find({student:student_id, exam_id:{ $in: term.exams}})
 
-    examResultSchema.findOne({term_id}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).then(async results => {
+    examResultSchema.findOne({student:student_id, term_id}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).then(async results => {
        
-        const competences =  await competenceSchema.find({school:term.class.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
+        const competences =  await competenceSchema.find({school:term?.class?.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
         var options = {
             format: "A4",
             orientation: "portrait",
             border: "10mm",
             header: {
-                height: "6.5mm",
+                height: "0mm",
 
                 contents: {
                     2: '',

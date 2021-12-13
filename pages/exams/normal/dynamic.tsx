@@ -1,18 +1,17 @@
 import { useRouter } from "next/dist/client/router";
 import { useEffect, useState } from "react";
-import CourseInterface from "../../models/course";
-import SubjectInterface from "../../models/subject";
-import api from "../../services/api";
-import { customStyles } from "../../services/constants";
+import CourseInterface from "../../../models/course";
+import SubjectInterface from "../../../models/subject";
+import api from "../../../services/api";
+import { customStyles } from "../../../services/constants";
 import Modal from 'react-modal'
 import Link from 'next/link'
-import Subjects from "../subjects";
-import StudentInterface from "../../models/student";
-import ExamResultInterface from "../../models/examResult";
-import ExamInterface from "../../models/exam";
+import Subjects from "../../subjects";
+import StudentInterface from "../../../models/student";
+import ExamResultInterface from "../../../models/examResult";
+import ExamInterface from "../../../models/exam";
 import { toast } from "@chakra-ui/toast";
-import { ImportResults } from "./ui/[_id]";
-
+import TermInterface from "../../../models/terms";
 
 export const getSubjectTotal = (result:ExamResultInterface|any) => {
     let sum = 0; 
@@ -26,6 +25,7 @@ export const getSubjectTotal = (result:ExamResultInterface|any) => {
 
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
+    const [term, setTerm] = useState<TermInterface>()
     const [courses, setCourses] = useState<CourseInterface[]>([])
     const [subjects, setSubjects] = useState<SubjectInterface[]>([])
     const [students, setStudents] = useState<StudentInterface[]>([])
@@ -34,32 +34,28 @@ export default function examDetails(){
 
     const [points, setPoints] = useState(0);
     const [ImportIsOpen, setImportIsOpen] = useState(false);
-    
-
 
     const router = useRouter();
-    const {_id:examId} = router.query;
+    const {term_id:examId} = router.query;
 
     useEffect(()=>{
         if(examId){
-            api.getExam(examId).then(({data:{data}} : any) => {
-                setExam(data)
+
+            api.getTerm(examId).then(({data:{data}} : any) => {
+                setTerm(data)
+                setExam(data.exams[0])
             })
 
-            api.getExamResults(examId).then(({data:{data}} : any) => {
+            api.getTermResult(examId).then(({data:{data}} : any) => {
                 setResults(data)
             })
-
-            api.getStudents().then(({data:{data}} : any) => {
-                setStudents(s => data);
-            } )
-
         }
     }, [examId])
 
+
     useEffect(()=>{
         if(exam?._id){
-            api.getSchoolSubjects({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).then(({data:{data}} : any) => {
+            api.getSchoolSubjects({school:term.class.school, report_type:term.class.section.report_type}).then(({data:{data}} : any) => {
                 setSubjects(s => data);
             })
         }
@@ -68,22 +64,16 @@ export default function examDetails(){
 
     useEffect(() => {
         if(results && exam){
-            console.log('thi si sht efile')
-                setExam(inputData => ({
-                    ...inputData,
-                    loaded: 'yes'
-                  }))
-                getTotalPoints();
-                console.log('this is me')
+            getTotalPoints();
         }
     }, [results])
 
     const printResults = () => {
-        window.open('/api/exams/results-normal/'+examId, '_blank')
+        window.open(`/api/exams/dynamic/${term?.report_type?.toLocaleLowerCase()}?term_id=${examId}`, '_blank')
     }
 
     const printStats = () => {
-        window.open('/api/exams/stats-normal?exam_id='+examId, '_blank')
+        window.open(`/api/exams/dynamic/${term?.report_type?.toLocaleLowerCase()}-stats?term_id=${examId}`, '_blank')
     }
 
     useEffect(() => {
@@ -159,43 +149,22 @@ export default function examDetails(){
     }
 
     const getRank = () => {
-            api.getExamResults(examId).then(({data:{data}} : any) => {
-                const sortedData = data.sort((a, b) => {
-                    let lA = getSubjectTotal(a); 
-                    let lB = getSubjectTotal(b); 
-
-                    if(lA < lB) return 1; 
-                    if(lA > lB) return -1; 
-                    return 0; 
-                } )
-
-                sortedData.map((item, index) => {
-                    item.rank = index+1; 
-                    api.updateExamResult(item);
-
-                    if(index==data.lenght-1){ 
-                        window.location = window.location
-                    }
-                })
-            })
+        api.calculateTerm(examId)
     }
-
 
 
 
     return (
         <>
             <div className='py-3'>
-                <h3>Classe : {exam?.class_id?.name} </h3>
-                <h4>Examen : {exam?.name} </h4>
+                <h3>Classe : {term?.class?.name} </h3>
+                <h4>TRIMESTRE : {term?.name} </h4>
             </div>
 
             <button className='mx-3 btn btn-success' onClick={() => printResults()} > Imprimer Resultats </button>
            
-           <button className='mx-3 btn btn-success' onClick={() => getRank()} > get Rank</button>
-
-           <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button>
-          
+            <button className='mx-3 btn btn-success' onClick={() => getRank()} > Calculer </button>
+           
            <button className='mx-3 btn btn-dark' onClick={() => printStats(true)} > Imprimer Statistics</button>
           
 
@@ -220,8 +189,7 @@ export default function examDetails(){
                 </tbody>
             </table>
 
-            {examId && <ImportResults modalIsOpen={ImportIsOpen} closeModal={closeImportModal} save={importResults} />}
-        </>
+      </>
     )
 }
 
@@ -254,62 +222,11 @@ export function ExamResult({result, subjects, points, deleteResult}:{subjects:Su
         <td>{result?.student?.number}</td>
         <td>{result?.student?.name}</td>
         {subjects.map(subject => {
-            return subject._id && <td key={subject._id}> <input type='number' name={`subject_${subject._id}`} style={{width:'50px'}} value={res[`subject_${subject._id}`]} onChange={handleChange} />  </td>
+            return subject._id && <td key={subject._id}> <input type='number' name={`subject_${subject._id}`} style={{width:'50px'}} value={res[`subject_${subject._id}`]} onChange={handleChange} readOnly disabled />  </td>
         })}
         <td>{total}</td>
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
         <th> <Link href={`/exams/print?_id=${res._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
-}
-
-type CreateSubjectModalProps = {
-    modalIsOpen:boolean,
-    subject?:any,
-    closeModal: () => void,
-    save:(student:any) => void
-}
-export function CreateSubjectModal({modalIsOpen, closeModal, save, subject}:CreateSubjectModalProps){
-    const [student, setStudent] = useState<CourseInterface>({name:'', subject, point:5});
-
-    function handleChange(e:any) {
-        const key = e.target.name
-        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
-    
-        setStudent(inputData => ({
-          ...inputData,
-          [key]: value
-        }))
-      }
-
-      
-    return (
-        <div>
-
-          <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={closeModal}
-            style={customStyles}
-            contentLabel="Add Student"
-          >
-            <div className='modal-body'>
-
-            <button onClick={closeModal}>close</button>
-                <div className='form-group'>
-                    <label>Name </label>
-                    <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
-                </div>
-
-                <div className='form-group'>
-                    <label>Point </label>
-                    <input className='form-control' name='point' value={student?.point} onChange={handleChange}></input>
-                </div>
-
-                <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success'>Save</button>
-                </div>
-            </div>
-          </Modal>
-        </div>
-      );
 }

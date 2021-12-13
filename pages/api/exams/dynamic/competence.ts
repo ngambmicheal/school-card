@@ -19,6 +19,7 @@ import { sectionSchema } from '../../../../models/section';
 import { getTotal, getTotalPoints, getTotals } from '../../../../assets/jsx/resultsUiStats';
 import resultsDynamicActions from '../../../../assets/jsx/resultsDynamicActions';
 import TermInterface, { termSchema } from '../../../../models/terms';
+import { replaceAll } from '../../../../services/utils';
   
 
 export default async function handler(
@@ -33,13 +34,19 @@ export default async function handler(
     const totalResults = await (await examResultSchema.find({term_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
     const competences =  await competenceSchema.find({school:term.class.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
-    var dir = `./tmp/terms/${term_id}`;
-    var zipOutput = fs.createWriteStream(`./public/terms/${term_id}.zip`);
-    var zipDir = `./public/terms/${term_id}.zip`;
+    const zipName = `${replaceAll(' ', '_', term.class?.name)}__${term.name}`
+    var dir = `./tmp/terms/${zipName}`;
+    var termsDir = './public/terms';
+    var zipOutput = fs.createWriteStream(`./public/terms/${zipName}.zip`);
+    var zipDir = `./public/terms/${zipName}.zip`;
     var archive = archiver('zip');
 
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir, { recursive: true });
+    }
+
+    if (!fs.existsSync(termsDir)){
+        fs.mkdirSync(termsDir, { recursive: true });
     }
 
     totalResults.map(async (results) => {
@@ -106,7 +113,7 @@ export default async function handler(
         </style>
                 `
 
-        const pdfResultsDir = `${dir}/${results._id}.pdf`
+        const pdfResultsDir = `${dir}/${replaceAll(' ', '_', results.student.name)}.pdf`
         var document = {
             html: html,
             data: {
@@ -134,6 +141,6 @@ export default async function handler(
     var stat = fs.statSync(zipDir);
     res.setHeader('Content-Length', stat.size);
     res.setHeader('Content-Type', 'application/zip');
-    res.setHeader(`Content-Disposition`, `attachment; filename=${term_id}.zip`);
+    res.setHeader(`Content-Disposition`, `attachment; filename=${zipName}.zip`);
     file.pipe(res);
 }
