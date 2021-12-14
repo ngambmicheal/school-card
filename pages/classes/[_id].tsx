@@ -145,6 +145,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Nursery' && <th>Exam Type Nursery</th> }
                         {classe?.section?.report_type =='Matiere' && <th>Exam Type Normal </th> }
                         {classe?.section?.report_type =='Competence' && <th>Exam Type Competence</th>  }
+                        {classe?.section?.report_type == 'Special' && <th>Exam Type Special</th> }
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -156,6 +157,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Nursery' &&  <td> <Link href={`/exams/nursery/${exam._id}`}>Fill Marks</Link></td> }
                         {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/${exam._id}`} >Entree les donnees</Link> </td> }
                         {classe?.section?.report_type =='Competence' &&  <td> <Link href={`/exams/ui/${exam._id}`} >Entree les donnees</Link> </td> }
+                        {classe?.section?.report_type =='Special' &&  <td> <Link href={`/exams/special/${exam._id}`} >Entree les donnees</Link> </td> }
                         <td> <a href='javascript:void(0)'  onClick={() =>deleteExam(exam._id)}>Delete</a> </td>
                     </tr>
                     })
@@ -176,6 +178,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Nursery' && <th>Exam Type Maternelle</th> }
                         {classe?.section?.report_type =='Matiere' && <th>Exam Type Normal </th> }
                         {classe?.section?.report_type == 'Competence' && <th>Exam Type Competence</th> }
+                        {classe?.section?.report_type == 'Special' && <th>Exam Type Special</th> }
                         <th>Action</th>
 
                     </tr>
@@ -188,6 +191,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Nursery' && <td> <Link href={`/exams/nursery/dynamic/?term_id=${term._id}`}>Nursery</Link></td> }
                         {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/normal/dynamic?term_id=${term._id}`} >View</Link> </td> }
                         {classe?.section?.report_type =='Competence' && <td> <Link href={`/exams/ui/dynamic?term_id=${term._id}`} >UI</Link> </td>}
+                        {classe?.section?.report_type =='Special' && <td> <Link href={`/exams/special/dynamic?term_id=${term._id}`} >UI/Special</Link> </td>}
                         <td> <a href='javascript:void(0)'  onClick={() =>calculateTerm(term._id)}>Calculer</a> | <a href='javascript:void(0)'  onClick={() =>deleteTerm(term._id)}>Delete</a> </td>
                     </tr>
                     })

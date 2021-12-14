@@ -2,7 +2,7 @@ import mg from "../services/mg"
 import ClasseInterface, { classeSchema } from "./classe"
 import ExamInterface, { examSchema } from "./exam"
 
-export type reportType = 'Competence' | 'Maternelle' | 'Matiere' | 'Nursery';
+export type reportType = 'Competence' | 'Maternelle' | 'Matiere' | 'Nursery' | 'Special'
 
 export default interface TermInterface{
     _id?:string,
