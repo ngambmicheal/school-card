@@ -157,7 +157,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 </div>
 
 <div>
-<table className='table1' style={{fontSize:'14px'}} >
+<table className='table1' style={{fontSize:'20px'}} >
  <thead>
      <tr>
          <th colSpan={2}>NOMS ET PRENOMS</th>
@@ -181,7 +181,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 </table>
 </div>
 
- <table className='table1' style={{fontSize:'15px'}}>
+ <table className='table1' style={{fontSize:'20px'}}>
      <thead>
      <tr>
          <th rowSpan={2} style={{width:'250px'}}>
@@ -282,7 +282,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
         <p style={{fontSize:'20px'}}>COTES : NA = Non Acquis, ECA = En Cours d’Acquisition, A = Acquis, A+ = Expert</p>
     </div>
 
-    <table style={{fontSize:'18px', width:'100%'}} className='table1'>
+    <table style={{fontSize:'25px', width:'100%'}} className='table1'>
         <tr>
             <th>Total </th>
             <th> {totalMarks} / {totalPoints} </th>

@@ -158,7 +158,7 @@ export default function resultsDynamicNormalActions(subjects:SubjectInterface[],
                         })
                     }
                     <th >
-                        MARKS
+                        TERM1
                     </th>
                     <th colSpan={2}>
                         APPRECIATION CODE
