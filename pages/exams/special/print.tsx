@@ -1,12 +1,12 @@
 import { useRouter } from "next/dist/client/router";
 import React from 'react';
 import { useEffect, useState } from "react";
-import CompetenceInterface from "../../models/competence";
-import { courseSchema } from "../../models/course";
-import api from "../../services/api";
+import CompetenceInterface from "../../../models/competence";
+import { courseSchema } from "../../../models/course";
+import api from "../../../services/api";
 import logo from '../../../public/logo.png'
 import { getSubjectTotal } from "./[_id]";
-import SubjectInterface from "../../models/subject";
+import SubjectInterface from "../../../models/subject";
 
 
 export default function coursesPage(){

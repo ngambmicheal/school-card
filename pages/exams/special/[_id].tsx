@@ -1,17 +1,16 @@
 import { useRouter } from "next/dist/client/router";
 import { useEffect, useState } from "react";
-import CourseInterface from "../../models/course";
-import SubjectInterface from "../../models/subject";
-import api from "../../services/api";
-import { customStyles } from "../../services/constants";
+import CourseInterface from "../../../models/course";
+import SubjectInterface from "../../../models/subject";
+import api from "../../../services/api";
+import { customStyles } from "../../../services/constants";
 import Modal from 'react-modal'
 import Link from 'next/link'
-import Subjects from "../subjects";
-import StudentInterface from "../../models/student";
-import ExamResultInterface from "../../models/examResult";
-import ExamInterface from "../../models/exam";
+import StudentInterface from "../../../models/student";
+import ExamResultInterface from "../../../models/examResult";
+import ExamInterface from "../../../models/exam";
 import { toast } from "@chakra-ui/toast";
-import { ImportResults } from "./ui/[_id]";
+import { ImportResults } from "../ui/[_id]";
 
 
 export const getSubjectTotal = (result:ExamResultInterface|any) => {
