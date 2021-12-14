@@ -55,6 +55,7 @@ export default function Competences(){
             <table className='table '>
                 <thead>
                     <tr>
+                        <th>Id</th>
                         <th>Nom</th>
                         <th>Type de Bulletin</th>
                         <th>Slug</th>
@@ -162,6 +163,7 @@ export function CompetenceRow({compt, deleteCompetence}:CompetenceProps){
   
     return (
         <tr key={competence._id}>
+            <td>{competence._id}</td>
             <td>  <input className='form-control' type='text' name='name' value={competence?.name} onChange={handleChange} />  </td>
             <td>
                 <select className='form-control' name='report_type'  onChange={handleChange} >

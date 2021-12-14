@@ -101,11 +101,13 @@ export default function ClasseDetails(){
 
     const deleteTerm = (term_id:any) => {
       if(confirm('Are you sure to delete?'))
-      api.deleteTerm(term_id)
+      api.deleteTerm(term_id).then(() => getTerms())
     }
 
     const calculateTerm = (term_id:string) => {
-      api.calculateTerm(term_id)
+      api.calculateTerm(term_id).then(() => {
+        alert('done ')
+      })
     }
 
     const saveExam = (exam:any) => {

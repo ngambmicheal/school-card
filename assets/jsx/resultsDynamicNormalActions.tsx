@@ -172,7 +172,7 @@ export default function resultsDynamicNormalActions(subjects:SubjectInterface[],
                             <> 
                                     <tr>
                                         <td colSpan={2}> {subject.name} </td>
-                                        <td>{results.exam_id?.[`point_${subject._id}`]}</td>
+                                        <td>{exams[0][`point_${subject._id}`]}</td>
                                         {examResults.map((result, index) => {
                                             return <>
                                                         <td>{result[`subject_${subject._id}`] ?? 0}</td> 
