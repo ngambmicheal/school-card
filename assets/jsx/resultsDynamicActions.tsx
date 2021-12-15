@@ -172,7 +172,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
      <tr>
          <th colSpan={1}>CLASSE</th>
          <th > {term?.class?.name} </th>
-         <th>Effectif</th>
+         <th>EFFECTIF</th>
          <th>{totalUsers}</th>
          <th>ENSEIGNANT(E)</th>
          <th >{term?.class?.teacher}</th>
@@ -284,9 +284,9 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 
     <table style={{fontSize:'25px', width:'100%'}} className='table1'>
         <tr>
-            <th>Total </th>
+            <th>TOTAL </th>
             <th> {totalMarks} / {totalPoints} </th>
-            <th>Cotes</th>
+            <th>COTES</th>
             <th colSpan={2}>Conseil de Classe</th>
         </tr>
         <tr>
