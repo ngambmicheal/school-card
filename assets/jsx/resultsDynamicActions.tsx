@@ -84,7 +84,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]);
+            sum+=parseFloat(result[el]??0);
         }
     }
     return sum; 
@@ -94,7 +94,7 @@ const getTotalExam = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('point_')){
-            sum+=parseFloat(result[el]);
+            sum+=parseFloat(result[el]??0);
         }
     }
     return sum; 
@@ -313,7 +313,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
         <tr>
             <td>Moyenne du dernier</td>
 
-            <td> {JSON.stringify(getTotal(statsResults[statsResults.length-1]))} { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
+            <td>{ ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
             <td> Tableau d'honneur </td>
             <td style={{fontSize:'15px'}}> <input type='checkbox' /> Oui <input type='checkbox' /> Non</td>
         </tr>

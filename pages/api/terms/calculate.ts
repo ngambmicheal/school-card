@@ -120,7 +120,7 @@ export function getSubjectSum(results:ExamResultInterface[], type:'total'|'subje
         total+= parseFloat(r[`${type}_${subject_id}`]??0);
     })
 
-    return total/(results.length)
+    return results.length ? total/(results.length) : 0;
 }
 
 export function getTermRank(results:ExamResultInterface[]) {

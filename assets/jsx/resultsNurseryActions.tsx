@@ -77,7 +77,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]);
+            sum+=parseFloat(result[el]??0);
         }
     }
     return sum; 
