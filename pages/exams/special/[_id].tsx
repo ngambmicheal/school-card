@@ -209,6 +209,7 @@ export default function examDetails(){
                         <th>Total / {points} </th>
                         <th>Moyenne</th>
                         <th>Rank</th>
+                        <th>Ignorer</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -258,6 +259,7 @@ export function ExamResult({result, subjects, points, deleteResult}:{subjects:Su
         <td>{total}</td>
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
+        <td><input type='checkbox' name='ignore' checked={res.ignore==true}  onClick={handleChange} /></td>
         <th> <Link href={`/exams/print?_id=${res._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }
