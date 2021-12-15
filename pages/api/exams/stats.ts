@@ -24,7 +24,7 @@ export default async function handler(
 
     const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema});
     const totalResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({number:1}).collation({locale: "en_US", numericOrdering: true})
-    const statsResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})
+    const statsResults = await examResultSchema.find({exam_id, ignore:{ $ne:true } }).populate({path:'student', model:studentSchema}).sort({rank:1})
     const competences =  await competenceSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
     var dir = `./tmp/stats/${exam_id}`;

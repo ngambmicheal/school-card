@@ -78,11 +78,11 @@ export default function examDetails(){
     }, [results])
 
     const printResults = () => {
-        window.open('/api/exams/results-normal/'+examId, '_blank')
+        window.open('/api/exams/results-special/'+examId, '_blank')
     }
 
     const printStats = () => {
-        window.open('/api/exams/stats-normal?exam_id='+examId, '_blank')
+        window.open('/api/exams/stats-special?exam_id='+examId, '_blank')
     }
 
     useEffect(() => {
@@ -260,7 +260,7 @@ export function ExamResult({result, subjects, points, deleteResult}:{subjects:Su
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
         <td><input type='checkbox' name='ignore' checked={res.ignore==true}  onClick={handleChange} /></td>
-        <th> <Link href={`/exams/print?_id=${res._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
+        <th> <Link href={`/exams/special/print?_id=${res._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }
 

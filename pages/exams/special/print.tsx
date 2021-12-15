@@ -36,7 +36,7 @@ export default function coursesPage(){
 
 
     const printResults = () => {
-        window.open(`/api/exams/results-normal/print-result?result=${resultsId}`,'_blank')
+        window.open(`/api/exams/results-special/print-result?result=${resultsId}`,'_blank')
     }
     return (
         <>

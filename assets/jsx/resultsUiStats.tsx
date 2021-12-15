@@ -126,7 +126,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                     </tr>
                     <tr>
                         <td> Effectif :  </td>
-                        <td> {statResults.length}</td>
+                        <td> {results.length}</td>
                     </tr>
                     <tr>
                         <td> Composant : </td> 

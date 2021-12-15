@@ -312,7 +312,8 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
         </tr>
         <tr>
             <td>Moyenne du dernier</td>
-            <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
+
+            <td> {JSON.stringify(getTotal(statsResults[statsResults.length-1]))} { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
             <td> Tableau d'honneur </td>
             <td style={{fontSize:'15px'}}> <input type='checkbox' /> Oui <input type='checkbox' /> Non</td>
         </tr>
