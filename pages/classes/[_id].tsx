@@ -81,6 +81,7 @@ export default function ClasseDetails(){
 
     const closeDynamicExamModal = () => {
       setDynamicExamIsOpen(s => false);
+      getTerms();
   }
 
     const closeImportModal = () => {
