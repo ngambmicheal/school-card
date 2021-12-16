@@ -32,7 +32,11 @@ export default async function handler(
             })
             .catch((e) => {
                 res.json({message:e.message, success:false });
-            })  
+            }).finally(() => {
+                examResultSchema.find({term_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true}).then(results => {
+                    res.json({data:results, status:true});
+                })
+            }) 
         })
     })
 
@@ -86,11 +90,11 @@ export default async function handler(
             break;
         case 'Special':
                 const termResults2:ExamResultInterface[] = await examResultSchema.find({term_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
-                const subject2:SubjectInterface[] = await subjectSchema.find({school:term?.class?.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema});
+                const subjects2:SubjectInterface[] = await subjectSchema.find({school:term?.class?.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema});
                 termResults2.map(tResult => {
                     let res:any = {}
                     examResultSchema.find({student:tResult.student._id, exam_id:{ $in: term.exams}, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{path:'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).then(results =>{
-                        subjects.map((subject:SubjectInterface) => {
+                        subjects2.map((subject:SubjectInterface) => {
                             res[`subject_${subject?._id}`] = getSubjectSum(results, 'subject', subject._id)
                         })
     

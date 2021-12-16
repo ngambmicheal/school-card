@@ -227,6 +227,6 @@ export function ExamResult({result, subjects, points, deleteResult}:{subjects:Su
         <td>{total}</td>
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
-        <th> <Link href={`/api/exams/results-dynamic/dynamic-print?term_id=${res.term_id}&student_id=${res.student._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
+        <th> <Link href={`/api/exams/results-dynamic/dynamic-print?term_id=${res.term_id}&student_id=${res.student?._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }
