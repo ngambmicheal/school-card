@@ -242,9 +242,9 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
             <td colSpan={2}> </td>
         </tr> */}
            {exams.length>1 && <tr>
-            <td> {exams[0].name.substr(0,4)} Average </td>
+            <td> Moyenne de {exams[0].name.substr(0,4)}</td>
             <td>  { ((total1Marks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td> {exams[1].name.substr(0,4)} Average </td>
+            <td> Moyenne de {exams[1].name.substr(0,4)}</td>
             <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
         </tr>
         }
