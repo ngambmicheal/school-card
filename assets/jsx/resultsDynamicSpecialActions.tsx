@@ -3,8 +3,6 @@ import fs from 'fs';
 import SubjectInterface from "../../models/subject";
 import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
-import { getSubjectTotal } from "../../pages/exams/[_id]";
-import { getGeneralAverage } from "./resultsActions";
 
 let comT:string[] = [];
 
@@ -22,8 +20,10 @@ const getAppreciation = (value:number, total:number, displayName:boolean=false, 
             return displayName? 'Expert' : 'A+';
     }
     if(total==30){
-        if(value <= 15) 
+        if(value <= 15) {
+            if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return 'NA';
+        }
         if(value < 22)
             return 'ECA';
         if(value < 26) 
@@ -32,8 +32,10 @@ const getAppreciation = (value:number, total:number, displayName:boolean=false, 
             return 'A+';
     }
     if(total==40){
-        if(value <= 20) 
+        if(value <= 20){
+            if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return 'NA';
+        } 
         if(value < 30)
             return 'ECA';
         if(value < 35) 
@@ -42,8 +44,10 @@ const getAppreciation = (value:number, total:number, displayName:boolean=false, 
             return 'A+';
     }
     if(total==50){
-        if(value <= 20) 
+        if(value <= 20){
+            if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return 'NA';
+        } 
         if(value < 30)
             return 'ECA';
         if(value < 41) 
