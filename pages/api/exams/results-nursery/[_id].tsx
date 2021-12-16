@@ -30,7 +30,7 @@ export default async function handler(
 
     const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema, 'populate':{path:'section', sectionSchema}});
 
-    const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1}))
+    const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).sort({rank:1}))
     const competences =  await competenceSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
     var dir = `./tmp/exams/${exam_id}`;
     var zipOutput = fs.createWriteStream(`./public/exams/${exam_id}.zip`);
