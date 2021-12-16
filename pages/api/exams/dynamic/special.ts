@@ -21,6 +21,7 @@ import { getTotal } from '../../../../assets/jsx/resultsNormalUiStats';
 import { replaceAll } from '../../../../services/utils';
 import resultsDynamicNormalActions from '../../../../assets/jsx/resultsDynamicNormalActions';
 import TermInterface, { termSchema } from '../../../../models/terms';
+import resultsDynamicSpecialActions from '../../../../assets/jsx/resultsDynamicSpecialActions';
   
 
 export default async function handler(
@@ -73,7 +74,7 @@ export default async function handler(
 
         const examResults =  await examResultSchema.find({student:results.student._id, exam_id:{ $in: term.exams}})
  
-        let html = ReactDOMServer.renderToStaticMarkup(resultsDynamicNormalActions(subjects, results, totalResults.length, totalResults, examResults, exams, term))
+        let html = ReactDOMServer.renderToStaticMarkup(resultsDynamicSpecialActions(subjects, results, totalResults.length, totalResults, examResults, exams, term))
         html+=`
                 <style>
                 .center{
