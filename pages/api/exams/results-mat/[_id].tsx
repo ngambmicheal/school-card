@@ -80,7 +80,7 @@ export default async function handler(
                     }
                     .table1 td, .table1 th{
                     text-align: center;
-                    border: 2px solid #ccc;
+                    border: 1px solid #555;
                     }
 
                     .table2 td, .table2 th{
