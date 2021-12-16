@@ -10,12 +10,12 @@ let comT:string[] = [];
 
 const getAppreciation = (value:number, total:number, displayName:boolean=false, competenceName:string='')  => {
     if(total==20){
-        if(value < 11){ 
+        if(value < 10){ 
             if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return displayName? 'Not Acquired' :'NA';
         }
         if(value < 15)
-            return displayName ? 'SIA': 'SIA';
+            return displayName ? 'SIA': 'ECA';
         if(value < 18) 
             return displayName? 'Acquired': 'A'; 
         if(value < 21) 
@@ -124,28 +124,28 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
 </table>
 
 <div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
-    REPORT CARD : {term?.name} 2021/2022
+    BULLETIN D'EVALUATION : {term?.name} 2021/2022
 </div>
 
 <div>
 <table className='table1' style={{fontSize:'20px', marginBottom:'40px'}} >
  <thead>
      <tr>
-         <th colSpan={2}>NAME AND SURNAME</th>
+         <th colSpan={2}>NOMS ET PRENOMS</th>
          <th colSpan={4}>{ results.student?.name }</th>
      </tr>
      <tr>
-         <th colSpan={2}>DATE OF BIRTH</th>
+         <th colSpan={2}>DATE DE NAISSANCE</th>
          <th colSpan={2}>{results.student?.dob}</th>
-         <th colSpan={1}>SEX</th>
+         <th colSpan={1}>SEXE</th>
          <th>{results.student?.sex}</th>
      </tr>
      <tr>
-         <th colSpan={1}>CLASS</th>
+         <th colSpan={1}>CLASSE</th>
          <th > {term?.class?.name}  </th>
-         <th>Enrolment</th>
+         <th>EFFECTIF</th>
          <th>{totalUsers}</th>
-         <th>TEACHER</th>
+         <th>ENSEIGNANT(E)</th>
          <th > {term?.class?.teacher} </th>
      </tr>
  </thead>
@@ -156,10 +156,10 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
                 <thead>
                 <tr>
                     <th  colSpan={2}>
-                        SUBJECTS
+                          MATIERES
                     </th>
                     <th  >
-                        MAX
+                        SUR
                     </th>
                     {exams.map((exam, index) => {
                         return <th>
@@ -168,10 +168,10 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
                         })
                     }
                     <th >
-                        TERM1
+                        NOTES
                     </th>
                     <th colSpan={2}>
-                        APPRECIATION CODE
+                        COTATIONS
                     </th>
                 </tr>
                 </thead>
@@ -200,41 +200,41 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
 
         
             <div className='center'>
-        <p style={{fontSize:'20px', margin:'30px 0'}}>CODES : NA = Not Acquired, SIA= Skill In Acquisition, A = Acquired, A+ = Expert</p>
+        <p style={{fontSize:'20px', margin:'30px 0'}}>COTES : NA = Non Acquis, ECA = En Cours d’Acquisition, A = Acquis, A+ = Expert</p>
     </div>
 
     <table style={{fontSize:'25px', width:'100%'}} className='table1'>
         <tr>
-            <th>Total </th>
+            <th>TOTAL </th>
             <th> {totalMarks} / {totalPoints} </th>
-            <th>Observations</th>
-            <th colSpan={3}>Class Council</th>
+            <th>COTES</th>
+            <th colSpan={3}>Conseil de Classe</th>
         </tr>
         <tr>
-            <td>Average</td>
+            <td>Moyenne</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
             <td rowSpan={5}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
-            <td> Conduct Warning</td>
+            <td> Avertissement Conduite</td>
             <td  style={{fontSize:'15px'}}>  <input type='checkbox' /> Yes <input type='checkbox' /> No  </td>
         </tr>
         <tr>
-            <td>Rank </td>
+            <td>Rang </td>
             <td>  {results.rank} / {totalUsers} </td>
-            <td> Warning</td>
+            <td> Avertissement Travail</td>
             <td> {average<12? 'Yes' : 'No'}   </td>
         </tr>
         <tr>
             {/* <td>General Average</td>
             <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td> */}
-            <td>Highest Average</td>
+            <td>Moyenne du premier</td>
             <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
             <td> Encouragements </td>
             <td>  {average>12? 'Yes' : 'No'}   </td>
         </tr>
         <tr>
-            <td>Lower Average</td>
+            <td>Moyenne du dernier</td>
             <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
-            <td> Honour Roll</td>
+            <td> Tableau d'honneur</td>
             <td  style={{fontSize:'15px'}}> <input type='checkbox' /> Yes <input type='checkbox' /> No</td>
         </tr>
         {/* <tr>
@@ -249,18 +249,18 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
         </tr>
         }
         <tr>
-            <td colSpan={2}> Teacher's Visa</td>
-            <td>Parent's Visa</td>
-            <td colSpan={2}>Headteachers Visa</td>
+            <td colSpan={2}> Observation de l'enseignant(e)</td>
+            <td>Visa parent</td>
+            <td colSpan={2}>Visa du chef d'établissement</td>
         </tr>
         <tr>
             <td colSpan={2} style={{minHeight:'100px', fontSize:'14px'}}> 
-                <i>Efforts should be done in the following</i>
+                <i>Des efforts s'imposent dans les compétences suivantes</i>
                 <br />
                 <ul style={{listStyle: 'none', textAlign:'left'}}>
                     {comT.length > 0 ? comT.map(s => {
                         return <li>{s}</li>
-                    }) : <li style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>Nothing to report</li>}
+                    }) : <li style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>RAS</li>}
                 </ul>
             </td>
             <td></td>
