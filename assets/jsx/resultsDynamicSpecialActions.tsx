@@ -215,13 +215,13 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
             <td rowSpan={5}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
             <td> Avertissement Conduite</td>
-            <td  style={{fontSize:'15px'}}>  <input type='checkbox' /> Yes <input type='checkbox' /> No  </td>
+            <td  style={{fontSize:'15px'}}>  <input type='checkbox' /> Oui <input type='checkbox' /> Non  </td>
         </tr>
         <tr>
             <td>Rang </td>
             <td>  {results.rank} / {totalUsers} </td>
             <td> Avertissement Travail</td>
-            <td> {average<12? 'Yes' : 'No'}   </td>
+            <td> {average<12? 'Oui' : 'Non'}   </td>
         </tr>
         <tr>
             {/* <td>General Average</td>
@@ -229,13 +229,13 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
             <td>Moyenne du premier</td>
             <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
             <td> Encouragements </td>
-            <td>  {average>12? 'Yes' : 'No'}   </td>
+            <td>  {average>12? 'Oui' : 'Non'}   </td>
         </tr>
         <tr>
             <td>Moyenne du dernier</td>
             <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
             <td> Tableau d'honneur</td>
-            <td  style={{fontSize:'15px'}}> <input type='checkbox' /> Yes <input type='checkbox' /> No</td>
+            <td  style={{fontSize:'15px'}}> <input type='checkbox' /> Oui <input type='checkbox' /> Non</td>
         </tr>
         {/* <tr>
             <td> </td>
