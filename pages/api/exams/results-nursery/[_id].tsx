@@ -19,6 +19,7 @@ import { sectionSchema } from '../../../../models/section';
 import { getTotal, getTotalPoints, getTotals } from '../../../../assets/jsx/resultsUiStats';
 import resultsMatActions from '../../../../assets/jsx/resultsMatActions';
 import resultsNurseryActions from '../../../../assets/jsx/resultsNurseryActions';
+import { replaceAll } from '../../../../services/utils';
   
 
 export default async function handler(
@@ -32,9 +33,11 @@ export default async function handler(
 
     const totalResults = await (await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).sort({rank:1}))
     const competences =  await competenceSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
-    var dir = `./tmp/exams/${exam_id}`;
-    var zipOutput = fs.createWriteStream(`./public/exams/${exam_id}.zip`);
-    var zipDir = `./public/exams/${exam_id}.zip`;
+    
+    const zipName = `${replaceAll(' ', '_', exam.class_id.name)}__${exam.name}`
+    var dir = `./tmp/exams/${zipName}`;
+    var zipOutput = fs.createWriteStream(`./public/exams/${zipName}.zip`);
+    var zipDir = `./public/exams/${zipName}.zip`;
     var archive = archiver('zip');
 
     if (!fs.existsSync(dir)){
@@ -99,7 +102,7 @@ export default async function handler(
                 </style>
                 `
 
-        const pdfResultsDir = `${dir}/${results._id}.pdf`
+                const pdfResultsDir = `${dir}/${replaceAll(' ', '_',results.student.name)}.pdf`
         var document = {
             html: html,
             data: {
