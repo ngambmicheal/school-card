@@ -32,7 +32,7 @@ export default function thEn(result:ExamResultInterface, term:TermInterface ) {
                     textAlign:'center'
                 }}
                 >
-            <h2> The pupil<b style={{color:'#020066', fontWeight:900}}>{result.student.name}</b> of the class <b style={{color:'#020066',fontWeight:900}}>{term.class?.name} </b>  deserved to be inscribed on the honor roll for his conduct and work during the  <b style={{color:'#020066',fontWeight:900}}> {term.name} </b>  with an average of  <b style={{color:'#020066',fontWeight:900}}> {average} / 20 </b> </h2>
+            <h2> The pupil <b style={{color:'#020066', fontWeight:900}}>{result.student.name}</b> of the class <b style={{color:'#020066',fontWeight:900}}>{term.class?.name} </b>  deserved to be inscribed on the honor roll for his conduct and work during the  <b style={{color:'#020066',fontWeight:900}}> {term.name} </b>  with an average of  <b style={{color:'#020066',fontWeight:900}}> {average} / 20 </b> </h2>
           </div>
         </div>
     )
