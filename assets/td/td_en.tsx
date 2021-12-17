@@ -25,11 +25,12 @@ export default function thEn(result:ExamResultInterface, term:TermInterface ) {
 
           <div  style={{
                     position: 'absolute', 
-                    top: '50%',
+                    top: '40%',
                     paddingLeft:'10%',
                     paddingRight:'10%',
                     transform: 'translate(-50%, -50%)',
-                    textAlign:'center'
+                    textAlign:'center',
+                    lineHeight:'40px'
                 }}
                 >
             <h2> The pupil <b style={{color:'#020066', fontWeight:900}}>{result.student.name}</b> of the class <b style={{color:'#020066',fontWeight:900}}>{term.class?.name} </b>  deserved to be inscribed on the honor roll for his conduct and work during the  <b style={{color:'#020066',fontWeight:900}}> {term.name} </b>  with an average of  <b style={{color:'#020066',fontWeight:900}}> {average} / 20 </b> </h2>
