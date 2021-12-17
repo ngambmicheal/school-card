@@ -90,7 +90,7 @@ const getTotal = (result:any) => {
     return sum; 
 }
 
-const getTotalExam = (result:any) => {
+export const getTotalExam = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('point_')){

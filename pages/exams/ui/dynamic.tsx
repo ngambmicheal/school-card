@@ -130,6 +130,10 @@ export default function examDetails(){
         return sum;
     }
 
+    const printTD = () => {
+        window.open(`/api/exams/td/${term?.report_type?.toLocaleLowerCase()}?term_id=${examId}`, '_blank')
+    }
+
     return (
         <>
             <div className='py-3'>
@@ -141,6 +145,9 @@ export default function examDetails(){
             <button className='mx-3 btn btn-success' onClick={() => getRank()} > Calculer </button>
 
             <button className='mx-3 btn btn-dark' onClick={() => printStats(true)} > Imprimer Statistics</button>
+
+            <button className='mx-3 btn btn-dark' onClick={() => printTD()} > Imprimer Tableau D</button>
+          
            
             <table className='table table-striped' >
                 <thead>
@@ -188,7 +195,8 @@ export default function examDetails(){
                         <th>{points} </th>
                         <th>Moyenne</th>
                         <th>Rank</th>
-                        <th></th>
+                        <th>Tableau d'honneur</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -278,6 +286,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
         <td>{total}</td>
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
+        <th><input type='checkbox' name='th' checked={res.th==true}  onClick={handleChange} /></th>
         <th> <Link href={`/api/exams/results/dynamic-print?term_id=${res.term_id}&student_id=${res.student._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }
