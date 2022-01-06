@@ -203,14 +203,12 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
             <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td> */}
             <td>Highest Average</td>
             <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
-            <td> Encouragements </td>
-            <td>  {average>12? 'Yes' : 'No'}   </td>
+            <td rowSpan={2}> Encouragements </td>
+            <td rowSpan={2}>  {average>12? 'Yes' : 'No'}   </td>
         </tr>
         <tr>
             <td>Lower Average</td>
             <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
-            <td> Honour Roll</td>
-            <td  style={{fontSize:'15px'}}> <input type='checkbox' /> Yes <input type='checkbox' /> No</td>
         </tr>
         {/* <tr>
             <td> </td>

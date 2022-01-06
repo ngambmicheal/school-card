@@ -276,14 +276,14 @@ export default function resultsActions(competences:CompetenceInterface[], result
             <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td> */}
             <td>Moyenne du premier</td>
             <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
-            <td> Encouragements </td>
-            <td> {average>12? 'Oui' : 'Non'}  </td>
+            <td rowSpan={2}> Encouragements </td>
+            <td rowSpan={2}> {average>12? 'Oui' : 'Non'}  </td>
         </tr>
         <tr>
             <td>Moyenne du dernier</td>
             <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
-            <td> Tableau d'honneur </td>
-            <td style={{fontSize:'15px'}}> <input type='checkbox' /> Oui <input type='checkbox' /> Non</td>
+            {/* <td> Tableau d'honneur </td>
+            <td style={{fontSize:'15px'}}> <input type='checkbox' /> Oui <input type='checkbox' /> Non</td> */}
         </tr>
         {/* <tr>
             <td> </td>

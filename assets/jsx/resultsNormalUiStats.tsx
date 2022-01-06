@@ -124,6 +124,39 @@ export default function resultsNormalUiStats(exam:ExamInterface, subjects:Subjec
                     </tr>
                 </table>
         </div>
+
+                <br /> <br /> <br />
+
+        <div style={{pageBreakAfter:"always"}}>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Rank
+                        </th>
+                        <th>
+                            Average
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {statResults.map(statResult => {
+                        const total = getTotal(statResult);
+                        return (
+                            <tr>
+                            <td>{statResult.student?.name}</td>    
+                            <td>{statResult.rank}</td>  
+                            <td>{  ((total / points) * 20).toFixed(2) } / 20</td>
+                            </tr> 
+                        )
+                    })}
+                </tbody>
+            </table>
+        </div>
         </>
     )
 }

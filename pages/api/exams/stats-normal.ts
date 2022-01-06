@@ -28,14 +28,9 @@ export default async function handler(
     const totalResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({number:1}).collation({locale: "en_US", numericOrdering: true})
     const statsResults = await examResultSchema.find({exam_id, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).sort({rank:1})
     const subjects = await subjectSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema})
- 
-    console.log(subjects);
 
-    var dir = `./tmp/stats/${exam_id}`;
-
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true });
-    }
+    const stats_name = `STATS_${exam.class_id.name}_${exam.name}.pdf`
+    var dir = `./tmp/stats/${stats_name}`;
 
         var options = {
             format: "A3",
@@ -86,7 +81,7 @@ export default async function handler(
                 </style>
                 `
 
-        const pdfResultsDir = `${dir}/${exam_id}.pdf`
+        const pdfResultsDir = dir
         var document = {
             html: html,
             data: {
@@ -97,11 +92,11 @@ export default async function handler(
 
           pdf.create(document, options)
           .then((response : any)  => {
-            var file = fs.createReadStream(`${dir}/${exam_id}.pdf`);
-            var stat = fs.statSync(`${dir}/${exam_id}.pdf`);
+            var file = fs.createReadStream(dir);
+            var stat = fs.statSync(dir);
             res.setHeader('Content-Length', stat.size);
             res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader(`Content-Disposition`, `attachment; filename=stats.pdf`);
+            res.setHeader(`Content-Disposition`, `attachment; filename=${stats_name}.pdf`);
             file.pipe(res);
           })
           .catch((error : any) => {

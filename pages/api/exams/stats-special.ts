@@ -15,6 +15,7 @@ import { courseSchema } from '../../../models/course';
 import { classeSchema } from '../../../models/classe';
 import resultsNormalUiStats from '../../../assets/jsx/resultsNormalUiStats';
 import { sectionSchema } from '../../../models/section';
+import { differenceBy } from 'lodash';
   
 
 export default async function handler(
@@ -31,11 +32,9 @@ export default async function handler(
  
     console.log(subjects);
 
-    var dir = `./tmp/stats/${exam_id}`;
+    const stats_name = `STATS_${exam.class_id.name}_${exam.name}.pdf`
+    var dir = `./tmp/stats/${stats_name}`;
 
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true });
-    }
 
         var options = {
             format: "A3",
@@ -86,7 +85,7 @@ export default async function handler(
                 </style>
                 `
 
-        const pdfResultsDir = `${dir}/${exam_id}.pdf`
+        const pdfResultsDir = dir
         var document = {
             html: html,
             data: {
@@ -97,11 +96,11 @@ export default async function handler(
 
           pdf.create(document, options)
           .then((response : any)  => {
-            var file = fs.createReadStream(`${dir}/${exam_id}.pdf`);
-            var stat = fs.statSync(`${dir}/${exam_id}.pdf`);
+            var file = fs.createReadStream(dir);
+            var stat = fs.statSync(dir);
             res.setHeader('Content-Length', stat.size);
             res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader(`Content-Disposition`, `attachment; filename=stats.pdf`);
+            res.setHeader(`Content-Disposition`, `attachment; filename=${stats_name}`);
             file.pipe(res);
           })
           .catch((error : any) => {
