@@ -31,6 +31,8 @@ export default async function handler(
     const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema, 'populate':{path:'section', sectionSchema}});
 
     const totalResults = await (await examResultSchema.find({exam_id, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).sort({rank:1}))
+    const statResults = await (await examResultSchema.find({exam_id, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).sort({rank:1})).filter(re => getTotal(re) != 0)
+    
     const subjects =  await subjectSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema});
 
     const zipName = `${replaceAll(' ', '_', exam.class_id.name)}__${exam.name}`
@@ -68,7 +70,7 @@ export default async function handler(
             }
         };
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsNormalActions(subjects, results, totalResults.length, totalResults))
+        let html = ReactDOMServer.renderToStaticMarkup(resultsNormalActions(subjects, results, totalResults.length, statResults))
         html+=`
                 <style>
                 .center{

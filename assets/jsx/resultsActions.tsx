@@ -26,7 +26,7 @@ let comT:string[] = [];
 
 export const getCompetenceAppreciation = (value:number, total:number, competenceName:string='')  => {
     if(total==20){
-        if(value < 11){
+        if(value < 10){
             if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return 'NA';
         }
@@ -278,6 +278,9 @@ export default function resultsActions(competences:CompetenceInterface[], result
             <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
             <td rowSpan={2}> Encouragements </td>
             <td rowSpan={2}> {average>12? 'Oui' : 'Non'}  </td>
+           {/* <span style={{height: "65px", background: '#000', width: '1px', color: 'transparent', position: 'absolute', bottom: '5.9%', right: '119px'}} className="sep">
+                i
+            </span> */}
         </tr>
         <tr>
             <td>Moyenne du dernier</td>

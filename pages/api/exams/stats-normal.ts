@@ -13,7 +13,7 @@ import { studentSchema } from '../../../models/student';
 import { subjectSchema } from '../../../models/subject';
 import { courseSchema } from '../../../models/course';
 import { classeSchema } from '../../../models/classe';
-import resultsNormalUiStats from '../../../assets/jsx/resultsNormalUiStats';
+import resultsNormalUiStats, { getTotal } from '../../../assets/jsx/resultsNormalUiStats';
 import { sectionSchema } from '../../../models/section';
   
 
@@ -26,7 +26,8 @@ export default async function handler(
 
     const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}})
     const totalResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({number:1}).collation({locale: "en_US", numericOrdering: true})
-    const statsResults = await examResultSchema.find({exam_id, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).sort({rank:1})
+     const statsResults = await(await examResultSchema.find({exam_id, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
+    //const totalResults = await(await examResultSchema.find({exam_id:results.exam_id, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
     const subjects = await subjectSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema})
 
     const stats_name = `STATS_${exam.class_id.name}_${exam.name}.pdf`
