@@ -194,18 +194,48 @@ export default function resultsMatActions(competences:CompetenceInterface[], res
                         })}
                 </tbody>
             </table>
-
-
-            <div style={{marginTop:'15px'}}>
-                OBSERVATION : <span>  Des efforts s'imposent dans les domaines suivants :  
-                            {comT.length > 0 ? 
-                                    comT.map(s => {
-                                        return <span>{s}, </span>
-                                    }) : 
-                            <span style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>RAS</span> } 
-                        </span>
-            </div>
-            <br />
+            
+            {
+                results.exam_id?.name.toLowerCase() === 'Trimestre 2'.toLowerCase() ? <>
+                    <div style={{marginTop:'5px'}}>
+                        <span style={{fontSize: '20px', fontWeight: 'bolder'}}>OBSERVATION :</span> <span>  Des efforts s'imposent dans les domaines suivants :  &nbsp;&nbsp;
+                                    {comT.length > 0 ? 
+                                            comT.map(s => {
+                                                return <span>{s}, </span>
+                                            }) : 
+                                    <span style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>RAS</span> } 
+                                </span>
+                    </div>
+                    <div className="k">
+                        <table>
+                            <tr style={{fontWeight: 'bolder'}}>
+                                <td style={{fontSize: '20px'}}>Promu(e) / Redouble :</td>
+                                <td>
+                                    PS <input type="checkbox" name="" id="" />&nbsp;&nbsp;
+                                </td>
+                                <td>
+                                    MS <input type="checkbox" name="" id="" />&nbsp;&nbsp;
+                                </td>
+                                <td>
+                                    GS <input type="checkbox" name="" id="" />&nbsp;&nbsp;
+                                </td>
+                                <td>
+                                    SIL <input type="checkbox" name="" id="" /> 
+                                </td>
+                            </tr>
+                        </table> 
+                    </div>
+                </> 
+                : <div style={{margin:'15px 0'}}>
+                        <span style={{fontSize: '20px', fontWeight: 'bolder'}}>OBSERVATION :</span> <span>  Des efforts s'imposent dans les domaines suivants :  &nbsp;&nbsp;
+                                    {comT.length > 0 ? 
+                                            comT.map(s => {
+                                                return <span>{s}, </span>
+                                            }) : 
+                                    <span style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>RAS</span> } 
+                                </span>
+                    </div>
+            }
             <table style={{width:'100%', marginTop:'5px', fontSize:'20px'}} className='table1'>
                 <tr>
                     <th>L'ENSEIGNANT(E)</th>

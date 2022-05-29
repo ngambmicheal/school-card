@@ -189,16 +189,50 @@ export default function resultsNurseryActions(competences:CompetenceInterface[],
             </table>
 
 
-            <div style={{marginTop:'15px'}}>
-                TERM REMARKS : <span> Efforts should be done in the following :  
-                            {comT.length > 0 ? 
-                                    comT.map(s => {
-                                        return <span>{s}, </span>
-                                    }) : 
-                            <span style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>Nothing to report</span> } 
-                        </span>
-            </div>
-            <br />
+            
+            
+            {
+                results.exam_id?.name.toLowerCase() === '3rd TERM'.toLowerCase() ? <>
+                    <div style={{marginTop:'5px'}}>
+                        <span style={{fontWeight: 'bolder'}}>TERM REMARKS</span> : <span> Efforts should be done in the following : &nbsp;&nbsp;
+                                        {comT.length > 0 ? 
+                                                comT.map(s => {
+                                                    return <span>{s}, </span>
+                                                }) : 
+                                        <span style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>Nothing to report</span> } 
+                                    </span>
+                    </div>
+                    <div className="k">
+                        <table>
+                            <tr style={{fontWeight: 'bolder'}}>
+                                <td style={{fontSize: '20px'}}>Promoted / Repeated :</td>
+                                <td>
+                                    PN <input type="checkbox" name="" id="" />&nbsp;&nbsp;
+                                </td>
+                                <td>
+                                    N1 <input type="checkbox" name="" id="" />&nbsp;&nbsp;
+                                </td>
+                                <td>
+                                    N2 <input type="checkbox" name="" id="" />&nbsp;&nbsp;
+                                </td>
+                                <td>
+                                    CLASS 1 <input type="checkbox" name="" id="" /> 
+                                </td>
+                            </tr>
+                        </table> 
+                    </div>
+                </> 
+                : <div style={{margin:'15px 0'}}>
+                        <span style={{fontWeight: 'bolder'}}>TERM REMARKS</span> : <span> Efforts should be done in the following :  &nbsp;&nbsp;
+                                    {comT.length > 0 ? 
+                                            comT.map(s => {
+                                                return <span>{s}, </span>
+                                            }) : 
+                                    <span style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>Nothing to report</span> } 
+                                </span>
+                    </div>
+            }
+
             <table style={{width:'100%', marginTop:'5px', fontSize:'20px'}} className='table1'>
                 <tr>
                     <th>Class Teacher Visa</th>
