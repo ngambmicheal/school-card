@@ -186,6 +186,10 @@ export default function examDetails(){
         return sum;
     }
 
+    const printTD = () => {
+        window.open(`/api/exams/td/nursery?exam_id=${examId}`, '_blank')
+    }
+
     return (
         <>
             <div className='py-3'>
@@ -199,6 +203,9 @@ export default function examDetails(){
             <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button>
             */}
             <button className='mx-3 btn btn-dark' onClick={() => printStats(true)} > Imprimer Statistics</button>
+
+            <button className='mx-3 btn btn-dark' onClick={() => printTD()} > Print Attestation</button>
+
            
             <table className='table table-striped' >
                 <thead>
@@ -219,6 +226,8 @@ export default function examDetails(){
                                 return <th key={subject._id}  colSpan={nurseryActs.length} className={index%2==0?'bg-grey':''}> {subject.slug || subject.name?.substring(0,30)} </th>
                             })
                         })}
+                         <th>Attestation</th>
+
                     </tr>
                     <tr>
                         <th>
@@ -329,9 +338,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
                 )
             })
         })}
-        <td>{total}</td>
-        <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
-        <th> {res.rank}</th>
+        <th><input type='checkbox' name='th' checked={res.th=='true'}  onClick={handleChange} value='true' /></th>
         <th> <Link href={`/exams/nursery/print?_id=${res._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }

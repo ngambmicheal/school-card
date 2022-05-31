@@ -196,7 +196,7 @@ export default function resultsMatActions(competences:CompetenceInterface[], res
             </table>
             
             {
-                results.exam_id?.name.toLowerCase() === 'Trimestre 2'.toLowerCase() ? <>
+                results.exam_id?.name.toLowerCase() === 'Trimestre 3'.toLowerCase() ? <>
                     <div style={{marginTop:'5px'}}>
                         <span style={{fontSize: '20px', fontWeight: 'bolder'}}>OBSERVATION :</span> <span>  Des efforts s'imposent dans les domaines suivants :  &nbsp;&nbsp;
                                     {comT.length > 0 ? 
