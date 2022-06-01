@@ -7,6 +7,7 @@ import Modal from 'react-modal';
 import { customStyles } from "../../services/constants";
 import { useRouter } from "next/dist/client/router";
 import SectionInterface from "../../models/section";
+import { CSVLink } from "react-csv";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
@@ -42,9 +43,17 @@ export default function Classes(){
         closeModal();
     }
 
+    const headers =  [
+        { label: "Nom", key: "name" },
+        { label: "Ecole", key: "school.name" },
+      ];
+
     return (
         <>
             <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une classe </button>
+            <CSVLink data={classes} headers={headers} className='btn btn-dark mx-3' filename={"liste-des-classes-csv"+new Date().getFullYear()+".csv"}>
+            Telecharcher Csv
+            </CSVLink>
             <table className='table '>
                 <thead>
                     <tr>

@@ -20,6 +20,7 @@ import {
     UseFormSetValue,
   } from 'react-hook-form'
 import TermInterface from "../../models/terms";
+import { CSVLink } from "react-csv";
 
 
 export default function ClasseDetails(){
@@ -124,6 +125,13 @@ export default function ClasseDetails(){
       api.downloadToPdf(classeId)
     }
     
+    const studentHeaders = [
+      { label: "Numero", key: "number" },
+      { label: "Nom", key: "name" },
+      { label: "Phone", key: 'phone'},
+      { label: "Sex", key:'sex'},
+      { label: "Id" , key: '_id'}
+    ]
 
     return (
         <>
@@ -203,13 +211,13 @@ export default function ClasseDetails(){
             {classeId && <CreateExamModal modalIsOpen={examIsOpen} closeModal={closeExamModal} save={saveExam} class_id={classeId} /> }
             {classeId && <DynamicExamModal exams={exams} modalIsOpen={dynamicExamIsOpen} closeModal={closeDynamicExamModal} save={saveExam} class_id={classeId} /> }
 
-
-
-
             <h3 className='mt-3'>Students  
                 <span className='pull-right'>
                     <button className='btn btn-xs btn-success mx-3' onClick={() =>setModalIsOpen(s => true)}>Add Student</button>
                     <button className='btn btn-xs btn-success mx-2' onClick={() =>setImportIsOpen(s => true)}> <i className='fa fa-upload'></i> Importer Eleve</button>
+                    <CSVLink data={students} headers={studentHeaders} className='btn btn-dark mx-3' filename={"liste-des-elevles-"+classe?.name+"-"+new Date().getFullYear()+".csv"}>
+                      Telecharcher liste des eleves Csv
+                    </CSVLink>
                 </span>
             </h3>
 
