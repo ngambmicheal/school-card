@@ -1,4 +1,5 @@
 import a from 'axios';
+import AnnualExamInterface from '../models/annualExam';
 import ClasseInterface from '../models/classe';
 import CompetenceInterface from '../models/competence';
 import CourseInterface from '../models/course';
@@ -126,6 +127,16 @@ export class Api{
       return axios.post(`/api/terms/calculate`, {term_id} )
     }
     getTerm(term_id:string) { return axios.get(`/api/terms/${term_id}`)}
+
+    //annualExams 
+    getAnnualExams(classeId?:string) { return axios.get(`/api/annualExams?class=${classeId}`)}
+    saveAnnualExam(data:AnnualExamInterface) { return axios.post('/api/annualExams/store', data);}
+    getAnnualExamResult(annualExamId:string){ return axios.get(`/api/annualExams/results?annualExam_id=${annualExamId}`)}
+    deleteAnnualExam(annualExamId:any){return axios.post('/api/annualExams/delete', {_id:annualExamId})}
+    calculateAnnualExam(annualExam_id:string){
+      return axios.post(`/api/annualExams/calculate`, {annualExam_id} )
+    }
+    getAnnualExam(annualExam_id:string) { return axios.get(`/api/annualExams/${annualExam_id}`)}
 
 
     downloadToCsv(classeId:any) { return axios.post(`/api/classes/export-csv`, {class_id: classeId})}
