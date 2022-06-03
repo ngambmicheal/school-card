@@ -13,6 +13,7 @@ import AnnualExamInterface from "../../models/annualExam";
 import { CreateStudentModal } from "./modals/student-forms";
 import { ImportStudents } from "./modals/import-students";
 import { AnnualExamModal, CreateExamModal } from "./modals/annual-exam";
+import { CSVLink } from "react-csv";
 
 
 export default function ClasseDetails(){
@@ -146,6 +147,13 @@ export default function ClasseDetails(){
       api.downloadToPdf(classeId)
     }
     
+    const studentHeaders = [
+      { label: "Numero", key: "number" },
+      { label: "Nom", key: "name" },
+      { label: "Phone", key: 'phone'},
+      { label: "Sex", key:'sex'},
+      { label: "Id" , key: '_id'}
+    ]
 
     return (
         <>
@@ -267,6 +275,9 @@ export default function ClasseDetails(){
                 <span className='pull-right'>
                     <button className='btn btn-xs btn-success mx-3' onClick={() =>setModalIsOpen(s => true)}>Add Student</button>
                     <button className='btn btn-xs btn-success mx-2' onClick={() =>setImportIsOpen(s => true)}> <i className='fa fa-upload'></i> Importer Eleve</button>
+                    <CSVLink data={students} headers={studentHeaders} className='btn btn-dark mx-3' filename={"liste-des-elevles-"+classe?.name+"-"+new Date().getFullYear()+".csv"}>
+                      Telecharcher liste des eleves Csv
+                    </CSVLink>
                 </span>
             </h3>
 

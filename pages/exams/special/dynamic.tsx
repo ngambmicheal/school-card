@@ -12,6 +12,7 @@ import ExamResultInterface from "../../../models/examResult";
 import ExamInterface from "../../../models/exam";
 import { toast } from "@chakra-ui/toast";
 import TermInterface from "../../../models/terms";
+import { CSVLink } from "react-csv";
 
 export const getSubjectTotal = (result:ExamResultInterface|any) => {
     let sum = 0; 
@@ -30,7 +31,6 @@ export default function examDetails(){
     const [subjects, setSubjects] = useState<SubjectInterface[]>([])
     const [students, setStudents] = useState<StudentInterface[]>([])
     const [results, setResults] = useState<any>([])
-    const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const [points, setPoints] = useState(0);
     const [ImportIsOpen, setImportIsOpen] = useState(false);
@@ -57,6 +57,11 @@ export default function examDetails(){
         if(exam?._id){
             api.getSchoolSubjects({school:term.class.school, report_type:term.class.section.report_type}).then(({data:{data}} : any) => {
                 setSubjects(s => data);
+
+                setTimeout(() => {
+                    getCsvData();
+                    getHeaders();
+                }, 1000);
             })
         }
     },[exam])
@@ -156,6 +161,50 @@ export default function examDetails(){
         window.open(`/api/exams/td/${term?.report_type?.toLocaleLowerCase()}?term_id=${examId}`, '_blank')
     }
 
+    const [resultsCsv, setResultsCsv] = useState<any>([])
+    const [headers, setHeaders] = useState<any>([])
+    
+    function getCsvData(){
+        console.log(results)
+        let data = results.map((result:any) => {
+            const total = getSubjectTotal(result);
+            return {
+                ...result, 
+                total, 
+                average: ((total / points) * 20).toFixed(2) 
+            }
+        })
+
+        setResultsCsv(data);
+    }
+
+    function getHeaders(){
+        let headers = [
+            {label:'Number', key:'student.number'},
+            {label:'Name',   key: 'student.name'}
+        ]
+    
+        subjects.map(subject => {
+            headers.push({
+                label: subject.name, 
+                key: `subject_${subject._id}`
+            })
+        })
+
+        headers = [...headers, ...[
+            {label: 'Total', key:'total'},
+            {label: 'Moyenne', key:'average'},
+            {label: 'Rang', key:'rank'}
+        ]]
+
+        setHeaders(headers);
+    }
+
+    useEffect(() => {
+        getCsvData();
+        getHeaders();
+    }, [subjects, results, points])
+
 
 
     return (
@@ -173,7 +222,10 @@ export default function examDetails(){
 
            <button className='mx-3 btn btn-dark' onClick={() => printTD()} > Imprimer Tableau D</button>
           
-
+           {resultsCsv.length && <CSVLink  data={resultsCsv} headers={headers} className='btn btn-dark mx-3' filename={`statistics-${term?.class?.name}-${term?.name}.csv`}>
+                Telecharcher Csv
+            </CSVLink>
+            }
             <table className='table '>
                 <thead>
                     <tr>
