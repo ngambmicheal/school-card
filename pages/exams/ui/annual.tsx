@@ -14,11 +14,11 @@ import ExamInterface from "../../../models/exam";
 import FileUpload, { validateFiles } from "../../../components/dropzone";
 import { toast } from "@chakra-ui/toast";
 import { useForm } from "react-hook-form";
-import TermInterface from "../../../models/annualEs";
+import TermInterface from "../../../models/terms";
 
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
-    const [annualE, setTerm] = useState<TermInterface>()
+    const [annualExam, setTerm] = useState<TermInterface>()
     const [competences, setCompetences] = useState<CompetenceInterface[]>([])
     const [points, setPoints] = useState(0);
 
@@ -28,29 +28,29 @@ export default function examDetails(){
     
 
     const router = useRouter();
-    const {annualE_id:examId} = router.query;
+    const {annualExam_id:examId} = router.query;
 
     useEffect(()=>{
         if(examId){
 
-            api.getTerm(examId).then(({data:{data}} : any) => {
+            api.getAnnualExam(examId as string).then(({data:{data}} : any) => {
                 setTerm(data)
-                setExam(data.exams[0])
+                setExam(data.terms[0].exams[0])
             })
 
-            api.getTermResult(examId).then(({data:{data}} : any) => {
+            api.getAnnualExamResult(examId as string).then(({data:{data}} : any) => {
                 setResults(data)
             })
         }
     }, [examId])
 
     useEffect(() =>{
-        if(annualE){
-            api.getSchoolCompetences({school:annualE?.class.school,report_type:annualE.class.section.report_type}).then(({data:{data}} : any) => {
+        if(annualExam){
+            api.getSchoolCompetences({school:annualExam?.class.school,report_type:annualExam.class.section.report_type}).then(({data:{data}} : any) => {
                 setCompetences(s => data);
             })
         }
-    }, [annualE])
+    }, [annualExam])
 
     useEffect(() => {
         if(results && exam){
@@ -65,11 +65,11 @@ export default function examDetails(){
     }, [results])
 
     const printResults = () => {
-        window.open(`/api/exams/dynamic/${annualE?.report_type?.toLocaleLowerCase()}?annualE_id=${examId}`, '_blank')
+        window.open(`/api/exams/annual/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${examId}`, '_blank')
     }
 
     const printStats = () => {
-        window.open(`/api/exams/dynamic/${annualE?.report_type?.toLocaleLowerCase()}-stats?annualE_id=${examId}`, '_blank')
+        window.open(`/api/exams/annual/${annualExam?.report_type?.toLocaleLowerCase()}-stats?annualExam_id=${examId}`, '_blank')
     }
 
     const deleteResult = (resultId:string) => {
@@ -80,14 +80,14 @@ export default function examDetails(){
         })
     }
 
-    useEffect(() => {
-        if(exam?._id){
+    // useEffect(() => {
+    //     if(exam?._id){
 
-            api.updateExam(exam._id, exam).then(({data:{data}} : any) => {
-                //setExam(data)
-            })
-        }
-    }, [exam])
+    //         api.updateExam(exam._id, exam).then(({data:{data}} : any) => {
+    //             //setExam(data)
+    //         })
+    //     }
+    // }, [exam])
 
     const handleChange = (e) => {
         const key = e.target.name
@@ -117,7 +117,7 @@ export default function examDetails(){
     }
 
     const getRank = () => {
-        api.calculateTerm(examId)
+        api.calculateAnnualExam(examId as string)
     }
 
     const getTotal = (result) => {
@@ -131,14 +131,14 @@ export default function examDetails(){
     }
 
     const printTD = () => {
-        window.open(`/api/exams/td/${annualE?.report_type?.toLocaleLowerCase()}?annualE_id=${examId}`, '_blank')
+        window.open(`/api/exams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${examId}`, '_blank')
     }
 
     return (
         <>
             <div className='py-3'>
-                <h3>Classe : {annualE?.class?.name} </h3>
-                <h4>TRIMESTRE : {annualE?.name} </h4>
+                <h3>Classe : {annualExam?.class?.name} </h3>
+                <h4>TRIMESTRE : {annualExam?.name} </h4>
             </div>
             <button className='mx-3 btn btn-success' onClick={() => printResults()} > Imprimer Resultats </button>
            
@@ -287,6 +287,6 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
         <th><input type='checkbox' name='th' checked={res.th==true}  onClick={handleChange} /></th>
-        <th> <Link href={`/api/exams/results/dynamic-print?annualE_id=${res.annualE_id}&student_id=${res.student._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
+        <th> <Link href={`/api/exams/results/dynamic-print?annualExam_id=${res.annualExam_id}&student_id=${res.student._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }

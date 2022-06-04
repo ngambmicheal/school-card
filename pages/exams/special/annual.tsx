@@ -22,7 +22,7 @@ export const getSubjectTotal = (result:ExamResultInterface|any) => {
 
 export default function termDetails(){
     const [term, setExam] = useState<ExamInterface>()
-    const [annualE, setAnnualE] = useState<AnnualEInterface>()
+    const [annualExam, setAnnualE] = useState<AnnualEInterface>()
     const [courses, setCourses] = useState<CourseInterface[]>([])
     const [subjects, setSubjects] = useState<SubjectInterface[]>([])
     const [students, setStudents] = useState<StudentInterface[]>([])
@@ -52,7 +52,7 @@ export default function termDetails(){
 
     useEffect(()=>{
         if(term?._id){
-            api.getSchoolSubjects({school:annualE.class.school, report_type:annualE.class.section.report_type}).then(({data:{data}} : any) => {
+            api.getSchoolSubjects({school:annualExam.class.school, report_type:annualExam.class.section.report_type}).then(({data:{data}} : any) => {
                 setSubjects(s => data);
             })
         }
@@ -66,11 +66,11 @@ export default function termDetails(){
     }, [results])
 
     const printResults = () => {
-        window.open(`/api/terms/dynamic/${annualE?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`, '_blank')
+        window.open(`/api/terms/annual/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`, '_blank')
     }
 
     const printStats = () => {
-        window.open(`/api/terms/dynamic/${annualE?.report_type?.toLocaleLowerCase()}-stats?annualExam_id=${termId}`, '_blank')
+        window.open(`/api/terms/annual/${annualExam?.report_type?.toLocaleLowerCase()}-stats?annualExam_id=${termId}`, '_blank')
     }
 
     useEffect(() => {
@@ -150,7 +150,7 @@ export default function termDetails(){
     }
 
     const printTD = () => {
-        window.open(`/api/terms/td/${annualE?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`, '_blank')
+        window.open(`/api/terms/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`, '_blank')
     }
 
 
@@ -158,8 +158,8 @@ export default function termDetails(){
     return (
         <>
             <div className='py-3'>
-                <h3>Classe : {annualE?.class?.name} </h3>
-                <h4>TRIMESTRE : {annualE?.name} </h4>
+                <h3>Classe : {annualExam?.class?.name} </h3>
+                <h4>TRIMESTRE : {annualExam?.name} </h4>
             </div>
 
             <button className='mx-3 btn btn-success' onClick={() => printResults()} > Imprimer Resultats </button>
