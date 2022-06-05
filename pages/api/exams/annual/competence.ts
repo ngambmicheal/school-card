@@ -20,7 +20,8 @@ import { getTotal, getTotalPoints, getTotals } from '../../../../assets/jsx/resu
 import resultsDynamicActions from '../../../../assets/jsx/resultsDynamicActions';
 import TermInterface, { termSchema } from '../../../../models/terms';
 import { replaceAll } from '../../../../services/utils';
-import AnnualExamInterface from '../../../../models/annualExam';
+import AnnualExamInterface, { annualExamSchema } from '../../../../models/annualExam';
+import resultsAnnualActions from '../../../../assets/jsx/resultsAnnualActions';
   
 
 export default async function handler(
@@ -30,9 +31,9 @@ export default async function handler(
 
     const {annualExam_id} = req.query
 
-    const term:AnnualExamInterface = await termSchema.findOne({_id:annualExam_id}).populate({path:'class', model:classeSchema})
+    const term:AnnualExamInterface = await annualExamSchema.findOne({_id:annualExam_id}).populate({path:'class', model:classeSchema})
     const termsSearch = term.terms?.map(t => t.toString())
-    const exams = await termSchema.find({_id:{$in:term.terms}})
+    const exams = await termSchema.find({_id:{$in:term.terms}}).populate({path:'exams', model:examSchema});
     const totalResults = await (await examResultSchema.find({annualExam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
     const competences =  await competenceSchema.find({school:term.class?.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
 
@@ -72,7 +73,7 @@ export default async function handler(
 
         const examResults =  await examResultSchema.find({student:results.student._id, term_id:{ $in: termsSearch}})
  
-        let html = ReactDOMServer.renderToStaticMarkup(resultsDynamicActions(competences, results, totalResults.length, totalResults, examResults, exams, term))
+        let html = ReactDOMServer.renderToStaticMarkup(resultsAnnualActions(competences, results, totalResults.length, totalResults, examResults, exams, term))
         html+=`
         <style>
         .center{
