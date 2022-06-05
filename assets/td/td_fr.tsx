@@ -1,7 +1,7 @@
 
 import ExamResultInterface from "../../models/examResult";
 import TermInterface from "../../models/terms";
-import { th_fr } from "../jsx/image";
+import { tdfr } from "../jsx/thfr";
 import { base64_encode } from "../jsx/resultsActions";
 import { getTotalExam } from "../jsx/resultsDynamicActions";
 import { getTotal } from "../jsx/resultsUiStats";
@@ -15,7 +15,8 @@ export default function thFr(result:ExamResultInterface, term:TermInterface ) {
 
     return (
         <div style={{  
-            backgroundImage: "url('data:image/png;base64," + th_fr + "')",
+            backgroundImage: "url(" + tdfr + ")",
+            // backgroundImage: "url("+ thBg + ")",
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
@@ -25,19 +26,33 @@ export default function thFr(result:ExamResultInterface, term:TermInterface ) {
 
           <div  style={{
                     position: 'absolute', 
-                    top: '50%',
+                    top: '42%',
+                    left: '1%',
                     paddingLeft:'10%',
                     paddingRight:'10%',
-                    transform: 'translate(-50%, -50%)',
-                    textAlign:'center',
-                    lineHeight:'40px'
+                    textAlign:'left',
+                    fontSize: '22px',
+                    fontWeight: 'normal',
+                    display: 'flex',
+                    justifyContent: 'center'
                 }}
                 >
-            <h2>Je soussignée Mme, <b style={{ fontWeight: 'bolder', fontSize: '20px'}}>DASSI Armande</b></h2>
-            <h2>
-                Directrice du Groupe Scolaire Bilingue Privé Laïc La Semence atteste que :
-            </h2>
-            <h2>L'élève <b style={{color:'#020066', fontWeight:900}}>{result.student.name}</b> de la classe <b style={{color:'#020066',fontWeight:900}}>{term.class?.name} </b> a mérité d'être inscrit au tableau d'honneur pour sa conduite et son travail pendant le <b style={{color:'#020066',fontWeight:900}}> {term.name} </b>   avec une moyenne de <b style={{color:'#020066',fontWeight:900}}> {average} / 20 </b> </h2>
+            <div className="d">
+                <h2 style={{
+                        fontWeight: 'normal'
+                    }}>
+                    Je soussignée Mme, <span style={{ fontWeight: 'bolder', fontSize: '40px', color: '#000065', fontFamily: 'Bradley Hand ITC', marginLeft: '30px'}}>DASSI Armande</span>
+                </h2>
+                <h2 style={{
+                        fontWeight: 'normal'
+                    }}>
+                    Directrice du Groupe Scolaire Bilingue Privé Laïc La Semence atteste que l'eleve <br />
+                    <div style={{ fontWeight: 'bolder', fontSize: '60px', color: '#000065', fontFamily: 'Bradley Hand ITC', textAlign: 'center'}}>{result.student.name}</div>
+                    a achevé avec succès le cycle primaire au cours de cette année scolaire.
+                    En foi de quoi la présente ATTESTATION lui a été décernée pour servir et valoir ce que de droit.
+
+                </h2>
+            </div>
           </div>
         </div>
     )

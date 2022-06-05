@@ -1,7 +1,7 @@
 
 import ExamResultInterface from "../../models/examResult";
 import TermInterface from "../../models/terms";
-import { th_en, th_fr } from "../jsx/image";
+import { priEn } from "../jsx/priEn";
 import { base64_encode } from "../jsx/resultsActions";
 import { getTotalExam } from "../jsx/resultsDynamicActions";
 import { getTotal } from "../jsx/resultsUiStats";
@@ -15,7 +15,8 @@ export default function thEn(result:ExamResultInterface, term:TermInterface ) {
 
     return (
         <div style={{  
-            backgroundImage: "url('data:image/png;base64," + th_en + "')",
+            backgroundImage: "url(" + priEn + ")",
+            // backgroundImage: "url("+ thBg + ")",
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
@@ -25,15 +26,33 @@ export default function thEn(result:ExamResultInterface, term:TermInterface ) {
 
           <div  style={{
                     position: 'absolute', 
-                    top: '40%',
+                    top: '45%',
+                    left: '1%',
                     paddingLeft:'10%',
                     paddingRight:'10%',
-                    transform: 'translate(-50%, -50%)',
-                    textAlign:'center',
-                    lineHeight:'40px'
+                    textAlign:'left',
+                    fontSize: '22px',
+                    fontWeight: 'normal',
+                    display: 'flex',
+                    justifyContent: 'center'
                 }}
                 >
-            <h2> The pupil <b style={{color:'#020066', fontWeight:900}}>{result.student.name}</b> of the class <b style={{color:'#020066',fontWeight:900}}>{term.class?.name} </b>  deserved to be inscribed on the honor roll for his conduct and work during the  <b style={{color:'#020066',fontWeight:900}}> {term.name} </b>  with an average of  <b style={{color:'#020066',fontWeight:900}}> {average} / 20 </b> </h2>
+            <div className="d">
+                <h2 style={{
+                        fontWeight: 'normal'
+                    }}>
+                    I, the undersigned Mrs, <span style={{ fontWeight: 'bolder', fontSize: '40px', color: '#000065', fontFamily: 'Bradley Hand ITC', marginLeft: '30px'}}>DASSI Armande</span>
+                </h2>
+                <h2 style={{
+                        fontWeight: 'normal'
+                    }}>
+                    Director of Groupe Scolaire Bilingue Privé Laïc La Semence certifie that the student <br />
+                    <div style={{ fontWeight: 'bolder', fontSize: '60px', color: '#000065', fontFamily: 'Bradley Hand ITC', textAlign: 'center'}}>{result.student.name}</div>
+                    has successfully completed the primary cycle during this school year.
+                    In witness whereof this CERTIFICATE has been awarded to him to serve and assert his rights.
+
+                </h2>
+            </div>
           </div>
         </div>
     )
