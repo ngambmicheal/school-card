@@ -9,10 +9,9 @@ import Link from 'next/link'
 import Subjects from "../../subjects";
 import StudentInterface from "../../../models/student";
 import ExamResultInterface from "../../../models/examResult";
-import ExamInterface from "../../../models/exam";
-import { toast } from "@chakra-ui/toast";
 import TermInterface from "../../../models/terms";
-import { CSVLink } from "react-csv";
+import { toast } from "@chakra-ui/toast";
+import AnnualEInterface from "../../../models/annualExam";
 
 export const getSubjectTotal = (result:ExamResultInterface|any) => {
     let sum = 0; 
@@ -24,77 +23,73 @@ export const getSubjectTotal = (result:ExamResultInterface|any) => {
     return sum;
 }
 
-export default function examDetails(){
-    const [exam, setExam] = useState<ExamInterface>()
+export default function termDetails(){
     const [term, setTerm] = useState<TermInterface>()
+    const [annualExam, setAnnualE] = useState<AnnualEInterface>()
     const [courses, setCourses] = useState<CourseInterface[]>([])
     const [subjects, setSubjects] = useState<SubjectInterface[]>([])
     const [students, setStudents] = useState<StudentInterface[]>([])
     const [results, setResults] = useState<any>([])
+    const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const [points, setPoints] = useState(0);
     const [ImportIsOpen, setImportIsOpen] = useState(false);
 
     const router = useRouter();
-    const {term_id:examId} = router.query;
+    const {annualExam_id:termId} = router.query;
 
     useEffect(()=>{
-        if(examId){
+        if(termId){
 
-            api.getTerm(examId).then(({data:{data}} : any) => {
-                setTerm(data)
-                setExam(data.exams[0])
+            api.getAnnualExam(termId).then(({data:{data}} : any) => {
+                setAnnualE(data)
+                setTerm(data.terms[0])
             })
 
-            api.getTermResult(examId).then(({data:{data}} : any) => {
+            api.getAnnualExamResult(termId).then(({data:{data}} : any) => {
                 setResults(data)
             })
         }
-    }, [examId])
+    }, [termId])
 
 
     useEffect(()=>{
-        if(exam?._id){
-            api.getSchoolSubjects({school:term.class.school, report_type:term.class.section.report_type}).then(({data:{data}} : any) => {
+        if(term?._id){
+            api.getSchoolSubjects({school:annualExam.class.school, report_type:annualExam.class?.section?.report_type}).then(({data:{data}} : any) => {
                 setSubjects(s => data);
-
-                setTimeout(() => {
-                    getCsvData();
-                    getHeaders();
-                }, 1000);
             })
         }
-    },[exam])
+    },[term])
 
 
     useEffect(() => {
-        if(results && exam){
+        if(results && term){
             getTotalPoints();
         }
     }, [results])
 
     const printResults = () => {
-        window.open(`/api/exams/dynamic/${term?.report_type?.toLocaleLowerCase()}?term_id=${examId}`, '_blank')
+        window.open(`/api/terms/annual/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`, '_blank')
     }
 
     const printStats = () => {
-        window.open(`/api/exams/dynamic/${term?.report_type?.toLocaleLowerCase()}-stats?term_id=${examId}`, '_blank')
+        window.open(`/api/terms/annual/${annualExam?.report_type?.toLocaleLowerCase()}-stats?annualExam_id=${termId}`, '_blank')
     }
 
     useEffect(() => {
-        if(exam?._id){
+        if(term?._id){
 
-            api.updateExam(exam._id, exam).then(({data:{data}} : any) => {
-                //setExam(data)
-            })
+            // api.updateTerm(term._id, term).then(({data:{data}} : any) => {
+            //     //setTerm(data)
+            // })
         }
-    }, [exam])
+    }, [term])
 
     const handleChange = (e) => {
         const key = e.target.name
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
     
-        setExam(inputData => ({
+        setTerm(inputData => ({
           ...inputData,
           [key]: value
         }))
@@ -105,7 +100,7 @@ export default function examDetails(){
 
     const deleteResult = (resultId:string) => {
         api.deleteResult(resultId).then(() => {
-            api.getExamResults(examId).then(({data:{data}} : any) => {
+            api.getExamResults(termId).then(({data:{data}} : any) => {
                 setResults(data)
             })
         })
@@ -114,7 +109,7 @@ export default function examDetails(){
     const importResults = (file:File|null) => {
         api.importResultsNormal({
             file: file,
-            exam_id:examId,
+            term_id:termId,
           })
           .then((data) => {
             toast({
@@ -144,74 +139,30 @@ export default function examDetails(){
     const getTotalPoints = () => { 
         let sum = 0; 
         console.log(sum)
-        for(const el in exam){
+        for(const el in term){
             if(el.includes('point_')){
-                sum+=parseFloat(exam[el])??0
-                console.log(exam[el])
+                sum+=parseFloat(term[el])??0
+                console.log(term[el])
             }
         }
        setPoints(s => sum)
     }
 
     const getRank = () => {
-        api.calculateTerm(examId)
+        api.calculateAnnualExam(termId)
     }
 
     const printTD = () => {
-        window.open(`/api/exams/td/${term?.report_type?.toLocaleLowerCase()}?term_id=${examId}`, '_blank')
+        window.open(`/api/terms/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`, '_blank')
     }
-
-    const [resultsCsv, setResultsCsv] = useState<any>([])
-    const [headers, setHeaders] = useState<any>([])
-    
-    function getCsvData(){
-        console.log(results)
-        let data = results.map((result:any) => {
-            const total = getSubjectTotal(result);
-            return {
-                ...result, 
-                total, 
-                average: ((total / points) * 20).toFixed(2) 
-            }
-        })
-
-        setResultsCsv(data);
-    }
-
-    function getHeaders(){
-        let headers = [
-            {label:'Number', key:'student.number'},
-            {label:'Name',   key: 'student.name'}
-        ]
-    
-        subjects.map(subject => {
-            headers.push({
-                label: subject.name, 
-                key: `subject_${subject._id}`
-            })
-        })
-
-        headers = [...headers, ...[
-            {label: 'Total', key:'total'},
-            {label: 'Moyenne', key:'average'},
-            {label: 'Rang', key:'rank'}
-        ]]
-
-        setHeaders(headers);
-    }
-
-    useEffect(() => {
-        getCsvData();
-        getHeaders();
-    }, [subjects, results, points])
 
 
 
     return (
         <>
             <div className='py-3'>
-                <h3>Classe : {term?.class?.name} </h3>
-                <h4>TRIMESTRE : {term?.name} </h4>
+                <h3>Classe : {annualExam?.class?.name} </h3>
+                <h4>TRIMESTRE : {annualExam?.name} </h4>
             </div>
 
             <button className='mx-3 btn btn-success' onClick={() => printResults()} > Imprimer Resultats </button>
@@ -222,17 +173,14 @@ export default function examDetails(){
 
            <button className='mx-3 btn btn-dark' onClick={() => printTD()} > Imprimer Tableau D</button>
           
-           {resultsCsv.length && <CSVLink  data={resultsCsv} headers={headers} className='btn btn-dark mx-3' filename={`statistics-${term?.class?.name}-${term?.name}.csv`}>
-                Telecharcher Csv
-            </CSVLink>
-            }
+
             <table className='table '>
                 <thead>
                     <tr>
                         <th>Numero</th>
                         <th>Nom</th>
                         {subjects && subjects.map(s=> {
-                            return <th key={s._id}> <input type='number' name={`point_${s._id}`} style={{width:'50px'}} value={exam[`point_${s._id}`]} onChange={handleChange} /> {s.name} </th>
+                            return <th key={s._id}> <input type='number' name={`point_${s._id}`} style={{width:'50px'}} value={term[`point_${s._id}`]} onChange={handleChange} /> {s.name} </th>
                         })}
                         <th>Total / {points} </th>
                         <th>Moyenne</th>
@@ -243,7 +191,7 @@ export default function examDetails(){
                 </thead>
                 <tbody>
                 { results && subjects.length && results.map( result=> {
-                    return <ExamResult  key={`exam-${result._id}`} result={result} subjects={subjects} points={points} deleteResult={deleteResult} />
+                    return <ExamResult  key={`term-${result._id}`} result={result} subjects={subjects} points={points} deleteResult={deleteResult} />
                 })}
                 </tbody>
             </table>
@@ -287,6 +235,6 @@ export function ExamResult({result, subjects, points, deleteResult}:{subjects:Su
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
         <th><input type='checkbox' name='th' checked={res.th==true}  onClick={handleChange} /></th>
-        <th> <Link href={`/api/exams/results-special/dynamic-print?term_id=${res.term_id}&student_id=${res.student?._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
+        <th> <Link href={`/api/terms/results-normal/annual-print?annualExam_id=${res.annualExam_id}&student_id=${res.student._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }

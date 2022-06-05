@@ -12,42 +12,45 @@ import { classeSchema } from '../../../models/classe';
 import { studentSchema } from '../../../models/student';
 import { ExamResult } from '../../../assets/jsx/resultsUiStats';
 import { getSubjectTotal } from '../../exams/[_id]';
+import AnnualExamInterface, { annualExamSchema } from '../../../models/annualExam';
 
 
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<any>
+  response: NextApiResponse<any>
 ) { 
 
-    const {term_id, student_id} = req.body;
+    const {annualExam_id, student_id} = req.body;
 
-    const term:TermInterface = await termSchema.findOne({_id:term_id}).populate({path:'class', model:classeSchema})
-    const exams = await examSchema.find({_id:{$in:term.exams}})
+    const term:AnnualExamInterface = await annualExamSchema.findOne({_id:annualExam_id}).populate({path:'class', model:classeSchema})
+    const exams = await termSchema.find({_id:{$in:term.terms}})
 
     studentSchema.find({class_id:term.class}).then((students) => {
         students.map(student => {
-            examResultSchema.update({term_id, student:student._id}, {number:student.number}, {upsert:true}).then(results => {
+            examResultSchema.update({annualExam_id, student:student._id}, {number:student.number}, {upsert:true}).then(results => {
                 //res.json({data:results, status:true});
             })
             .catch((e) => {
-                res.json({message:e.message, success:false });
+                response.json({message:e.message, success:false });
             }).finally(() => {
-                examResultSchema.find({term_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true}).then(results => {
-                    res.json({data:results, status:true});
+                examResultSchema.find({annualExam_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true}).then(results => {
+                    response.json({data:results, status:true});
                 })
             }) 
         })
     })
 
+    const termsSearch = term.terms?.map(t => t.toString())
+
     switch (term.report_type) {
         case 'Competence':
             const competences:CompetenceInterface[] = await competenceSchema.find({school:term?.class?.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema}).populate({path:'subjects', model:subjectSchema ,populate:{'path':'courses', model:courseSchema}})
-            let termResults:ExamResultInterface[] = await examResultSchema.find({term_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
+            let termResults:ExamResultInterface[] = await examResultSchema.find({annualExam_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
             
-            termResults.map(tResult => {
+            termResults.map(async tResult => {
                 let res:any = {}
-                examResultSchema.find({student:tResult.student._id, exam_id:{ $in: term.exams}, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{path:'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).then(results =>{
+                examResultSchema.find({student:tResult.student._id, term_id:{ $in: termsSearch}, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{path:'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).then(results =>{
                     
                     competences.map(competence => {
                         competence.subjects?.map((subject:SubjectInterface) => {
@@ -64,16 +67,16 @@ export default async function handler(
                 })
             })
 
-            const termResultsUpdated:ExamResultInterface[] = await examResultSchema.find({term_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
+            const termResultsUpdated:ExamResultInterface[] = await examResultSchema.find({annualExam_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
             getTermRank(termResultsUpdated)
             
             break;
         case 'Matiere':
-            const termResults1:ExamResultInterface[] = await examResultSchema.find({term_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
+            const termResults1:ExamResultInterface[] = await examResultSchema.find({annualExam_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
             const subjects:SubjectInterface[] = await subjectSchema.find({school:term?.class?.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema});
             termResults1.map(tResult => {
                 let res:any = {}
-                examResultSchema.find({student:tResult.student._id, exam_id:{ $in: term.exams}, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{path:'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).then(results =>{
+                examResultSchema.find({student:tResult.student._id, term_id:{ $in: termsSearch}, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{path:'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).then(results =>{
                     subjects.map((subject:SubjectInterface) => {
                         res[`subject_${subject?._id}`] = getSubjectSum(results, 'subject', subject._id)
                     })
@@ -85,15 +88,15 @@ export default async function handler(
                 })
             })
 
-            const termResultsUpdated1:ExamResultInterface[] = await examResultSchema.find({term_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
+            const termResultsUpdated1:ExamResultInterface[] = await examResultSchema.find({annualExam_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
             getTermRank(termResultsUpdated1)
             break;
         case 'Special':
-                const termResults2:ExamResultInterface[] = await examResultSchema.find({term_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
+                const termResults2:ExamResultInterface[] = await examResultSchema.find({annualExam_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
                 const subjects2:SubjectInterface[] = await subjectSchema.find({school:term?.class?.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema});
                 termResults2.map(tResult => {
                     let res:any = {}
-                    examResultSchema.find({student:tResult.student._id, exam_id:{ $in: term.exams}, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{path:'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).then(results =>{
+                    examResultSchema.find({student:tResult.student._id, term_id:{ $in: termsSearch}, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{path:'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).then(results =>{
                         subjects2.map((subject:SubjectInterface) => {
                             res[`subject_${subject?._id}`] = getSubjectSum(results, 'subject', subject._id)
                         })
@@ -105,7 +108,7 @@ export default async function handler(
                     })
                 })
     
-                const termResultsUpdated2:ExamResultInterface[] = await examResultSchema.find({term_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
+                const termResultsUpdated2:ExamResultInterface[] = await examResultSchema.find({annualExam_id}).sort({number:1}).populate({path:'student', model:studentSchema}).collation({locale: "en_US", numericOrdering: true})
                 getTermRank(termResultsUpdated2)
                 break
         default:
@@ -113,7 +116,7 @@ export default async function handler(
     }
 
 
-    res.json({data:{term, exams}, status:true})
+    response.json({data:{term, exams}, status:true})
 
 }
 

@@ -8,7 +8,7 @@ import fs from 'fs'
 import { examResultSchema } from '../../../../models/examResult';
 import { competenceSchema } from '../../../../models/competence';
 import { subjectSchema } from '../../../../models/subject';
-import { getCompetencesLenght } from './dynamic-print';
+import { getCompetencesLenght } from './print-result';
 import resultsActions from '../../../../assets/jsx/resultsActions';
 import ReactDOMServer from 'react-dom/server';
 import archiver from 'archiver';
@@ -19,6 +19,9 @@ import { sectionSchema } from '../../../../models/section';
 import resultsNormalActions from '../../../../assets/jsx/resultsNormalActions';
 import { getTotal } from '../../../../assets/jsx/resultsNormalUiStats';
 import { replaceAll } from '../../../../services/utils';
+import resultsDynamicNormalActions from '../../../../assets/jsx/resultsDynamicNormalActions';
+import TermInterface, { termSchema } from '../../../../models/terms';
+import AnnualExamInterface, { annualExamSchema } from '../../../../models/annualExam';
   
 
 export default async function handler(
@@ -26,20 +29,21 @@ export default async function handler(
   res: NextApiResponse<any>
 ) { 
 
-    const {_id:exam_id} = req.query
+    const {annualExam_id} = req.query
 
-    const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema, 'populate':{path:'section', sectionSchema}});
+    const term:AnnualExamInterface = await annualExamSchema.findOne({_id:annualExam_id}).populate({path:'class', model:classeSchema})
+    const exams = await examSchema.find({_id:{$in:term.terms}})
+    const totalResults = await (await examResultSchema.find({annualExam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
+ 
+    const termsSearch = term.terms?.map(t => t.toString())
 
-    const totalResults = await (await examResultSchema.find({exam_id, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).sort({rank:1}))
-    const statResults = await (await examResultSchema.find({exam_id, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).populate({path:'exam_id', model:examSchema, populate:{'path':'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}}}).sort({rank:1})).filter(re => getTotal(re) != 0)
-    
-    const subjects =  await subjectSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema});
+    const subjects =  await subjectSchema.find({school:term.class?.school, report_type:term.report_type}).populate({path:'school', model:schoolSchema});
 
-    const zipName = `${replaceAll(' ', '_', exam.class_id.name)}__${exam.name}`
-    var dir = `./tmp/exams/${zipName}`;
-    var termsDir = './public/exams';
-    var zipOutput = fs.createWriteStream(`./public/exams/${zipName}.zip`);
-    var zipDir = `./public/exams/${zipName}.zip`;
+    const zipName = `${replaceAll(' ', '_', term.class?.name)}__${term.name}`
+    var dir = `./tmp/terms/${zipName}`;
+    var termsDir = './public/terms';
+    var zipOutput = fs.createWriteStream(`./public/terms/${zipName}.zip`);
+    var zipDir = `./public/terms/${zipName}.zip`;
     var archive = archiver('zip');
 
     if (!fs.existsSync(dir)){
@@ -51,7 +55,7 @@ export default async function handler(
     }
 
 
-    totalResults.map((results) => {
+    totalResults.map(async (results) => {
         var options = {
             format: "A4",
             orientation: "portrait",
@@ -70,7 +74,9 @@ export default async function handler(
             }
         };
 
-        let html = ReactDOMServer.renderToStaticMarkup(resultsNormalActions(subjects, results, totalResults.length, statResults))
+        const examResults =  await examResultSchema.find({student:results.student._id, term_id:{ $in: termsSearch}})
+ 
+        let html = ReactDOMServer.renderToStaticMarkup(resultsDynamicNormalActions(subjects, results, totalResults.length, totalResults, examResults, exams, term))
         html+=`
                 <style>
                 .center{

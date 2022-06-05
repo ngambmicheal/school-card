@@ -14,10 +14,12 @@ import ExamInterface from "../../../models/exam";
 import FileUpload, { validateFiles } from "../../../components/dropzone";
 import { toast } from "@chakra-ui/toast";
 import { useForm } from "react-hook-form";
+import TermInterface from "../../../models/terms";
 import { CSVLink } from "react-csv";
 
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
+    const [annualExam, setTerm] = useState<TermInterface>()
     const [competences, setCompetences] = useState<CompetenceInterface[]>([])
     const [points, setPoints] = useState(0);
 
@@ -27,32 +29,29 @@ export default function examDetails(){
     
 
     const router = useRouter();
-    const {_id:examId} = router.query;
+    const {annualExam_id:examId} = router.query;
 
     useEffect(()=>{
         if(examId){
 
-            api.getExam(examId).then(({data:{data}} : any) => {
-                setExam(data)
+            api.getAnnualExam(examId as string).then(({data:{data}} : any) => {
+                setTerm(data)
+                setExam(data.terms[0].exams[0])
             })
 
-            api.getExamResults(examId).then(({data:{data}} : any) => {
+            api.getAnnualExamResult(examId as string).then(({data:{data}} : any) => {
                 setResults(data)
             })
-
-            api.getStudents().then(({data:{data}} : any) => {
-                setStudents(s => data);
-            } )
         }
     }, [examId])
 
     useEffect(() =>{
-        if(exam){
-            api.getSchoolCompetences({school:exam?.class_id.school,report_type:exam.class_id.section.report_type}).then(({data:{data}} : any) => {
+        if(annualExam){
+            api.getSchoolCompetences({school:annualExam?.class.school,report_type:annualExam.class.section.report_type}).then(({data:{data}} : any) => {
                 setCompetences(s => data);
             })
         }
-    }, [exam])
+    }, [annualExam])
 
     useEffect(() => {
         if(results && exam){
@@ -67,11 +66,11 @@ export default function examDetails(){
     }, [results])
 
     const printResults = () => {
-        window.open('/api/exams/results/'+examId, '_blank')
+        window.open(`/api/exams/annual/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${examId}`, '_blank')
     }
 
     const printStats = () => {
-        window.open('/api/exams/stats?exam_id='+examId, '_blank')
+        window.open(`/api/exams/annual/${annualExam?.report_type?.toLocaleLowerCase()}-stats?annualExam_id=${examId}`, '_blank')
     }
 
     const deleteResult = (resultId:string) => {
@@ -82,14 +81,14 @@ export default function examDetails(){
         })
     }
 
-    useEffect(() => {
-        if(exam?._id){
+    // useEffect(() => {
+    //     if(exam?._id){
 
-            api.updateExam(exam._id, exam).then(({data:{data}} : any) => {
-                //setExam(data)
-            })
-        }
-    }, [exam])
+    //         api.updateExam(exam._id, exam).then(({data:{data}} : any) => {
+    //             //setExam(data)
+    //         })
+    //     }
+    // }, [exam])
 
     const handleChange = (e) => {
         const key = e.target.name
@@ -104,35 +103,7 @@ export default function examDetails(){
 
     }
 
-    const importResults = (file:File|null) => {
-        api.importResults({
-            file: file,
-            exam_id:examId,
-          })
-          .then((data) => {
-            toast({
-              status: 'success',
-              title: 'Successfully imported leads',
-              description: `Loaded `,
-            })
-    
-            setTimeout(() => router.push('/soft-leads'), 2000)
-          })
-          .catch((e) => {
-            console.log(e)
-            toast({
-              status: 'error',
-              title: typeof e === 'string' ? e : 'Failed to import leads',
-              description: e.error??e.toString(),
-              isClosable: true,
-            })
 
-          })
-    }   
-
-    const closeImportModal = () => {
-        setImportIsOpen(s => false);
-    }
 
     const getTotalPoints = () => { 
         let sum = 0; 
@@ -147,25 +118,7 @@ export default function examDetails(){
     }
 
     const getRank = () => {
-            api.getExamResults(examId).then(({data:{data}} : any) => {
-                const sortedData = data.sort((a, b) => {
-                    let lA = getTotal(a); 
-                    let lB = getTotal(b); 
-
-                    if(lA < lB) return 1; 
-                    if(lA > lB) return -1; 
-                    return 0; 
-                } )
-
-                sortedData.map((item, index) => {
-                    item.rank = index+1; 
-                    api.updateExamResult(item);
-
-                    if(index==data.lenght-1){ 
-                        window.location = window.location
-                    }
-                })
-            })
+        api.calculateAnnualExam(examId as string)
     }
 
     const getTotal = (result) => {
@@ -178,20 +131,28 @@ export default function examDetails(){
         return sum;
     }
 
+    const printTD = () => {
+        window.open(`/api/exams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${examId}`, '_blank')
+    }
+
 
     const [resultsCsv, setResultsCsv] = useState<any>([])
+    const [modalIsOpen, setModalIsOpen] = useState(false);
     const [headers, setHeaders] = useState<any>([])
     
     function getCsvData(){
-        console.log(results)
         let data = results.map((result:any) => {
             const total = getTotal(result);
             return {
                 ...result, 
-                total, 
+                total : total.toFixed(2), 
                 average: ((total / points) * 20).toFixed(2) 
             }
-        })
+        }).sort((a:any, b:any) => {
+            if(a.rank < b.rank) return 1; 
+            if(a.rank > b.rank) return -1; 
+            return 0; 
+        } )
 
         setResultsCsv(data);
     }
@@ -229,24 +190,26 @@ export default function examDetails(){
         getHeaders();
     }, [competences, results, points])
 
+
     return (
         <>
             <div className='py-3'>
-                <h3>Classe : {exam?.class_id?.name} </h3>
-                <h4>Examen : {exam?.name} </h4>
+                <h3>Classe : {annualExam?.class?.name} </h3>
+                <h4>TRIMESTRE : {annualExam?.name} </h4>
             </div>
             <button className='mx-3 btn btn-success' onClick={() => printResults()} > Imprimer Resultats </button>
            
-            <button className='mx-3 btn btn-success' onClick={() => getRank()} > get Rank</button>
+            <button className='mx-3 btn btn-success' onClick={() => getRank()} > Calculer </button>
 
-            <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button>
-           
             <button className='mx-3 btn btn-dark' onClick={() => printStats(true)} > Imprimer Statistics</button>
 
-            {resultsCsv.length && <CSVLink  data={resultsCsv} headers={headers} className='btn btn-dark mx-3' filename={`statistics-${exam?.class_id?.name}-${exam?.name}.csv`}>
+            <button className='mx-3 btn btn-dark' onClick={() => printTD()} > Imprimer Tableau D</button>
+
+            {resultsCsv.length && <CSVLink  data={resultsCsv} headers={headers} className='btn btn-dark mx-3' filename={`statistics-${annualExam?.class?.name}-${annualExam?.name}.csv`}>
                 Telecharcher Csv
             </CSVLink>
             }
+          
            
             <table className='table table-striped' >
                 <thead>
@@ -294,7 +257,7 @@ export default function examDetails(){
                         <th>{points} </th>
                         <th>Moyenne</th>
                         <th>Rank</th>
-                        <th>Ignorer</th>
+                        <th>Tableau d'honneur</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -305,8 +268,7 @@ export default function examDetails(){
                 </tbody>
             </table>
 
-            {examId && <ImportResults modalIsOpen={ImportIsOpen} closeModal={closeImportModal} save={importResults} />}
-        </>
+   </>
     )
 }
 
@@ -376,7 +338,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
                 return (
                     <>
                         {subject.courses?.map(course => {
-                                return course._id && <td key={course._id}> <input name={`subject_${course._id}`} style={{width:'50px'}} value={res[`subject_${course._id}`]} onChange={handleChange} max={course.point} />  </td>
+                                return course._id && <td key={course._id}> <input name={`subject_${course._id}`} style={{width:'50px'}} value={res[`subject_${course._id}`]} readOnly disabled max={course.point} />  </td>
                         })}
                     <th> {res[`total_${subject._id}`]} </th>
                     </>
@@ -386,132 +348,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
         <td>{total}</td>
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
-        <td><input type='checkbox' name='ignore' checked={res.ignore==true}  onClick={handleChange} /></td>
-        <th> <Link href={`/exams/ui/print?_id=${res._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
+        <th><input type='checkbox' name='th' checked={res.th==true}  onClick={handleChange} /></th>
+        <th> <Link href={`/api/exams/results/dynamic-print?annualExam_id=${res.annualExam_id}&student_id=${res.student._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }
-
-type CreateSubjectModalProps = {
-    modalIsOpen:boolean,
-    subject?:any,
-    closeModal: () => void,
-    save:(student:any) => void
-}
-export function CreateSubjectModal({modalIsOpen, closeModal, save, subject}:CreateSubjectModalProps){
-    const [student, setStudent] = useState<CourseInterface>({name:'', subject, point:5});
-
-    function handleChange(e:any) {
-        const key = e.target.name
-        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
-    
-        setStudent(inputData => ({
-          ...inputData,
-          [key]: value
-        }))
-      }
-
-      
-    return (
-        <div>
-
-          <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={closeModal}
-            style={customStyles}
-            contentLabel="Add Student"
-          >
-            <div className='modal-body'>
-
-            <button onClick={closeModal}>close</button>
-                <div className='form-group'>
-                    <label>Name </label>
-                    <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
-                </div>
-
-                <div className='form-group'>
-                    <label>Point </label>
-                    <input className='form-control' name='point' value={student?.point} onChange={handleChange}></input>
-                </div>
-
-                <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success'>Save</button>
-                </div>
-            </div>
-          </Modal>
-        </div>
-      );
-}
-
-
-
-export function ImportResults({modalIsOpen, closeModal,save}:{modalIsOpen:boolean,closeModal:()=>void,save:(file:File|null)=>void}){
-    const [file, setFile] = useState<File|null>(null);
-    const [values, setValues] = useState();
-
-    return <>
-        <Modal 
-                    isOpen={modalIsOpen}
-                    onRequestClose={closeModal}
-                    style={customStyles}
-                    contentLabel="Add Exam">
-            
-            <div className='modal-body'>
-                <div className='row'>
-                    <UploadFile file={file} setFile={setFile} values={values}></UploadFile>
-                </div>
-                <div className='row'>
-                    {file && <button className='btn btn-success' onClick={()=>save(file)}> Upload </button> }
-                </div>
-
-            </div>
-
-        </Modal>
-    </>
-}
-
-type UploadFileStepProps = {
-    file: File | null
-    setFile: (f: File) => void,
-    values:any
-  }
-  
-export function UploadFile(props: UploadFileStepProps) {
-    const { setFile, file, } = props
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        getValues,
-        formState: { errors },
-      } = useForm<any>({
-        defaultValues: { leadFieldToCsvColumn: {} },
-      })
-  
-    const [debounce, setDebounce] = useState(true)
-  
-    useEffect(() => {
-      setDebounce(false)
-    }, [debounce])
-  
-    return (
-        <FileUpload
-          accept={'.csv'}
-          register={register('file_', { validate: validateFiles })}
-          onChange={(files) => {
-            if (debounce) {
-              setDebounce(false)
-              return
-            }
-  
-            setFile(files[0])
-          }}
-        >
-          <div className="full-width">
-            <button className='btn' style={{width:'80%', height:'80%', minWidth:'150px', minHeight:'150px'}}>
-              {file ? file.name : 'Select File'}
-            </button>
-          </div>
-        </FileUpload>
-    )
-  }
-  

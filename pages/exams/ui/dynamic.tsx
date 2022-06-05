@@ -15,6 +15,7 @@ import FileUpload, { validateFiles } from "../../../components/dropzone";
 import { toast } from "@chakra-ui/toast";
 import { useForm } from "react-hook-form";
 import TermInterface from "../../../models/terms";
+import { CSVLink } from "react-csv";
 
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
@@ -134,6 +135,59 @@ export default function examDetails(){
         window.open(`/api/exams/td/${term?.report_type?.toLocaleLowerCase()}?term_id=${examId}`, '_blank')
     }
 
+    const [resultsCsv, setResultsCsv] = useState<any>([])
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [headers, setHeaders] = useState<any>([])
+    
+    function getCsvData(){
+        console.log(results)
+        let data = results.map((result:any) => {
+            const total = getTotal(result);
+            return {
+                ...result, 
+                total, 
+                average: ((total / points) * 20).toFixed(2) 
+            }
+        })
+
+        setResultsCsv(data);
+    }
+
+    function getHeaders(){
+        let headers = [
+            {label:'Number', key:'student.number'},
+            {label:'Name',   key: 'student.name'}
+        ]
+    
+        competences.map(competence => {
+            competence.subjects?.map(subject => {
+                const name = subject.slug || subject.name;
+
+                subject.courses?.map(course => {
+                    headers.push({
+                        label: name + '--' + course.name, 
+                        key: `subject_${course._id}`
+                    })
+                })
+            })
+        })
+
+        headers = [...headers, ...[
+            {label: 'Total', key:'total'},
+            {label: 'Moyenne', key:'average'},
+            {label: 'Rang', key:'rank'}
+        ]]
+
+        setHeaders(headers);
+    }
+
+    useEffect(() => {
+        getCsvData();
+        getHeaders();
+    }, [competences, results, points])
+
+
+
     return (
         <>
             <div className='py-3'>
@@ -148,6 +202,11 @@ export default function examDetails(){
 
             <button className='mx-3 btn btn-dark' onClick={() => printTD()} > Imprimer Tableau D</button>
           
+                   
+            {resultsCsv.length && <CSVLink  data={resultsCsv} headers={headers} className='btn btn-dark mx-3' filename={`statistics-${term?.class?.name}-${term?.name}.csv`}>
+                Telecharcher Csv
+            </CSVLink>
+            }
            
             <table className='table table-striped' >
                 <thead>

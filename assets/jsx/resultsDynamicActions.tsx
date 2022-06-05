@@ -27,7 +27,7 @@ export const getGeneralAverage = (results:ExamResultInterface[], totalPoints:num
 let comT:string[] = [];
 const getCompetenceAppreciation = (value:number, total:number, competenceName:string='')  => {
     if(total==20){
-        if(value < 11){
+        if(value < 10){
             if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return 'NA';
         }

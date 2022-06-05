@@ -4,17 +4,19 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import * as  pdf from 'pdf-creator-node';
 import fs from 'fs'
 import ReactDOMServer from 'react-dom/server';
-import resultsUiStats from '../../../assets/jsx/resultsUiStats';
-import { examSchema } from '../../../models/exam';
-import { examResultSchema } from '../../../models/examResult';
-import { schoolSchema } from '../../../models/school';
-import { competenceSchema } from '../../../models/competence';
-import { studentSchema } from '../../../models/student';
-import { subjectSchema } from '../../../models/subject';
-import { courseSchema } from '../../../models/course';
-import { classeSchema } from '../../../models/classe';
-import resultsNormalUiStats, { getTotal } from '../../../assets/jsx/resultsNormalUiStats';
-import { sectionSchema } from '../../../models/section';
+import resultsUiStats from '../../../../assets/jsx/resultsUiStats';
+import { examSchema } from '../../../../models/exam';
+import { examResultSchema } from '../../../../models/examResult';
+import { schoolSchema } from '../../../../models/school';
+import { competenceSchema } from '../../../../models/competence';
+import { studentSchema } from '../../../../models/student';
+import { subjectSchema } from '../../../../models/subject';
+import { courseSchema } from '../../../../models/course';
+import { classeSchema } from '../../../../models/classe';
+import resultsNormalUiStats from '../../../../assets/jsx/resultsNormalUiStats';
+import { sectionSchema } from '../../../../models/section';
+import { termSchema } from '../../../../models/terms';
+import { replaceAll } from '../../../../services/utils';
   
 
 export default async function handler(
@@ -22,16 +24,20 @@ export default async function handler(
   res: NextApiResponse<any>
 ) { 
 
-    const {exam_id} = req.query
+    const {annualExam_id} = req.query
 
-    const exam = await examSchema.findOne({_id:exam_id}).populate({path:'class_id', model:classeSchema, populate:{'path':'section', model:sectionSchema}})
-    const totalResults = await examResultSchema.find({exam_id}).populate({path:'student', model:studentSchema}).sort({number:1}).collation({locale: "en_US", numericOrdering: true})
-     const statsResults = await(await examResultSchema.find({exam_id, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
-    //const totalResults = await(await examResultSchema.find({exam_id:results.exam_id, ignore:{ $ne:true }}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
-    const subjects = await subjectSchema.find({school:exam.class_id.school, report_type:exam.class_id.section.report_type}).populate({path:'school', model:schoolSchema})
+    const term = await termSchema.findOne({_id:annualExam_id}).populate({path:'class', model:classeSchema, populate:{path:'section', model:sectionSchema}}).populate({path:'terms', model:termSchema , populate: {path:'exams', model: examSchema}});
+    const totalResults = await examResultSchema.find({annualExam_id}).populate({path:'student', model:studentSchema}).sort({number:1}).collation({locale: "en_US", numericOrdering: true})
+    const statsResults = await examResultSchema.find({annualExam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})
+    const subjects = await subjectSchema.find({school:term.class.school, report_type:term.class.section.report_type}).populate({path:'school', model:schoolSchema})
+ 
 
-    const stats_name = `STATS_${exam.class_id.name}_${exam.name}.pdf`
-    var dir = `./tmp/stats/${stats_name}`;
+    var dir = `./tmp/stats`;
+    const zipName = `${replaceAll(' ', '_', term.class.name)}__${term.name}`
+
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir, { recursive: true });
+    }
 
         var options = {
             format: "A3",
@@ -51,6 +57,8 @@ export default async function handler(
             }
         };
 
+        let exam = term.terms[0].exams[0];
+        exam.name = term.name;
         let html = ReactDOMServer.renderToStaticMarkup(resultsNormalUiStats(exam, subjects, totalResults, statsResults))
         html+=`
                 <style>
@@ -82,7 +90,7 @@ export default async function handler(
                 </style>
                 `
 
-        const pdfResultsDir = dir
+        const pdfResultsDir = `${dir}/${zipName}.pdf`
         var document = {
             html: html,
             data: {
@@ -93,11 +101,11 @@ export default async function handler(
 
           pdf.create(document, options)
           .then((response : any)  => {
-            var file = fs.createReadStream(dir);
-            var stat = fs.statSync(dir);
+            var file = fs.createReadStream(`${dir}/${zipName}.pdf`);
+            var stat = fs.statSync(`${dir}/${zipName}.pdf`);
             res.setHeader('Content-Length', stat.size);
             res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader(`Content-Disposition`, `attachment; filename=${stats_name}.pdf`);
+            res.setHeader(`Content-Disposition`, `attachment; filename=${zipName}.pdf`);
             file.pipe(res);
           })
           .catch((error : any) => {

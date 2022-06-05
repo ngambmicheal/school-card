@@ -58,7 +58,7 @@ export default async function handler(
         };
 
 
-        const totalResults = await(await examResultSchema.find({exam_id:results.exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1}))
+        const totalResults = await(await examResultSchema.find({exam_id:results.exam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
 
         let html = ReactDOMServer.renderToStaticMarkup(resultsDynamicNormalActions(subjects, results, totalResults.length, totalResults ))
         html+=`

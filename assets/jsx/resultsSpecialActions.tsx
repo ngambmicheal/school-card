@@ -22,11 +22,11 @@ const getAppreciation = (value:number, total:number, displayName:boolean=false, 
             return displayName? 'Expert' : 'A+';
     }
     if(total==30){
-        if(value <= 15) {
+        if(value < 15) {
             if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return 'NA';
         }
-        if(value < 22)
+        if(value < 21)
             return 'ECA';
         if(value < 26) 
             return 'A'; 
@@ -34,7 +34,7 @@ const getAppreciation = (value:number, total:number, displayName:boolean=false, 
             return 'A+';
     }
     if(total==40){
-        if(value <= 20){
+        if(value < 20){
             if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return 'NA';
         } 
@@ -46,7 +46,7 @@ const getAppreciation = (value:number, total:number, displayName:boolean=false, 
             return 'A+';
     }
     if(total==50){
-        if(value <= 20){
+        if(value < 25){
             if(comT.indexOf(competenceName)<0) comT.push(competenceName)
             return 'NA';
         } 
@@ -54,7 +54,7 @@ const getAppreciation = (value:number, total:number, displayName:boolean=false, 
             return 'ECA';
         if(value < 41) 
             return 'A'; 
-        if(value > 41) 
+        if(value >= 41) 
             return 'A+';
     }
 }
@@ -219,14 +219,19 @@ export default function resultsSpecialActions(subjects:SubjectInterface[], resul
             <td> { getGeneralAverage(statsResults, totalPoints).toFixed(2) }  /20 </td> */}
             <td>Moyenne du premier</td>
             <td>   { ((getTotal(statsResults[0])/ totalPoints) * 20).toFixed(2) } / 20 </td>
-            <td> Encouragements </td>
-            <td>  {average>12? 'Yes' : 'No'}   </td>
+            <td rowSpan={2} colSpan={1}> Encouragements </td> 
+           {/* <span style={{height: "65px", background: '#000', width: '1px', color: 'transparent', position: 'absolute', bottom: '30.5%', right: '111px'}} className="sep">
+                i
+            </span> */}
+            <td rowSpan={2} colSpan={1}> {average>12? 'Yes' : 'No'}   </td>
         </tr>
         <tr>
-            <td>Moyenne du dernier</td>
+            <td >Moyenne du dernier</td>
             <td> { ((getTotal(statsResults[statsResults.length-1])/ totalPoints) * 20).toFixed(2) } /20  </td>
-            <td> Tableau d'honneur</td>
-            <td  style={{fontSize:'15px'}}> <input type='checkbox' /> Yes <input type='checkbox' /> No</td>
+            {/* <td></td> */}
+            {/* <td></td> */}
+            {/* <td> Tableau d'honneur</td>
+            <td  style={{fontSize:'15px'}}> <input type='checkbox' /> Yes <input type='checkbox' /> No</td> */}
         </tr>
         {/* <tr>
             <td> </td>
