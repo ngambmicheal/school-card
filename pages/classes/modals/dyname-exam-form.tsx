@@ -77,3 +77,7 @@ type DynamicExamModalProps = {
       );
   }
   
+
+  export default function () {
+    return '';
+  }

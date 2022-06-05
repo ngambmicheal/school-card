@@ -73,3 +73,8 @@ export function CreateStudentModal({modalIsOpen, closeModal, save, class_id, tot
         </div>
       );
 }
+
+
+export default function () {
+  return '';
+}

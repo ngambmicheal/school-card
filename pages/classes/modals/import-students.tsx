@@ -227,3 +227,7 @@ export function UploadFile(props: UploadFileStepProps) {
       </div>
     )
   }
+
+  export default function () {
+    return '';
+  }
