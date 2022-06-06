@@ -20,7 +20,7 @@ export const getSubjectTotal = (result:ExamResultInterface|any) => {
         if(el.includes('subject_')){
             sum+=parseFloat(result[el]);
         }
-    }
+    } 
     return sum;
 }
 
@@ -238,6 +238,7 @@ export default function examDetails(){
                         <th>Moyenne</th>
                         <th>Rank</th>
                         <th>Tableau d'honneur</th>
+                        <th>Ignorer</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -287,6 +288,7 @@ export function ExamResult({result, subjects, points, deleteResult}:{subjects:Su
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
         <th><input type='checkbox' name='th' checked={res.th==true}  onClick={handleChange} /></th>
+        <th> <td><input type='checkbox' name='ignore' checked={res.ignore==true}  onClick={handleChange} /></td> </th>
         <th> <Link href={`/api/exams/results-special/dynamic-print?term_id=${res.term_id}&student_id=${res.student?._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }

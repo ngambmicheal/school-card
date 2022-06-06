@@ -5,6 +5,7 @@ import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
+import AnnualExamInterface from "../../models/annualExam";
 
 let comT:string[] = [];
 
@@ -96,12 +97,13 @@ const getTotalExam = (result:any) => {
 }
 
 
-export default function resultsDynamicSpecialActions(subjects:SubjectInterface[], results:any, totalUsers:number, statsResults:ExamResultInterface[], examResults:ExamResultInterface[], exams:ExamInterface[], term:TermInterface ) {
+export default function resultsAnnualSpecialActions(subjects:SubjectInterface[], results:any, totalUsers:number, statsResults:ExamResultInterface[], examResults:ExamResultInterface[], exams:TermInterface[], term:AnnualExamInterface ) {
 
     comT = [];
 
+    const examWithPoint = exams[0].exams as ExamInterface[];
     const totalMarks = getTotal(results)
-    const totalPoints = getTotalExam(exams[0])
+    const totalPoints = getTotalExam(examWithPoint[0])
     const average = (totalMarks / totalPoints) * 20;
 
     const total1Marks = examResults.length ? getTotal(examResults[0]) : 0;

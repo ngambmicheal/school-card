@@ -5,6 +5,8 @@ import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import { getSubjectTotal } from "../../pages/exams/[_id]";
 import { getGeneralAverage } from "./resultsActions";
+import ExamInterface from "../../models/exam";
+import TermInterface from "../../models/terms";
 
 let comT:string[] = [];
 

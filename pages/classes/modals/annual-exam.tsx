@@ -125,3 +125,8 @@ export function AnnualExamModal({modalIsOpen, closeModal, save, class_id, terms}
       </div>
     );
 }
+
+
+export default function () {
+  return '';
+}
