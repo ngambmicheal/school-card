@@ -134,6 +134,11 @@ export default function ClasseDetails(){
       })
     }
 
+    const handleTermChange = (term:TermInterface, value:string ) => {
+      term.slug = value;
+      api.updateTerms(term)
+    }
+
     const saveExam = (exam:any) => {
         api.saveExam(exam).then(() => getExams())
         closeExamModal();
@@ -208,6 +213,7 @@ export default function ClasseDetails(){
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Slug</th>
                         {classe?.section?.report_type =='Maternelle' && <th>Exam Type Maternelle</th> }
                         {classe?.section?.report_type =='Nursery' && <th>Exam Type Maternelle</th> }
                         {classe?.section?.report_type =='Matiere' && <th>Exam Type Normal </th> }
@@ -221,6 +227,7 @@ export default function ClasseDetails(){
                     {terms.map(term => {
                     return <tr key={term._id}>
                         <td> {term.name} </td>
+                        <td> <input type='text' name='slug' value={term?.slug} onChange={e => handleTermChange(term, e.target.value)} /></td>
                         {classe?.section?.report_type =='Maternelle' && <td> <Link href={`/exams/mat/dynamic?term_id=${term._id}`}>Mat</Link></td> }
                         {classe?.section?.report_type =='Nursery' && <td> <Link href={`/exams/nursery/dynamic/?term_id=${term._id}`}>Nursery</Link></td> }
                         {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/normal/dynamic?term_id=${term._id}`} >View</Link> </td> }

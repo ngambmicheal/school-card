@@ -131,6 +131,7 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
 
     const total1Marks = examResults.length ? getTotal(examResults[0]) : 0;
     const total2Marks = examResults.length ? getTotal(examResults[1]) : 0;
+    const total3Marks = examResults.length>2 ? getTotal(examResults[2]) : 0;
 
     return (
         <>
@@ -197,7 +198,7 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
          </th>
          {exams.map((exam, index) => {
             return <th>
-               {exam.name.substr(0,4)}
+               {exam.slug}
             </th>
             })
         }
@@ -262,11 +263,11 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
                                                  <th> {!isExcluded ?to.pointTotal:'--'}</th>
                                                  {examResults.map((result, index) => {
                                                     return <>
-                                                                <td>{getOnlySubjectTotal(subject, result) ?? 0}</td> 
+                                                                <td>{getOnlySubjectTotal(subject, result).toFixed(2) ?? 0}</td> 
                                                             </>
                                                     })
                                                 }
-                                                 <th>{!isExcluded ?to.total:'--'}</th> 
+                                                 <th>{!isExcluded ?to.total.toFixed(2):'--'}</th> 
                                              </tr>
                                              { ( competenceIndex==2 && (subjectIndex +1  == competence.subjects?.length) )&& <><tr style={{border:'none !important', pageBreakAfter:'always' }}><td colSpan={0} style={{border:'white 1px inset'}} > <div style={{pageBreakAfter:'always' }}> </div ></td></tr></>}
                                      </>
@@ -294,7 +295,7 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
         <tr>
             <td>Moyenne</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td rowSpan={5}>  {getCompetenceAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td rowSpan={6}>  {getCompetenceAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
             <td> Avertissement Conduite </td>
             <td style={{fontSize:'15px'}}>  <input type='checkbox' /> Oui <input type='checkbox' /> Non  </td>
         </tr>
@@ -323,12 +324,19 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
             <td> </td>
             <td colSpan={2}> </td>
         </tr> */}
-        {exams.length>1 && <tr>
-            <td>Moyenne de {exams[0].name.substr(0,4)} </td>
+        {exams.length>1 && <><tr>
+            <td>Moyenne de {exams[0].slug} </td>
             <td>  { ((total1Marks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td>Moyenne de {exams[1].name.substr(0,4)} </td>
+            <td>Moyenne de {exams[1].slug} </td>
             <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
-        </tr>
+            </tr>
+            <tr>
+                <td> Moyenne de {exams[2].slug}</td>
+                <td>  { ((total3Marks / totalPoints) * 20).toFixed(2) } /20 </td>
+                <td>{average > 10 ? 'Admis en classe de' : 'Redouble la classe de'}</td>
+                <td>{term.class?.name}</td>
+            </tr>
+        </>
         }
         <tr>
             <td colSpan={2}> Observation de l'enseignant(e)</td>
