@@ -13,6 +13,7 @@ import { studentSchema } from '../../../models/student';
 import { ExamResult } from '../../../assets/jsx/resultsUiStats';
 import { getSubjectTotal } from '../../exams/[_id]';
 import AnnualExamInterface, { annualExamSchema } from '../../../models/annualExam';
+import { addNumbers, divideNumber } from '../../../utils/actions';
 
 
 
@@ -124,12 +125,12 @@ export default async function handler(
 
 
 export function getSubjectSum(results:ExamResultInterface[], type:'total'|'subject', subject_id?:string){
-    let total = 0; 
+    let total = 0
     results.map((r:any) => {
-        total+= parseFloat(r[`${type}_${subject_id}`]??0);
+        total= addNumbers(total,r[`${type}_${subject_id}`]??0)
     })
 
-    return results.length ? (total/(results.length)).toFixed(2) : 0;
+    return results.length ? divideNumber(total, results.length) : 0;
 }
 
 export function getTermRank(results:ExamResultInterface[]) {

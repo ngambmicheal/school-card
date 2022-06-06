@@ -16,6 +16,8 @@ import { toast } from "@chakra-ui/toast";
 import { useForm } from "react-hook-form";
 import TermInterface from "../../../models/terms";
 import { CSVLink } from "react-csv";
+import { addNumbers } from "../../../utils/actions";
+
 
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
@@ -125,7 +127,7 @@ export default function examDetails(){
         let sum = 0; 
         for(const el in result){
             if(el.includes('subject_')){
-                sum+=parseFloat(result[el]);
+                sum= addNumbers(sum, result[el]);
             }
         }
         return sum;
@@ -297,7 +299,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
         let sum = 0; 
         for(const el in result){
             if(el.includes('total_')){
-                sum+=result[el];
+                sum= addNumbers(sum,result[el]);
             }
         }
        setTotal(s => Number(sum.toFixed(2)))
