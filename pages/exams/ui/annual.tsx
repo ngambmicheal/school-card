@@ -300,7 +300,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
                 sum+=result[el];
             }
         }
-       setTotal(s => sum)
+       setTotal(s => Number(sum.toFixed(2)))
     }
 
     const calculateSubTotal = () => {
@@ -314,7 +314,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
     const getTotals = () => {
         competences.map(c => {
             c.subjects?.map(s => {
-                res[`total_${s._id}`] = s.courses?.map(cc => res[`subject_${cc._id}`]).reduce(reducer,0);
+                res[`total_${s._id}`] = Number(Number((s.courses?.map(cc => res[`subject_${cc._id}`]).reduce(reducer,0))).toFixed(2));
             })
         })
     }

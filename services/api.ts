@@ -120,6 +120,7 @@ export class Api{
 
     //terms 
     getTerms(classeId?:string) { return axios.get(`/api/terms?class=${classeId}`)}
+    updateTerms(data:any) { return axios.post('/api/terms/update', data) }
     saveTerm(data:TermInterface) { return axios.post('/api/terms/store', data);}
     getTermResult(termId:string){ return axios.get(`/api/terms/results?term_id=${termId}`)}
     deleteTerm(termId:any){return axios.post('/api/terms/delete', {_id:termId})}

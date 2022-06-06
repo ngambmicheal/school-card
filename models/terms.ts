@@ -9,7 +9,8 @@ export default interface TermInterface{
     name:string,
     class?:string & ClasseInterface,
     exams?:string[] & ExamInterface[],
-    report_type ?: reportType
+    report_type ?: reportType,
+    slug?: string; 
 }
 
 const TermSchema = new mg.Schema({

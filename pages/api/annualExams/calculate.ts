@@ -59,6 +59,8 @@ export default async function handler(
                             })
         
                             res[`total_${subject?._id}`] = getSubjectSum(results, 'total', subject._id)
+
+                            console.log(res);
                             examResultSchema.findOneAndUpdate({_id:tResult._id}, res).then(() =>{
 
                             })

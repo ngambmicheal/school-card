@@ -108,6 +108,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
 
     const total1Marks = examResults.length ? getTotal(examResults[0]) : 0;
     const total2Marks = examResults.length ? getTotal(examResults[1]) : 0;
+    const total3Marks = examResults.length >2 ? getTotal(examResults[2]) : 0; 
 
     return (
         <>
@@ -190,7 +191,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
                             <> 
                                     <tr>
                                         <td colSpan={2}> {subject.name} </td>
-                                        <td>{exams[0][`point_${subject._id}`]}</td>
+                                        <td>{examWithPoint[0][`point_${subject._id}`]}</td>
                                         {examResults.map((result, index) => {
                                             return <>
                                                         <td>{result[`subject_${subject._id}`] ?? 0}</td> 
@@ -198,7 +199,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
                                             })
                                         }
                                         <td>{results[`subject_${subject._id}`] ?? 0}</td> 
-                                        <td>{getAppreciation((results[`subject_${subject._id}`] ?? 0), exams[0][`point_${subject._id}`], false, subject.name)}</td>
+                                        <td>{getAppreciation((results[`subject_${subject._id}`] ?? 0), examWithPoint[0][`point_${subject._id}`], false, subject.name)}</td>
                                         </tr>
                                     </>
                                 )
@@ -221,7 +222,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
         <tr>
             <td>Moyenne</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td rowSpan={5}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td rowSpan={6}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
             <td> Avertissement Conduite</td>
             <td  style={{fontSize:'15px'}}>  <input type='checkbox' /> Oui <input type='checkbox' /> Non  </td>
         </tr>
@@ -249,12 +250,19 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
             <td> </td>
             <td colSpan={2}> </td>
         </tr> */}
-           {exams.length>1 && <tr>
-            <td> Moyenne de {exams[0].name.substr(0,4)}</td>
-            <td>  { ((total1Marks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td> Moyenne de {exams[1].name.substr(0,4)}</td>
-            <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
-        </tr>
+           {exams.length>1 && <><tr>
+                <td> Moyenne de {exams[0].slug}</td>
+                <td>  { ((total1Marks / totalPoints) * 20).toFixed(2) } /20 </td>
+                <td> Moyenne de {exams[1].slug}</td>
+                <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
+            </tr>
+            <tr>
+                <td> Moyenne de {exams[2].slug}</td>
+                <td>  { ((total3Marks / totalPoints) * 20).toFixed(2) } /20 </td>
+                <td>{average > 10 ? 'Admis en classe de' : 'Redouble la classe de'}</td>
+                <td>{term.class?.name}</td>
+            </tr>
+            </>
         }
         <tr>
             <td colSpan={2}> Observation de l'enseignant(e)</td>
