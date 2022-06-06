@@ -58,6 +58,7 @@ export default function Classes(){
                         <th>Ecole</th>
                         <th>Section</th>
                         <th>Teacher </th>
+                        <th>Promoted To</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -76,6 +77,7 @@ export default function Classes(){
 
 export function ClasseRow({classe, deleteClasse}:{classe:ClasseInterface,deleteClasse:(id:string)=>void}) {
     const [teacher, setTeacher] = useState(classe.teacher); 
+    const [promoted, setPromoted] = useState(classe.promoted);
 
 
     const updateTeacher = (event) => {
@@ -83,12 +85,19 @@ export function ClasseRow({classe, deleteClasse}:{classe:ClasseInterface,deleteC
         setTeacher(tt);
         api.updateClasse({_id:classe._id, teacher:tt});
     }
+
+    const updatePromoted = (event) => {
+        const tt = event.target.value; 
+        setPromoted(tt);
+        api.updateClasse({_id:classe._id, promoted:tt});
+    }
     return (
         <tr key={classe._id}>
             <td>{classe.name}</td>
             <td>{classe.school?.name}</td>
             <td>{classe.section?.name}</td>
             <td><input  value={teacher} onChange={updateTeacher} /> </td>
+            <td><input  value={promoted} onChange={updatePromoted} /> </td>
             <td><Link href={`classes/${classe._id}`}>Voir</Link> |  <a href='javascript:void(0)'  onClick={() =>deleteClasse(classe._id)}>Supprimer</a></td>
         </tr>
     )

@@ -260,7 +260,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
                 <td> Moyenne de {exams[2].slug}</td>
                 <td>  { ((total3Marks / totalPoints) * 20).toFixed(2) } /20 </td>
                 <td>{average > 10 ? 'Admis en classe de' : 'Redouble la classe de'}</td>
-                <td>{term.class?.name}</td>
+                <td>{average > 10 ? term.class?.promoted : term.class?.name}</td>
             </tr>
             </>
         }
