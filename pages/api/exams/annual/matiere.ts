@@ -33,7 +33,7 @@ export default async function handler(
     const {annualExam_id} = req.query
 
     const term:AnnualExamInterface = await annualExamSchema.findOne({_id:annualExam_id}).populate({path:'class', model:classeSchema})
-    const exams = await examSchema.find({_id:{$in:term.terms}})
+    const exams = await termSchema.find({_id:{$in:term.terms}}).populate({path:'exams', model:examSchema});
     const totalResults = await (await examResultSchema.find({annualExam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})).filter(re => getTotal(re) != 0)
  
     const termsSearch = term.terms?.map(t => t.toString())
@@ -55,6 +55,7 @@ export default async function handler(
         fs.mkdirSync(termsDir, { recursive: true });
     }
 
+    console.log(totalResults)
 
     totalResults.map(async (results) => {
         var options = {

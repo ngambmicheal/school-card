@@ -134,6 +134,8 @@ export function getSubjectSum(results:ExamResultInterface[], type:'total'|'subje
 }
 
 export function getTermRank(results:ExamResultInterface[]) {
+
+
         const sortedData = results.sort((a, b) => {
             let lA = getSubjectTotal(a); 
             let lB = getSubjectTotal(b); 
@@ -145,7 +147,10 @@ export function getTermRank(results:ExamResultInterface[]) {
 
         sortedData.map((item, index) => {
             let rank = index+1; 
-            examResultSchema.findOneAndUpdate({_id:item._id}, {rank:rank}).then(()=>{
+            // let total = getSubjectTotal(item); 
+            // let points = ''; 
+            // let average = divideNumber(total, points);
+            examResultSchema.findOneAndUpdate({_id:item._id}, {rank}).then(()=>{
 
             })
         })
