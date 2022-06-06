@@ -194,7 +194,7 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
              SOUS-COMPETENCES
          </th>
          <th colSpan={2}>
-             UNITES D'APPRENTISSAGES
+             UA
          </th>
          {exams.map((exam, index) => {
             return <th>
@@ -206,7 +206,7 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
      </tr>
      <tr>
          <th>
-             EVALUATIONS
+             EVAL
          </th>
          <th>
              SUR 
