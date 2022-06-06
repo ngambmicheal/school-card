@@ -94,6 +94,7 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
 
     const total1Marks = examResults.length ? getTotal(examResults[0]) : 0;
     const total2Marks = examResults.length ? getTotal(examResults[1]) : 0;
+    const total3Marks = examResults.length> 2 ? getTotal(examResults[2]) : 0;
 
     return (
         <>
@@ -235,12 +236,19 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
             <td> </td>
             <td colSpan={2}> </td>
         </tr> */}
-           {exams.length>1 && <tr>
-            <td> {exams[0].name.substr(0,4)} Average </td>
+           {exams.length>1 && <><tr>
+            <td> {exams[0].slug} Average </td>
             <td>  { ((total1Marks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td> {exams[1].name.substr(0,4)} Average </td>
+            <td> {exams[1].slug} Average </td>
             <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
         </tr>
+        <tr>
+            <td> Moyenne de {exams[2].slug}</td>
+            <td>  { ((total3Marks / totalPoints) * 20).toFixed(2) } /20 </td>
+            <td>{average > 10 ? 'Admitted in ' : 'Repeating '}</td>
+            <td>{term.class?.name}</td>
+        </tr>
+        </>
         }
         <tr>
             <td colSpan={2}> Teacher's Visa</td>

@@ -243,7 +243,7 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
                                                  {!subjectIndex && !courseIndex&& <th style={{width:'150px'}} rowSpan={getCompetencesLenght(competence)}> {competence.name} </th> }
                                                  {!courseIndex && <td  style={{width:'150px'}} rowSpan={(subject.courses?.length??1)+1}> {subject.name}  </td>  }
                                                  <td>{!isExcluded ? course.name :''} </td>
-                                                 <td>{ !isExcluded ?exams[0][`point_${course._id}`] :'--'}</td>
+                                                 <td>{ !isExcluded ?examWithPoint[0][`point_${course._id}`] :'--'}</td>
                                                  {examResults.map((result, index) => {
                                                     return <>
                                                                 <td>{result[`subject_${course._id}`] ?? 0}</td> 

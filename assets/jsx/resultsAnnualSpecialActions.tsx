@@ -191,7 +191,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
                             <> 
                                     <tr>
                                         <td colSpan={2}> {subject.name} </td>
-                                        <td>{exams[0][`point_${subject._id}`]}</td>
+                                        <td>{examWithPoint[0][`point_${subject._id}`]}</td>
                                         {examResults.map((result, index) => {
                                             return <>
                                                         <td>{result[`subject_${subject._id}`] ?? 0}</td> 
@@ -199,7 +199,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
                                             })
                                         }
                                         <td>{results[`subject_${subject._id}`] ?? 0}</td> 
-                                        <td>{getAppreciation((results[`subject_${subject._id}`] ?? 0), exams[0][`point_${subject._id}`], false, subject.name)}</td>
+                                        <td>{getAppreciation((results[`subject_${subject._id}`] ?? 0), examWithPoint[0][`point_${subject._id}`], false, subject.name)}</td>
                                         </tr>
                                     </>
                                 )
