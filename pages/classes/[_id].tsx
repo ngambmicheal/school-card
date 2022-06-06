@@ -276,7 +276,7 @@ export default function ClasseDetails(){
 
             {classeId && <CreateExamModal modalIsOpen={examIsOpen} closeModal={closeExamModal} save={saveExam} class_id={classeId} /> }
             {classeId && <DynamicExamModal exams={exams} modalIsOpen={dynamicExamIsOpen} closeModal={closeDynamicExamModal} save={saveExam} class_id={classeId} /> }
-            {classeId && <AnnualExamModal terms={terms} modalIsOpen={annualExamIsOpen} closeModal={closeAnnualExamModal} save={saveAnnualExam} class_id={classeId} /> }
+            {classeId && classe && <AnnualExamModal report_type={classe.section?.report_type} terms={terms} modalIsOpen={annualExamIsOpen} closeModal={closeAnnualExamModal} save={saveAnnualExam} class_id={classeId} /> }
 
             <h3 className='mt-3'>Students  
                 <span className='pull-right'>

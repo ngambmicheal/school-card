@@ -2,7 +2,7 @@ import { useState } from "react";
 import ExamInterface from "../../../models/exam";
 import Modal from 'react-modal';
 import { customStyles } from "../../../services/constants";
-import TermInterface from "../../../models/terms";
+import TermInterface, { reportType } from "../../../models/terms";
 import api from "../../../services/api";
 
 type CreateExamModalProps = {
@@ -58,9 +58,10 @@ type AnnualExamModalProps = {
   class_id?:any,
   closeModal: () => void,
   save:(student:any) => void, 
-  terms:TermInterface[]
+  terms:TermInterface[],
+  report_type:reportType | undefined
 }
-export function AnnualExamModal({modalIsOpen, closeModal, save, class_id, terms}:AnnualExamModalProps){
+export function AnnualExamModal({modalIsOpen, closeModal, save, class_id, terms, report_type}:AnnualExamModalProps){
   const [termSelected, setTermSelected] = useState<string[]>([]);
   const [name, setName] = useState('')
 
@@ -79,7 +80,6 @@ export function AnnualExamModal({modalIsOpen, closeModal, save, class_id, terms}
     
   
   const generate = () => {
-    const report_type:string = terms[0].class?.section?.report_type||'Competence';
     api.saveAnnualExam({report_type, terms:termSelected, name, class:terms[0].class?._id??terms[0].class }).then(()=>{
       closeModal()
     })

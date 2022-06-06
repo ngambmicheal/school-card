@@ -12,6 +12,7 @@ import ExamResultInterface from "../../../models/examResult";
 import TermInterface from "../../../models/terms";
 import { toast } from "@chakra-ui/toast";
 import AnnualEInterface from "../../../models/annualExam";
+import ExamInterface from "../../../models/exam";
 
 export const getSubjectTotal = (result:ExamResultInterface|any) => {
     let sum = 0; 
@@ -25,6 +26,7 @@ export const getSubjectTotal = (result:ExamResultInterface|any) => {
 
 export default function termDetails(){
     const [term, setTerm] = useState<TermInterface>()
+    const [exam, setExam] = useState<ExamInterface>()
     const [annualExam, setAnnualE] = useState<AnnualEInterface>()
     const [courses, setCourses] = useState<CourseInterface[]>([])
     const [subjects, setSubjects] = useState<SubjectInterface[]>([])
@@ -42,6 +44,7 @@ export default function termDetails(){
         if(termId){
 
             api.getAnnualExam(termId).then(({data:{data}} : any) => {
+                setExam(data.terms[0].exams[0])
                 setAnnualE(data)
                 setTerm(data.terms[0])
             })
@@ -138,11 +141,10 @@ export default function termDetails(){
 
     const getTotalPoints = () => { 
         let sum = 0; 
-        console.log(sum)
-        for(const el in term){
+        for(const el in exam){
             if(el.includes('point_')){
-                sum+=parseFloat(term[el])??0
-                console.log(term[el])
+                sum+=parseFloat(exam[el])??0
+                console.log(exam[el])
             }
         }
        setPoints(s => sum)
@@ -180,7 +182,7 @@ export default function termDetails(){
                         <th>Numero</th>
                         <th>Nom</th>
                         {subjects && subjects.map(s=> {
-                            return <th key={s._id}> <input type='number' name={`point_${s._id}`} style={{width:'50px'}} value={term[`point_${s._id}`]} onChange={handleChange} /> {s.name} </th>
+                            return <th key={s._id}> <input type='number' name={`point_${s._id}`} style={{width:'50px'}} value={exam[`point_${s._id}`]} onChange={handleChange} /> {s.name} </th>
                         })}
                         <th>Total / {points} </th>
                         <th>Moyenne</th>
