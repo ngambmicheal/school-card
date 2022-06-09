@@ -40,7 +40,7 @@ export default function termDetails(){
 
             api.getAnnualExam(termId).then(({data:{data}} : any) => {
                 setAnnualE(data)
-                setExam(data.terms[0])
+                setExam(data.terms[0].exams[0])
             })
 
             api.getAnnualExamResult(termId).then(({data:{data}} : any) => {
@@ -66,11 +66,11 @@ export default function termDetails(){
     }, [results])
 
     const printResults = () => {
-        window.open(`/api/terms/annual/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`, '_blank')
+        window.open(`/api/exams/annual/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`, '_blank')
     }
 
     const printStats = () => {
-        window.open(`/api/terms/annual/${annualExam?.report_type?.toLocaleLowerCase()}-stats?annualExam_id=${termId}`, '_blank')
+        window.open(`/api/exams/annual/${annualExam?.report_type?.toLocaleLowerCase()}-stats?annualExam_id=${termId}`, '_blank')
     }
 
     useEffect(() => {
