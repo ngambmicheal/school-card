@@ -78,6 +78,6 @@ type DynamicExamModalProps = {
   }
   
 
-  export default function () {
+  export default function NothingName () {
     return '';
   }

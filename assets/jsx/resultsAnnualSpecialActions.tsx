@@ -6,6 +6,7 @@ import ExamResultInterface from "../../models/examResult";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
 import AnnualExamInterface from "../../models/annualExam";
+import { addNumbers } from "../../utils/actions";
 
 let comT:string[] = [];
 
@@ -80,7 +81,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]??0);
+            sum = addNumbers(sum, result[el]??0);
         }
     }
     return sum; 
@@ -90,7 +91,7 @@ const getTotalExam = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('point_')){
-            sum+=parseFloat(result[el]??0);
+            sum = addNumbers(sum, result[el]??0);
         }
     }
     return sum; 
@@ -271,13 +272,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
         </tr>
         <tr>
             <td colSpan={2} style={{minHeight:'100px', fontSize:'14px'}}> 
-                <i>Des efforts s'imposent dans les compétences suivantes</i>
-                <br />
-                <ul style={{listStyle: 'none', textAlign:'left'}}>
-                    {comT.length > 0 ? comT.map(s => {
-                        return <li>{s}</li>
-                    }) : <li style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>RAS</li>}
-                </ul>
+                Redouble le CM2 en cas d'échec du CEP
             </td>
             <td></td>
             <td colSpan={2}></td>

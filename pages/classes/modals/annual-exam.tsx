@@ -127,6 +127,6 @@ export function AnnualExamModal({modalIsOpen, closeModal, save, class_id, terms,
 }
 
 
-export default function () {
+export default function NothingName () {
   return '';
 }

@@ -75,6 +75,6 @@ export function CreateStudentModal({modalIsOpen, closeModal, save, class_id, tot
 }
 
 
-export default function () {
+export default function NothingName() {
   return '';
 }
