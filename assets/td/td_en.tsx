@@ -49,7 +49,7 @@ export default function thEn(result:ExamResultInterface, term:TermInterface ) {
                     Director of Groupe Scolaire Bilingue Privé Laïc La Semence certifie that the student <br />
                     <div style={{ fontWeight: 'bolder', fontSize: '60px', color: '#000065', fontFamily: 'Bradley Hand ITC', textAlign: 'center'}}>{result.student.name}</div>
                     has successfully completed the primary cycle during this school year.
-                    In witness whereof this CERTIFICATE has been awarded to him to serve and assert his rights.
+                    In witness whereof this Attestation has been awarded to him to serve and assert his rights.
 
                 </h2>
             </div>

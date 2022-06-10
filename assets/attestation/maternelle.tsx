@@ -14,8 +14,8 @@ export default function AttestationMaternelleFr(result:ExamResultInterface, term
 
     return (
         <div style={{  
-            backgroundImage: "url(" + thBG + ")",
-            // backgroundImage: "url("+ bgEn + ")",
+            // backgroundImage: "url(" + thBG + ")",
+            backgroundImage: "url("+ bgEn + ")",
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
@@ -37,7 +37,7 @@ export default function AttestationMaternelleFr(result:ExamResultInterface, term
                     justifyContent: 'center'
                 }}
                 >
-            <div className="fran">
+            {/* <div className="fran">
                 <h2 style={{
                         lineHeight:'50px',
                         fontWeight: 'normal'
@@ -46,25 +46,24 @@ export default function AttestationMaternelleFr(result:ExamResultInterface, term
                         lineHeight:'50px',
                         fontWeight: 'normal'
                     }}>
-                    Directrice du Groupe Scolaire Bilingue Privé Laïc La Semence atteste que l'eleve <br />
+                    Directrice du Groupe Scolaire Bilingue Privé Laïc La SEMENCE atteste que l'eleve <br />
                     <div style={{ fontWeight: 'bolder', fontSize: '60px', color: '#000065', fontFamily: 'Bradley Hand ITC', textAlign: 'center'}}>{result.student.name}</div>
-                    a suivi avec succes le Cycle Maternel et est promu en ce jour au Cycle primaire.
-                </h2>
-            </div>
-            {/* <div className="anglais">
-                <h2 style={{
-                        lineHeight:'50px',
-                        fontWeight: 'normal'
-                    }}>I the undersigned Madam, <span style={{ fontWeight: 'bolder', fontSize: '40px', color: '#000065', fontFamily: 'Bradley Hand ITC', marginLeft: '30px'}}>DASSI Armande</span></h2>
-                <h2 style={{
-                        lineHeight:'50px',
-                        fontWeight: 'normal'
-                    }}>
-                    Director of Groupe Scolaire Bilingue Privé Laïc La Semence, certifies that the child <br />
-                    <div style={{ fontWeight: 'bolder', fontSize: '60px', color: '#000065', fontFamily: 'Bradley Hand ITC', textAlign: 'center'}}>{result.student.name}</div>
-                    has successfully completed the Kindergarten Cycle and is promoted today to the Primary Cycle.
+                    a suivi avec succes le Cycle Maternel et est promu(e) en ce jour au Cycle Primaire.
                 </h2>
             </div> */}
+            <div className="anglais">
+                <h2 style={{
+                        fontWeight: 'normal'
+                    }}>I the undersigned Madam, <span style={{ fontWeight: 'bolder', fontSize: '40px', color: '#000065', fontFamily: 'Bradley Hand ITC', marginLeft: '30px'}}>DASSI Armande</span></h2>
+                    <h2 style={{
+                        fontWeight: 'normal',
+                        lineHeight: '40px'
+                    }}>
+                     Headmistress of Groupe Scolaire Bilingue Privé Laïc La SEMENCE, certifies that the child
+                    <div style={{ fontWeight: 'bolder', marginLeft: '30px', fontSize: '60px', color: '#000065', fontFamily: 'Bradley Hand ITC', textAlign: 'center'}}>{result.student.name}</div>
+                    has successfully completed Nursery Course and is promoted to the Primary Cycle.
+                </h2>
+            </div>
           </div>
         </div>
     )

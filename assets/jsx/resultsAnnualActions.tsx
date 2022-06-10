@@ -326,13 +326,13 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
             <td colSpan={2}> </td>
         </tr> */}
         {exams.length>1 && <><tr>
-            <td>Moyenne de {exams[0].slug} </td>
+            <td>Moyenne du {exams[0].slug} </td>
             <td>  { ((total1Marks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td>Moyenne de {exams[1].slug} </td>
+            <td>Moyenne du {exams[1].slug} </td>
             <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
             </tr>
             <tr>
-                <td> Moyenne de {exams[2].slug}</td>
+                <td> Moyenne du {exams[2].slug}</td>
                 <td>  { ((total3Marks / totalPoints) * 20).toFixed(2) } /20 </td>
                 <td>{average > 10 ? 'Admis en classe de' : 'Redouble la classe de'}</td>
                 <td>{average > 10 ? term.class?.promoted : term.class?.name }</td>

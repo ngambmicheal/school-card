@@ -159,12 +159,12 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
                     </th>
                     {exams.map((exam, index) => {
                         return <th>
-                        {exam.name.substr(0,4)}
+                        {exam.slug}
                         </th>
                         })
                     }
                     <th >
-                        TERM1
+                        ANNUAL
                     </th>
                     <th colSpan={2}>
                         APPRECIATION CODE
@@ -209,7 +209,7 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
         <tr>
             <td>Average</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td rowSpan={5}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td rowSpan={6}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
             <td> Conduct Warning</td>
             <td  style={{fontSize:'15px'}}>  <input type='checkbox' /> Yes <input type='checkbox' /> No  </td>
         </tr>
@@ -244,7 +244,7 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
             <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
         </tr>
         <tr>
-            <td> Moyenne de {exams[2].slug}</td>
+            <td> {exams[2].slug} Average</td>
             <td>  { ((total3Marks / totalPoints) * 20).toFixed(2) } /20 </td>
             <td>{average > 10 ? 'Admitted in ' : 'Repeating '}</td>
             <td>{average > 10 ? term.class?.promoted : term.class?.name}</td>
