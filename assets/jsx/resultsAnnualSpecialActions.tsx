@@ -272,6 +272,15 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
         </tr>
         <tr>
             <td colSpan={2} style={{minHeight:'100px', fontSize:'14px'}}> 
+                <i>Des efforts s'imposent dans les compétences suivantes</i>
+                <br />
+                <ul style={{listStyle: 'none', textAlign:'left'}}>
+                    {comT.length > 0 ? comT.map(s => {
+                        return <li>{s}</li>
+                    }) : <li style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>RAS</li>}
+                </ul>
+
+                <br />
                 Redouble le CM2 en cas d'échec du CEP
             </td>
             <td></td>
