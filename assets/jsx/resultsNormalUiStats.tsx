@@ -4,13 +4,14 @@ import ExamInterface from "../../models/exam";
 import { useState } from "react";
 import SubjectInterface from "../../models/subject";
 import { getGeneralAverage } from "./resultsActions";
+import { addNumbers } from "../../utils/actions";
 
 export const getTotalPoints = (exam:ExamInterface) => { 
     let sum = 0; 
     console.log(sum)
     for(const el in exam){
         if(el.includes('point_')){
-            sum+=parseFloat(exam[el])??0
+            sum = addNumbers(sum, exam[el]??0)
         }
     }
   
@@ -21,7 +22,7 @@ export const getTotal = (result:ExamResultInterface) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]??0);
+            sum = addNumbers(sum, result[el]??0);
         }
     }
    return sum; 
@@ -30,7 +31,7 @@ export const getTotal = (result:ExamResultInterface) => {
 export const getTotals = (subject:SubjectInterface, result:ExamResultInterface) => {
     let total = 0; 
             subject.courses?.map(cc => {
-                total+=parseFloat(result[`subject_${cc._id}`] ?? 0); 
+                total = addNumbers(total, result[`subject_${cc._id}`] ?? 0); 
             })
     return total; 
 }

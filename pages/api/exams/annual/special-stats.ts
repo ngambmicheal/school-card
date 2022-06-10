@@ -17,6 +17,7 @@ import resultsNormalUiStats from '../../../../assets/jsx/resultsNormalUiStats';
 import { sectionSchema } from '../../../../models/section';
 import { termSchema } from '../../../../models/terms';
 import { replaceAll } from '../../../../services/utils';
+import AnnualExamInterface, { annualExamSchema } from '../../../../models/annualExam';
   
 
 export default async function handler(
@@ -26,14 +27,16 @@ export default async function handler(
 
     const {annualExam_id} = req.query
 
-    const term = await termSchema.findOne({_id:annualExam_id}).populate({path:'class', model:classeSchema, populate:{path:'section', model:sectionSchema}}).populate({path:'terms', model:termSchema , populate: {path:'exams', model: examSchema}});
+    const term = await annualExamSchema.findOne({_id:annualExam_id}).populate({path:'class', model:classeSchema, populate:{path:'section', model:sectionSchema}}).populate({path:'terms', model:termSchema , populate: {path:'exams', model: examSchema}});
     const totalResults = await examResultSchema.find({annualExam_id}).populate({path:'student', model:studentSchema}).sort({number:1}).collation({locale: "en_US", numericOrdering: true})
     const statsResults = await examResultSchema.find({annualExam_id}).populate({path:'student', model:studentSchema}).sort({rank:1})
-    const subjects = await subjectSchema.find({school:term.class.school, report_type:term.class.section.report_type}).populate({path:'school', model:schoolSchema})
+    
+    console.log(term)
+    const subjects = await subjectSchema.find({school:term.class?.school, report_type:term.class?.section?.report_type}).populate({path:'school', model:schoolSchema})
  
 
     var dir = `./tmp/stats`;
-    const zipName = `${replaceAll(' ', '_', term.class.name)}__${term.name}`
+    const zipName = `${replaceAll(' ', '_', term.class?.name)}__${term.name}`
 
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir, { recursive: true });

@@ -228,6 +228,6 @@ export function UploadFile(props: UploadFileStepProps) {
     )
   }
 
-  export default function () {
+  export default function NothingName () {
     return '';
   }
