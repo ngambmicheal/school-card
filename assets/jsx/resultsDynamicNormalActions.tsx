@@ -160,7 +160,7 @@ export default function resultsDynamicNormalActions(subjects:SubjectInterface[],
                         })
                     }
                     <th >
-                        TERM1
+                        TERM
                     </th>
                     <th colSpan={2}>
                         APPRECIATION CODE
