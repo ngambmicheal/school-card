@@ -7,7 +7,7 @@ type NavbarProps = {
 
 export default function Navbar({user, logout}:NavbarProps){
     return (
-        <nav className='navbar navbar-dark bg-dark navbar-expand-lg '>
+        <nav className='navbar navbar-dark bg-dark navbar-expand'>
         <div className='collapse navbar-collapse'>
             <ul className='navbar-nav mr-auto'>
                 {/* {user?
@@ -32,13 +32,13 @@ export default function Navbar({user, logout}:NavbarProps){
 
         <Link href='/' ><a className='nav-link'>Accueil</a></Link>
         <Link href='/schools' ><a className='nav-link'>Ecoles</a></Link>
+
         <Link href='/sections'><a className='nav-link'>Sections</a></Link>
         <Link href='/classes' ><a className='nav-link'>Classes</a></Link>
         <Link href='/students' ><a className='nav-link'>Elèves</a></Link>
         <Link href='/competences'><a className='nav-link'>Compétences</a></Link>
         <Link href='/subjects'><a className='nav-link'>Matières</a></Link>
         <Link href='/courses'><a className='nav-link'>Courses</a></Link>
-
             </ul>
         </div>
     </nav>
