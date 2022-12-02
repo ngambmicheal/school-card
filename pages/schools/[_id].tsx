@@ -46,6 +46,7 @@ export default function Classes(){
     const headers =  [
         { label: "Nom", key: "name" },
         { label: "Ecole", key: "school.name" },
+        { label: "Section", key: "section"}
       ];
 
     return (
