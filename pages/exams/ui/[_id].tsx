@@ -172,7 +172,7 @@ export default function examDetails(){
         let sum = 0; 
         for(const el in result){
             if(el.includes('subject_')){
-                sum+=parseFloat(result[el]);
+                sum+=parseFloat(parseFloat(result[el]).toFixed(2))
             }
         }
         return sum;
@@ -310,7 +310,7 @@ export default function examDetails(){
     )
 }
 
-const reducer = (previousValue:any, currentValue:any) => parseFloat(previousValue??0) + parseFloat(currentValue??0)
+const reducer = (previousValue:any, currentValue:any) => parseFloat((parseFloat(previousValue??0) + parseFloat(currentValue??0)).toFixed(2))
 
 export function ExamResult({ result, competences, exam, points, deleteResult}:{competences:CompetenceInterface[], result:ExamResultInterface|any, exam:any, points:any, deleteResult:(resultId:string)=>void}){
 
