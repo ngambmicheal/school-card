@@ -101,7 +101,7 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
 
     comT = [];
 
-    const totalMarks = getTotal(results)
+    const totalMarks = getFloat(getTotal(results))
     const totalPoints = getTotalExam(exams[0])
     const average = (totalMarks / totalPoints) * 20;
 
@@ -213,7 +213,7 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
     <table style={{fontSize:'25px', width:'100%'}} className='table1'>
         <tr>
             <th>TOTAL </th>
-            <th> {totalMarks} / {totalPoints} </th>
+            <th> { getFloat(totalMarks)} / {totalPoints} </th>
             <th>COTES</th>
             <th colSpan={3}>Conseil de Classe</th>
         </tr>

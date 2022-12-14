@@ -117,7 +117,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
         return {total, app, pointTotal}
     }
 
-    const totalMarks = getTotal(results)
+    const totalMarks = getFloat(getTotal(results))
     const totalPoints = getTotalExam(results?.exam_id)
     const average = (totalMarks / totalPoints) * 20;
 

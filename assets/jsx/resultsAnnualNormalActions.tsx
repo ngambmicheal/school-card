@@ -89,7 +89,7 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
     comT = [];
 
     const examWithPoint = exams[0].exams as ExamInterface[];
-    const totalMarks = getTotal(results)
+    const totalMarks = getFloat(getTotal(results))
     const totalPoints = getTotalExam(examWithPoint[0])
     const average = (totalMarks / totalPoints) * 20;
 

@@ -87,7 +87,7 @@ export default function resultsDynamicNormalActions(subjects:SubjectInterface[],
 
     comT = [];
 
-    const totalMarks = getTotal(results)
+    const totalMarks = getFloat(getTotal(results));
     const totalPoints = getTotalExam(exams[0])
     const average = (totalMarks / totalPoints) * 20;
 

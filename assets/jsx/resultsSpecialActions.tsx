@@ -101,7 +101,7 @@ export default function resultsSpecialActions(subjects:SubjectInterface[], resul
 
     comT = [];
 
-    const totalMarks = getTotal(results)
+    const totalMarks = getFloat(getTotal(results))
     const totalPoints = getTotalExam(results?.exam_id)
     const average = (totalMarks / totalPoints) * 20;
 
