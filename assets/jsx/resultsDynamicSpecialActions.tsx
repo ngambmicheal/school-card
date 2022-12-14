@@ -5,6 +5,7 @@ import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
+import { getFloat } from "../../utils/calc";
 
 let comT:string[] = [];
 
@@ -79,7 +80,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
     return sum; 
@@ -89,7 +90,7 @@ const getTotalExam = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('point_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
     return sum; 
