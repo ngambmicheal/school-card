@@ -16,6 +16,7 @@ import { toast } from "@chakra-ui/toast";
 import { useForm } from "react-hook-form";
 import TermInterface from "../../../models/terms";
 import { CSVLink } from "react-csv";
+import { getFloat } from "../../../utils/calc";
 
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
@@ -110,7 +111,7 @@ export default function examDetails(){
         console.log(sum)
         for(const el in exam){
             if(el.includes('point_')){
-                sum+=parseFloat(exam[el])??0
+                sum+=getFloat(exam[el])??0
                 console.log(exam[el])
             }
         }

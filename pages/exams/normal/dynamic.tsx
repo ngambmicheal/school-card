@@ -18,7 +18,7 @@ export const getSubjectTotal = (result:ExamResultInterface|any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]);
+            sum+=parseFloat(parseFloat(result[el]).toFixed(2))
         }
     }
     return sum;
@@ -141,7 +141,7 @@ export default function examDetails(){
         console.log(sum)
         for(const el in exam){
             if(el.includes('point_')){
-                sum+=parseFloat(exam[el])??0
+                sum+=parseFloat(parseFloat(exam[el]).toFixed(2))??0
                 console.log(exam[el])
             }
         }
