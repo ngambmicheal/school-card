@@ -15,6 +15,7 @@ import FileUpload, { validateFiles } from "../../../components/dropzone";
 import { toast } from "@chakra-ui/toast";
 import { useForm } from "react-hook-form";
 import { CSVLink } from "react-csv";
+import { getFloat } from "../../../utils/calc";
 
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
@@ -139,7 +140,7 @@ export default function examDetails(){
         console.log(sum)
         for(const el in exam){
             if(el.includes('point_')){
-                sum+=parseFloat(exam[el])??0
+                sum+=getFloat(exam[el])??0
                 console.log(exam[el])
             }
         }
@@ -172,7 +173,7 @@ export default function examDetails(){
         let sum = 0; 
         for(const el in result){
             if(el.includes('subject_')){
-                sum+=parseFloat(parseFloat(result[el]).toFixed(2))
+                sum+=getFloat(getFloat(result[el]).toFixed(2))
             }
         }
         return sum;
@@ -310,7 +311,7 @@ export default function examDetails(){
     )
 }
 
-const reducer = (previousValue:any, currentValue:any) => parseFloat((parseFloat(previousValue??0) + parseFloat(currentValue??0)).toFixed(2))
+const reducer = (previousValue:any, currentValue:any) => getFloat((getFloat(previousValue??0) + getFloat(currentValue??0)).toFixed(2))
 
 export function ExamResult({ result, competences, exam, points, deleteResult}:{competences:CompetenceInterface[], result:ExamResultInterface|any, exam:any, points:any, deleteResult:(resultId:string)=>void}){
 
