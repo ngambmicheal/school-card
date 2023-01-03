@@ -8,11 +8,13 @@ import Modal from 'react-modal';
 import SchoolInterface from "../../models/school";
 import { useRouter } from "next/dist/client/router";
 import CompetenceInterface from "../../models/competence";
+import { useSession } from "next-auth/react";
 
 export default function Subjects(){
     const [subjects, setSubjects] = useState<Subject[]>([])
     const [competence, setCompetence] = useState<CompetenceInterface>()
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const {data:session} = useSession();
 
     const router = useRouter();
     const {_id:competenceId} = router.query;
@@ -41,7 +43,8 @@ export default function Subjects(){
     }
 
     const deleteSubject = (id:any) => {
-        api.deleteSubject(id).then(() => getSubjects())
+        if(confirm('Are you sure you want to delete?'))
+            api.deleteSubject(id).then(() => getSubjects())
     }
 
     return (
@@ -63,7 +66,7 @@ export default function Subjects(){
                             <td>{subject._id}</td>
                             <td>{subject.name}</td>
                             <td>{subject.school?.name}</td>
-                            <td><Link href={`/subjects/${subject._id}`}>Voir</Link> | <a href='javascript:void(0)'  onClick={() =>deleteSubject(subject._id)}>Delete</a> </td>
+                            <td><Link href={`/subjects/${subject._id}`}>Voir</Link> | {session && <a className="delete-action" onClick={() =>deleteSubject(subject._id)}>Delete</a>} </td>
                         </tr>
                     })
                     }
@@ -107,8 +110,7 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, sch
             contentLabel="Add Student"
           >
             <div className='modal-body'>
-            <h2 >Hello</h2>
-            <button onClick={closeModal}>close</button>
+            <h2 >Add Competence</h2>
                 <div className='form-group'>
                     <label>Name </label>
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
@@ -116,6 +118,8 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, sch
 
                 <div className='from-group'>
                     <button onClick={() =>save(student)} className='btn btn-success' disabled={!student.school}>Save</button>
+                    <button className='btn btn-secondary end' onClick={closeModal}>close</button>
+
                 </div>
             </div>
           </Modal>

@@ -11,7 +11,6 @@ export default interface StudentInterface{
     email?:string, 
     dob?:string,
     class_id ?:string & ClasseInterface,
-    school_id ?:string & SchoolInterface,
     number?:string,
     sex?:string,
     place?:string
@@ -23,10 +22,6 @@ const StudentSchema = new mg.Schema({
     class_id : {
         type:mg.Schema.Types.ObjectId,
         ref:'Classe',
-    },
-    school_id : {
-        type:mg.Schema.Types.ObjectId,
-        ref:'School',
     },
     surname: {type:String},
     phone: {type:String},

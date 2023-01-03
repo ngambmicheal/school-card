@@ -56,3 +56,23 @@ td.center{
 input[type='checkbox']{
   transform: scale(2);
 }
+
+.delete-action{
+  color:#dc3545
+}
+
+.update-action{
+  color: #0d5835
+}
+
+.btn {
+  margin-top: 12px;
+}
+
+a{
+  cursor: pointer;
+}
+
+.end{
+  float: right;
+}

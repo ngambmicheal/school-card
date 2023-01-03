@@ -39,7 +39,7 @@ export default function Users(){
 
     return (
         <>
-            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter un élève </button>
+            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter utilisateur </button>
             <table className='table '>
                 <thead>
                     <tr>
@@ -97,7 +97,7 @@ export function CreateUserModal({modalIsOpen, closeModal, save}:CreateUserModalP
           >
             <div className='modal-body'>
             <h2 >Ajouter un utilisateur</h2>
-            <button onClick={closeModal}>fermer</button>
+            <button onClick={closeModal} className='btn btn-secondary end'>Annuler</button>
                 <div className='form-group'>
                     <label>Nom</label>
                     <input className='form-control' name='name' value={user?.name} onChange={handleChange}></input>

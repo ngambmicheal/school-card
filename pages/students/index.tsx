@@ -5,6 +5,7 @@ import api from "../../services/api";
 import ClasseInterface from "../../models/student";
 import Modal from 'react-modal';
 import { customStyles } from "../../services/constants";
+import { CreateStudentModal } from "../classes/modals/student-forms";
 
 export default function Students(){
     const [students, setStudents] = useState<Classe[]>([])
@@ -25,14 +26,15 @@ export default function Students(){
         })
     }
 
-    const saveClasse = (student:any) => {
-        api.saveClasse(student).then(() => getStudents())
+    const saveStudent = (student:any) => {
+        api.saveStudent(student).then(() => getStudents())
         closeModal();
     }
 
     return (
         <>
             <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter un élève </button>
+            <h3 className="my-3">Liste des eleves</h3>
             <table className='table '>
                 <thead>
                     <tr>
@@ -57,53 +59,7 @@ export default function Students(){
                 </tbody>
             </table>
 
-            <CreateClassModal closeModal={closeModal} save={saveClasse} modalIsOpen={modalIsOpen} />
+            <CreateStudentModal totalUsers={students.length} closeModal={closeModal} save={saveStudent} modalIsOpen={modalIsOpen} />
         </>
     )
 }
-
-type CreateClassModalProps = {
-    modalIsOpen:boolean,
-    closeModal: () => void,
-    save:(student:any) => void
-}
-export function CreateClassModal({modalIsOpen, closeModal, save}:CreateClassModalProps){
-    const [student, setClasse] = useState<ClasseInterface>({ name:''});
-
-    function handleChange(e:any) {
-        const key = e.target.name
-        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
-    
-        setClasse(inputData => ({
-          ...inputData,
-          [key]: value
-        }))
-      }
-
-      
-    return (
-        <div>
-
-          <Modal
-            isOpen={modalIsOpen}
-            onRequestClose={closeModal}
-            style={customStyles}
-            contentLabel="Add Classe"
-          >
-            <div className='modal-body'>
-            <h2 >Ajouter un élève</h2>
-            <button onClick={closeModal}>fermer</button>
-                <div className='form-group'>
-                    <label>Nom </label>
-                    <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
-                </div>
-
-                <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success'>Enregistrer</button>
-                </div>
-            </div>
-          </Modal>
-        </div>
-      );
-}
-

@@ -8,11 +8,13 @@ import { customStyles } from "../../services/constants";
 import SchoolInterface from "../../models/school";
 import SectionInterface from "../../models/section";
 import { helperService } from "../../services";
+import { useSession } from "next-auth/react";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
     const [sections, setSections] = useState<SectionInterface[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const {data:session} = useSession();
 
     useEffect(() => {
         getClasses()
@@ -45,7 +47,7 @@ export default function Classes(){
 
     return (
         <>
-            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une classe </button>
+            {session && <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une classe </button>}
             <table className='table '>
                 <thead>
                     <tr>
@@ -58,7 +60,7 @@ export default function Classes(){
                 </thead>
                 <tbody>
                     {classes.map((classe:any) => {
-                       return  <ClasseRow classe={classe} deleteClasse={deleteClasse} />
+                       return  <ClasseRow session={session} classe={classe} deleteClasse={deleteClasse} />
                     })
                     }
                 </tbody>
@@ -69,7 +71,8 @@ export default function Classes(){
     )
 }
 
-export function ClasseRow({classe, deleteClasse}:{classe:ClasseInterface,deleteClasse:(id:string)=>void}) {
+type ClasseRowInterface = {classe:ClasseInterface,deleteClasse:(id:string)=>void, session:any}
+export function ClasseRow({classe, deleteClasse, session}: ClasseRowInterface) {
     const [teacher, setTeacher] = useState(classe.teacher); 
 
 
@@ -83,8 +86,8 @@ export function ClasseRow({classe, deleteClasse}:{classe:ClasseInterface,deleteC
             <td>{classe.name}</td>
             <td>{classe.school?.name}</td>
             <td>{classe.section?.name}</td>
-            <td><input  value={teacher} onChange={updateTeacher} /> </td>
-            <td><Link href={`classes/${classe._id}`}>Voir</Link> |  <a href='javascript:void(0)'  onClick={() =>deleteClasse(classe._id)}>Supprimer</a></td>
+            <td><input disabled={!session} value={teacher} onChange={updateTeacher} /> </td>
+            <td><Link href={`classes/${classe._id}`}>Voir</Link> {session && <a className="delete-action"  onClick={() =>deleteClasse(classe._id)}>  | Supprimer</a>}</td>
         </tr>
     )
 }
@@ -120,7 +123,6 @@ export function CreateClassModal({modalIsOpen, closeModal, save, sections}:Creat
           >
             <div className='modal-body'>
             <h2 >Ajouter une classe</h2>
-            <button onClick={closeModal}>fermer</button>
                 <div className='form-group my-3'>
                     <label>Nom </label>
                     <input className='form-control' name='name' value={classe?.name} onChange={handleChange}></input>
@@ -140,6 +142,7 @@ export function CreateClassModal({modalIsOpen, closeModal, save, sections}:Creat
 
                 <div className='from-group'>
                     <button onClick={() =>save(classe)} className='btn btn-success' disabled={!classe.school && !classe.name && !classe.section}>Enregistrer</button>
+                    <button onClick={closeModal} className='btn btn-secondary end'>Annuler</button>
                 </div>
             </div>
           </Modal>

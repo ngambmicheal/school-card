@@ -339,7 +339,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
             })
         })}
         <th><input type='checkbox' name='th' checked={res.th=='true'}  onClick={handleChange} value='true' /></th>
-        <th> <Link href={`/exams/nursery/print?_id=${res._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
+        <th> <Link href={`/exams/nursery/print?_id=${res._id}`}>Imprimer</Link> | <a onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }
 
@@ -374,7 +374,7 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, subject}:Crea
           >
             <div className='modal-body'>
 
-            <button onClick={closeModal}>close</button>
+            <button className='btn btn-secondary end' onClick={closeModal}>close</button>
                 <div className='form-group'>
                     <label>Name </label>
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>

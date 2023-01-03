@@ -6,6 +6,7 @@ import api from "../../services/api";
 import { customStyles } from "../../services/constants";
 import Modal from 'react-modal'
 import Link from 'next/link'
+import { useSession } from "next-auth/react";
 
 export default function subjectDetails(){
     const [subject, setSubject] = useState<SubjectInterface>()
@@ -13,6 +14,7 @@ export default function subjectDetails(){
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const router = useRouter();
+    const {data:session} = useSession();
     const {_id:subjectId} = router.query;
 
     useEffect(()=>{
@@ -44,7 +46,8 @@ export default function subjectDetails(){
     }
 
     const deleteCourse = (course:any) => {
-        //api.deleteCourse(course).then(() => getCourses());
+        if(confirm('Are you sure ?'))
+        api.deleteCourse(course).then(() => getCourses());
     }
 
     return (
@@ -52,7 +55,9 @@ export default function subjectDetails(){
             <div className='py-3'>
                 <h3>Matiere : {subject?.name}</h3>
             </div>
-            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une sous matiere </button>
+            {session && <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une sous matiere </button> }
+
+            <h3 className="py-2">Liste des sous-matieres</h3>
             <table className='table '>
                 <thead>
                     <tr>
@@ -64,7 +69,7 @@ export default function subjectDetails(){
                 </thead>
                 <tbody>
                     {courses.map(course => {
-                       return  <CourseRow crs={course} deleteCourse={deleteCourse} />
+                       return  <CourseRow session={session} crs={course} deleteCourse={deleteCourse} />
                     })
                     }
                 </tbody>
@@ -106,8 +111,6 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, subject}:Crea
             contentLabel="Add Student"
           >
             <div className='modal-body'>
-
-            <button onClick={closeModal}>close</button>
                 <div className='form-group'>
                     <label>Name </label>
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
@@ -120,6 +123,8 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, subject}:Crea
 
                 <div className='from-group'>
                     <button onClick={() =>save(student)} className='btn btn-success'>Save</button>
+                    <button className='btn btn-secondary end' onClick={closeModal}>close</button>
+
                 </div>
             </div>
           </Modal>
@@ -130,9 +135,10 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, subject}:Crea
 type CourseProps = {
     crs:CourseInterface,
     deleteCourse:(id:string) => void, 
+    session:any
   }
 
-export function CourseRow({crs, deleteCourse}:CourseProps){
+export function CourseRow({crs, deleteCourse, session}:CourseProps){
     const [course, setCourse] = useState(crs); 
     const [hasUpdated, setHasUpdated] = useState(false)
   
@@ -157,9 +163,9 @@ export function CourseRow({crs, deleteCourse}:CourseProps){
     return (
         <tr key={course._id}>
             <td>{course._id}</td>
-            <td>  <input className='form-control' type='text' name='name' value={course?.name} onChange={handleChange} />  </td>
-            <td>  <input className='form-control' type='text' name='point' value={course?.point} onChange={handleChange} />  </td>
-            <td> {hasUpdated && <a href='javascript:void(0)'  onClick={() =>updateCourse()}>Update | </a> } | <a href='javascript:void(0)'  onClick={() =>deleteCourse(course._id)}>Delete</a>  </td>
+            <td>  <input className='form-control' type='text' disabled={!session} name='name' value={course?.name} onChange={handleChange} />  </td>
+            <td>  <input className='form-control' type='text' name='point' disabled={!session} value={course?.point} onChange={handleChange} />  </td>
+            <td> {hasUpdated && session && <a className="update-action"  onClick={() =>updateCourse()}>Update | </a> } {session && <a className="delete-action"  onClick={() =>deleteCourse(course._id)}> | Delete</a> }</td>
         </tr>
       )
   }

@@ -8,11 +8,13 @@ import Modal from 'react-modal';
 import SchoolInterface from "../../models/school";
 import { report_types } from "../sections";
 import { helperService } from "../../services";
+import { useSession } from "next-auth/react";
 
 export default function Subjects(){
     const [subjects, setSubjects] = useState<Subject[]>([])
     const [schools, setSchools] = useState<SchoolInterface[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const {data:session} = useSession();
 
     useEffect(() => {
         getSubjects();
@@ -38,12 +40,12 @@ export default function Subjects(){
     }
 
     const deleteSubject = (subject:any) => {
-        api.deleteSubject(subject).then(() => getSubjects());
+        if(confirm('Are you sure you want to delete?') ) api.deleteSubject(subject).then(() => getSubjects());
     }
 
     return (
         <>
-            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une matière </button>
+            {session && <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une matière </button>}
             <table className='table '>
                 <thead>
                     <tr>
@@ -57,7 +59,7 @@ export default function Subjects(){
                 </thead>
                 <tbody>
                     {subjects.map(subject => {
-                       return <SubjectRow subj={subject} deleteSubject={deleteSubject} />
+                       return <SubjectRow key={subject._id} session={session} subj={subject} deleteSubject={deleteSubject} />
                     })
                     }
                 </tbody>
@@ -71,10 +73,11 @@ export default function Subjects(){
 type SubjectProps = {
     subj:SubjectInterface,
     deleteSubject:(id:string) => void, 
+    session:any
   }
 
   
-export function SubjectRow({subj, deleteSubject}:SubjectProps){
+export function SubjectRow({subj, deleteSubject, session}:SubjectProps){
     const [subject, setSubject] = useState(subj); 
     const [hasUpdated, setHasUpdated] = useState(false)
   
@@ -103,7 +106,7 @@ export function SubjectRow({subj, deleteSubject}:SubjectProps){
             <td>  <input className='form-control' type='text' name='slug' value={subject?.slug} onChange={handleChange} />  </td>
             <td>{subject.report_type}</td>
             <td>{subject.school?.name}</td>
-            <td> {hasUpdated && <a href='javascript:void(0)'  onClick={() =>updateSubject()}>Update | </a> }<Link href={`subjects/${subject._id}`}>Voir</Link>  | <a href='javascript:void(0)'  onClick={() =>deleteSubject(subject._id)}>Delete</a>  </td>
+            <td> {hasUpdated && session && <a className="update-action"  onClick={() =>updateSubject()}>Update | </a> } <Link href={`subjects/${subject._id}`}>Voir</Link>  {session && <a className="delete-action"  onClick={() =>deleteSubject(subject._id)}> | Delete</a>  }</td>
         </tr>
       )
   }
@@ -141,7 +144,6 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, sch
           >
             <div className='modal-body'>
             <h2 >Ajouter une matière</h2>
-            <button onClick={closeModal}>fermer</button>
                 <div className='form-group'>
                     <label>Nom </label>
                     <input className='form-control' name='name' value={subject?.name} onChange={handleChange}></input>
@@ -158,6 +160,8 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, sch
 
                     <div className='from-group mt-2'>
                         <button onClick={() =>save(subject)} className='btn btn-success' disabled={!subject.name || !subject.report_type}>Enregistrer</button>
+                        <button onClick={closeModal} className='btn btn-secondary end'>Annuler</button>
+
                     </div>
                 </div>
             </div>

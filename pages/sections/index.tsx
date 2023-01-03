@@ -8,12 +8,14 @@ import Modal from 'react-modal';
 import SchoolInterface from "../../models/school";
 import useSchool from "../../hooks/useSchool";
 import { helperService } from "../../services";
+import { useSession } from "next-auth/react";
 
 export const report_types = ['Competence', 'Matiere', 'Maternelle','Nursery', 'Special'];
 export default function Sections(){
     const [sections, setSections] = useState<Section[]>([])
     const [schools, setSchools] = useState<SchoolInterface[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const {data:session} = useSession();
 
     useEffect(() => {
         getSections();
@@ -38,6 +40,11 @@ export default function Sections(){
         closeModal();
     }
 
+    const deleteSection = (section:string) => {
+        if((confirm('Are you sure you want to delete ?')))
+        api.deleteSection(section).then(() => getSections())
+    }
+
     return (
         <>
             <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une section </button>
@@ -56,7 +63,7 @@ export default function Sections(){
                             <td>{section.name}</td>
                             <td>{section.school?.name}</td>
                             <th>{section.report_type}</th>
-                            <td><Link href={`sections/${section._id}`}>Voir</Link></td>
+                            <td><Link href={`sections/${section._id}`}>Voir</Link>  {session && <a className="delete-action" href='#' onClick={() => deleteSection(section._id)}> | Delete </a> }</td>
                         </tr>
                     })
                     }
@@ -102,7 +109,6 @@ export function CreateSectionModal({modalIsOpen, closeModal, save, class_id, sch
           >
             <div className='modal-body'>
             <h2 >Ajouter une section</h2>
-            <button onClick={closeModal}>fermer</button>
                 <div className='form-group'>
                     <label>Nom </label>
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
@@ -121,6 +127,8 @@ export function CreateSectionModal({modalIsOpen, closeModal, save, class_id, sch
 
                 <div className='from-group'>
                     <button onClick={() =>save(student)} className='btn btn-success' disabled={!(student.report_type && student.name)}>Enregistrer</button>
+                    <button onClick={closeModal} className='btn btn-secondary end'>Annuler</button>
+
                 </div>
             </div>
           </Modal>

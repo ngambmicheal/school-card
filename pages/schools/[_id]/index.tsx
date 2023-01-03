@@ -9,11 +9,13 @@ import { useRouter } from "next/dist/client/router";
 import SectionInterface from "../../../models/section";
 import { CSVLink } from "react-csv";
 import { helperService } from "../../../services";
+import { useSession } from "next-auth/react";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [sections, setSections] = useState<SectionInterface[]>([])
+    const session = useSession();
 
     const router = useRouter()
     const {_id:schoolId} = router.query;
@@ -45,6 +47,12 @@ export default function Classes(){
         closeModal();
     }
 
+    const deleteClass = (classId:string) => {
+        if(confirm('Are you sure to delete?'))
+          api.deleteClasse(classId).then(() => getClasses())
+      }
+  
+
     const chooseSchool = () => {
         helperService.saveSchoolId(schoolId as unknown as string)
         window.location.reload();
@@ -61,10 +69,7 @@ export default function Classes(){
             <CSVLink data={classes} headers={headers} className='btn btn-dark mx-3' filename={"liste-des-classes-csv"+new Date().getFullYear()+".csv"}>
             Telecharcher Csv
             </CSVLink>
-            <Link href={`/staff`}><button className="btn btn-primary mx-2">Staff</button></Link>
             <Link href={`/schools/${schoolId}/settings`}><button className="btn btn-dark mx-2">Settings</button></Link>
-
-            <button className='btn btn-success' onClick={() => chooseSchool()}> Choose this school </button>
 
             <br/>
 
@@ -82,7 +87,7 @@ export default function Classes(){
                        return  <tr key={classe._id}>
                             <td>{classe.name}</td>
                             <td>{classe.school?.name} </td>
-                            <td><Link href={`/classes/${classe._id}`}>Voir</Link></td>
+                            <td><Link href={`/classes/${classe._id}`}>Voir</Link> { session.data &&  <a className="delete-action"  onClick={() =>deleteClass(classe._id as string)}> | Delete</a> }</td>
                         </tr>
                     })
                     }
@@ -102,7 +107,7 @@ type CreateClassModalProps = {
     schoolId:any
 }
 export function CreateClassModal({modalIsOpen, closeModal, save,sections, schoolId}:CreateClassModalProps){
-    const [classe, setClasse] = useState<ClasseInterface>({ name:'',teacher:'', school:schoolId});
+    const [classe, setClasse] = useState<ClasseInterface>({ name:'',teacher:'', school:helperService.getSchoolId()??undefined});
 
     function handleChange(e:any) {
         const key = e.target.name
@@ -126,7 +131,7 @@ export function CreateClassModal({modalIsOpen, closeModal, save,sections, school
           >
             <div className='modal-body'>
             <h2 >Hello</h2>
-            <button onClick={closeModal}>close</button>
+            <button className='btn btn-secondary end' onClick={closeModal}>close</button>
                 <div className='form-group'>
                     <label>Name </label>
                     <input className='form-control' name='name' value={classe?.name} onChange={handleChange}></input>
@@ -137,7 +142,7 @@ export function CreateClassModal({modalIsOpen, closeModal, save,sections, school
 
                     <select className='form-control' name='section'  onChange={handleChange} >
                         <option value=''> Choisir </option>
-                        {sections.filter(s => s.school?._id == classe.school).map(school => {
+                        {sections.map(school => {
                             return (<option key={school._id} value={school._id}> {school.name} </option>)
                         })}
                     </select>

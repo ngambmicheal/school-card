@@ -34,7 +34,7 @@ export const authOptions = { providers: [
 
       // If no error and we have user data, return it
       if (res.ok && user) {
-        return user
+        return user 
       }
       // Return null if user data could not be retrieved
       return null
@@ -43,7 +43,13 @@ export const authOptions = { providers: [
 ], 
 pages:{
     error: '/auth/error'
-}
+}, 
+callbacks:{
+  async session(data:any){
+    return data.session
+  }
+}, 
+secret:'ThisIsMySecret'
 }
 
 export default NextAuth(authOptions)

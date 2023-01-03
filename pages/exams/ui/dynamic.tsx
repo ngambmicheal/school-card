@@ -349,6 +349,6 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
         <th> {res.rank}</th>
         <th><input type='checkbox' name='th' checked={res.th==true}  onClick={handleChange} /></th>
         <th> <td><input type='checkbox' name='ignore' checked={res.ignore==true}  onClick={handleChange} /></td> </th>
-        <th> <Link href={`/api/exams/results/dynamic-print?term_id=${res.term_id}&student_id=${res.student._id}`}>Imprimer</Link> | <a href='javascript:void(0)' onClick={() =>deleteResult(res._id)}> Delete</a> </th>
+        <th> <Link href={`/api/exams/results/dynamic-print?term_id=${res.term_id}&student_id=${res.student._id}`}>Imprimer</Link> | <a onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }

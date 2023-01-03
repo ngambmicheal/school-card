@@ -27,13 +27,13 @@ export default function Sections(){
     }
 
     const getSections= () => {
-        api.getSchoolSections(schoolId).then(({data:{data}} : any) => {
+        api.getSections().then(({data:{data}} : any) => {
             setSections(s =>data)
         })
     }
 
     const saveSection = (student:any) => {
-        api.saveSection(student).then(() => getSections())
+        api.saveSections(student).then(() => getSections())
         closeModal();
     }
 
@@ -95,7 +95,7 @@ export function CreateClassModal({modalIsOpen, closeModal, save}:CreateClassModa
           >
             <div className='modal-body'>
             <h2 >Hello</h2>
-            <button onClick={closeModal}>close</button>
+            <button className='btn btn-secondary end' onClick={closeModal}>close</button>
                 <div className='form-group'>
                     <label>Name </label>
                     <input className='form-control' name='name' value={section?.name} onChange={handleChange}></input>

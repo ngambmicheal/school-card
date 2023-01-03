@@ -14,6 +14,7 @@ import { CreateStudentModal } from "./modals/student-forms";
 import { ImportStudents } from "./modals/import-students";
 import { AnnualExamModal, CreateExamModal } from "./modals/annual-exam";
 import { CSVLink } from "react-csv";
+import { useSession } from "next-auth/react";
 
 
 export default function ClasseDetails(){
@@ -192,7 +193,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/${exam._id}`} >Entree les donnees</Link> </td> }
                         {classe?.section?.report_type =='Competence' &&  <td> <Link href={`/exams/ui/${exam._id}`} >Entree les donnees</Link> </td> }
                         {classe?.section?.report_type =='Special' &&  <td> <Link href={`/exams/special/${exam._id}`} >Entree les donnees</Link> </td> }
-                        <td> <a href='javascript:void(0)'  onClick={() =>deleteExam(exam._id as string)}>Delete</a> </td>
+                        <td> <a  onClick={() =>deleteExam(exam._id as string)}>Delete</a> </td>
                     </tr>
                     })
                 }   
@@ -226,7 +227,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/normal/dynamic?term_id=${term._id}`} >View</Link> </td> }
                         {classe?.section?.report_type =='Competence' && <td> <Link href={`/exams/ui/dynamic?term_id=${term._id}`} >UI</Link> </td>}
                         {classe?.section?.report_type =='Special' && <td> <Link href={`/exams/special/dynamic?term_id=${term._id}`} >UI/Special</Link> </td>}
-                        <td> { term._id && <a href='javascript:void(0)'  onClick={() =>calculateTerm(term._id)}> Calculer  | </a>} <a href='javascript:void(0)'  onClick={() =>deleteTerm(term._id)}>Delete</a> </td>
+                        <td> { term._id && <a  onClick={() =>calculateTerm(term._id)}> Calculer  | </a>} <a  onClick={() =>deleteTerm(term._id)}>Delete</a> </td>
                     </tr>
                     })
                 }   
@@ -258,7 +259,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/normal/annual?annualExam_id=${term._id}`} >View</Link> </td> }
                         {classe?.section?.report_type =='Competence' && <td> <Link href={`/exams/ui/annual?annualExam_id=${term._id}`} >UI</Link> </td>}
                         {classe?.section?.report_type =='Special' && <td> <Link href={`/exams/special/annual?annualExam_id=${term._id}`} >UI/Special</Link> </td>}
-                        <td> {term._id &&  <a href='javascript:void(0)'  onClick={() =>calculateAnnualExam(term._id)}>Calculer | </a>  } <a href='javascript:void(0)'  onClick={() =>deleteAnnualResult(term._id)}>Delete</a> </td>
+                        <td> {term._id &&  <a  onClick={() =>calculateAnnualExam(term._id)}>Calculer | </a>  } <a  onClick={() =>deleteAnnualResult(term._id)}>Delete</a> </td>
                     </tr>
                     })
                 }   
@@ -317,6 +318,7 @@ type StudentProps = {
 export function StudentRow({stud, deleteStudent, terms}:StudentProps){
   const [student, setStudent] = useState(stud); 
   const [hasUpdated, setHasUpdated] = useState(false)
+  const session = useSession()
 
 
   function handleChange(e:any) {
@@ -344,11 +346,11 @@ export function StudentRow({stud, deleteStudent, terms}:StudentProps){
             <td>  <input  style={{width:'50px'}} type='text' name='sex' value={student?.sex} onChange={handleChange}></input></td>
             <td>  <input  style={{width:'150px'}} className='form-control' type='text' name='dob' value={student?.dob} onChange={handleChange}></input></td>
             <td>  <input  style={{width:'150px'}} type='text' name='place' value={student?.place} onChange={handleChange}></input></td>
-            <td>  {hasUpdated && <a href='javascript:void(0)'  onClick={() =>updateStudent()}>Update</a> }  | 
-                      <a href='javascript:void(0)'  onClick={() =>deleteStudent(student._id)}>Delete</a> | 
+            <td>  {hasUpdated && <a className="update-action"  onClick={() =>updateStudent()}>Update</a> }   
+                     {session.data && <a className="delete-action"  onClick={() =>deleteStudent(student._id)}> | Delete</a>} 
 
                       {terms.map((term, index) => {
-                          return <> <a href={`/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?_id=${term._id}&student_id=${student._id}`} target='_blank'> {term.name} </a>  | </>
+                          return <> <a href={`/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?_id=${term._id}&student_id=${student._id}`} target='_blank'> | {term.name} </a>   </>
                       })}
             </td>
         </tr>
