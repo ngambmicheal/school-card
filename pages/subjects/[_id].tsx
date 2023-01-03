@@ -36,7 +36,10 @@ export default function subjectDetails(){
     }
 
     const saveCourses = (subject:any) => {
-        api.saveCourses(subject).then(() => getCourses())
+        api.saveCourses(subject).then(() => {
+            api.sync();
+            getCourses()
+        })
         closeModal();
     }
 

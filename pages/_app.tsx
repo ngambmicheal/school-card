@@ -13,7 +13,6 @@ function MyApp({ Component,   pageProps: { session, ...pageProps } }: AppProps) 
         <Component {...pageProps} />
     </Main>
     </SessionProvider>
-
   )
 }
 export default MyApp

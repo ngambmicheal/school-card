@@ -29,7 +29,10 @@ export default function Competences(){
     }
 
     const saveCompetence = (competence:any) => {
-        api.saveCompetences(competence).then(() => getCompetences())
+        api.saveCompetences(competence).then(() => {
+            api.sync();
+            getCompetences()
+        })
         closeModal();
     }
 
