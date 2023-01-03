@@ -5,6 +5,7 @@ import api from "../../services/api";
 import SchoolInterface from "../../models/school";
 import { customStyles } from "../../services/constants";
 import Modal from 'react-modal';
+import { helperService } from "../../services";
 
 export default function Schools(){
     const [schools, setSchools] = useState<School[]>([])
@@ -29,6 +30,11 @@ export default function Schools(){
         closeModal();
     }
 
+    const chooseSchool = (schoolId:string) => {
+        helperService.saveSchoolId(schoolId); 
+        window.location = '/schools/'+schoolId
+      }
+
     return (
         <>
             <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une ecole </button>
@@ -43,7 +49,7 @@ export default function Schools(){
                     {schools.map(school => {
                        return  <tr key={school._id}>
                             <td>{school.name}</td>
-                            <td><i className="fa fa-eye"></i><Link href={`schools/${school._id}`}> Voir</Link></td>
+                            <td><i className="glyphicon glyphicon-eye"></i><a href='#' onClick={() => school._id && chooseSchool(school._id)}> Choisir </a></td>
                         </tr>
                     })
                     }

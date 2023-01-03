@@ -4,6 +4,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import SchoolInterface from '../models/school'
+import { helperService } from '../services'
 import api from '../services/api'
 import styles from '../styles/Home.module.css'
 
@@ -15,6 +16,11 @@ const Home: NextPage = () => {
       setSchools(data)
     })
   }, [])
+
+  const chooseSchool = (schoolId:string) => {
+    helperService.saveSchoolId(schoolId); 
+    window.location = '/schools/'+schoolId
+  }
 
   return (
     <div className={styles.container}>
@@ -33,7 +39,7 @@ const Home: NextPage = () => {
               </thead>
               <tbody>
                 {schools.map(s => {
-                    return <tr><th key={s._id}><Link href={`schools/${s._id}`}> {s.name} </Link> </th><th><Link href={`schools/${s._id}`}> Choisir </Link></th></tr>
+                    return <tr><th key={s._id}><Link href={`schools/${s._id}`}> {s.name} </Link> </th><th><a href='#' onClick={() => s._id && chooseSchool(s._id)}> Choisir </a></th></tr>
                   })}
                 </tbody>
             </table>
