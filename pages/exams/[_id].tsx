@@ -19,7 +19,7 @@ export const getSubjectTotal = (result:ExamResultInterface|any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]);
+            sum+= parseFloat(parseFloat(result[el]).toFixed(2));
         }
     }
     return sum;

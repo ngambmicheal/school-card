@@ -5,6 +5,7 @@ import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
+import { getFloat } from "../../utils/calc";
 
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -84,7 +85,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
     return sum; 
@@ -94,7 +95,7 @@ export const getTotalExam = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('point_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
     return sum; 
@@ -104,7 +105,7 @@ export const getTotalExam = (result:any) => {
 export const getOnlySubjectTotal = (subject:SubjectInterface, results:ExamResultInterface) => {
     let total = 0 ; 
     subject.courses?.map(c => {
-        total+=parseFloat(results[`subject_${c._id}`]??0);
+        total+=getFloat(results[`subject_${c._id}`]??0);
     })
     return total
 }
@@ -114,8 +115,8 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
         let total = 0 ; 
         let pointTotal = 0;
         subject.courses?.map(c => {
-            total+=parseFloat(results[`subject_${c._id}`]??0);
-            pointTotal+=parseFloat(exams[0][`point_${c._id}`]??0);
+            total+=getFloat(results[`subject_${c._id}`]??0);
+            pointTotal+=getFloat(exams[0][`point_${c._id}`]??0);
         })
 
         const app = getCompetenceAppreciation(total, pointTotal, subject.slug);
@@ -123,7 +124,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
         return {total, app, pointTotal}
     }
 
-    const totalMarks = getTotal(results)
+    const totalMarks = getFloat(getTotal(results));
     const totalPoints = getTotalExam(exams[0])
     const average = (totalMarks / totalPoints) * 20;
 

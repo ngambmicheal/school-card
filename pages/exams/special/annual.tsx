@@ -9,6 +9,7 @@ import ExamResultInterface from "../../../models/examResult";
 import ExamInterface from "../../../models/terms";
 import { toast } from "@chakra-ui/toast";
 import AnnualEInterface from "../../../models/annualExam";
+import { getFloat } from "../../../utils/calc";
 
 export const getSubjectTotal = (result:ExamResultInterface|any) => {
     let sum = 0; 
@@ -138,7 +139,7 @@ export default function termDetails(){
         console.log(sum)
         for(const el in term){
             if(el.includes('point_')){
-                sum+=parseFloat(term[el])??0
+                sum+=getFloat(term[el])??0
                 console.log(term[el])
             }
         }
