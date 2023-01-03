@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { helperService } from '../services'
 
 type NavbarProps = {
     user: any,
@@ -33,12 +34,15 @@ export default function Navbar({user, logout}:NavbarProps){
         <Link href='/' ><a className='nav-link'>Accueil</a></Link>
         <Link href='/schools' ><a className='nav-link'>Ecoles</a></Link>
 
+        { helperService.getSchoolId() && <>
         <Link href='/sections'><a className='nav-link'>Sections</a></Link>
         <Link href='/classes' ><a className='nav-link'>Classes</a></Link>
         <Link href='/students' ><a className='nav-link'>Elèves</a></Link>
         <Link href='/competences'><a className='nav-link'>Compétences</a></Link>
         <Link href='/subjects'><a className='nav-link'>Matières</a></Link>
         <Link href='/courses'><a className='nav-link'>Courses</a></Link>
+        <Link href='/staff'><a className='nav-link'>Staff</a></Link>
+        </>}
             </ul>
         </div>
     </nav>

@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import ClasseInterface, { classeSchema } from '../../../models/classe';
 import mg from '../../../services/mg';
+import logger from '../../../utils/logger';
 
 type Data = {
   name: string
@@ -18,6 +19,7 @@ export default function handler(
     classe.save().then(()=>{
         res.status(200).json({data:classe, success:true, message:'done'});
     }).catch((e) => {
+      logger.error(e)
         res.status(400).json({message:e.message, success:false });
     })  
 }

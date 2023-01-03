@@ -39,3 +39,4 @@ tmp/*
 *.pdf
 .docker
 .env
+/logs/*

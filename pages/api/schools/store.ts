@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import ClasseInterface, { classeSchema } from '../../../models/classe';
 import SchoolInterface, { schoolSchema } from '../../../models/school';
+import logger from '../../../utils/logger';
 
 type Data = {
   name: string
@@ -18,8 +19,9 @@ export default function handler(
     school.save().then(()=>{
                     res.status(200).json({data:school, success:true, message:'done'});
                 })
-                .catch(() => {
-                    res.status(400).json({message:'Could not be sent', success:false });
+                .catch((e) => {
+                  logger.error(e, {message: "Could not Create School"})
+                    res.status(400).json({message:e.message, success:false });
                 })
 
 }

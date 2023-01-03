@@ -43,7 +43,7 @@ export default function Schools(){
                     {schools.map(school => {
                        return  <tr key={school._id}>
                             <td>{school.name}</td>
-                            <td><Link href={`schools/${school._id}`}>Voir</Link></td>
+                            <td><i className="fa fa-eye"></i><Link href={`schools/${school._id}`}> Voir</Link></td>
                         </tr>
                     })
                     }

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
-import Classe from "../../models/classe"
+import Classe from "../../../models/classe"
 import Link from 'next/link';
-import api from "../../services/api";
-import ClasseInterface from "../../models/classe";
+import api from "../../../services/api";
+import ClasseInterface from "../../../models/classe";
 import Modal from 'react-modal';
-import { customStyles } from "../../services/constants";
+import { customStyles } from "../../../services/constants";
 import { useRouter } from "next/dist/client/router";
-import SectionInterface from "../../models/section";
+import SectionInterface from "../../../models/section";
 import { CSVLink } from "react-csv";
 
 export default function Classes(){
@@ -55,6 +55,13 @@ export default function Classes(){
             <CSVLink data={classes} headers={headers} className='btn btn-dark mx-3' filename={"liste-des-classes-csv"+new Date().getFullYear()+".csv"}>
             Telecharcher Csv
             </CSVLink>
+            <Link href={`/staff`}><button className="btn btn-primary mx-2">Staff</button></Link>
+            <Link href={`/schools/${schoolId}/settings`}><button className="btn btn-dark mx-2">Settings</button></Link>
+
+
+            <br/>
+
+            <h4 className="h3">Classes</h4>
             <table className='table '>
                 <thead>
                     <tr>
@@ -88,7 +95,7 @@ type CreateClassModalProps = {
     schoolId:any
 }
 export function CreateClassModal({modalIsOpen, closeModal, save,sections, schoolId}:CreateClassModalProps){
-    const [classe, setClasse] = useState<ClasseInterface>({ name:'', school:schoolId});
+    const [classe, setClasse] = useState<ClasseInterface>({ name:'',teacher:'', school:schoolId});
 
     function handleChange(e:any) {
         const key = e.target.name
