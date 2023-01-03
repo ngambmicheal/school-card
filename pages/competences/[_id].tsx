@@ -117,7 +117,7 @@ export function CreateSubjectModal({modalIsOpen, closeModal, save, class_id, sch
                 </div>
 
                 <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success' disabled={!student.school}>Save</button>
+                    <button onClick={() =>save(student)} className='btn btn-success' disabled={!student.school || !student.name}>Save</button>
                     <button className='btn btn-secondary end' onClick={closeModal}>close</button>
 
                 </div>

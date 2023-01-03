@@ -7,11 +7,14 @@ import { customStyles } from "../../services/constants";
 import Modal from 'react-modal';
 import { helperService } from "../../services";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "react-i18next";
 
 export default function Schools(){
     const [schools, setSchools] = useState<School[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const {data:session} = useSession();
+    const { t } = useTranslation();
+
 
     useEffect(() => {
         getSchools();
@@ -44,12 +47,12 @@ export default function Schools(){
 
     return (
         <>
-            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une ecole </button>
+            <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> {t('title.add-school')}</button>
             <table className='table '>
                 <thead>
                     <tr>
-                        <th>Nom</th>
-                        <th>Action</th>
+                        <th>{t('title.name')}</th>
+                        <th>{t('title.action')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,8 +60,8 @@ export default function Schools(){
                        return  <tr key={school._id}>
                             <td>{school.name}</td>
                             <td><i className="glyphicon glyphicon-eye"></i>
-                                <a href='#' onClick={() => school._id && chooseSchool(school._id)}> Choisir </a>
-                                {session && <a className="delete-action" href='#' onClick={() => deleteSchool(school._id)}> | Delete </a> }
+                                <a href='#' onClick={() => school._id && chooseSchool(school._id)}> {t('action.choose')} </a>
+                                {session && <a className="delete-action" href='#' onClick={() => deleteSchool(school._id)}> | {t('action.delete')} </a> }
                             </td>
                         </tr>
                     })

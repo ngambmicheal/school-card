@@ -8,6 +8,7 @@ import { helperService } from '../services'
 import api from '../services/api'
 import styles from '../styles/Home.module.css'
 
+
 const Home: NextPage = () => {
   const [schools, setSchools] = useState<SchoolInterface[]>([]);
 

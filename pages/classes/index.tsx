@@ -10,6 +10,8 @@ import SectionInterface from "../../models/section";
 import { helperService } from "../../services";
 import { useSession } from "next-auth/react";
 import UserInterface from "../../models/user";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
@@ -54,15 +56,16 @@ export default function Classes(){
 
     return (
         <>
-            {session && <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter une classe </button>}
+            {session && <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> {t('title.add-class')} </button>}
+            <h3 className="mt-3">{t('title.list-class')}</h3>
             <table className='table '>
                 <thead>
                     <tr>
-                        <th>Nom</th>
-                        <th>Ecole</th>
-                        <th>Section</th>
-                        <th>Teacher </th>
-                        <th>Action</th>
+                        <th>{t('title.name')}</th>
+                        <th>{t('title.school')}</th>
+                        <th>{t('title.section')}</th>
+                        <th>{t('title.teacher')}</th>
+                        <th>{t('title.action')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,7 +102,7 @@ export function ClasseRow({classe, deleteClasse, session, teachers}: ClasseRowIn
                 {teachers.map(tr => <option value={tr._id}>{tr.name}</option>)}
                 </select>
             </td>
-            <td><Link href={`classes/${classe._id}`}>Voir</Link> {session && <a className="delete-action"  onClick={() =>deleteClasse(classe._id)}>  | Supprimer</a>}</td>
+            <td><Link href={`classes/${classe._id}`}>{t('action.view')}</Link> {session && <a className="delete-action"  onClick={() =>deleteClasse(classe._id)}>  | {t('action.delete')}</a>}</td>
         </tr>
     )
 }
@@ -153,7 +156,7 @@ export function CreateClassModal({modalIsOpen, closeModal, save, sections}:Creat
 
 
                 <div className='from-group'>
-                    <button onClick={() =>save(classe)} className='btn btn-success' disabled={!classe.school && !classe.name && !classe.section}>Enregistrer</button>
+                    <button onClick={() =>save(classe)} className='btn btn-success' disabled={!classe.school || !classe.name || !classe.section}>Enregistrer</button>
                     <button onClick={closeModal} className='btn btn-secondary end'>Annuler</button>
                 </div>
             </div>
