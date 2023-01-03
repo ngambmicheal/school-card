@@ -9,11 +9,14 @@ import SchoolInterface from "../../models/school";
 import SectionInterface from "../../models/section";
 import { helperService } from "../../services";
 import { useSession } from "next-auth/react";
+import UserInterface from "../../models/user";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
     const [sections, setSections] = useState<SectionInterface[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [teachers, setTeachers] = useState<UserInterface[]>([])
+
     const {data:session} = useSession();
 
     useEffect(() => {
@@ -21,6 +24,10 @@ export default function Classes(){
 
         api.getSections().then(({data:{data}} : any) => {
             setSections(data)
+        })
+
+        api.getUsers().then(({data:{data}}: any) => {
+            setTeachers(s => data.filter(t => t.type === 'STAFF'))
         })
     }, []);
 
@@ -60,7 +67,7 @@ export default function Classes(){
                 </thead>
                 <tbody>
                     {classes.map((classe:any) => {
-                       return  <ClasseRow session={session} classe={classe} deleteClasse={deleteClasse} />
+                       return  <ClasseRow teachers={teachers} session={session} classe={classe} deleteClasse={deleteClasse} />
                     })
                     }
                 </tbody>
@@ -71,8 +78,8 @@ export default function Classes(){
     )
 }
 
-type ClasseRowInterface = {classe:ClasseInterface,deleteClasse:(id:string)=>void, session:any}
-export function ClasseRow({classe, deleteClasse, session}: ClasseRowInterface) {
+type ClasseRowInterface = {classe:ClasseInterface,deleteClasse:(id:string)=>void, session:any, teachers:UserInterface[]}
+export function ClasseRow({classe, deleteClasse, session, teachers}: ClasseRowInterface) {
     const [teacher, setTeacher] = useState(classe.teacher); 
 
 
@@ -86,7 +93,12 @@ export function ClasseRow({classe, deleteClasse, session}: ClasseRowInterface) {
             <td>{classe.name}</td>
             <td>{classe.school?.name}</td>
             <td>{classe.section?.name}</td>
-            <td><input disabled={!session} value={teacher} onChange={updateTeacher} /> </td>
+            <td>
+                <select  disabled={!session} value={teacher} className="form-control"  onChange={updateTeacher} >
+                <option value={undefined}>-- Select Teacher --</option>
+                {teachers.map(tr => <option value={tr._id}>{tr.name}</option>)}
+                </select>
+            </td>
             <td><Link href={`classes/${classe._id}`}>Voir</Link> {session && <a className="delete-action"  onClick={() =>deleteClasse(classe._id)}>  | Supprimer</a>}</td>
         </tr>
     )

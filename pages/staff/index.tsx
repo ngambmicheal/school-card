@@ -44,7 +44,8 @@ export default function Users(){
                 <thead>
                     <tr>
                         <th>Nom</th>
-                        <th>Numéro de téléphone</th>
+                        <th>Phone</th>
+                        <th>Type</th>
                         <th>Email</th>
                         <th>Action</th>
                     </tr>
@@ -54,6 +55,7 @@ export default function Users(){
                        return  <tr key={user._id}>
                             <td>{user.name}</td>
                             <td>{user.phone}</td>
+                            <td>{user.type}</td>
                             <td>{user.email}</td>
                             <td><Link href={`users/${user._id}`}>Voir</Link></td>
                         </tr>
@@ -97,7 +99,6 @@ export function CreateUserModal({modalIsOpen, closeModal, save}:CreateUserModalP
           >
             <div className='modal-body'>
             <h2 >Ajouter un utilisateur</h2>
-            <button onClick={closeModal} className='btn btn-secondary end'>Annuler</button>
                 <div className='form-group'>
                     <label>Nom</label>
                     <input className='form-control' name='name' value={user?.name} onChange={handleChange}></input>
@@ -129,6 +130,7 @@ export function CreateUserModal({modalIsOpen, closeModal, save}:CreateUserModalP
 
                 <div className='from-group mt-3'>
                     <button onClick={() =>save(user)} className='btn btn-success' disabled={!user.password}>Enregistrer</button>
+                    <button onClick={closeModal} className='btn btn-secondary end'>Annuler</button>
                 </div>
             </div>
           </Modal>

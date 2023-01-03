@@ -9,12 +9,15 @@ import { useRouter } from "next/dist/client/router";
 import SectionInterface from "../../../models/section";
 import { CSVLink } from "react-csv";
 import useSchool from "../../../hooks/useSchool";
+import SchoolInterface from "../../../models/school";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [sections, setSections] = useState<SectionInterface[]>([])
-    const {school} = useSchool()
+    const {school:schol} = useSchool()
+
+    const [school, setSchool] = useState<SchoolInterface|undefined>(schol)
 
     const router = useRouter()
     const {_id:schoolId} = router.query;
@@ -24,7 +27,9 @@ export default function Classes(){
         api.getSections().then(({data:{data}} : any) => {
             setSections(data)
         })
-    }, [schoolId]);
+
+        setSchool(s => schol)
+    }, [schol]);
 
 
 
@@ -36,11 +41,19 @@ export default function Classes(){
         const key = e.target.name
         const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
     
-        // setClasse(inputData => ({
-        //   ...inputData,
-        //   [key]: value
-        // }))
+        setSchool(inputData => ({
+          ...inputData,
+          [key]: value
+        }))
       }
+
+    const updateSchool = () => {
+        if(school){
+            api.updateSchool(school).then(() => {
+
+            })
+        }
+    }
 
 
     return (
@@ -56,7 +69,7 @@ export default function Classes(){
                 </div>
                 <div className='form-group'>
                     <label>Address</label>
-                    <input className='form-control' name='name' value={school.address} onChange={handleChange}></input>
+                    <input className='form-control' name='address' value={school.address} onChange={handleChange}></input>
                 </div>
                 <div className='form-group'>
                     <label>Email</label>
@@ -71,13 +84,15 @@ export default function Classes(){
             <div className="col-md-6">
             <div className='form-group'>
                     <label className="form-label">Allow mark editing </label>
-                    <input className="mx-4" type='checkbox' name='allowUpdate' onChange={handleChange}></input>
+                    <input className="mx-4" type='checkbox' name='allowUpdate' checked={school.allowUpdate} onChange={handleChange}></input>
                 </div>
             </div>
             </div>
 
             <div className="row">
-
+                <div className="col-sm-6">
+                <button className="btn btn-success" onClick={() => updateSchool()}>Enregistrer</button>
+                </div>
             </div>
             </div>
 

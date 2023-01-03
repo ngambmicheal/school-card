@@ -7,15 +7,22 @@ export default interface SchoolInterface{
     address?:string,
     allowUpdate?:boolean,
     email?:string, 
-    box?:string
+    box?:string, 
+    details?: string
 }
 
 const SchoolSchema = new mg.Schema({
     name: {type:String, required:true},
     details: {type:String},
+    phone: {type:String},
+    address: {type:String},
+    allowUpdate: {type:Boolean}, 
+    email: {type:String},
+    box:{type:String}
    },
    {
-   timestamps:true
+   timestamps:true,
+   strict:false
    }
 )
 

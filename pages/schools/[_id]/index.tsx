@@ -61,7 +61,7 @@ export default function Classes(){
     const headers =  [
         { label: "Nom", key: "name" },
         { label: "Ecole", key: "school.name" },
-        { label: "Section", key: "section"}
+        { label: "Section", key: "section.name"}
       ];
 
     return (
@@ -79,6 +79,7 @@ export default function Classes(){
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Section</th>
                         <th>School</th>
                         <th>Action</th>
                     </tr>
@@ -87,6 +88,7 @@ export default function Classes(){
                     {classes.map(classe => {
                        return  <tr key={classe._id}>
                             <td>{classe.name}</td>
+                            <td>{classe.section?.name}</td>
                             <td>{classe.school?.name} </td>
                             <td><Link href={`/classes/${classe._id}`}>Voir</Link> { session.data &&  <a className="delete-action"  onClick={() =>deleteClass(classe._id as string)}> | Delete</a> }</td>
                         </tr>
@@ -132,7 +134,6 @@ export function CreateClassModal({modalIsOpen, closeModal, save,sections, school
           >
             <div className='modal-body'>
             <h2 >Hello</h2>
-            <button className='btn btn-secondary end' onClick={closeModal}>close</button>
                 <div className='form-group'>
                     <label>Name </label>
                     <input className='form-control' name='name' value={classe?.name} onChange={handleChange}></input>
@@ -151,6 +152,7 @@ export function CreateClassModal({modalIsOpen, closeModal, save,sections, school
 
                 <div className='from-group'>
                     <button onClick={() =>save(classe)} className='btn btn-success'>Save</button>
+                    <button className='btn btn-secondary end' onClick={closeModal}>close</button>
                 </div>
             </div>
           </Modal>

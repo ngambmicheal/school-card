@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import ClasseInterface, { classeSchema } from '../../../models/classe';
 import UserInterface, { userSchema } from '../../../models/user';
+import { HeadersEnum } from '../../../utils/enums';
 
 type Data = {
   name: string
@@ -15,6 +16,7 @@ export default function handler(
     const userQuery = req.body;
 
     userQuery.username = userQuery.email;
+    userQuery.school_id = req.headers[HeadersEnum.SchoolId]
 
     const user = new userSchema(userQuery)
     user.save().then(()=>{

@@ -106,7 +106,7 @@ export class Api{
     getSchoolClasses(schoolId?:any){ return axios.get(`/api/classes?school=${schoolId}`) }
     getSchoolCompetences(data:{school:string, report_type?:string}){ return axios.get(`/api/competences?school=${data.school}&report_type=${data.report_type}`)}
     deleteSchool(id:any) { return axios.post('/api/schools/delete', {_id:id})}
-
+    updateSchool(school:SchoolInterface){ return axios.post('/api/schools/update', school)}
 
     //sections
     getSections() {  return axios.get(`/api/sections?school=${this.schoolId}`);  }
