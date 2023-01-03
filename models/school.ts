@@ -2,7 +2,12 @@ import mg from "../services/mg"
 
 export default interface SchoolInterface{
     _id?:string,
-    name:string
+    name:string, 
+    phone?:string, 
+    address?:string,
+    allowUpdate?:boolean,
+    email?:string, 
+    box?:string
 }
 
 const SchoolSchema = new mg.Schema({

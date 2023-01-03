@@ -13,7 +13,7 @@ export default function handler(
   res: NextApiResponse<any>
 ) { 
 
-    const query ={school:req.headers[HeadersEnum.SchoolId], ...req.body}; 
+    const query ={school:req.headers[HeadersEnum.SchoolId], ...req.query}; 
 
     const classes = classeSchema.find(query).populate({path:'school', model:schoolSchema}).populate({path:'section', model:sectionSchema}).then(classes => {
                                             res.json({data:classes, status:true});

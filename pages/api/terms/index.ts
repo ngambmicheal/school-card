@@ -10,7 +10,6 @@ export default function handler(
   res: NextApiResponse<any>
 ) { 
 
-  console.log(req.query);
     const terms = termSchema.find(req.query).populate({path:'exams', model:examSchema}).then(terms => {
                         res.json({data:terms, status:true});
                     })
