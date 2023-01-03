@@ -6,13 +6,9 @@ type MainProps = {
     user: any
 }
 export default function Main({children, user}:MainProps){
-
-    const logout = () =>{
-
-    }
     return (
         <>
-            <Navbar user={user} logout={logout}/>
+            <Navbar user={user}/>
             <div className='container mx-auto mt-4'>
                 {children}
             </div>

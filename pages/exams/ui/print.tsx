@@ -79,7 +79,7 @@ export default function coursesPage(){
             <thead>
                 <tr>
                     <th>NOMS ET PRENOMS</th>
-                    <th colSpan={3}>{ results.student?.name }</th>
+                    <th colSpan={3}>{ results?.student?.name }</th>
                 </tr>
                 <tr>
                     <th>DATE DE NAISSANCE</th>

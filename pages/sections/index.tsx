@@ -6,6 +6,8 @@ import SectionInterface from "../../models/section";
 import { customStyles } from "../../services/constants";
 import Modal from 'react-modal';
 import SchoolInterface from "../../models/school";
+import useSchool from "../../hooks/useSchool";
+import { helperService } from "../../services";
 
 export const report_types = ['Competence', 'Matiere', 'Maternelle','Nursery', 'Special'];
 export default function Sections(){
@@ -74,7 +76,8 @@ type CreateSectionModalProps = {
     schools:SectionInterface[]
 }
 export function CreateSectionModal({modalIsOpen, closeModal, save, class_id, schools}:CreateSectionModalProps){
-    const [student, setStudent] = useState<SectionInterface>({name:''});
+    const localSchool = useSchool(); 
+    const [student, setStudent] = useState<SectionInterface>({name:'', school:helperService.getSchoolId()??undefined});
 
 
     function handleChange(e:any) {
@@ -106,17 +109,6 @@ export function CreateSectionModal({modalIsOpen, closeModal, save, class_id, sch
                 </div>
 
                 <div className='form-group my-3'>
-                    <label>Ecole</label>
-
-                    <select className='form-control' name='school'  onChange={handleChange} >
-                        <option value=''> Choisir </option>
-                        {schools.map(school => {
-                            return (<option key={school._id} value={school._id}> {school.name} </option>)
-                        })}
-                    </select>
-                </div>
-
-                <div className='form-group my-3'>
                     <label>Type de Bulletin</label>
 
                     <select className='form-control' name='report_type'  onChange={handleChange} >
@@ -128,7 +120,7 @@ export function CreateSectionModal({modalIsOpen, closeModal, save, class_id, sch
                 </div>
 
                 <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success'>Enregistrer</button>
+                    <button onClick={() =>save(student)} className='btn btn-success' disabled={!(student.report_type && student.name)}>Enregistrer</button>
                 </div>
             </div>
           </Modal>

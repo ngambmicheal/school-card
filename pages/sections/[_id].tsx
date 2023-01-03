@@ -6,13 +6,15 @@ import SectionInterface from "../../models/section";
 import Modal from 'react-modal';
 import { customStyles } from "../../services/constants";
 import { useRouter } from "next/dist/client/router";
+import useSchool from "../../hooks/useSchool";
+import { helperService } from "../../services";
 
 export default function Sections(){
     const [sections, setSections] = useState<Section[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const router = useRouter()
-    const {_id:schoolId} = router.query;
+    const schoolId = helperService.getSchoolId()
 
     useEffect(() => {
         if(schoolId)

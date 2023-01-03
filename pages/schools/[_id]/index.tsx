@@ -8,6 +8,7 @@ import { customStyles } from "../../../services/constants";
 import { useRouter } from "next/dist/client/router";
 import SectionInterface from "../../../models/section";
 import { CSVLink } from "react-csv";
+import { helperService } from "../../../services";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
@@ -18,8 +19,9 @@ export default function Classes(){
     const {_id:schoolId} = router.query;
 
     useEffect(() => {
-        if(schoolId)
-        getClasses()
+        if(schoolId){
+            getClasses()
+        }
 
         api.getSections().then(({data:{data}} : any) => {
             setSections(data)
@@ -43,6 +45,10 @@ export default function Classes(){
         closeModal();
     }
 
+    const chooseSchool = () => {
+        helperService.saveSchoolId(schoolId as unknown as string)
+        window.location.reload();
+    }
     const headers =  [
         { label: "Nom", key: "name" },
         { label: "Ecole", key: "school.name" },
@@ -58,6 +64,7 @@ export default function Classes(){
             <Link href={`/staff`}><button className="btn btn-primary mx-2">Staff</button></Link>
             <Link href={`/schools/${schoolId}/settings`}><button className="btn btn-dark mx-2">Settings</button></Link>
 
+            <button className='btn btn-success' onClick={() => chooseSchool()}> Choose this school </button>
 
             <br/>
 

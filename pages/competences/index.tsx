@@ -7,6 +7,7 @@ import { customStyles } from "../../services/constants";
 import Modal from 'react-modal';
 import SchoolInterface from "../../models/school";
 import { report_types } from "../sections";
+import { helperService } from "../../services";
 
 export default function Competences(){
     const [competences, setCompetences] = useState<Competence[]>([])
@@ -15,10 +16,6 @@ export default function Competences(){
 
     useEffect(() => {
         getCompetences();
-
-        api.getSchools().then(({data:{data}, status} : any) => {
-            setSchools(data)
-        })
     }, []);
 
     const getCompetences = () => {
@@ -84,7 +81,7 @@ type CreateCompetenceModalProps = {
     schools: SchoolInterface[]
 }
 export function CreateCompetenceModal({modalIsOpen, closeModal, save, class_id, schools}:CreateCompetenceModalProps){
-    const [student, setStudent] = useState<CompetenceInterface>({name:'', school:''});
+    const [student, setStudent] = useState<CompetenceInterface>({name:'', school:helperService.getSchoolId()??undefined});
 
     function handleChange(e:any) {
         const key = e.target.name
@@ -114,17 +111,8 @@ export function CreateCompetenceModal({modalIsOpen, closeModal, save, class_id, 
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
                 </div>
 
-                <div className='form-group'>
-                    <label>Ecole</label>
-                    <select className='form-control' name='school' value={student?.school} onChange={handleChange} >
-                        {schools.map(school => {
-                            return (<option key={school._id} value={school._id}> {school.name} </option>)
-                        })}
-                    </select>
-                </div>
-
-                <div className='from-group'>
-                    <button onClick={() =>save(student)} className='btn btn-success' disabled={!student.school}>Enregistrer</button>
+                <div className='from-group mt-3'>
+                    <button onClick={() =>save(student)} className='btn btn-success' disabled={!student.school && !student.name}>Enregistrer</button>
                 </div>
             </div>
           </Modal>

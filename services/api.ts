@@ -1,4 +1,5 @@
 import a from 'axios';
+import { helperService } from '.';
 import AnnualExamInterface from '../models/annualExam';
 import ClasseInterface from '../models/classe';
 import CompetenceInterface from '../models/competence';
@@ -9,11 +10,28 @@ import SectionInterface from '../models/section';
 import StudentInterface from '../models/student';
 import SubjectInterface from '../models/subject';
 import TermInterface from '../models/terms';
+import UserInterface from '../models/user';
 
 const axios = a.create()
 
+// Add a request interceptor
+axios.interceptors.request.use(
+  config => {
+    const schoolId = helperService.getSchoolId();
+    if (schoolId) {
+      config.headers['SchoolId'] = schoolId
+    }
+    // config.headers['Content-Type'] = 'application/json';
+    return config
+  },
+  error => {
+    Promise.reject(error)
+  }
+)
+
 export class Api{
 
+  schoolId = helperService.getSchoolId();
     //classes
     getClasses(){ return axios.get('/api/classes');   }
     saveClasse(data:ClasseInterface){    return axios.post('/api/classes/store', data)}
@@ -90,7 +108,7 @@ export class Api{
 
 
     //sections
-    getSections() {  return axios.get('/api/sections');  }
+    getSections() {  return axios.get(`/api/sections?school=${this.schoolId}`);  }
     saveSections(data:SectionInterface) { return axios.post('/api/sections/store', data); }
     getSection(sectionId?:any){ return axios.get(`/api/sections/${sectionId}`) }
     getSectionCourses(sectionId?:any){ return axios.get(`/api/courses?section=${sectionId}`) }
@@ -108,7 +126,7 @@ export class Api{
     //subjects
     getExams() {  return axios.get('/api/exams');  }
     saveExam(data:ExamInterface) { return axios.post('/api/exams/store', data); }
-    updateExam(id?:any, data:any) { return axios.post('/api/exams/update', data) }
+    updateExam(id:any, data:any) { return axios.post('/api/exams/update', data) }
     getExam(examId?:any){ return axios.get(`/api/exams/${examId}`) }
     getExamResults(examId?:any){ return axios.get(`/api/exams/results?exam_id=${examId}`) }
     getResults(resultsId?:any){ return axios.get(`/api/exams/results/result?result_id=${resultsId}`) }
@@ -142,6 +160,10 @@ export class Api{
     downloadToCsv(classeId:any) { return axios.post(`/api/classes/export-csv`, {class_id: classeId})}
     downloadToPdf(classeId:any) { return axios.post(`/api/classes/export-pdf`, {class_id: classeId})}
 
+    getUsers() {  return axios.get('/api/users');  }
+deleteUser(userId:string) { return axios.post('/api/users/delete',{_id:userId})}
+saveUser(data:UserInterface) { return axios.post('/api/users/store', data); }
+updateUser(data:UserInterface) {return axios.post('/api/users/update', data)}
 
     sync(){
       axios.get('/api/competences/sync');

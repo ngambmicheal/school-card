@@ -1,36 +1,20 @@
 import Link from 'next/link'
+import { useSession, signIn, signOut } from "next-auth/react"
 import { helperService } from '../services'
+import useSchool from '../hooks/useSchool'
 
 type NavbarProps = {
     user: any,
-    logout: () => void
 }
 
-export default function Navbar({user, logout}:NavbarProps){
+export default function Navbar({user}:NavbarProps){
+    const { data: session } = useSession()
+    const {school} = useSchool();
     return (
         <nav className='navbar navbar-dark bg-dark navbar-expand'>
         <div className='collapse navbar-collapse'>
             <ul className='navbar-nav mr-auto'>
-                {/* {user?
-                <>
-                    <li className='navbar-item'>
-                        <Link href='/admin/users' ><a className='nav-link'>Users</a></Link>
-                    </li>
-                    <li className='navbar-item'>
-                        <Link href='/admin/users'>Logout</Link>
-                    </li>
-                </> 
-                :
-                <>
-                    <li className='navbar-item'>
-                        <Link  href='/auth/login'><a className='nav-link'>Login</a></Link>
-                    </li>
-                    <li className='navbar-item'>
-                        <Link  href='/auth/register'><a className='nav-link'>Register</a></Link>
-                    </li>
-                </>
-                } */}
-
+        <Link href='#'><a className='nav-link'>{school?.name}</a></Link>
         <Link href='/' ><a className='nav-link'>Accueil</a></Link>
         <Link href='/schools' ><a className='nav-link'>Ecoles</a></Link>
 
@@ -43,6 +27,20 @@ export default function Navbar({user, logout}:NavbarProps){
         <Link href='/courses'><a className='nav-link'>Courses</a></Link>
         <Link href='/staff'><a className='nav-link'>Staff</a></Link>
         </>}
+            </ul>
+        </div>
+        <div className='collapse navbar-collapse'>
+        <ul className='navbar-nav mr-0'>
+            {session?
+                <>
+                    <Link href='/profile' ><a className='nav-link'>{session.user?.name}</a></Link>
+                    <a className='nav-link' href='#' onClick={() => signOut()}>Logout</a>
+                </> 
+                :
+                <>
+                    <a href='#' className='nav-link' onClick={() => signIn()}>Sign in</a>
+                </>
+                }
             </ul>
         </div>
     </nav>

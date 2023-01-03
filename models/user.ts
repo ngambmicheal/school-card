@@ -1,28 +1,32 @@
-export default interface User{
-
-}import mg from "../services/mg"
+import mg from "../services/mg"
+import { UserRole, UserType } from "../utils/enums"
 import ClasseInterface, { classeSchema } from "./classe"
 import CompetenceInterface from "./competence"
+import SchoolInterface, { schoolSchema } from "./school"
 
-export default interface StudentInterface{
+export default interface UserInterface{
     _id ?:string,
     name: string, 
     surname?: string, 
     phone?:string, 
     email?:string, 
     dob?:string,
-    class_id ?:string | ClasseInterface,
+    school_id ?: string | SchoolInterface,
     number?:string,
     sex?:string,
-    place?:string
+    place?:string, 
+    type: UserType, 
+    role: UserRole[], 
+    username:string, 
+    password:string
 }
 
-const StudentSchema = new mg.Schema({
+const UserSchema = new mg.Schema({
     name: {type:String, required:true},
     details: {type:String},
-    class_id : {
+    school_id : {
         type:mg.Schema.Types.ObjectId,
-        ref:'Classe',
+        ref:'School',
     },
     surname: {type:String},
     phone: {type:String},
@@ -31,6 +35,10 @@ const StudentSchema = new mg.Schema({
     sex: {type:String},
     dob: {type:String},
     number:{type:String},
+    type: {type:String},
+    role: [{type:String}], 
+    username: {type:String},
+    password: {type:String}
    },
    {
    timestamps:true,
@@ -38,6 +46,5 @@ const StudentSchema = new mg.Schema({
    }
 )
 
-
-classeSchema
-export const studentSchema = mg.models.Student || mg.model('Student', StudentSchema)
+schoolSchema
+export const userSchema = mg.models.User || mg.model('User', UserSchema)
