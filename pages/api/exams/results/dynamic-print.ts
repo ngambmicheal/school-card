@@ -16,6 +16,7 @@ import { getTotal } from '../../../../assets/jsx/resultsUiStats';
 import { sectionSchema } from '../../../../models/section';
 import TermInterface, { termSchema } from '../../../../models/terms';
 import resultsDynamicActions from '../../../../assets/jsx/resultsDynamicActions';
+import { bgImgStyle } from '../../../../utils/styles';
 
 export const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -73,6 +74,9 @@ export default async function handler(
         let html = ReactDOMServer.renderToStaticMarkup(resultsDynamicActions(competences, results, totalResults.length, totalResults, examResults, exams, term ))
         html+=`
                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }
@@ -83,6 +87,7 @@ export default async function handler(
                     margin-top: 10px;
                     margin-bottom: 0px;
                     font-size:9px;
+                    z-index:1;
                     }
                     .com, b{
                     font-weight: bold;

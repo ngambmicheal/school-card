@@ -59,7 +59,10 @@ export default async function handler(
         exam.name = term.name;
         let html = ReactDOMServer.renderToStaticMarkup(resultsUiStats(exam, competences, totalResults, statsResults))
         html+=`
-                <style>
+                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }

@@ -62,7 +62,10 @@ export default async function handler(
     
         let html = ReactDOMServer.renderToStaticMarkup(resultsNormalActions(subjects, results, totalResults.length, totalResults ))
         html+=`
-                <style>
+                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }

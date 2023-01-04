@@ -101,6 +101,7 @@ export default function resultsMatActions(competences:CompetenceInterface[], res
 
     return (
         <>
+    <div className="bg-logo"></div>
     <table className='table2' style={{fontSize:'14px'}}>
     <tr>
         <th className='center' style={{width:'40%'}}>

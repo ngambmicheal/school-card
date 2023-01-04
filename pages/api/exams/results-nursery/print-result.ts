@@ -68,7 +68,10 @@ export default async function handler(
 
         let html = ReactDOMServer.renderToStaticMarkup(resultsNurseryActions(competences, results, totalResults.length, totalResults ))
         html+=`
-                <style>
+                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }

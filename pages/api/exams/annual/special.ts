@@ -24,6 +24,7 @@ import TermInterface, { termSchema } from '../../../../models/terms';
 import resultsDynamicSpecialActions from '../../../../assets/jsx/resultsDynamicSpecialActions';
 import AnnualExamInterface, { annualExamSchema } from '../../../../models/annualExam';
 import resultsAnnualSpecialActions from '../../../../assets/jsx/resultsAnnualSpecialActions';
+import { bgImgStyle } from '../../../../utils/styles';
   
 
 export default async function handler(
@@ -79,7 +80,10 @@ export default async function handler(
  
         let html = ReactDOMServer.renderToStaticMarkup(resultsAnnualSpecialActions(subjects, results, totalResults.length, totalResults, examResults, exams, term))
         html+=`
-                <style>
+                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }

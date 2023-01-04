@@ -19,6 +19,7 @@ import { sectionSchema } from '../../../../models/section';
 import resultsNormalActions from '../../../../assets/jsx/resultsNormalActions';
 import { getTotal } from '../../../../assets/jsx/resultsNormalUiStats';
 import { replaceAll } from '../../../../services/utils';
+import { bgImgStyle } from '../../../../utils/styles';
   
 
 export default async function handler(
@@ -72,7 +73,10 @@ export default async function handler(
 
         let html = ReactDOMServer.renderToStaticMarkup(resultsNormalActions(subjects, results, totalResults.length, statResults))
         html+=`
-                <style>
+                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }

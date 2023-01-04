@@ -36,8 +36,7 @@ export function CreateExamModal({modalIsOpen, closeModal, save, class_id}:Create
             contentLabel="Add Exam"
           >
             <div className='modal-body'>
-            <h2 >Hello</h2>
-            <button className='btn btn-secondary end' onClick={closeModal}>close</button>
+            <h2 >Ajouter un examen</h2>
                 <div className='form-group'>
                     <label> Name </label>
                     <input className='form-control' name='name' value={exam?.name} onChange={handleChange}></input>
@@ -45,6 +44,7 @@ export function CreateExamModal({modalIsOpen, closeModal, save, class_id}:Create
 
                 <div className='from-group'>
                     <button onClick={() =>save(exam)} className='btn btn-success'>Save</button>
+                    <button className='btn btn-secondary end' onClick={closeModal}>close</button>
                 </div>
             </div>
           </Modal>

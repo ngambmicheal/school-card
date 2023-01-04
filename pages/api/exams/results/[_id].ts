@@ -18,6 +18,7 @@ import { classeSchema } from '../../../../models/classe';
 import { sectionSchema } from '../../../../models/section';
 import { getTotal, getTotalPoints, getTotals } from '../../../../assets/jsx/resultsUiStats';
 import { replaceAll } from '../../../../services/utils';
+import { logo } from '../../../../assets/jsx/image';
   
 
 export default async function handler(
@@ -67,6 +68,19 @@ export default async function handler(
         .center{
             text-align:center
         }
+
+        .bg-logo{
+            position:fixed;
+            top:20%;
+            background-image:url('data:image/jpeg;base64, ${logo}');
+            background-position: 50% 0;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity:0.2;
+            z-index:-1;
+            width: 100%;
+            height: 100%;
+        }
         .table1, .table2, .table3{
             border-collapse: collapse;
             font-weight:bold;
@@ -74,6 +88,7 @@ export default async function handler(
             margin-top: 10px;
             margin-bottom: 0px;
             font-size:9px;
+            z-index:1;
             }
             .com, b{
             font-weight: bold;

@@ -17,6 +17,7 @@ import { replaceAll } from '../../../../services/utils';
 import { termSchema } from '../../../../models/terms';
 import { sectionSchema } from '../../../../models/section';
 import { annualExamSchema } from '../../../../models/annualExam';
+import { bgImgStyle } from '../../../../utils/styles';
   
 
 export default async function handler(
@@ -60,7 +61,10 @@ export default async function handler(
         exam.name = term.name;
         let html = ReactDOMServer.renderToStaticMarkup(resultsUiStats(exam, competences, totalResults, statsResults))
         html+=`
-                <style>
+                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }

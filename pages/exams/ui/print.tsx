@@ -1,10 +1,10 @@
 import { useRouter } from "next/dist/client/router";
 import React from 'react';
 import { useEffect, useState } from "react";
+import { logo } from "../../../assets/jsx/image";
 import CompetenceInterface from "../../../models/competence";
 import { courseSchema } from "../../../models/course";
 import api from "../../../services/api";
-import logo from '../../../public/logo.png'
 
 
 export default function coursesPage(){
@@ -44,9 +44,11 @@ export default function coursesPage(){
     }
     return (
         <>
+ 
            <button className='btn btn-success mx-2' onClick={printResults}> Imprimer </button>
            <button className='btn btn-success mx-2'> Envoyer au Parent </button>
            <input placeholder='parent email' width={100} />
+        <div className="show-logo" style={{backgroundImage:`url('data:image/jpeg;base64, ${logo}')`}}>
            <table className='table2'>
                <tr>
                    <th>
@@ -161,6 +163,7 @@ export default function coursesPage(){
                         })}
                 </tbody>
             </table>
+            </div>
         </>
     );
 }

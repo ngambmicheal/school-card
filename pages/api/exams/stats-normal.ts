@@ -15,6 +15,7 @@ import { courseSchema } from '../../../models/course';
 import { classeSchema } from '../../../models/classe';
 import resultsNormalUiStats, { getTotal } from '../../../assets/jsx/resultsNormalUiStats';
 import { sectionSchema } from '../../../models/section';
+import { bgImgStyle } from '../../../utils/styles';
   
 
 export default async function handler(
@@ -53,7 +54,10 @@ export default async function handler(
 
         let html = ReactDOMServer.renderToStaticMarkup(resultsNormalUiStats(exam, subjects, totalResults, statsResults))
         html+=`
-                <style>
+                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }

@@ -53,6 +53,7 @@ export default function resultsNormalUiStats(exam:ExamInterface, subjects:Subjec
     const stat = getAdmis(points, statsResults);
     return (
         <>
+    <div className="bg-logo"></div>
             <div className='py-3'>
                 <h3>Classe : {exam?.class_id?.name} </h3>
                 <h4>Examen : {exam?.name} </h4>

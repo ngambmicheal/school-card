@@ -36,7 +36,7 @@ export default function Navbar({user}:NavbarProps){
         <ul className='navbar-nav mr-0'>
             {session?
                 <>
-                    <Link href='/profile' ><a className='nav-link'>{session.user?.name}</a></Link>
+                    <Link href='/auth/profile' ><a className='nav-link'>{session.user?.name}</a></Link>
                     <a className='nav-link' href='#' onClick={() => signOut()}>Logout</a>
                 </> 
                 :

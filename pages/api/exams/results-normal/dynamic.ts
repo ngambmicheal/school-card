@@ -16,6 +16,7 @@ import resultsNormalActions from '../../../../assets/jsx/resultsNormalActions';
 import { sectionSchema } from '../../../../models/section';
 import { getTotal } from '../../../../assets/jsx/resultsNormalUiStats';
 import resultsDynamicNormalActions from '../../../../assets/jsx/resultsDynamicNormalActions';
+import { bgImgStyle } from '../../../../utils/styles';
 
 export const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -62,7 +63,10 @@ export default async function handler(
 
         let html = ReactDOMServer.renderToStaticMarkup(resultsDynamicNormalActions(subjects, results, totalResults.length, totalResults ))
         html+=`
-                <style>
+                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }

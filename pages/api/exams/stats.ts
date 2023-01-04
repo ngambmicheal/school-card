@@ -14,6 +14,7 @@ import { subjectSchema } from '../../../models/subject';
 import { courseSchema } from '../../../models/course';
 import { classeSchema } from '../../../models/classe';
 import { sectionSchema } from '../../../models/section';
+import { bgImgStyle } from '../../../utils/styles';
   
 
 export default async function handler(
@@ -51,7 +52,10 @@ export default async function handler(
 
         let html = ReactDOMServer.renderToStaticMarkup(resultsUiStats(exam, competences, totalResults, statsResults))
         html+=`
-                <style>
+                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }

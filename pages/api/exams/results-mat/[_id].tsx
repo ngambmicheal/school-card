@@ -19,6 +19,7 @@ import { sectionSchema } from '../../../../models/section';
 import { getTotal, getTotalPoints, getTotals } from '../../../../assets/jsx/resultsUiStats';
 import resultsMatActions from '../../../../assets/jsx/resultsMatActions';
 import { replaceAll } from '../../../../services/utils';
+import { bgImgStyle } from '../../../../utils/styles';
   
 
 export default async function handler(
@@ -64,7 +65,10 @@ export default async function handler(
 
         let html = ReactDOMServer.renderToStaticMarkup(resultsMatActions(competences, results, totalResults.length, totalResults))
         html+=`
-                <style>
+                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }

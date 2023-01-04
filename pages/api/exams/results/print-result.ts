@@ -15,6 +15,8 @@ import { courseSchema } from '../../../../models/course';
 import { getTotal } from '../../../../assets/jsx/resultsUiStats';
 import { sectionSchema } from '../../../../models/section';
 import serverPath from '../../../../services/serverpath';
+import { logo } from '../../../../assets/jsx/image';
+import { bgImgStyle } from '../../../../utils/styles';
 
 
 export const getCompetencesLenght = (competence:CompetenceInterface) => {
@@ -75,6 +77,8 @@ export default async function handler(
         let html = ReactDOMServer.renderToStaticMarkup(resultsActions(competences, results, totalResults.length, totalResults ))
         html+=`
                 <style>
+                  ${bgImgStyle}
+           
                 .center{
                     text-align:center
                 }
@@ -85,6 +89,7 @@ export default async function handler(
                     margin-top: 10px;
                     margin-bottom: 0px;
                     font-size:9px;
+                    z-index:2
                     }
                     .com, b{
                     font-weight: bold;
@@ -114,6 +119,8 @@ export default async function handler(
                   }
                 </style>
                 `
+
+            console.log(html)
 
 
         var document = {

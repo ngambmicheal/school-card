@@ -23,6 +23,7 @@ import resultsDynamicNormalActions from '../../../../assets/jsx/resultsDynamicNo
 import TermInterface, { termSchema } from '../../../../models/terms';
 import AnnualExamInterface, { annualExamSchema } from '../../../../models/annualExam';
 import resultsAnnualNormalActions from '../../../../assets/jsx/resultsAnnualNormalActions';
+import { bgImgStyle } from '../../../../utils/styles';
   
 
 export default async function handler(
@@ -79,7 +80,10 @@ export default async function handler(
  
         let html = ReactDOMServer.renderToStaticMarkup(resultsAnnualNormalActions(subjects, results, totalResults.length, totalResults, examResults, exams, term))
         html+=`
-                <style>
+                 <style>
+
+                ${bgImgStyle}
+
                 .center{
                     text-align:center
                 }

@@ -92,6 +92,7 @@ export default function resultsNurseryActions(competences:CompetenceInterface[],
 
     return (
         <>
+    <div className="bg-logo"></div>
     <table className='table2' style={{fontSize:'14px'}}>
     <tr>
         <th className='center' style={{width:'40%'}}>
