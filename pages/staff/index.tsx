@@ -41,12 +41,13 @@ export default function Users(){
     }
 
     const generatePassword = () => {
-
+        api.generatePasswordForSchoolStaff();
     }
 
     return (
         <>
             <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter utilisateur </button>
+            <button className="btn btn-dark mx-2" onClick={() => generatePassword()}>Generate Password</button>
             <table className='table '>
                 <thead>
                     <tr>
@@ -66,7 +67,7 @@ export default function Users(){
                             <td>{user.type}</td>
                             <td>{user.email}</td>
                             {session && <td>{user.password}</td>}
-                            {session && <td><Link href={`users/${user._id}`}>Voir</Link> <a className="" onClick={() => generatePassword()}> | Generate Password</a></td> }
+                            {session && <td><Link href={`/staff/${user._id}`}>Voir</Link></td> }
                         </tr>
                     })
                     }

@@ -153,6 +153,7 @@ export class Api{
     getAnnualExams(classeId?:string) { return axios.get(`/api/annualExams?class=${classeId}`)}
     saveAnnualExam(data:AnnualExamInterface) { return axios.post('/api/annualExams/store', data);}
     getAnnualExamResult(annualExamId:string){ return axios.get(`/api/annualExams/results?annualExam_id=${annualExamId}`)}
+
     deleteAnnualExam(annualExamId:any){return axios.post('/api/annualExams/delete', {_id:annualExamId})}
     calculateAnnualExam(annualExam_id:string){
       return axios.post(`/api/annualExams/calculate`, {annualExam_id} )
@@ -164,9 +165,13 @@ export class Api{
     downloadToPdf(classeId:any) { return axios.post(`/api/classes/export-pdf`, {class_id: classeId})}
 
     getUsers() {  return axios.get('/api/users');  }
-deleteUser(userId:string) { return axios.post('/api/users/delete',{_id:userId})}
-saveUser(data:UserInterface) { return axios.post('/api/users/store', data); }
-updateUser(data:UserInterface) {return axios.post('/api/users/update', data)}
+    deleteUser(userId:string) { return axios.post('/api/users/delete',{_id:userId})}
+    saveUser(data:UserInterface) { return axios.post('/api/users/store', data); }
+    updateUser(data:UserInterface) {return axios.post('/api/users/update', data)}
+
+    generatePasswordForSchoolStaff(){
+      return axios.post('/api/users/generate-school-password')
+    }
 
     sync(){
       axios.get('/api/competences/sync');
