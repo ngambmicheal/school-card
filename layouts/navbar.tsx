@@ -11,7 +11,7 @@ export default function Navbar({user}:NavbarProps){
     const { data: session } = useSession()
     const {school} = useSchool();
     return (
-        <nav className='navbar navbar-dark bg-dark navbar-expand'>
+        <nav className='navbar navbar-dark bg-dark navbar-expand sticky-top '>
         <div className='collapse navbar-collapse'>
             <ul className='navbar-nav mr-auto'>
         <Link href='#'><a className='nav-link'>{school?.name}</a></Link>

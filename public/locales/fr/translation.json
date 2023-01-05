@@ -8,7 +8,8 @@
                 "teacher":"Enseignant",
                 "section":"Section",
                 "action":"Action",
-                "list-class":"Liste de classes"
+                "list-class":"Liste de classes",
+                "update-teacher": "Choisir L'Enseignant"
                 }, 
         "action":{
             "delete": "Supprimer",

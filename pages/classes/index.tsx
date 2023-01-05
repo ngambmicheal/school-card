@@ -65,6 +65,7 @@ export default function Classes(){
                         <th>{t('title.school')}</th>
                         <th>{t('title.section')}</th>
                         <th>{t('title.teacher')}</th>
+                        {session && <th>{t('title.update-teacher')}</th>}
                         <th>{t('title.action')}</th>
                     </tr>
                 </thead>
@@ -89,7 +90,7 @@ export function ClasseRow({classe, deleteClasse, session, teachers}: ClasseRowIn
     const updateTeacher = (event) => {
         const tt = event.target.value; 
         const tea = teachers.find(t => t._id == tt);
-        if(tt){
+        if(tt != ''){
             setTeacher(tt);
             api.updateClasse({_id:classe._id, teacher_id:tt, teacher:tea?.name});
         }
@@ -102,7 +103,7 @@ export function ClasseRow({classe, deleteClasse, session, teachers}: ClasseRowIn
             <td>{classe.teacher}</td>
             <td>
                 <select  disabled={!session} value={teacher} className="form-control"  onChange={updateTeacher} >
-                <option value={undefined}>-- Select Teacher --</option>
+                <option value=''>-- Select Teacher --</option>
                 {teachers.map(tr => <option value={tr._id}>{tr.name}</option>)}
                 </select>
             </td>
