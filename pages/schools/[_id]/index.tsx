@@ -90,7 +90,7 @@ export default function Classes(){
                             <td>{classe.name}</td>
                             <td>{classe.section?.name}</td>
                             <td>{classe.school?.name} </td>
-                            <td><Link href={`/classes/${classe._id}`}>Voir</Link> { session.data &&  <a className="delete-action"  onClick={() =>deleteClass(classe._id as string)}> | Delete</a> }</td>
+                            <td>{ session.data && <><Link href={`/classes/${classe._id}`}>Voir</Link>   <a className="delete-action"  onClick={() =>deleteClass(classe._id as string)}> | Delete</a> </> }</td>
                         </tr>
                     })
                     }

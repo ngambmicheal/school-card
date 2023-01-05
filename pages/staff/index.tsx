@@ -7,11 +7,14 @@ import { customStyles } from "../../services/constants";
 import { UserRole, UserType } from "../../utils/enums";
 import SchoolInterface from "../../models/school";
 import { helperService } from "../../services";
+import { useSession } from "next-auth/react";
+import { generateRandomString } from "../../utils/calc";
 
 export default function Users(){
     const [users, setUsers] = useState<UserInterface[]>([])
     const [schools, setSchools] = useState<SchoolInterface[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const {data:session} = useSession(); 
 
     useEffect(() => {
         getUsers()
@@ -37,6 +40,10 @@ export default function Users(){
         closeModal();
     }
 
+    const generatePassword = () => {
+
+    }
+
     return (
         <>
             <button className='btn btn-success' onClick={() => setModalIsOpen(true)}> Ajouter utilisateur </button>
@@ -47,7 +54,8 @@ export default function Users(){
                         <th>Phone</th>
                         <th>Type</th>
                         <th>Email</th>
-                        <th>Action</th>
+                        {session && <th>Password</th>} 
+                        {session  && <th>Action</th> }
                     </tr>
                 </thead>
                 <tbody>
@@ -57,7 +65,8 @@ export default function Users(){
                             <td>{user.phone}</td>
                             <td>{user.type}</td>
                             <td>{user.email}</td>
-                            <td><Link href={`users/${user._id}`}>Voir</Link></td>
+                            {session && <td>{user.password}</td>}
+                            {session && <td><Link href={`users/${user._id}`}>Voir</Link> <a className="" onClick={() => generatePassword()}> | Generate Password</a></td> }
                         </tr>
                     })
                     }
@@ -75,7 +84,7 @@ type CreateUserModalProps = {
     save:(user:any) => void
 }
 export function CreateUserModal({modalIsOpen, closeModal, save}:CreateUserModalProps){
-    const [user, setUser] = useState<UserInterface>({ name:'', type:UserType.STAFF, role:[], username:'', password:'', school_id: helperService.getSchoolId()??undefined});
+    const [user, setUser] = useState<UserInterface>({ name:'', type:UserType.STAFF, role:[], username:'', password:generateRandomString(8), school_id: helperService.getSchoolId()??undefined});
 
     function handleChange(e:any) {
         const key = e.target.name
