@@ -106,7 +106,7 @@ export function ClasseRow({classe, deleteClasse, session, teachers}: ClasseRowIn
                 {teachers.map(tr => <option value={tr._id}>{tr.name}</option>)}
                 </select>
             </td>
-            <td><Link href={`classes/${classe._id}`}>{t('action.view')}</Link> {session && <a className="delete-action"  onClick={() =>deleteClasse(classe._id)}>  | {t('action.delete')}</a>}</td>
+            <td>{session && <> <Link href={`classes/${classe._id}`}>{t('action.view')}</Link> <a className="delete-action"  onClick={() =>deleteClasse(classe._id)}>  | {t('action.delete')}</a></>}</td>
         </tr>
     )
 }
