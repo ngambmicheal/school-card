@@ -11,12 +11,17 @@ import { CSVLink } from "react-csv";
 import useSchool from "../../../hooks/useSchool";
 import SchoolInterface from "../../../models/school";
 import SchoolSettingInfo from "./info";
+import { useSession } from "next-auth/react";
+import useUser from "../../../hooks/useUser";
+import { UserType } from "../../../utils/enums";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [sections, setSections] = useState<SectionInterface[]>([])
-    const {school:schol} = useSchool()
+    const {school:schol} = useSchool();
+    const {data:session} = useSession();
+    const user = useUser(session);
 
     const [school, setSchool] = useState<SchoolInterface|undefined>(schol)
 
@@ -41,10 +46,14 @@ export default function Classes(){
 
 
     return (
-        <> {school && <div>
+        <> {school && session  && <div>
             
-        <SchoolSettingInfo school={school}></SchoolSettingInfo>
+        <SchoolSettingInfo school={school} editable={user?.type===UserType.ADMIN}></SchoolSettingInfo>
 
+        </div>}
+
+        { school && !session && <div>
+            <div>{school.name}</div>    
         </div>}
         </>
     )

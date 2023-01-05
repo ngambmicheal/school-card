@@ -18,7 +18,7 @@ export default function Navbar(){
         <nav className='navbar navbar-dark bg-dark navbar-expand sticky-top '>
         <div className='collapse navbar-collapse'>
             <ul className='navbar-nav mr-auto'>
-        <Link href='#'><a className='nav-link'>{school?.name}</a></Link>
+        <Link href={`/schools/${school?._id}/settings`}><a className='nav-link'>{school?.name}</a></Link>
         {!session && <Link href='/' ><a className='nav-link'>Accueil</a></Link>}
 
         { helperService.getSchoolId() && session && user?.type===UserType.ADMIN && <>

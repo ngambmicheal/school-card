@@ -26,6 +26,9 @@ export default function ProfilePage({...error}){
     <h3 className='my-3'>Information Personelle</h3>
       <div> Name: <b> {user?.name} </b> </div>
       <div> Email: <b> {user?.email} </b> </div>
+      <div> Type: <b> {user?.type} </b> </div>
+      <div> Phone: <b> {user?.phone} </b> </div>
+
 
     {user?.type == UserType.STAFF && <> 
       <h3 className='my-3'>Mes Classes</h3>

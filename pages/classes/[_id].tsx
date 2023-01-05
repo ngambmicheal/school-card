@@ -15,6 +15,7 @@ import { ImportStudents } from "./modals/import-students";
 import { AnnualExamModal, CreateExamModal } from "./modals/annual-exam";
 import { CSVLink } from "react-csv";
 import { useSession } from "next-auth/react";
+import useSchool from "../../hooks/useSchool";
 
 
 export default function ClasseDetails(){
@@ -30,6 +31,7 @@ export default function ClasseDetails(){
     const [ImportIsOpen, setImportIsOpen] = useState(false);
     const router = useRouter()
     const {_id:classeId} = router.query;
+    const {editable} = useSchool(); 
 
     useEffect(()=>{
         if(classeId){
@@ -169,7 +171,7 @@ export default function ClasseDetails(){
 
             
             <h3 className='mt-3'>Exams  
-            <span className='pull-right'><button className='btn btn-xs btn-success' onClick={() =>setExamIsOpen(s => true)}>Add Exam</button></span>
+             {editable &&  <span className='pull-right'><button className='btn btn-xs btn-success' onClick={() =>setExamIsOpen(s => true)}>Add Exam</button></span> }
             </h3>
 
             <table className='table table-hover'>
@@ -181,7 +183,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Matiere' && <th>Exam Type Normal </th> }
                         {classe?.section?.report_type =='Competence' && <th>Exam Type Competence</th>  }
                         {classe?.section?.report_type == 'Special' && <th>Exam Type Special</th> }
-                        <th>Action</th>
+                        {editable && <th>Action</th> }
                     </tr>
                 </thead>
                 <tbody>
@@ -193,7 +195,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/${exam._id}`} >Entree les donnees</Link> </td> }
                         {classe?.section?.report_type =='Competence' &&  <td> <Link href={`/exams/ui/${exam._id}`} >Entree les donnees</Link> </td> }
                         {classe?.section?.report_type =='Special' &&  <td> <Link href={`/exams/special/${exam._id}`} >Entree les donnees</Link> </td> }
-                        <td> <a  onClick={() =>deleteExam(exam._id as string)}>Delete</a> </td>
+                        {editable && <td> <a  onClick={() =>deleteExam(exam._id as string)}>Delete</a> </td> }
                     </tr>
                     })
                 }   
@@ -203,7 +205,7 @@ export default function ClasseDetails(){
             <hr />
 
             <h3 className='mt-3'> Trimestre </h3>
-            { exams.length && <span className='px-13'><button className='btn btn-xs btn-success' onClick={() =>setDynamicExamIsOpen(s => true)}> Ajouter Trimestre </button></span> }
+            { exams.length && editable && <span className='px-13'><button className='btn btn-xs btn-success' onClick={() =>setDynamicExamIsOpen(s => true)}> Ajouter Trimestre </button></span> }
 
             <table className='table table-hover'>
                 <thead>
@@ -214,7 +216,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Matiere' && <th>Exam Type Normal </th> }
                         {classe?.section?.report_type == 'Competence' && <th>Exam Type Competence</th> }
                         {classe?.section?.report_type == 'Special' && <th>Exam Type Special</th> }
-                        <th>Action</th>
+                       {editable && <th>Action</th> }
 
                     </tr>
                 </thead>
@@ -227,7 +229,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/normal/dynamic?term_id=${term._id}`} >View</Link> </td> }
                         {classe?.section?.report_type =='Competence' && <td> <Link href={`/exams/ui/dynamic?term_id=${term._id}`} >UI</Link> </td>}
                         {classe?.section?.report_type =='Special' && <td> <Link href={`/exams/special/dynamic?term_id=${term._id}`} >UI/Special</Link> </td>}
-                        <td> { term._id && <a  onClick={() =>calculateTerm(term._id)}> Calculer  | </a>} <a  onClick={() =>deleteTerm(term._id)}>Delete</a> </td>
+                      {editable &&  <td> { term._id && <a  onClick={() =>calculateTerm(term._id)}> Calculer  | </a>} <a  onClick={() =>deleteTerm(term._id)}>Delete</a> </td> }
                     </tr>
                     })
                 }   
@@ -235,7 +237,7 @@ export default function ClasseDetails(){
             </table>
 
             <h3 className='mt-3'> Bulletin Annuelle </h3>
-            { exams.length && <span className='px-13'><button className='btn btn-xs btn-success' onClick={() =>setAnnualExamIsOpen(s => true)}> Ajouter Bulletin Final </button></span> }
+            { exams.length && editable && <span className='px-13'><button className='btn btn-xs btn-success' onClick={() =>setAnnualExamIsOpen(s => true)}> Ajouter Bulletin Final </button></span> }
 
             <table className='table table-hover'>
                 <thead>
@@ -246,7 +248,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Matiere' && <th>Exam Type Normal </th> }
                         {classe?.section?.report_type == 'Competence' && <th>Exam Type Competence</th> }
                         {classe?.section?.report_type == 'Special' && <th>Exam Type Special</th> }
-                        <th>Action</th>
+                       {editable && <th>Action</th> }
 
                     </tr>
                 </thead>
@@ -259,7 +261,7 @@ export default function ClasseDetails(){
                         {classe?.section?.report_type =='Matiere' && <td> <Link href={`/exams/normal/annual?annualExam_id=${term._id}`} >View</Link> </td> }
                         {classe?.section?.report_type =='Competence' && <td> <Link href={`/exams/ui/annual?annualExam_id=${term._id}`} >UI</Link> </td>}
                         {classe?.section?.report_type =='Special' && <td> <Link href={`/exams/special/annual?annualExam_id=${term._id}`} >UI/Special</Link> </td>}
-                        <td> {term._id &&  <a  onClick={() =>calculateAnnualExam(term._id)}>Calculer | </a>  } <a  onClick={() =>deleteAnnualResult(term._id)}>Delete</a> </td>
+                       {editable &&  <td> {term._id &&  <a  onClick={() =>calculateAnnualExam(term._id)}>Calculer | </a>  } <a  onClick={() =>deleteAnnualResult(term._id)}>Delete</a> </td> }
                     </tr>
                     })
                 }   

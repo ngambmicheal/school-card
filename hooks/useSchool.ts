@@ -6,6 +6,7 @@ import api from "../services/api";
 export default function useSchool(){
     const [school, setSchool] = useState<SchoolInterface>();
     const [schools, setSchools] = useState<SchoolInterface[]>();
+    const [editable, setEditable] = useState(false); 
 
     useEffect(() => {
         if(!school){
@@ -16,9 +17,11 @@ export default function useSchool(){
                 setSchool(s => school)
                 setSchools(s => schools)
 
+                setEditable(s => !!school?.allowUpdate)
+
             })
         }
     }, [])
 
-    return {school, schools}
+    return {school, schools, editable}
 }

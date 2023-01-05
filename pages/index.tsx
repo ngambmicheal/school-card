@@ -20,7 +20,7 @@ const Home: NextPage = () => {
 
   const chooseSchool = (schoolId:string) => {
     helperService.saveSchoolId(schoolId); 
-    window.location = '/schools/'+schoolId
+    window.location = '/classes';
   }
 
   return (

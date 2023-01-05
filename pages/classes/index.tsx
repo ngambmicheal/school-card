@@ -65,7 +65,6 @@ export default function Classes(){
                         <th>{t('title.school')}</th>
                         <th>{t('title.section')}</th>
                         <th>{t('title.teacher')}</th>
-                        {session && <th>{t('title.update-teacher')}</th>}
                         <th>{t('title.action')}</th>
                     </tr>
                 </thead>
@@ -100,7 +99,6 @@ export function ClasseRow({classe, deleteClasse, session, teachers}: ClasseRowIn
             <td>{classe.name}</td>
             <td>{classe.school?.name}</td>
             <td>{classe.section?.name}</td>
-            <td>{classe.teacher}</td>
             <td>
                 <select  disabled={!session} value={teacher} className="form-control"  onChange={updateTeacher} >
                 <option value=''>-- Select Teacher --</option>
