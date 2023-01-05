@@ -169,6 +169,10 @@ export class Api{
     saveUser(data:UserInterface) { return axios.post('/api/users/store', data); }
     updateUser(data:UserInterface) {return axios.post('/api/users/update', data)}
 
+    getUserClasses(user_id:string){
+      return axios.post('/api/users/get-classes', {user_id})
+    }
+
     generatePasswordForSchoolStaff(){
       return axios.post('/api/users/generate-school-password')
     }

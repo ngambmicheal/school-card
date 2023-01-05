@@ -8,14 +8,16 @@ export default function useSchool(){
     const [schools, setSchools] = useState<SchoolInterface[]>();
 
     useEffect(() => {
-        const schoolId = helperService.getSchoolId()
-        api.getSchools().then(({data:{data}}:any) => {
+        if(!school){
+            const schoolId = helperService.getSchoolId()
+            api.getSchools().then(({data:{data}}:any) => {
 
-            const school = (data as SchoolInterface[]).find(school => school._id == schoolId)
-            setSchool(s => school)
-            setSchools(s => schools)
+                const school = (data as SchoolInterface[]).find(school => school._id == schoolId)
+                setSchool(s => school)
+                setSchools(s => schools)
 
-        })
+            })
+        }
     }, [])
 
     return {school, schools}

@@ -2,22 +2,26 @@ import Link from 'next/link'
 import { useSession, signIn, signOut } from "next-auth/react"
 import { helperService } from '../services'
 import useSchool from '../hooks/useSchool'
+import useUser from '../hooks/useUser'
+import { UserType } from '../utils/enums'
 
 type NavbarProps = {
     user: any,
 }
 
-export default function Navbar({user}:NavbarProps){
+export default function Navbar(){
     const { data: session } = useSession()
     const {school} = useSchool();
+    const user = useUser(session); 
+
     return (
         <nav className='navbar navbar-dark bg-dark navbar-expand sticky-top '>
         <div className='collapse navbar-collapse'>
             <ul className='navbar-nav mr-auto'>
         <Link href='#'><a className='nav-link'>{school?.name}</a></Link>
-        <Link href='/' ><a className='nav-link'>Accueil</a></Link>
+        {!session && <Link href='/' ><a className='nav-link'>Accueil</a></Link>}
 
-        { helperService.getSchoolId() && session && <>
+        { helperService.getSchoolId() && session && user?.type===UserType.ADMIN && <>
         <Link href='/classes' ><a className='nav-link'>Classes</a></Link>
         <Link href='/students' ><a className='nav-link'>Elèves</a></Link>
             <Link href='/schools' ><a className='nav-link'>Ecoles</a></Link>

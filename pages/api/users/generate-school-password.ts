@@ -7,16 +7,19 @@ import { HeadersEnum } from '../../../utils/enums';
 
 
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) { 
 
   const query ={school_id:req.headers[HeadersEnum.SchoolId], ...req.query}; 
+
+  const school = await schoolSchema.findOne({_id: req.headers[HeadersEnum.SchoolId]})
+
   userSchema.find(query).populate({path:'school_id', model:schoolSchema}).collation({locale: "en_US", numericOrdering: true}).then(users => {
 
             users.map(async user => {
-                await userSchema.updateOne({_id:user._id}, {password: generateRandomString(9)})
+                await userSchema.updateOne({_id:user._id}, {password: generateRandomString(school.staff_password_length??8)})
             })
             res.json({data:users, status:true});
         })

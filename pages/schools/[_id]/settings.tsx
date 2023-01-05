@@ -10,6 +10,7 @@ import SectionInterface from "../../../models/section";
 import { CSVLink } from "react-csv";
 import useSchool from "../../../hooks/useSchool";
 import SchoolInterface from "../../../models/school";
+import SchoolSettingInfo from "./info";
 
 export default function Classes(){
     const [classes, setClasses] = useState<Classe[]>([])
@@ -37,22 +38,12 @@ export default function Classes(){
         setModalIsOpen(s => false);
     }
 
-    function handleChange(e:any) {
-        const key = e.target.name
-        const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value
-    
-        setSchool(inputData => ({
-          ...inputData,
-          [key]: value
-        }))
-      }
 
 
     return (
         <> {school && <div>
             
-
-
+        <SchoolSettingInfo school={school}></SchoolSettingInfo>
 
         </div>}
         </>

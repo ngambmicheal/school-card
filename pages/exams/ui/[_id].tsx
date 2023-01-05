@@ -16,6 +16,8 @@ import { toast } from "@chakra-ui/toast";
 import { useForm } from "react-hook-form";
 import { CSVLink } from "react-csv";
 import { getFloat } from "../../../utils/calc";
+import useSchool from "../../../hooks/useSchool";
+import SchoolInterface from "../../../models/school";
 
 export default function examDetails(){
     const [exam, setExam] = useState<ExamInterface>()
@@ -29,6 +31,7 @@ export default function examDetails(){
 
     const router = useRouter();
     const {_id:examId} = router.query;
+    const {school} = useSchool();
 
     useEffect(()=>{
         if(examId){
@@ -76,11 +79,13 @@ export default function examDetails(){
     }
 
     const deleteResult = (resultId:string) => {
-        api.deleteResult(resultId).then(() => {
+       if(confirm('Are you sure to delete?')){
+         api.deleteResult(resultId).then(() => {
             api.getExamResults(examId).then(({data:{data}} : any) => {
                 setResults(data)
             })
         })
+        }
     }
 
     useEffect(() => {
@@ -240,7 +245,7 @@ export default function examDetails(){
            
             <button className='mx-3 btn btn-success' onClick={() => getRank()} > get Rank</button>
 
-            <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button>
+            {school && school.allowUpdate && <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button> }
            
             <button className='mx-3 btn btn-dark' onClick={() => printStats(true)} > Imprimer Statistics</button>
 
@@ -301,7 +306,7 @@ export default function examDetails(){
                 </thead>
                 <tbody>
                 { results && competences.length && results.map( result=> {
-                    return <ExamResult  key={`exam-${result._id}`} result={result} competences={competences} exam={exam} points={points} deleteResult={deleteResult} />
+                    return <ExamResult  key={`exam-${result._id}`} result={result} competences={competences} exam={exam} points={points} deleteResult={deleteResult} school={school} />
                 })}
                 </tbody>
             </table>
@@ -313,7 +318,7 @@ export default function examDetails(){
 
 const reducer = (previousValue:any, currentValue:any) => getFloat((getFloat(previousValue??0) + getFloat(currentValue??0)).toFixed(2))
 
-export function ExamResult({ result, competences, exam, points, deleteResult}:{competences:CompetenceInterface[], result:ExamResultInterface|any, exam:any, points:any, deleteResult:(resultId:string)=>void}){
+export function ExamResult({ school, result, competences, exam, points, deleteResult}:{school:SchoolInterface, competences:CompetenceInterface[], result:ExamResultInterface|any, exam:any, points:any, deleteResult:(resultId:string)=>void}){
 
     const [total, setTotal] = useState(0);
     const [res, setRes] = useState(result);
@@ -377,7 +382,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
                 return (
                     <>
                         {subject.courses?.map(course => {
-                                return course._id && <td key={course._id}> <input name={`subject_${course._id}`} style={{width:'50px'}} value={res[`subject_${course._id}`]} onChange={handleChange} max={course.point} />  </td>
+                                return course._id && <td key={course._id}> <input name={`subject_${course._id}`} style={{width:'50px'}} value={res[`subject_${course._id}`]} disabled={!school.allowUpdate} onChange={handleChange} max={course.point} />  </td>
                         })}
                     <th> {res[`total_${subject._id}`]} </th>
                     </>
@@ -387,7 +392,7 @@ export function ExamResult({ result, competences, exam, points, deleteResult}:{c
         <td>{total}</td>
         <th> { ((total / points) * 20).toFixed(2) } / 20 </th>
         <th> {res.rank}</th>
-        <td><input type='checkbox' name='ignore' checked={res.ignore==true}  onClick={handleChange} /></td>
+        <td><input type='checkbox' name='ignore' checked={res.ignore==true}  onClick={handleChange} disabled={!school.allowUpdate} /></td>
         <th> <Link href={`/exams/ui/print?_id=${res._id}`}>Imprimer</Link> | <a onClick={() =>deleteResult(res._id)}> Delete</a> </th>
     </tr>
 }
