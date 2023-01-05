@@ -83,19 +83,23 @@ export default function Classes(){
 
 type ClasseRowInterface = {classe:ClasseInterface,deleteClasse:(id:string)=>void, session:any, teachers:UserInterface[]}
 export function ClasseRow({classe, deleteClasse, session, teachers}: ClasseRowInterface) {
-    const [teacher, setTeacher] = useState(classe.teacher); 
+    const [teacher, setTeacher] = useState(classe.teacher_id); 
 
 
     const updateTeacher = (event) => {
         const tt = event.target.value; 
-        setTeacher(tt);
-        api.updateClasse({_id:classe._id, teacher:tt});
+        const tea = teachers.find(t => t._id == tt);
+        if(tt){
+            setTeacher(tt);
+            api.updateClasse({_id:classe._id, teacher_id:tt, teacher:tea?.name});
+        }
     }
     return (
         <tr key={classe._id}>
             <td>{classe.name}</td>
             <td>{classe.school?.name}</td>
             <td>{classe.section?.name}</td>
+            <td>{classe.teacher}</td>
             <td>
                 <select  disabled={!session} value={teacher} className="form-control"  onChange={updateTeacher} >
                 <option value={undefined}>-- Select Teacher --</option>
