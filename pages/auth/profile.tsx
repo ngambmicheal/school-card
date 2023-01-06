@@ -38,6 +38,10 @@ export default function ProfilePage({ ...error }) {
         {" "}
         Phone: <b> {user?.phone} </b>{" "}
       </div>
+      <div>
+        {" "}
+        matricule: <b> {user?.matricule} </b>{" "}
+      </div>
 
       {user?.type == UserType.STAFF && (
         <>
