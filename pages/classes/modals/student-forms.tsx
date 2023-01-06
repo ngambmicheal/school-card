@@ -126,6 +126,7 @@ export function CreateStudentModal({
               value={student?.class_id}
               onChange={handleChange}
             >
+              <option value=''>---Select class</option>
               {classes?.map((classe) => (
                 <option value={classe._id}>{classe.name}</option>
               ))}
@@ -133,7 +134,7 @@ export function CreateStudentModal({
           </div>
 
           <div className="from-group">
-            <button onClick={() => save(student)} className="btn btn-success">
+            <button disabled={!student.name || !student.class_id} onClick={() => save(student)} className="btn btn-success">
               Save
             </button>
             <button className="btn btn-secondary end" onClick={closeModal}>

@@ -5,6 +5,8 @@ import fs from "fs";
 import { stripBomFromKeys } from "../../../utils/stripBom";
 import { studentSchema } from "../../../models/student";
 import mg from "../../../services/mg";
+import { createUser } from "../users/store";
+import { HeadersEnum, UserType } from "../../../utils/enums";
 
 export default async function importStudent(
   req: NextApiRequest,
@@ -57,12 +59,26 @@ export default async function importStudent(
             class_id: fields.class_id,
           }));
 
-          data = data.map((x: any) => ({
+          data = await Promise.all(data.map(async(x: any) => {
+            const user = await createUser({
+              name: x.name, 
+              email: x.email,
+              school_id:  req.headers[HeadersEnum.SchoolId] as string, 
+              role:[], 
+              type: UserType.STUDENT, 
+              username:x.email??'', 
+              matricule:x.matricule??'',
+              password:''
+            })
+
+            return {
             ...x,
             class_id: x.class_id,
             name: x.name,
             email: x.email,
-          }));
+            matricule : user.matricule,
+            user_id : user._id 
+          }}))
 
           totalCount += data.length;
 
@@ -88,6 +104,8 @@ export default async function importStudent(
       });
     }
   );
+
+  return res.json(output)
 }
 
 type ParsedForm = {

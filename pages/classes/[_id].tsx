@@ -527,6 +527,7 @@ export default function ClasseDetails() {
         <thead>
           <tr>
             <th>No </th>
+            <th>Matricule</th>
             <th>Name</th>
             <th>Phone</th>
             <th>Sex</th>
@@ -611,6 +612,7 @@ export function StudentRow({ stud, deleteStudent, terms }: StudentProps) {
           onChange={handleChange}
         />{" "}
       </td>
+      <td>{student.matricule}</td>
       <td>
         {" "}
         <input

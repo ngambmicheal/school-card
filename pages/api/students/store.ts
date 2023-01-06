@@ -2,12 +2,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import ClasseInterface, { classeSchema } from "../../../models/classe";
 import StudentInterface, { studentSchema } from "../../../models/student";
+import { HeadersEnum, UserType } from "../../../utils/enums";
+import { createUser } from "../users/store";
 
 type Data = {
   name: string;
 };
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<{
     data?: StudentInterface;
@@ -15,7 +17,22 @@ export default function handler(
     message: string;
   }>
 ) {
-  const studentQuery = req.body;
+  const studentQuery  = req.body as StudentInterface
+
+  const user = await createUser({
+    name: studentQuery.name, 
+    email: studentQuery.email,
+    school_id:  req.headers[HeadersEnum.SchoolId] as string, 
+    role:[], 
+    type: UserType.STUDENT, 
+    username:studentQuery.email??'', 
+    matricule:'',
+    password:''
+  })
+
+  studentQuery.matricule = user.matricule; 
+  studentQuery.user_id = user._id ;
+  
 
   const student = new studentSchema(studentQuery);
   student

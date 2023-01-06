@@ -6,10 +6,13 @@ import ClasseInterface from "../../models/student";
 import Modal from "react-modal";
 import { customStyles } from "../../services/constants";
 import { CreateStudentModal } from "../classes/modals/student-forms";
+import { useToast } from "@chakra-ui/react";
+import { errorMessage, successMessage } from "../../utils/messages";
 
 export default function Students() {
   const [students, setStudents] = useState<Classe[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const toast = useToast(); 
 
   useEffect(() => {
     getStudents();
@@ -26,7 +29,7 @@ export default function Students() {
   };
 
   const saveStudent = (student: any) => {
-    api.saveStudent(student).then(() => getStudents());
+    api.saveStudent(student).then(() => { toast(successMessage('Student Created successfully!')); getStudents()}).catch((error) => toast(errorMessage(error.response?.data?.message??error.message)));
     closeModal();
   };
 

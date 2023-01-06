@@ -147,7 +147,7 @@ function MapColumns(props: MapColumnsProps) {
         </thead>
         <tbody>
           {generateColumns({
-            leadFields: ["name", "email", "dob", "phone", "number", "sex"],
+            leadFields: ["name", "email", "dob", "phone", "number", "sex", "matricule"],
             foundFields: csvColumns,
             setValue,
             values: values,
@@ -244,7 +244,7 @@ function Submit(
             description: `Loaded `,
           });
 
-          setTimeout(() => router.push("/soft-leads"), 2000);
+          setTimeout(() => window.location.reload(), 2000);
         })
         .catch((e) => {
           console.log(e);

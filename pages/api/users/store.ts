@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import ClasseInterface, { classeSchema } from "../../../models/classe";
 import { schoolSchema } from "../../../models/school";
 import UserInterface, { userSchema } from "../../../models/user";
-import { padWithLeadingZeros } from "../../../utils/calc";
+import { generateRandomString, padWithLeadingZeros } from "../../../utils/calc";
 import { HeadersEnum, UserTypeCode } from "../../../utils/enums";
 
 type Data = {
@@ -30,18 +30,45 @@ export default async function handler(
     .find({ school_id: userQuery.school_id })
     .count();
 
-  const code = `${school.code}-${
-    UserTypeCode[userQuery.type]
-  }-${padWithLeadingZeros(users + 1, 6)}`;
-  userQuery.matricule = code;
+  try{
+    const user = await createUser(userQuery); 
+    return res.status(200).json({ data: user, success: true, message: "done" });
+  }
+  catch(e){
+    return res.status(400).json({ message: "Could not be sent", success: false });
+  }
 
-  const user = new userSchema(userQuery);
-  user
-    .save()
-    .then(() => {
-      res.status(200).json({ data: user, success: true, message: "done" });
-    })
-    .catch(() => {
-      res.status(400).json({ message: "Could not be sent", success: false });
-    });
+}
+
+
+export async function createUser(userParams:UserInterface): Promise<UserInterface>{
+  const school = await schoolSchema.findOne({
+    _id: userParams.school_id,
+  });
+  const users = await userSchema
+    .find({ school_id: userParams.school_id })
+    .count();
+
+    if(userParams.matricule){
+      const existingUser = await userSchema.findOne({matricule:userParams.matricule});
+      if(existingUser) return existingUser;
+    }
+
+    const code = `${school.code}-${
+      UserTypeCode[userParams.type]
+    }-${padWithLeadingZeros(users + 1, 6)}`;
+    userParams.matricule = code;
+
+    if(!userParams.email){ 
+      userParams.email = code;
+      userParams.username = code;
+    }
+  
+
+    if(!userParams.password){
+      userParams.password = generateRandomString(school.staff_password_length ?? 8) 
+    }
+
+  const user = await new userSchema(userParams).save(); 
+  return user; 
 }
