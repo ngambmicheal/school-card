@@ -1,12 +1,12 @@
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
+export default function Error({ ...error }) {
+  const router = useRouter();
 
-export default function Error({...error}){
-    const router = useRouter(); 
-
-    return (<>
-        This is an error 
-        <p color='red'>{router.query.error}</p>
-    
-    </>)
+  return (
+    <>
+      This is an error
+      <p color="red">{router.query.error}</p>
+    </>
+  );
 }

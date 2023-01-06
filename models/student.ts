@@ -13,6 +13,8 @@ export default interface StudentInterface{
     class_id ?:string & ClasseInterface,
     number?:string,
     sex?:string,
+    matricule?:string,
+    user?:string,
     place?:string
 }
 
@@ -30,6 +32,11 @@ const StudentSchema = new mg.Schema({
     sex: {type:String},
     dob: {type:String},
     number:{type:String},
+    matricule: {type:String},
+    user:{
+        type:mg.Schema.Types.ObjectId,
+        ref:'User'
+    }
    },
    {
    timestamps:true,

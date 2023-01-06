@@ -1,10 +1,9 @@
-import type { NextPage } from 'next'
-import api from '../services/api'
+import type { NextPage } from "next";
+import api from "../services/api";
 
 const Synced: NextPage = () => {
-    api.sync();
-    return (<></>)
-}   
+  api.sync();
+  return <></>;
+};
 
-export default Synced
-  
+export default Synced;
