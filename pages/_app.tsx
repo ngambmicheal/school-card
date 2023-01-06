@@ -6,7 +6,7 @@ import { useState } from "react";
 import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
 
-import "./i18n";
+import "../services/i18n";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (

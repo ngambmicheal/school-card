@@ -178,8 +178,8 @@ export class Api{
     }
 
     sync(){
-      axios.get('/api/competences/sync');
-      axios.get('/api/subjects/sync');
+      axios.get('/api/competences/sync').catch(() => console.log('syncing competence'))
+      axios.get('/api/subjects/sync').catch(() => console.log('syncing subjects'))
     }
 }
 

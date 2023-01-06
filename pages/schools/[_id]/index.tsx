@@ -10,7 +10,6 @@ import SectionInterface from "../../../models/section";
 import { CSVLink } from "react-csv";
 import { helperService } from "../../../services";
 import { useSession } from "next-auth/react";
-import useSchool from "../../../hooks/useSchool";
 
 export default function Classes() {
   const [classes, setClasses] = useState<Classe[]>([]);
