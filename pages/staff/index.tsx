@@ -52,6 +52,7 @@ export default function Users(){
                 <thead>
                     <tr>
                         <th>Nom</th>
+                        <th>Code</th>
                         <th>Phone</th>
                         <th>Type</th>
                         <th>Email</th>
@@ -63,6 +64,7 @@ export default function Users(){
                     {users.map(user => {
                        return  <tr key={user._id}>
                             <td>{user.name}</td>
+                            <td>{user.matricule}</td>
                             <td>{user.phone}</td>
                             <td>{user.type}</td>
                             <td>{user.email}</td>

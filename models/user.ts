@@ -18,7 +18,8 @@ export default interface UserInterface{
     type: UserType, 
     role: UserRole[], 
     username:string, 
-    password:string
+    password:string, 
+    matricule:string,
 }
 
 const UserSchema = new mg.Schema({
@@ -38,7 +39,8 @@ const UserSchema = new mg.Schema({
     type: {type:String},
     role: [{type:String}], 
     username: {type:String},
-    password: {type:String}
+    password: {type:String},
+    matricule: {type:String}
    },
    {
    timestamps:true,

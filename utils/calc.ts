@@ -11,3 +11,7 @@ export function generateRandomString(length: number):string{
         }
         return result;
     }
+
+export   function padWithLeadingZeros(num:number, totalLength:number) {
+        return String(num).padStart(totalLength, '0');
+      }

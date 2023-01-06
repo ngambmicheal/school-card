@@ -9,7 +9,8 @@ export default interface SchoolInterface{
     email?:string, 
     box?:string, 
     details?: string,
-    staff_password_length?:number
+    staff_password_length?:number, 
+    code:string
 }
 
 const SchoolSchema = new mg.Schema({
@@ -20,7 +21,8 @@ const SchoolSchema = new mg.Schema({
     allowUpdate: {type:Boolean}, 
     email: {type:String},
     box:{type:String},
-    staff_password_length:{type:Number}
+    staff_password_length:{type:Number},
+    code:{type:String}
    },
    {
    timestamps:true,

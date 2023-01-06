@@ -8,12 +8,16 @@ import Modal from 'react-modal';
 import { helperService } from "../../services";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "react-i18next";
+import { generateRandomString } from "../../utils/calc";
+import { toast, useToast } from "@chakra-ui/react";
+import { errorMessage, successMessage } from "../../utils/messages";
 
 export default function Schools(){
     const [schools, setSchools] = useState<School[]>([])
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const {data:session} = useSession();
     const { t } = useTranslation();
+    const toast = useToast();
 
 
     useEffect(() => {
@@ -31,13 +35,13 @@ export default function Schools(){
     }
 
     const saveSchool = (school:any) => {
-        api.saveSchools(school).then(() => getSchools())
+        api.saveSchools(school).then(() => {toast(successMessage('School saved successfully!')); getSchools()}).catch(error => toast(errorMessage(error.response?.data?.message??error.message)))
         closeModal();
     }
 
     const deleteSchool = (school:any) => {
         if(confirm('Are you sure you want to delete ? '))
-        api.deleteSchool(school).then(() => getSchools());
+        api.deleteSchool(school).then(() =>  {toast(successMessage('School deleted successfully!')); getSchools()});
     }
 
     const chooseSchool = (schoolId:string) => {
@@ -52,6 +56,7 @@ export default function Schools(){
                 <thead>
                     <tr>
                         <th>{t('title.name')}</th>
+                        <th>{t('title.code')}</th>
                         <th>{t('title.action')}</th>
                     </tr>
                 </thead>
@@ -59,6 +64,7 @@ export default function Schools(){
                     {schools.map(school => {
                        return  <tr key={school._id}>
                             <td>{school.name}</td>
+                            <td>{school.code}</td>
                             <td><i className="glyphicon glyphicon-eye"></i>
                                 <a href='#' onClick={() => school._id && chooseSchool(school._id)}> {t('action.choose')} </a>
                                 {session && <a className="delete-action" href='#' onClick={() => deleteSchool(school._id)}> | {t('action.delete')} </a> }
@@ -81,7 +87,7 @@ type CreateSchoolModalProps = {
     save:(student:any) => void
 }
 export function CreateSchoolModal({modalIsOpen, closeModal, save, class_id}:CreateSchoolModalProps){
-    const [student, setStudent] = useState<SchoolInterface>({name:''});
+    const [student, setStudent] = useState<SchoolInterface>({name:'', code: generateRandomString(3)});
 
     function handleChange(e:any) {
         const key = e.target.name
@@ -109,6 +115,12 @@ export function CreateSchoolModal({modalIsOpen, closeModal, save, class_id}:Crea
                     <label>Nom </label>
                     <input className='form-control' name='name' value={student?.name} onChange={handleChange}></input>
                 </div>
+
+                <div className='form-group'>
+                    <label>Code</label>
+                    <input className='form-control' name='code' value={student?.code} onChange={handleChange}></input>
+                </div>
+
 
                 <div className='from-group'>
                     <button onClick={() =>save(student)} className='btn btn-success'>Enregistrer</button>

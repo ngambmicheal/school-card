@@ -14,3 +14,10 @@ export enum UserRole{
 export enum HeadersEnum{
     SchoolId= 'schoolid'
 }
+
+export const UserTypeCode: Record<UserType, string> =  {
+ [UserType.ADMIN] : 'ADM', 
+ [UserType.STUDENT] : 'STD', 
+ [UserType.STAFF] : 'STF',
+ [UserType.PARENT]: 'PRT'
+}

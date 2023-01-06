@@ -8,12 +8,19 @@ type Data = {
   name: string
 }
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<{data?:SchoolInterface, success:boolean, message:string}>
 ) {
 
     const schoolQuery = req.body;
+
+    const existingSchool = await schoolSchema.findOne({code:schoolQuery.code});
+
+    if(existingSchool){
+      res.status(400).json({message:'School with code already exist', success:false})
+      return false;
+    }
 
     const school = new schoolSchema(schoolQuery)
     school.save().then(()=>{
