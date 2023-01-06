@@ -52,14 +52,14 @@ export default function SignIn({ csrfToken }: any) {
 
   const error = errorType && (errors[errorType] ?? errors.default);
 
-  console.log(error);
-
   const schoolId = helperService.getSchoolId();
 
   return (
     <>
-      <div className="card">
-        <div className="card-content">
+      <div className="row">
+        <div className="col-sm-6 m-auto">
+          <div className="card">
+            <div className="card-body">
           {error && (
             <Alert status="error">
               <AlertIcon />
@@ -91,6 +91,8 @@ export default function SignIn({ csrfToken }: any) {
           )}
         </div>
       </div>
+      </div>
+          </div>
     </>
   );
 }
