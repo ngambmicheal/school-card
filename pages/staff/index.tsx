@@ -15,6 +15,7 @@ export default function Users() {
   const [schools, setSchools] = useState<SchoolInterface[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { data: session } = useSession();
+  const [filterBy, setFilterBy] = useState<any>('')
 
   useEffect(() => {
     getUsers();
@@ -45,6 +46,9 @@ export default function Users() {
 
   return (
     <>
+    <div className="row">
+      <div className="col-sm-6">
+
       <button className="btn btn-success" onClick={() => setModalIsOpen(true)}>
         {" "}
         Ajouter utilisateur{" "}
@@ -52,6 +56,27 @@ export default function Users() {
       <button className="btn btn-dark mx-2" onClick={() => generatePassword()}>
         Generate Password
       </button>
+      </div>
+      <div className="col-sm-6">
+      <div className="form-group">
+            <label>Filter By</label>
+            <select
+              className="form-control"
+              name="type"
+              value={filterBy}
+              onChange={e => setFilterBy(() => e.target.value)}
+            >
+              <option value={''} >Select All</option>
+              {Object.keys(UserType).map((key) => (
+                <option value={key} selected={key == filterBy}>
+                  {key}
+                </option>
+              ))}
+            </select>
+          </div>
+              
+          </div>
+    </div>
       <table className="table ">
         <thead>
           <tr>
@@ -65,7 +90,7 @@ export default function Users() {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => {
+          {users.filter(user => filterBy? user.type == filterBy : user ).map((user) => {
             return (
               <tr key={user._id}>
                 <td>{user.name}</td>
