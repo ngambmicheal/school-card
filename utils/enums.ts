@@ -16,8 +16,8 @@ export enum HeadersEnum{
 }
 
 export const UserTypeCode: Record<UserType, string> =  {
- [UserType.ADMIN] : 'ADM', 
- [UserType.STUDENT] : 'STD', 
- [UserType.STAFF] : 'STF',
- [UserType.PARENT]: 'PRT'
+ [UserType.ADMIN] : 'A', 
+ [UserType.STUDENT] : 'S', 
+ [UserType.STAFF] : 'T',
+ [UserType.PARENT]: 'P'
 }

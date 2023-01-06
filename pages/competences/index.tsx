@@ -63,7 +63,8 @@ export default function Competences() {
       )}
 
       <h3 className="my-4">Liste des competences</h3>
-      <table className="table ">
+            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+
         <thead>
           <tr>
             <th>Id</th>

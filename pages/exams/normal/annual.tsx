@@ -193,7 +193,8 @@ export default function termDetails() {
         Imprimer Tableau D
       </button>
 
-      <table className="table ">
+            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+
         <thead>
           <tr>
             <th>Numero</th>

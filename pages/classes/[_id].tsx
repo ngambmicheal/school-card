@@ -181,7 +181,8 @@ export default function ClasseDetails() {
         )}
       </h3>
 
-      <table className="table table-hover">
+            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+
         <thead>
           <tr>
             <th>Name</th>
@@ -275,7 +276,8 @@ export default function ClasseDetails() {
         </span>
       )}
 
-      <table className="table table-hover">
+            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+
         <thead>
           <tr>
             <th>Name</th>
@@ -373,7 +375,8 @@ export default function ClasseDetails() {
         </span>
       )}
 
-      <table className="table table-hover">
+            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+
         <thead>
           <tr>
             <th>Name</th>
@@ -523,7 +526,7 @@ export default function ClasseDetails() {
         </span>
       </h3>
 
-      <table className="table table-hover">
+      <table className="table table-hover table-striped table-bordered my-3 table-secondary">
         <thead>
           <tr>
             <th>No </th>

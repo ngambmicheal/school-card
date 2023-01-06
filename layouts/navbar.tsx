@@ -42,7 +42,7 @@ export default function Navbar(){
                 </> 
                 :
                 <>
-                    <a href='#' className='nav-link' onClick={() => signIn()}>Sign in</a>
+                    {school && <a href='#' className='nav-link' onClick={() => signIn()}>Sign in</a> }
                 </>
                 }
             </ul>

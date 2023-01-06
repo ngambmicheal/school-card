@@ -65,7 +65,8 @@ export default function Schools() {
         {" "}
         {t("title.add-school")}
       </button>
-      <table className="table ">
+            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+
         <thead>
           <tr>
             <th>{t("title.name")}</th>

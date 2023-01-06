@@ -77,7 +77,8 @@ export default function Users() {
               
           </div>
     </div>
-      <table className="table ">
+            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+
         <thead>
           <tr>
             <th>Nom</th>

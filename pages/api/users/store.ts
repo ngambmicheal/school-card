@@ -42,6 +42,7 @@ export default async function handler(
 
 
 export async function createUser(userParams:UserInterface): Promise<UserInterface>{
+  const year = new Date().getFullYear().toString().slice(-2);
   const school = await schoolSchema.findOne({
     _id: userParams.school_id,
   });
@@ -56,7 +57,7 @@ export async function createUser(userParams:UserInterface): Promise<UserInterfac
 
     const code = `${school.code}-${
       UserTypeCode[userParams.type]
-    }-${padWithLeadingZeros(users + 1, 6)}`;
+    }${year}-${padWithLeadingZeros(users + 1, 6)}`;
     userParams.matricule = code;
 
     if(!userParams.email){ 
