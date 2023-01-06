@@ -66,7 +66,7 @@ export default function subjectDetails() {
       )}
 
       <h3 className="py-2">Liste des sous-matieres</h3>
-            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+            <table className="table table-hover table-striped table-bordered my-3 ">
 
         <thead>
           <tr>

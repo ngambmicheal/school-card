@@ -81,7 +81,7 @@ export default function Classes() {
       <br />
 
       <h4 className="h3">Classes</h4>
-            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+            <table className="table table-hover table-striped table-bordered my-3 ">
 
         <thead>
           <tr>

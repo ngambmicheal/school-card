@@ -41,7 +41,7 @@ export default function Sections() {
         {" "}
         Ajouter une section{" "}
       </button>
-            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+            <table className="table table-hover table-striped table-bordered my-3 ">
 
         <thead>
           <tr>

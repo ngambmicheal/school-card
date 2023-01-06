@@ -40,7 +40,7 @@ export default function Students() {
         Ajouter un élève{" "}
       </button>
       <h3 className="my-3">Liste des eleves</h3>
-            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+            <table className="table table-hover table-striped table-bordered my-3 ">
 
         <thead>
           <tr>

@@ -65,7 +65,7 @@ export default function Classes() {
         </button>
       )}
       <h3 className="mt-3">{t("title.list-class")}</h3>
-            <table className="table table-hover table-striped table-bordered my-3 table-secondary">
+            <table className="table table-hover table-striped table-bordered my-3 ">
 
         <thead>
           <tr>
