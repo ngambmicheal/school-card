@@ -243,7 +243,7 @@ export default function examDetails() {
     <>
       <div className="py-3">
         <h3>Classe : {exam?.class_id?.name} </h3>
-        <h4>Examen : {exam?.name} </h4>
+        <h4>Examen : {exam?.name}  - {exam?.session_id?.name}</h4>
       </div>
       <button className="mx-3 btn btn-success" onClick={() => printResults()}>
         {" "}

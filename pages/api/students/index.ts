@@ -15,7 +15,7 @@ export default async function handler(
     await classeSchema.find({ school: req.headers[HeadersEnum.SchoolId] })
   ).map((classe) => classe._id);
 
-  const query = { ...req.query, class_id: { $in: classes } };
+  const query = { ...req.query, class_id: { $in: classes }, session_id: req.headers[HeadersEnum.SchoolSessionId] };
 
   studentSchema
     .find(query)

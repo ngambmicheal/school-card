@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import ClasseInterface, { classeSchema } from "../../../models/classe";
 import ExamInterface, { examSchema } from "../../../models/exam";
+import { HeadersEnum } from "../../../utils/enums";
 
 type Data = {
   name: string;
@@ -16,6 +17,8 @@ export default function handler(
   }>
 ) {
   const examQuery = req.body;
+
+  examQuery.session_id = req.headers[HeadersEnum.SchoolSessionId] as string
 
   const exam = new examSchema(examQuery);
   exam

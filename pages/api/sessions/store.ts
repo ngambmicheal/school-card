@@ -1,7 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import TermInterface, { termSchema } from "../../../models/terms";
-import { HeadersEnum } from "../../../utils/enums";
+import ClasseInterface, { sessionSchema } from "../../../models/session";
+import mg from "../../../services/mg";
+import logger from "../../../utils/logger";
 
 type Data = {
   name: string;
@@ -10,21 +11,21 @@ type Data = {
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<{
-    data?: TermInterface;
+    data?: ClasseInterface;
     success: boolean;
     message: string;
   }>
 ) {
-  const termQuery = req.body;
-  termQuery.session_id = req.headers[HeadersEnum.SchoolSessionId] as string
+  const { name } = req.body;
 
-  const term = new termSchema(termQuery);
-  term
+  const session = new sessionSchema(req.body);
+  session
     .save()
     .then(() => {
-      res.status(200).json({ data: term, success: true, message: "done" });
+      res.status(200).json({ data: session, success: true, message: "done" });
     })
     .catch((e:any) => {
+      logger.error(e);
       res.status(400).json({ message: e.message, success: false });
     });
 }

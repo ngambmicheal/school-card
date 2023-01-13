@@ -16,6 +16,8 @@ import { AnnualExamModal, CreateExamModal } from "./modals/annual-exam";
 import { CSVLink } from "react-csv";
 import { useSession } from "next-auth/react";
 import useSchool from "../../hooks/useSchool";
+import { useToast } from "@chakra-ui/react";
+import { successMessage } from "../../utils/messages";
 
 export default function ClasseDetails() {
   const [classe, setClasse] = useState<ClasseInterface>();
@@ -31,6 +33,7 @@ export default function ClasseDetails() {
   const router = useRouter();
   const { _id: classeId } = router.query;
   const { editable } = useSchool();
+  const toast = useToast();
 
   useEffect(() => {
     if (classeId) {
@@ -61,7 +64,10 @@ export default function ClasseDetails() {
 
   const deleteStudent = (studentId: string) => {
     if (confirm("Are you sure to delete?"))
-      api.deleteStudent(studentId).then(() => getStudents());
+      api.deleteStudent(studentId).then(() => {
+        toast(successMessage('Student deleted successfully!'))
+        getStudents();
+  });
   };
 
   const deleteExam = (examId: string) => {

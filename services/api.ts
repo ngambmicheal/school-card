@@ -1,4 +1,4 @@
-import a from "axios";
+import a, { AxiosResponse } from "axios";
 import { helperService } from ".";
 import AnnualExamInterface from "../models/annualExam";
 import ClasseInterface from "../models/classe";
@@ -13,16 +13,22 @@ import SubjectInterface from "../models/subject";
 import TermInterface from "../models/terms";
 import UserInterface from "../models/user";
 
+type ApiResponse<T> = AxiosResponse<{data:T, message:String}>
+
 const axios = a.create();
 
 // Add a request interceptor
 axios.interceptors.request.use(
   (config) => {
     const schoolId = helperService.getSchoolId();
-    if (schoolId) {
-      config.headers["SchoolId"] = schoolId;
+    const SchoolSessionId = helperService.getSchoolSessionId();
+    if(!config.headers){
+      config.headers = {};
     }
-    // config.headers['Content-Type'] = 'application/json';
+    if (schoolId)
+      config.headers["SchoolId"] = schoolId;
+    if(SchoolSessionId)
+      config.headers["SchoolSessionId"] = SchoolSessionId;
     return config;
   },
   (error) => {
@@ -319,7 +325,7 @@ export class Api {
     return axios.post("/api/users/generate-school-password");
   }
 
-  getSessions() {
+  getSessions(): Promise<ApiResponse<SessionInterface[]>>{
     return axios.get("/api/sessions");
   }
   saveSession(data:SessionInterface){

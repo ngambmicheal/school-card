@@ -12,7 +12,8 @@ export enum UserRole{
 }
 
 export enum HeadersEnum{
-    SchoolId= 'schoolid'
+    SchoolId= 'schoolid', 
+    SchoolSessionId = 'schoolsessionid'
 }
 
 export const UserTypeCode: Record<UserType, string> =  {

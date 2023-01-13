@@ -15,7 +15,8 @@ export default interface StudentInterface{
     sex?:string,
     matricule?:string,
     user_id?:string,
-    place?:string
+    place?:string,
+    session_id?:string
 }
 
 const StudentSchema = new mg.Schema({
@@ -36,6 +37,10 @@ const StudentSchema = new mg.Schema({
     user_id:{
         type:mg.Schema.Types.ObjectId,
         ref:'User'
+    },
+    session_id:{
+        type:mg.Schema.Types.ObjectId,
+        ref:'Session'
     }
    },
    {

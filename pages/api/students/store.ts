@@ -18,6 +18,7 @@ export default async function handler(
   }>
 ) {
   const studentQuery = req.body as StudentInterface;
+  let totalStudents = await studentSchema.find({class_id: req.query.class_id}).count();
 
   const user = await createUser({
     name: studentQuery.name,
@@ -32,6 +33,7 @@ export default async function handler(
 
   studentQuery.matricule = user.matricule;
   studentQuery.user_id = user._id;
+  studentQuery.session_id = req.headers[HeadersEnum.SchoolSessionId] as string
 
   const student = new studentSchema(studentQuery);
   student

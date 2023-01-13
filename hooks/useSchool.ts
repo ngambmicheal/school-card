@@ -11,14 +11,18 @@ export default function useSchool(){
     useEffect(() => {
         if(!school){
             const schoolId = helperService.getSchoolId()
+            const sessionSchoolId = helperService.getSchoolSessionId(); 
             api.getSchools().then(({data:{data}}:any) => {
 
                 const school = (data as SchoolInterface[]).find(school => school._id == schoolId)
                 setSchool(s => school)
                 setSchools(s => schools)
 
-                setEditable(s => !!school?.allowUpdate)
+                if(school?.session_id && !sessionSchoolId){
+                    helperService.saveSchoolSessionId(school.session_id)
+                }
 
+                setEditable(s => !!school?.allowUpdate)
             })
         }
     }, [])

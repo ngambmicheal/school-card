@@ -36,12 +36,15 @@ export default async function importStudent(
   const f = files.file as formidable.File;
 
   const output = await new Promise<{ loadedCount: number; totalCount: number }>(
-    (resolve, reject) => {
+    async (resolve, reject) => {
       const filecontent = fs.createReadStream(f.path);
       filecontent.setEncoding("utf8");
 
       let loadedCount = 0;
       let totalCount = 0;
+      
+
+      let totalStudents = await studentSchema.find({class_id: fields.class_id}).count();
 
       const promises: Promise<any>[] = [];
 
@@ -59,8 +62,10 @@ export default async function importStudent(
             class_id: fields.class_id,
           }));
 
-          data = await Promise.all(
-            data.map(async (x: any) => {
+          data = await data.reduce(async (previousMapping:any, x: any) => {
+
+            const previousData = await previousMapping; 
+
               const user = await createUser({
                 name: x.name,
                 email: x.email,
@@ -71,23 +76,28 @@ export default async function importStudent(
                 matricule: x.matricule ?? "",
                 password: "",
               });
+              totalStudents++;
 
-              return {
+              previousData.push({
                 ...x,
                 class_id: x.class_id,
                 name: x.name,
                 email: x.email,
                 matricule: user.matricule,
                 user_id: user._id,
-              };
-            })
-          );
+                session_id: req.headers[HeadersEnum.SchoolSessionId] as string, 
+                number: totalStudents
+              })
+              return previousData
+
+            }, Promise.resolve([]))
 
           totalCount += data.length;
 
           try {
             //const BulkHasOperations = (b:any) => b && b.s && b.s.currentBatch && b.s.currentBatch.operations && b.s.currentBatch.operations.length > 0;
             //const bulk = studentSchema.collection.initializeUnorderedBulkOp();
+            
             studentSchema.insertMany(data).then((dd) => {
               console.log(dd);
             });
