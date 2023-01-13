@@ -85,6 +85,7 @@ export default function Classes() {
                 session={session}
                 classe={classe}
                 deleteClasse={deleteClasse}
+                isAdmin={isAdmin}
               />
             );
           })}
