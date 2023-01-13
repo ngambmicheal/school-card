@@ -59,26 +59,29 @@ export default async function importStudent(
             class_id: fields.class_id,
           }));
 
-          data = await Promise.all(data.map(async(x: any) => {
-            const user = await createUser({
-              name: x.name, 
-              email: x.email,
-              school_id:  req.headers[HeadersEnum.SchoolId] as string, 
-              role:[], 
-              type: UserType.STUDENT, 
-              username:x.email??'', 
-              matricule:x.matricule??'',
-              password:''
-            })
+          data = await Promise.all(
+            data.map(async (x: any) => {
+              const user = await createUser({
+                name: x.name,
+                email: x.email,
+                school_id: req.headers[HeadersEnum.SchoolId] as string,
+                role: [],
+                type: UserType.STUDENT,
+                username: x.email ?? "",
+                matricule: x.matricule ?? "",
+                password: "",
+              });
 
-            return {
-            ...x,
-            class_id: x.class_id,
-            name: x.name,
-            email: x.email,
-            matricule : user.matricule,
-            user_id : user._id 
-          }}))
+              return {
+                ...x,
+                class_id: x.class_id,
+                name: x.name,
+                email: x.email,
+                matricule: user.matricule,
+                user_id: user._id,
+              };
+            })
+          );
 
           totalCount += data.length;
 
@@ -105,7 +108,7 @@ export default async function importStudent(
     }
   );
 
-  return res.json(output)
+  return res.json(output);
 }
 
 type ParsedForm = {

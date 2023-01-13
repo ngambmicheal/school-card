@@ -29,7 +29,7 @@ const Home: NextPage = () => {
           Bienvenue au site. <br /> Choississez Votre Ecole :
         </h4>
 
-        <table className="table">
+        <table className="table table-hover table-striped">
           <thead>
             <tr>
               <th> Ecole </th>
@@ -40,15 +40,19 @@ const Home: NextPage = () => {
             {schools.map((s) => {
               return (
                 <tr>
-                  <th key={s._id}>
+                  <td key={s._id}>
                     <Link href={`schools/${s._id}`}> {s.name} </Link>{" "}
-                  </th>
-                  <th>
-                    <a href="#" onClick={() => s._id && chooseSchool(s._id)}>
+                  </td>
+                  <td>
+                    <a
+                      className="choose-action"
+                      href="#"
+                      onClick={() => s._id && chooseSchool(s._id)}
+                    >
                       {" "}
                       Choisir{" "}
                     </a>
-                  </th>
+                  </td>
                 </tr>
               );
             })}

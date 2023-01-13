@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint", 
-    "format": "prettier 'pages/**/*.{ts,tsx,css,scss}' --write"
+    "format": "prettier 'pages/**/*.{ts,tsx,css,scss}' 'services/**/*.{ts, tsx}' --write"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.6.10",

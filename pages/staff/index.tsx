@@ -15,7 +15,7 @@ export default function Users() {
   const [schools, setSchools] = useState<SchoolInterface[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { data: session } = useSession();
-  const [filterBy, setFilterBy] = useState<any>('')
+  const [filterBy, setFilterBy] = useState<any>("");
 
   useEffect(() => {
     getUsers();
@@ -46,27 +46,32 @@ export default function Users() {
 
   return (
     <>
-    <div className="row">
-      <div className="col-sm-6">
-
-      <button className="btn btn-success" onClick={() => setModalIsOpen(true)}>
-        {" "}
-        Ajouter utilisateur{" "}
-      </button>
-      <button className="btn btn-dark mx-2" onClick={() => generatePassword()}>
-        Generate Password
-      </button>
-      </div>
-      <div className="col-sm-6">
-      <div className="form-group">
+      <div className="row">
+        <div className="col-sm-6">
+          <button
+            className="btn btn-success"
+            onClick={() => setModalIsOpen(true)}
+          >
+            {" "}
+            Ajouter utilisateur{" "}
+          </button>
+          <button
+            className="btn btn-dark mx-2"
+            onClick={() => generatePassword()}
+          >
+            Generate Password
+          </button>
+        </div>
+        <div className="col-sm-6">
+          <div className="form-group">
             <label>Filter By</label>
             <select
               className="form-control"
               name="type"
               value={filterBy}
-              onChange={e => setFilterBy(() => e.target.value)}
+              onChange={(e) => setFilterBy(() => e.target.value)}
             >
-              <option value={''} >Select All</option>
+              <option value={""}>Select All</option>
               {Object.keys(UserType).map((key) => (
                 <option value={key} selected={key == filterBy}>
                   {key}
@@ -74,11 +79,9 @@ export default function Users() {
               ))}
             </select>
           </div>
-              
-          </div>
-    </div>
-            <table className="table table-hover table-striped table-bordered my-3 ">
-
+        </div>
+      </div>
+      <table className="table table-hover table-striped table-bordered my-3 ">
         <thead>
           <tr>
             <th>Nom</th>
@@ -91,23 +94,25 @@ export default function Users() {
           </tr>
         </thead>
         <tbody>
-          {users.filter(user => filterBy? user.type == filterBy : user ).map((user) => {
-            return (
-              <tr key={user._id}>
-                <td>{user.name}</td>
-                <td>{user.matricule}</td>
-                <td>{user.phone}</td>
-                <td>{user.type}</td>
-                <td>{user.email}</td>
-                {session && <td>{user.password}</td>}
-                {session && (
-                  <td>
-                    <Link href={`/staff/${user._id}`}>Voir</Link>
-                  </td>
-                )}
-              </tr>
-            );
-          })}
+          {users
+            .filter((user) => (filterBy ? user.type == filterBy : user))
+            .map((user) => {
+              return (
+                <tr key={user._id}>
+                  <td>{user.name}</td>
+                  <td>{user.matricule}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.type}</td>
+                  <td>{user.email}</td>
+                  {session && <td>{user.password}</td>}
+                  {session && (
+                    <td>
+                      <Link href={`/staff/${user._id}`}>Voir</Link>
+                    </td>
+                  )}
+                </tr>
+              );
+            })}
         </tbody>
       </table>
 
@@ -137,7 +142,7 @@ export function CreateUserModal({
     username: "",
     password: generateRandomString(8),
     school_id: helperService.getSchoolId() ?? undefined,
-    matricule:''
+    matricule: "",
   });
 
   function handleChange(e: any) {

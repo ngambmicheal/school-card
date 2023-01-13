@@ -109,6 +109,18 @@ export default function SchoolSettingInfo({
                 ></input>
               </div>
             )}
+
+            {editable && (
+              <div className="form-group">
+                <label>School Name</label>
+                <select
+                  className="form-control"
+                  name="session_id"
+                  value={school?.session_id}
+                  onChange={handleChange}
+                ></select>
+              </div>
+            )}
           </div>
         </div>
 

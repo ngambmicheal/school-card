@@ -55,8 +55,7 @@ export default function Subjects() {
           Ajouter une matière{" "}
         </button>
       )}
-            <table className="table table-hover table-striped table-bordered my-3 ">
-
+      <table className="table table-hover table-striped table-bordered my-3 ">
         <thead>
           <tr>
             <th>Id</th>

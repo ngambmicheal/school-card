@@ -9,7 +9,6 @@ export default async function handler(
   const school_id = req.headers[HeadersEnum.SchoolId];
   const { username, password } = req.body;
 
-
   if (!(username && password && school_id)) {
     return res.send(false);
   }
@@ -20,9 +19,8 @@ export default async function handler(
     ? { username, password }
     : { username, password, school_id };
 
-
-  const existingUser = await userSchema.findOne({username, school_id})
-  if(!existingUser) return res.send(false)
+  const existingUser = await userSchema.findOne({ username, school_id });
+  if (!existingUser) return res.send(false);
 
   const user = await userSchema.findOne(query);
 

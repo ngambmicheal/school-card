@@ -4,8 +4,8 @@ import api from "../services/api";
 
 const Synced: NextPage = () => {
   useEffect(() => {
-    api.sync()
-  }, [])
+    api.sync();
+  }, []);
   return <></>;
 };
 

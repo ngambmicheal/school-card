@@ -30,18 +30,19 @@ export default async function handler(
     .find({ school_id: userQuery.school_id })
     .count();
 
-  try{
-    const user = await createUser(userQuery); 
+  try {
+    const user = await createUser(userQuery);
     return res.status(200).json({ data: user, success: true, message: "done" });
+  } catch (e) {
+    return res
+      .status(400)
+      .json({ message: "Could not be sent", success: false });
   }
-  catch(e){
-    return res.status(400).json({ message: "Could not be sent", success: false });
-  }
-
 }
 
-
-export async function createUser(userParams:UserInterface): Promise<UserInterface>{
+export async function createUser(
+  userParams: UserInterface
+): Promise<UserInterface> {
   const year = new Date().getFullYear().toString().slice(-2);
   const school = await schoolSchema.findOne({
     _id: userParams.school_id,
@@ -50,26 +51,29 @@ export async function createUser(userParams:UserInterface): Promise<UserInterfac
     .find({ school_id: userParams.school_id })
     .count();
 
-    if(userParams.matricule){
-      const existingUser = await userSchema.findOne({matricule:userParams.matricule});
-      if(existingUser) return existingUser;
-    }
+  if (userParams.matricule) {
+    const existingUser = await userSchema.findOne({
+      matricule: userParams.matricule,
+    });
+    if (existingUser) return existingUser;
+  }
 
-    const code = `${school.code}-${
-      UserTypeCode[userParams.type]
-    }${year}-${padWithLeadingZeros(users + 1, 6)}`;
-    userParams.matricule = code;
+  const code = `${school.code}-${
+    UserTypeCode[userParams.type]
+  }${year}-${padWithLeadingZeros(users + 1, 6)}`;
+  userParams.matricule = code;
 
-    if(!userParams.email){ 
-      userParams.email = code;
-      userParams.username = code;
-    }
-  
+  if (!userParams.email) {
+    userParams.email = code;
+    userParams.username = code;
+  }
 
-    if(!userParams.password){
-      userParams.password = generateRandomString(school.staff_password_length ?? 8) 
-    }
+  if (!userParams.password) {
+    userParams.password = generateRandomString(
+      school.staff_password_length ?? 8
+    );
+  }
 
-  const user = await new userSchema(userParams).save(); 
-  return user; 
+  const user = await new userSchema(userParams).save();
+  return user;
 }

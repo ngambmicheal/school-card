@@ -147,7 +147,15 @@ function MapColumns(props: MapColumnsProps) {
         </thead>
         <tbody>
           {generateColumns({
-            leadFields: ["name", "email", "dob", "phone", "number", "sex", "matricule"],
+            leadFields: [
+              "name",
+              "email",
+              "dob",
+              "phone",
+              "number",
+              "sex",
+              "matricule",
+            ],
             foundFields: csvColumns,
             setValue,
             values: values,

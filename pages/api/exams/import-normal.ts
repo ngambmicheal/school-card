@@ -26,13 +26,11 @@ export default async function importStudent(
     //@ts-ignore
     const f = files.file as formidable.File;
 
-    const exam = await examSchema
-      .findOne({ _id: fields.exam_id })
-      .populate({
-        path: "class_id",
-        model: classeSchema,
-        populate: { path: "section", model: sectionSchema },
-      });
+    const exam = await examSchema.findOne({ _id: fields.exam_id }).populate({
+      path: "class_id",
+      model: classeSchema,
+      populate: { path: "section", model: sectionSchema },
+    });
     const subjects = await subjectSchema
       .find({
         school: exam.class_id.school,

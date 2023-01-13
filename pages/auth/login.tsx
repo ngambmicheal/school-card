@@ -60,39 +60,51 @@ export default function SignIn({ csrfToken }: any) {
         <div className="col-sm-6 m-auto">
           <div className="card">
             <div className="card-body">
-          {error && (
-            <Alert status="error">
-              <AlertIcon />
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+              {error && (
+                <Alert status="error">
+                  <AlertIcon />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
 
-          {schoolId && (
-            <form method="post" action="/api/auth/callback/credentials">
-              <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-              <input name="schoolId" type="hidden" defaultValue={schoolId} />
-              <div className="form-group">
-                <label> Username </label>
-                <input className="form-control" name="username" type="text" />
-              </div>
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  className="form-control"
-                  name="password"
-                  type="password"
-                />
-              </div>
+              {schoolId && (
+                <form method="post" action="/api/auth/callback/credentials">
+                  <input
+                    name="csrfToken"
+                    type="hidden"
+                    defaultValue={csrfToken}
+                  />
+                  <input
+                    name="schoolId"
+                    type="hidden"
+                    defaultValue={schoolId}
+                  />
+                  <div className="form-group">
+                    <label> Username </label>
+                    <input
+                      className="form-control"
+                      name="username"
+                      type="text"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Password</label>
+                    <input
+                      className="form-control"
+                      name="password"
+                      type="password"
+                    />
+                  </div>
 
-              <button className="btn btn-dark" type="submit">
-                Sign in
-              </button>
-            </form>
-          )}
+                  <button className="btn btn-dark" type="submit">
+                    Sign in
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-      </div>
-          </div>
     </>
   );
 }

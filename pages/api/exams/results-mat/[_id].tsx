@@ -31,13 +31,11 @@ export default async function handler(
 ) {
   const { _id: exam_id } = req.query;
 
-  const exam = await examSchema
-    .findOne({ _id: exam_id })
-    .populate({
-      path: "class_id",
-      model: classeSchema,
-      populate: { path: "section", sectionSchema },
-    });
+  const exam = await examSchema.findOne({ _id: exam_id }).populate({
+    path: "class_id",
+    model: classeSchema,
+    populate: { path: "section", sectionSchema },
+  });
 
   const totalResults = await (
     await examResultSchema

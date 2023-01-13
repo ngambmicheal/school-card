@@ -65,6 +65,14 @@ input[type='checkbox']{
   color: #0d5835
 }
 
+.choose-action{
+  color: white; 
+  padding: 5px;
+  background: grey;
+  border-radius: 5px;
+}
+
+
 .btn {
   margin-top: 12px;
 }

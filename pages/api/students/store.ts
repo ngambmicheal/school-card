@@ -17,22 +17,21 @@ export default async function handler(
     message: string;
   }>
 ) {
-  const studentQuery  = req.body as StudentInterface
+  const studentQuery = req.body as StudentInterface;
 
   const user = await createUser({
-    name: studentQuery.name, 
+    name: studentQuery.name,
     email: studentQuery.email,
-    school_id:  req.headers[HeadersEnum.SchoolId] as string, 
-    role:[], 
-    type: UserType.STUDENT, 
-    username:studentQuery.email??'', 
-    matricule:'',
-    password:''
-  })
+    school_id: req.headers[HeadersEnum.SchoolId] as string,
+    role: [],
+    type: UserType.STUDENT,
+    username: studentQuery.email ?? "",
+    matricule: "",
+    password: "",
+  });
 
-  studentQuery.matricule = user.matricule; 
-  studentQuery.user_id = user._id ;
-  
+  studentQuery.matricule = user.matricule;
+  studentQuery.user_id = user._id;
 
   const student = new studentSchema(studentQuery);
   student
