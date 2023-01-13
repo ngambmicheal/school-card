@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import UserInterface from "../../models/user";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
+import useUser from "../../hooks/useUser";
 
 export default function Classes() {
   const [classes, setClasses] = useState<Classe[]>([]);
@@ -20,6 +21,7 @@ export default function Classes() {
   const [teachers, setTeachers] = useState<UserInterface[]>([]);
 
   const { data: session } = useSession();
+  const {isAdmin} = useUser(session);
 
   useEffect(() => {
     getClasses();
@@ -55,7 +57,7 @@ export default function Classes() {
 
   return (
     <>
-      {session && (
+      {session && isAdmin && (
         <button
           className="btn btn-success"
           onClick={() => setModalIsOpen(true)}
@@ -104,12 +106,14 @@ type ClasseRowInterface = {
   deleteClasse: (id: string) => void;
   session: any;
   teachers: UserInterface[];
+  isAdmin:boolean
 };
 export function ClasseRow({
   classe,
   deleteClasse,
   session,
   teachers,
+  isAdmin
 }: ClasseRowInterface) {
   const [teacher, setTeacher] = useState(classe.teacher_id);
 
@@ -128,7 +132,7 @@ export function ClasseRow({
       <td>{classe.section?.name}</td>
       <td>
         <select
-          disabled={!session}
+          disabled={!session || !isAdmin}
           value={teacher}
           className="form-control"
           onChange={updateTeacher}
@@ -140,17 +144,17 @@ export function ClasseRow({
         </select>
       </td>
       <td>
-        {session && (
+        {session &&  (
           <>
             {" "}
             <Link href={`classes/${classe._id}`}>{t("action.view")}</Link>{" "}
-            <a
+            {isAdmin && <a
               className="delete-action"
               onClick={() => deleteClasse(classe._id)}
             >
               {" "}
               | {t("action.delete")}
-            </a>
+            </a>}
           </>
         )}
       </td>

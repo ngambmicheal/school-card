@@ -15,7 +15,7 @@ export default function Users() {
   const [schools, setSchools] = useState<SchoolInterface[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { data: session } = useSession();
-  const [filterBy, setFilterBy] = useState<any>("");
+  const [filterBy, setFilterBy] = useState<UserType>(UserType.STAFF);
 
   useEffect(() => {
     getUsers();
@@ -69,7 +69,7 @@ export default function Users() {
               className="form-control"
               name="type"
               value={filterBy}
-              onChange={(e) => setFilterBy(() => e.target.value)}
+              onChange={(e) => setFilterBy(() => e.target.value as UserType)}
             >
               <option value={""}>Select All</option>
               {Object.keys(UserType).map((key) => (

@@ -6,6 +6,7 @@ export class HelperService {
   }
 
   saveSchoolId(schoolId: string) {
+    global?.localStorage?.clear();
     return global?.localStorage?.setItem(enums.SCHOOL_STORAGE_KEY, schoolId);
   }
 

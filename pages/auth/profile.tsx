@@ -10,7 +10,7 @@ import Link from "next/link";
 export default function ProfilePage({ ...error }) {
   const { data: session } = useSession();
   const [userClasses, setUserClasses] = useState<ClasseInterface[]>([]);
-  const user = useUser(session);
+  const {user} = useUser(session);
 
   useEffect(() => {
     if (user)
@@ -21,7 +21,7 @@ export default function ProfilePage({ ...error }) {
 
   return (
     <>
-      <h3 className="my-3">Information Personelle</h3>
+      <h3 className="my-3 ">Information Personelle</h3>
       <div>
         {" "}
         Name: <b> {user?.name} </b>{" "}
@@ -45,6 +45,7 @@ export default function ProfilePage({ ...error }) {
 
       {user?.type == UserType.STAFF && (
         <>
+          <hr />
           <h3 className="my-3">Mes Classes</h3>
           <table className="table">
             <thead>

@@ -21,5 +21,5 @@ export default function useUser(session:Session | null){
         }
     }, [session])
 
-    return user;
+    return {isAdmin,user};
 }

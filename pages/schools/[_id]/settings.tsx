@@ -21,7 +21,7 @@ export default function Classes() {
   const [sections, setSections] = useState<SectionInterface[]>([]);
   const { school: schol } = useSchool();
   const { data: session } = useSession();
-  const user = useUser(session);
+  const {user} = useUser(session);
 
   const [school, setSchool] = useState<SchoolInterface | undefined>(schol);
 
