@@ -340,6 +340,10 @@ export class Api {
       .get("/api/subjects/sync")
       .catch(() => console.log("syncing subjects"));
   }
+
+  syncSchoolSession(){
+    return axios.post("/api/schools/sync-sessions")
+  }
 }
 
 const api = new Api();

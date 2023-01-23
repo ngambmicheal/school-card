@@ -40,6 +40,10 @@ export default function SchoolSettingInfo({
     api.saveSession(session).then(() => {getSessions(), toast(successMessage('Session added successfully!')) } ).catch(e => toast(errorMessage(e)))
   }
 
+  const syncSchoolSession = async () => {
+    api.syncSchoolSession().then(() => toast(successMessage('Synced successfully!'))).catch(e => toast(errorMessage(e)))
+  }
+
   function handleChange(e: any) {
     const key = e.target.name;
     const value =
@@ -138,7 +142,8 @@ export default function SchoolSettingInfo({
                   <option value=''>--- Select Session ---</option>
                   {schoolSessions.map(session => <option key={session._id} value={session._id}>{session.name}</option>)}
                 </select>
-                <button onClick={() => setSessionModal(true)}>Add School Session</button>
+                <button className="btn btn-dark" onClick={() => setSessionModal(true)}>Add School Session</button>
+                {school?.session_id &&  <button className="btn btn-secondary mx-3" onClick={() => syncSchoolSession()}>Sync Session</button> }
               </div>
             )}
           </div>
