@@ -93,3 +93,12 @@ a{
 .form-group label{
   font-weight: 900;
 }
+
+
+.table-striped tr:nth-child(even){
+  background: #dfdfdf;
+}
+
+.table-striped tr:nth-child(odd){
+  background: #fffafa;
+}
