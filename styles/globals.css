@@ -102,3 +102,8 @@ a{
 .table-striped tr:nth-child(odd){
   background: #fffafa;
 }
+
+input{
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
