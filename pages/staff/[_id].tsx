@@ -14,6 +14,7 @@ export default function viewStaff() {
     username: "",
     password: generateRandomString(8),
     school_id: helperService.getSchoolId() ?? undefined,
+    matricule:''
   });
   const router = useRouter();
   const { _id: userId } = router.query;
@@ -41,8 +42,16 @@ export default function viewStaff() {
     api.updateUser(user);
   };
 
+  const generateMatricule = () => {
+    api.generateMatricule(userId as string).then(() => { 
+      window.location = window.location;
+    })
+  }
+
   return (
     <>
+    <div className="row">
+      <div className="col-sm-6">
       <div className="modal-body">
         <h2>Modifier L'utilisateur</h2>
         <div className="form-group">
@@ -92,6 +101,7 @@ export default function viewStaff() {
             name="type"
             value={user?.type}
             onChange={handleChange}
+            disabled={true}
           >
             {Object.keys(UserType).map((key) => (
               <option value={key} selected={key == user.type}>
@@ -111,6 +121,22 @@ export default function viewStaff() {
           </button>
         </div>
       </div>
+      </div>
+      <div className="col-sm-6">
+        <div className="form-group">
+            <label>Matricule</label>
+            <input
+            disabled={true}
+              className="form-control"
+              name="matricule"
+              value={user?.matricule}
+              onChange={handleChange}
+            ></input>
+          </div>
+          {user.matricule && <button className="btn btn-dark" onClick={() => generateMatricule()}>Generate Matricule</button> }
+      </div>
+
+    </div>
     </>
   );
 }

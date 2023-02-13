@@ -316,6 +316,9 @@ export class Api {
   updateUser(data: UserInterface) {
     return axios.post("/api/users/update", data);
   }
+  generateMatricule(user_id: string){
+    return axios.post(`/api/users/${user_id}/generate-matricule`)
+  }
 
   getUserClasses(user_id: string) {
     return axios.post("/api/users/get-classes", { user_id });

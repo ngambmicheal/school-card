@@ -4,7 +4,7 @@ import ClasseInterface, { classeSchema } from "../../../models/classe";
 import { schoolSchema } from "../../../models/school";
 import UserInterface, { userSchema } from "../../../models/user";
 import { generateRandomString, padWithLeadingZeros } from "../../../utils/calc";
-import { HeadersEnum, UserTypeCode } from "../../../utils/enums";
+import { HeadersEnum, UserType, UserTypeCode } from "../../../utils/enums";
 
 type Data = {
   name: string;
@@ -41,7 +41,8 @@ export default async function handler(
 }
 
 export async function createUser(
-  userParams: UserInterface
+  userParams: UserInterface, 
+  returnCode = false
 ): Promise<UserInterface> {
   const year = new Date().getFullYear().toString().slice(-2);
   const school = await schoolSchema.findOne({
@@ -76,4 +77,22 @@ export async function createUser(
 
   const user = await new userSchema(userParams).save();
   return user;
+}
+
+export async function generateNewMatricule(
+  userParams: {school_id: string, user_type: UserType}, 
+): Promise<string> {
+  const year = new Date().getFullYear().toString().slice(-2);
+  const school = await schoolSchema.findOne({
+    _id: userParams.school_id,
+  });
+  const users = await userSchema
+    .find({ school_id: userParams.school_id })
+    .count();
+
+  const code = `${school.code}-${
+    UserTypeCode[userParams.user_type]
+  }${year}-${padWithLeadingZeros(users + 1, 6)}`;
+
+  return code; 
 }
