@@ -18,6 +18,7 @@ import { termSchema } from "../../../../models/terms";
 import { sectionSchema } from "../../../../models/section";
 import { annualExamSchema } from "../../../../models/annualExam";
 import { bgImgStyle } from "../../../../utils/styles";
+import { findSchoolById } from "../../schools";
 
 export default async function handler(
   req: NextApiRequest,
@@ -85,6 +86,8 @@ export default async function handler(
 
   let exam = term.terms[0].exams[0];
   exam.name = term.name;
+  const school = await findSchoolById(exam.class_id.school)
+
   let html = ReactDOMServer.renderToStaticMarkup(
     resultsUiStats(exam, competences, totalResults, statsResults)
   );
@@ -101,7 +104,7 @@ export default async function handler(
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 20px;
-                    font-size:9px;
+                    font-size:${school?.police_stats??6}px;
                     }
                     .com, b{
                     font-weight: bold;

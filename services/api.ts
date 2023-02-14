@@ -65,6 +65,10 @@ export class Api {
   getStudents() {
     return axios.get("/api/students");
   }
+  getStudent(studentId:string){
+    return axios.get(`/api/students/${studentId}`)
+  }
+
   deleteStudent(studentId: string) {
     return axios.post("/api/students/delete", { _id: studentId });
   }

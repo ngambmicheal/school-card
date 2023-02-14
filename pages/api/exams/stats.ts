@@ -15,6 +15,7 @@ import { courseSchema } from "../../../models/course";
 import { classeSchema } from "../../../models/classe";
 import { sectionSchema } from "../../../models/section";
 import { bgImgStyle } from "../../../utils/styles";
+import { findSchool, findSchoolById } from "../schools";
 
 export default async function handler(
   req: NextApiRequest,
@@ -69,6 +70,9 @@ export default async function handler(
     },
   };
 
+  const school = await findSchoolById(exam.class_id.school)
+  console.log({school})
+
   let html = ReactDOMServer.renderToStaticMarkup(
     resultsUiStats(exam, competences, totalResults, statsResults)
   );
@@ -85,7 +89,7 @@ export default async function handler(
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 20px;
-                    font-size:9px;
+                    font-size:${school?.police_stats??6}px;
                     }
                     .com, b{
                     font-weight: bold;

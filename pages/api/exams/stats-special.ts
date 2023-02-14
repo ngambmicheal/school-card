@@ -16,6 +16,7 @@ import { classeSchema } from "../../../models/classe";
 import resultsNormalUiStats from "../../../assets/jsx/resultsNormalUiStats";
 import { sectionSchema } from "../../../models/section";
 import { differenceBy } from "lodash";
+import { findSchool, findSchoolById } from "../schools";
 
 export default async function handler(
   req: NextApiRequest,
@@ -44,7 +45,6 @@ export default async function handler(
     })
     .populate({ path: "school", model: schoolSchema });
 
-  console.log(subjects);
 
   const stats_name = `STATS_${exam.class_id.name}_${exam.name}.pdf`;
   var dir = `./tmp/stats/${stats_name}`;
@@ -67,6 +67,7 @@ export default async function handler(
     },
   };
 
+  const school = await findSchoolById(exam.class_id.school)
   let html = ReactDOMServer.renderToStaticMarkup(
     resultsNormalUiStats(exam, subjects, totalResults, statsResults)
   );
@@ -83,7 +84,7 @@ export default async function handler(
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 20px;
-                    font-size:6px;
+                    font-size:${school?.police_stats??6}px;
                     }
                     .com, b{
                     font-weight: bold;

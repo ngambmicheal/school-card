@@ -103,7 +103,7 @@ a{
   background: #fffafa;
 }
 
-input{
-  border: 1px solid #aaa;
+input, select{
+  border: 1px solid #41464b !important;
   border-radius: 5px;
 }

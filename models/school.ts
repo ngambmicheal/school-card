@@ -11,7 +11,10 @@ export default interface SchoolInterface{
     details?: string,
     staff_password_length?:number, 
     session_id?:string,
-    code:string
+    code:string, 
+
+    police_stats: number, 
+    police_reports: number
 }
 
 const SchoolSchema = new mg.Schema({
@@ -24,7 +27,12 @@ const SchoolSchema = new mg.Schema({
     box:{type:String},
     staff_password_length:{type:Number},
     code:{type:String}, 
-    session_id: {type:String}
+    session_id: {type:String},
+
+
+    //settings
+    police_stats: {type:Number},
+    police_reports: {type:Number}
    },
    {
    timestamps:true,

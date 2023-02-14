@@ -14,6 +14,13 @@ import SchoolSettingInfo from "./info";
 import { useSession } from "next-auth/react";
 import useUser from "../../../hooks/useUser";
 import { UserType } from "../../../utils/enums";
+import SchoolSettingImpression from "./impression";
+
+
+enum settingPages {
+  Information='Information',
+  Impression='Impression'
+}
 
 export default function Classes() {
   const [classes, setClasses] = useState<Classe[]>([]);
@@ -24,6 +31,7 @@ export default function Classes() {
   const {user} = useUser(session);
 
   const [school, setSchool] = useState<SchoolInterface | undefined>(schol);
+  const [act, setAct] = useState<any>(settingPages.Information)
 
   const router = useRouter();
   const { _id: schoolId } = router.query;
@@ -42,13 +50,21 @@ export default function Classes() {
 
   return (
     <>
+
+    {Object.keys(settingPages).map(page => {
+      return <button key={page} onClick={() => setAct(s => page)} className={page == act? 'btn btn-success mx-3': 'btn btn-dark mx-3'}>{page}</button>
+    })}
+
       {" "}
       {school && session && (
         <div>
-          <SchoolSettingInfo
+          {act===settingPages.Information && <SchoolSettingInfo
             school={school}
             editable={user?.type === UserType.ADMIN}
-          ></SchoolSettingInfo>
+          ></SchoolSettingInfo>}
+
+
+          {act===settingPages.Impression && <SchoolSettingImpression school={school} editable={true}></SchoolSettingImpression>}
         </div>
       )}
       {school && !session && (
