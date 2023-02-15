@@ -14,7 +14,9 @@ export default interface SchoolInterface{
     code:string, 
 
     police_stats: number, 
-    police_reports: number
+    police_reports: number,
+    subject_display: number,
+    name_display_stats: 0 | 1 | 2 
 }
 
 const SchoolSchema = new mg.Schema({
@@ -32,7 +34,9 @@ const SchoolSchema = new mg.Schema({
 
     //settings
     police_stats: {type:Number},
-    police_reports: {type:Number}
+    police_reports: {type:Number},
+    subject_display: {type:Number}, 
+    name_display_stats: {type:Number, default: 2}
    },
    {
    timestamps:true,

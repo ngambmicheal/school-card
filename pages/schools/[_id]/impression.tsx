@@ -44,6 +44,7 @@ export default function SchoolSettingImpression({
       <div className="mt-3">
         <div className="row">
           <div className="col-md-6">
+              <h3>Stats Page</h3>
             <div className="form-group">
               <label>Police Stats Pdf </label>
               <input
@@ -55,8 +56,77 @@ export default function SchoolSettingImpression({
               ></input>
             </div>
 
-            <div className="col-md-6">
             <div className="form-group">
+              <label>Subject Display  </label> <br/>
+              <span className="mx-3">
+                <label htmlFor='display_5'>Orale  <input id="display_5"
+                disabled={!editable}
+                type='radio'
+                name="subject_display"
+                value={5}
+                checked={school?.subject_display==5}
+                onChange={handleChange}
+              ></input> </label>
+              </span>
+              <span className="mx-3">
+                <label htmlFor='display_3'>Ora  <input id="display_3"
+                disabled={!editable}
+                type='radio'
+                name="subject_display"
+                value={3}
+                checked={school?.subject_display==3}
+                onChange={handleChange}
+              ></input> </label>
+              </span>
+              <span className="mx-3">
+                <label htmlFor='display_1'>O  <input id="display_1"
+                disabled={!editable}
+                type='radio'
+                name="subject_display"
+                value={1}
+                checked={school?.subject_display==1}
+                onChange={handleChange}
+              ></input> </label>
+              </span>
+            </div>
+
+            <div className="form-group">
+              <label>Name Display  </label> <br/>
+              <span className="mx-3">
+                <label htmlFor='display_name_2'>Nom Complet <input id="display_name_2"
+                disabled={!editable}
+                type='radio'
+                name="name_display_stats"
+                value={2}
+                checked={school?.name_display_stats==2}
+                onChange={handleChange}
+              ></input> </label>
+              </span>
+              <span className="mx-3">
+                <label htmlFor='display_name_1'>Prenom<input id="display_name_1"
+                disabled={!editable}
+                type='radio'
+                name="name_display_stats"
+                value={1}
+                checked={school?.name_display_stats==1}
+                onChange={handleChange}
+              ></input> </label>
+              </span>
+              <span className="mx-3">
+                <label htmlFor='display_name_0'>Aucun <input id="display_name_0"
+                disabled={!editable}
+                type='radio'
+                name="name_display_stats"
+                value={0}
+                checked={school?.name_display_stats==0}
+                onChange={handleChange}
+              ></input> </label>
+              </span>
+          </div>
+          </div>
+         <div className="col-md-6">
+           <h3>Reports Page</h3>
+           <div className="form-group">
               <label>Police Bulletin </label>
               <input
                 className="form-control"
@@ -66,7 +136,7 @@ export default function SchoolSettingImpression({
                 onChange={handleChange}
               ></input>
             </div>
-          </div>
+         </div>
         </div>
 
         {editable && (
@@ -83,7 +153,6 @@ export default function SchoolSettingImpression({
           </div>
         )}
       </div>
-        </div>
     </>
   );
 }

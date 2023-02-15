@@ -5,6 +5,8 @@ import { useState } from "react";
 import SubjectInterface from "../../models/subject";
 import { getGeneralAverage } from "./resultsActions";
 import { getFloat } from "../../utils/calc";
+import SchoolInterface from "../../models/school";
+import { displayNameFn } from "./resultsUiStats";
 
 export const getTotalPoints = (exam:ExamInterface) => { 
     let sum = 0; 
@@ -46,11 +48,13 @@ export const getAdmis = (total:number, results:ExamResultInterface[] ) => {
 }
 
 
-export default function resultsNormalUiStats(exam:ExamInterface, subjects:SubjectInterface[], results: ExamResultInterface[], statResults:ExamResultInterface[]){
+export default function resultsNormalUiStats(exam:ExamInterface, subjects:SubjectInterface[], results: ExamResultInterface[], statResults:ExamResultInterface[], school: SchoolInterface){
 
     const points = getTotalPoints(exam);
     const statsResults = statResults.filter(s => getTotal(s) >0 );
     const stat = getAdmis(points, statsResults);
+    const displayName = displayNameFn(school)
+
     return (
         <>
     <div className="bg-logo"></div>

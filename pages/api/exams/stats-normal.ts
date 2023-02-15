@@ -74,7 +74,7 @@ export default async function handler(
   const school = await findSchoolById(exam.class_id.school)
 
   let html = ReactDOMServer.renderToStaticMarkup(
-    resultsNormalUiStats(exam, subjects, totalResults, statsResults)
+    resultsNormalUiStats(exam, subjects, totalResults, statsResults, school)
   );
   html += `
                  <style>
