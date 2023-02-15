@@ -38,7 +38,7 @@ export const getTotals = (subject:SubjectInterface, result:ExamResultInterface) 
 }
 
 export const displayNameFn = (school?:SchoolInterface) =>{
-    return [undefined, '1', '2'].includes(school?.name_display_stats as unknown as string)
+    return [undefined, '1', '2', 1, 2].includes(school?.name_display_stats as unknown as string)
 }
 
 export const getAdmis = (total:number, results:ExamResultInterface[] ) => {
