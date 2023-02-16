@@ -95,7 +95,7 @@ export default async function handler(
                     }
                     .table1 td, .table1 th{
                     text-align: center;
-                    border: 2px solid #ccc;
+                    border: 1px solid #ccc;
                     }
 
                     .table2 td, .table2 th{
@@ -105,6 +105,14 @@ export default async function handler(
                     .th{
                     width:300px;
                     }
+
+                .table3{
+                  font-size:${school?.police_stats??13}px;
+                }
+
+                .table3 tr:nth-child(even), .table1 tr:nth-child(even){
+                  background:#ddd
+                }
                 </style>
                 `;
 

@@ -102,7 +102,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                                     <>
                                         {subject.courses?.map(course => {
                                         return <th key={course._id} > 
-                                                    {course.name.substr(0,3)} 
+                                                    {course.name.substr(0,school.subject_display??3)} 
                                                 </th>
                                         })}
                                     <th> Tot</th>
@@ -174,7 +174,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
 
         <div style={{pageBreakAfter:"always"}}>
 
-            <table>
+            <table className="table3">
                 <thead>
                     <tr>
                             
