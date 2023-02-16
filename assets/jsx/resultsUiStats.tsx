@@ -227,7 +227,7 @@ export function ExamResult({ result, competences, exam, points, school, displayN
                         {subject.courses?.map(course => {
                                 return course._id && <td key={course._id}> {result[`subject_${course._id}`]}</td>
                         })}
-                    <th>  {getTotals(subject, result)} </th>
+                    <td>  {getTotals(subject, result)} </td>
                     </>
                 )
             })
