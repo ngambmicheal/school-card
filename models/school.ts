@@ -17,6 +17,7 @@ export default interface SchoolInterface{
     police_reports: number,
     subject_display: number,
     name_display_stats: 0 | 1 | 2 
+    sub_total_display: 0 | 1
 }
 
 const SchoolSchema = new mg.Schema({
@@ -36,7 +37,8 @@ const SchoolSchema = new mg.Schema({
     police_stats: {type:Number},
     police_reports: {type:Number},
     subject_display: {type:Number}, 
-    name_display_stats: {type:Number, default: 2}
+    name_display_stats: {type:Number, default: 2},
+    sub_total_display: {type:Number, default:1}
    },
    {
    timestamps:true,

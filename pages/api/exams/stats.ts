@@ -122,6 +122,11 @@ export default async function handler(
     data: {},
     path: pdfResultsDir,
     type: "",
+    childProcessOptions: {
+      env: {
+        OPENSSL_CONF: '/dev/null',
+      },
+    }
   };
 
   pdf

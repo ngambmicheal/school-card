@@ -123,6 +123,29 @@ export default function SchoolSettingImpression({
               ></input> </label>
               </span>
           </div>
+          <div className="form-group">
+              <label>Afficher Sous-Total</label> <br/>
+              <span className="mx-3">
+                <label htmlFor='sub_total_display_yes'>OUI<input id="sub_total_display_yes"
+                disabled={!editable}
+                type='radio'
+                name="sub_total_display"
+                value={1}
+                checked={school?.sub_total_display==1}
+                onChange={handleChange}
+              ></input> </label>
+              </span>
+              <span className="mx-3">
+                <label htmlFor='sub_total_display_non'>NON<input id="sub_total_display_non"
+                disabled={!editable}
+                type='radio'
+                name="sub_total_display"
+                value={0}
+                checked={school?.sub_total_display==1}
+                onChange={handleChange}
+              ></input> </label>
+              </span>
+          </div>
           </div>
          <div className="col-md-6">
            <h3>Reports Page</h3>
