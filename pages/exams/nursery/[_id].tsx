@@ -110,7 +110,7 @@ export default function examDetails() {
     }));
 
     getTotalPoints();
-  };
+  }; 
 
   const importResults = (file: File | null) => {
     api
@@ -190,6 +190,27 @@ export default function examDetails() {
     window.open(`/api/exams/td/nursery?exam_id=${examId}`, "_blank");
   };
 
+  const handleChangeToggle = async (event) => {
+    const subjectName = event.target.name;
+    const at = event.target.value;
+
+    const promises:any = []; 
+    results.map(result => {
+      
+      result[subjectName] = at;
+      promises.push(api.updateExamResult(result));
+    })
+
+    setTimeout(() => {
+      setResults(results)
+    }, 100);
+
+    await Promise.all(promises).then(() => {
+  
+    })
+    
+  }
+
   return (
     <>
       <div className="py-3">
@@ -263,7 +284,13 @@ export default function examDetails() {
                     <>
                       {nurseryActs.map((at) => {
                         return (
-                          <th className={index % 2 == 0 ? "bg-grey" : ""}>
+                          <th className={index % 2 == 0 ? "bg-grey" : ""} key={`subjects_result-${index}-${subject._id}-${at.slug}`}>
+                             <input
+                        type="checkbox"
+                        name={`subject_${subject._id}`}
+                        value={at.slug}
+                        onClick={handleChangeToggle}
+                      /> <br />
                             {at.name}
                           </th>
                         );
@@ -392,13 +419,13 @@ export function ExamResult({
               <>
                 {nurseryActs.map((at) => {
                   return (
-                    <td className={index % 2 == 0 ? "bg-grey" : ""}>
+                    <td className={index % 2 == 0 ? "bg-grey" : ""} key={`subjects_results-${index}-${index}-${subject._id}-${at.slug}`}>
                       <input
                         type="checkbox"
                         name={`subject_${subject._id}`}
                         checked={at.slug == res[`subject_${subject._id}`]}
                         value={at.slug}
-                        onClick={handleChange}
+                        onChange={handleChange}
                       />{" "}
                     </td>
                   );
