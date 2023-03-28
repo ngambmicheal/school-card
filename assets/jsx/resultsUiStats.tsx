@@ -73,7 +73,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                         {displayName && <th></th>}
                         {competences && competences.map(s=> {
                             const spans = s.subjects?.reduce((a,b) => {
-                                    return a + (b.courses?.length) +  (school.sub_total_display?1:0)
+                                    return a + (b.courses?.length) +  (school?.sub_total_display?1:0)
                             }, 0)
 
                             return <th key={s._id} colSpan={spans}> {s.slug || s.name} </th>
@@ -87,7 +87,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                         {displayName && <th>Nom</th>}
                         {competences && competences.map(competence=> {
                             return competence.subjects?.map(subject => {
-                                return <th key={subject._id} colSpan={subject.courses?.length+(school.sub_total_display?1:0)} > {subject.slug || subject.name} </th>
+                                return <th key={subject._id} colSpan={subject.courses?.length+(school?.sub_total_display?1:0)} > {subject.slug || subject.name} </th>
                             })
                         })}
                     </tr>
@@ -104,10 +104,10 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                                     <>
                                         {subject.courses?.map(course => {
                                         return <th key={course._id} > 
-                                                    {course.name.substr(0,school.subject_display??3)} 
+                                                    {course.name.substr(0,school?.subject_display??3)} 
                                                 </th>
                                         })}
-                                    { school.sub_total_display && <th> Tot</th> }
+                                    { school?.sub_total_display && <th> Tot</th> }
                                     </>
                                 )
                             })
@@ -228,7 +228,7 @@ export function ExamResult({ result, competences, exam, points, school, displayN
                         {subject.courses?.map(course => {
                                 return course._id && <td key={course._id}> {result[`subject_${course._id}`]}</td>
                         })}
-                    { school.sub_total_display &&<td>  {getTotals(subject, result)} </td>}
+                    { school?.sub_total_display &&<td>  {getTotals(subject, result)} </td>}
                     </>
                 )
             })
