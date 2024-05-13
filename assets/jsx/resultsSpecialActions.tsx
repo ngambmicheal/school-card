@@ -129,7 +129,7 @@ export default function resultsSpecialActions(subjects:SubjectInterface[], resul
 </table>
 
 <div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
-    BULLETIN D'EVALUATION : {results.exam_id?.name} 2021/2022
+    BULLETIN D'EVALUATION : {results.exam_id?.name} 2023/2024
 </div>
 
 <div>

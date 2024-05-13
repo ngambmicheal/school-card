@@ -84,7 +84,7 @@ export default function coursesPage() {
           </th>
         </tr>
       </table>
-      <div>BULLETIN D'EVALUATION 2021/2022</div>
+      <div>BULLETIN D'EVALUATION 2023/2024</div>
       <div>
         <table className="table1">
           <thead>

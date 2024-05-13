@@ -123,7 +123,7 @@ export default function resultsMatActions(competences:CompetenceInterface[], res
 </table>
 
 <div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION : {results.exam_id?.name}  2021/2022
+    BULLETIN D'EVALUATION : {results.exam_id?.name}  2023/2024
 </div>
 
 <div>

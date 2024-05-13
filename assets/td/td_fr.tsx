@@ -25,19 +25,19 @@ export default function thFr(result:ExamResultInterface, term:TermInterface ) {
 
           <div  style={{
                     position: 'absolute', 
-                    top: '50%',
-                    paddingLeft:'10%',
+                    top: '40%',
+                    paddingLeft:'8%',
                     paddingRight:'10%',
                     transform: 'translate(-50%, -50%)',
-                    textAlign:'center',
+                    // textAlign:'center',
                     lineHeight:'40px'
                 }}
                 >
-            <h2>Je soussignée Mme, <b style={{ fontWeight: 'bolder', fontSize: '20px'}}>DASSI Armande</b></h2>
-            <h2>
+            <h2 style={{fontSize: '35px'}}>Je soussignée, Mme <b style={{color:'#020066', fontWeight: 'bolder', fontSize: '40px'}}>DASSI Armande</b></h2>
+            <h2  style={{fontSize: '35px'}}>
                 Directrice du Groupe Scolaire Bilingue Privé Laïc La Semence atteste que :
             </h2>
-            <h2>L'élève <b style={{color:'#020066', fontWeight:900}}>{result.student.name}</b> de la classe <b style={{color:'#020066',fontWeight:900}}>{term.class?.name} </b> a mérité d'être inscrit au tableau d'honneur pour sa conduite et son travail pendant le <b style={{color:'#020066',fontWeight:900}}> {term.name} </b>   avec une moyenne de <b style={{color:'#020066',fontWeight:900}}> {average} / 20 </b> </h2>
+            <h2  style={{fontSize: '35px', lineHeight:'45px'}}>L'élève <b style={{color:'#020066', fontWeight:900, fontSize: '40px'}}>{result.student.name}</b> de la classe <b style={{color:'#020066',fontWeight:900, fontSize: '40px'}}>{term.class?.name} </b> a mérité d'être inscrit au tableau d'honneur pour sa conduite et son travail pendant le <b style={{color:'#020066',fontWeight:900, fontSize: '40px'}}> {term.name} </b>   avec une moyenne de <b style={{color:'#020066',fontWeight:900, fontSize: '40px'}}> {average} / 20 </b> </h2>
           </div>
         </div>
     )
