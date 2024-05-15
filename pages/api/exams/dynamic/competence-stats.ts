@@ -17,6 +17,8 @@ import { replaceAll } from "../../../../services/utils";
 import { termSchema } from "../../../../models/terms";
 import { sectionSchema } from "../../../../models/section";
 import { findSchool, findSchoolById } from "../../schools";
+import { bgImgStyle } from "../../../../utils/styles";
+
 
 export default async function handler(
   req: NextApiRequest,
