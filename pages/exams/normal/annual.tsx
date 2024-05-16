@@ -166,6 +166,13 @@ export default function termDetails() {
     );
   };
 
+  const printAttestation = () => {
+    window.open(
+      `/api/terms/attestation/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      "_blank"
+    );
+  };
+
   return (
     <>
       <div className="py-3">

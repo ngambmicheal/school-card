@@ -164,6 +164,13 @@ export default function termDetails() {
     );
   };
 
+  const printAttestation = () => {
+    window.open(
+      `/api/terms/attestation/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      "_blank"
+    );
+  };
+
   return (
     <>
       <div className="py-3">
@@ -189,6 +196,11 @@ export default function termDetails() {
       <button className="mx-3 btn btn-dark" onClick={() => printTD()}>
         {" "}
         Imprimer Tableau D
+      </button>
+
+      <button className="mx-3 btn btn-dark" onClick={() => printAttestation()}>
+        {" "}
+        Imprimer Attestation
       </button>
 
       <table className="table table-hover table-striped table-bordered my-3 ">

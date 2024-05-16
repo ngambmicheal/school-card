@@ -186,7 +186,7 @@ export default function examDetails() {
   };
 
   const printTD = () => {
-    window.open(`/api/exams/td/mat?exam_id=${examId}`, "_blank");
+    window.open(`/api/exams/attestation/mat?exam_id=${examId}`, "_blank");
   };
 
   const handleChangeToggle = async (event) => {

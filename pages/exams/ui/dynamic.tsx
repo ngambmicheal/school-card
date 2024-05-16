@@ -145,6 +145,13 @@ export default function examDetails() {
     );
   };
 
+  const printAttestation = () => {
+    window.open(
+      `/api/exams/attestation/${term?.report_type?.toLocaleLowerCase()}?term_id=${examId}`,
+      "_blank"
+    );
+  };
+
   const [resultsCsv, setResultsCsv] = useState<any>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [headers, setHeaders] = useState<any>([]);
@@ -223,6 +230,11 @@ export default function examDetails() {
       <button className="mx-3 btn btn-dark" onClick={() => printTD()}>
         {" "}
         Imprimer Tableau D
+      </button>
+
+      <button className="mx-3 btn btn-dark" onClick={() => printAttestation()}>
+        {" "}
+        Imprimer Attestation
       </button>
 
       {resultsCsv.length && (
