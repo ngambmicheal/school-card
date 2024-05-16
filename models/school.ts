@@ -20,6 +20,8 @@ export default interface SchoolInterface{
     sub_total_display: 0 | 1, 
     td_font_size: number
     td_font_size_name: number
+    attestation_font_size: number
+    attestation_font_size_name: number
 }
 
 const SchoolSchema = new mg.Schema({
@@ -42,7 +44,9 @@ const SchoolSchema = new mg.Schema({
     name_display_stats: {type:Number, default: 2},
     sub_total_display: {type:Number, default:1},
     td_font_size: {type:Number, default:35},
-    td_font_size_name: {type:Number, default:40}
+    td_font_size_name: {type:Number, default:40},
+    attestation_font_size: {type:Number, default:35},
+    attestation_font_size_name: {type:Number, default:40},
    },
    {
    timestamps:true,

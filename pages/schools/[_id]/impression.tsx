@@ -185,6 +185,31 @@ export default function SchoolSettingImpression({
                 onChange={handleChange}
               ></input>
             </div>
+
+            <hr />
+
+            <h3 className="py-2">Attestation</h3>
+            <div className="form-group">
+              <h4>Police Ecriture </h4>
+              <input
+                className="form-control"
+                disabled={!editable}
+                name="attestation_font_size"
+                value={school?.attestation_font_size}
+                onChange={handleChange}
+              ></input>
+            </div>
+
+            <div className="form-group">
+              <h4>Police Nom </h4>
+              <input
+                className="form-control"
+                disabled={!editable}
+                name="attestation_font_size_name"
+                value={school?.attestation_font_size_name}
+                onChange={handleChange}
+              ></input>
+            </div>
          </div>
         </div>
 

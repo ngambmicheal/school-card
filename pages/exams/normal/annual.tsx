@@ -193,6 +193,11 @@ export default function termDetails() {
         Imprimer Tableau D
       </button>
 
+      <button className="mx-3 btn btn-dark" onClick={() => printAttestation()}>
+        {" "}
+        Imprimer Attestation
+      </button>
+
       <table className="table table-hover table-striped table-bordered my-3 ">
         <thead>
           <tr>
