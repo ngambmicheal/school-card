@@ -148,10 +148,10 @@ export default function termDetails() {
 
   const getTotalPoints = () => {
     let sum = 0;
-    for (const el in annualExam) {
+    for (const el in exam) {
       if (el.includes("point_")) {
-        sum += parseFloat(parseFloat(annualExam[el]).toFixed(2)) ?? 0;
-        console.log(annualExam[el]);
+        sum += parseFloat(parseFloat(exam[el]).toFixed(2)) ?? 0;
+        console.log(exam[el]);
       }
     }
     setPoints((s) => sum);
