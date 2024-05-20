@@ -100,7 +100,7 @@ export function AnnualExamModal({
 
   const generate = () => {
     const report_type: string =
-      terms[0].class?.section?.report_type || "Competence";
+      terms[0].class?.section?.report_type ?? terms[0].report_type  ?? "Competence";
     api
       .saveAnnualExam({
         report_type,

@@ -17,10 +17,10 @@ export const getSubjectTotal = (result: ExamResultInterface | any) => {
   let sum = 0;
   for (const el in result) {
     if (el.includes("subject_")) {
-      sum += parseFloat(parseFloat(result[el]).toFixed(2));
+      sum +=  parseFloat(parseFloat(result[el]).toFixed(2));
     }
   }
-  return sum;
+  return parseFloat(sum.toFixed(2));
 };
 
 export default function termDetails() {
@@ -31,6 +31,8 @@ export default function termDetails() {
   const [students, setStudents] = useState<StudentInterface[]>([]);
   const [results, setResults] = useState<any>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const [exam, setExam] = useState<any>({});
 
   const [points, setPoints] = useState(0);
   const [ImportIsOpen, setImportIsOpen] = useState(false);
@@ -43,6 +45,7 @@ export default function termDetails() {
       api.getAnnualExam(termId).then(({ data: { data } }: any) => {
         setAnnualE(data);
         setTerm(data.terms[0]);
+        setExam(data.terms[0].exams[0]);
       });
 
       api.getAnnualExamResult(termId).then(({ data: { data } }: any) => {
@@ -65,39 +68,39 @@ export default function termDetails() {
   }, [term]);
 
   useEffect(() => {
-    if (results && term) {
+    if (results && annualExam) {
       getTotalPoints();
     }
   }, [results]);
 
   const printResults = () => {
     window.open(
-      `/api/terms/annual/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      `/api/exams/annual/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
       "_blank"
     );
   };
 
   const printStats = () => {
     window.open(
-      `/api/terms/annual/${annualExam?.report_type?.toLocaleLowerCase()}-stats?annualExam_id=${termId}`,
+      `/api/exams/annual/${annualExam?.report_type?.toLocaleLowerCase()}-stats?annualExam_id=${termId}`,
       "_blank"
     );
   };
 
   useEffect(() => {
-    if (term?._id) {
-      // api.updateTerm(term._id, term).then(({data:{data}} : any) => {
+    if (annualExam?._id) {
+      // api.updateAnnualExam(annualExam._id, annualExam).then(({data:{data}} : any) => {
       //     //setTerm(data)
       // })
     }
-  }, [term]);
+  }, [annualExam]);
 
   const handleChange = (e) => {
     const key = e.target.name;
     const value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
 
-    setTerm((inputData) => ({
+    setAnnualE((inputData) => ({
       ...inputData,
       [key]: value,
     }));
@@ -145,11 +148,10 @@ export default function termDetails() {
 
   const getTotalPoints = () => {
     let sum = 0;
-    console.log(sum);
-    for (const el in term) {
+    for (const el in annualExam) {
       if (el.includes("point_")) {
-        sum += parseFloat(parseFloat(term[el]).toFixed(2)) ?? 0;
-        console.log(term[el]);
+        sum += parseFloat(parseFloat(annualExam[el]).toFixed(2)) ?? 0;
+        console.log(annualExam[el]);
       }
     }
     setPoints((s) => sum);
@@ -161,14 +163,14 @@ export default function termDetails() {
 
   const printTD = () => {
     window.open(
-      `/api/terms/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      `/api/annualExams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
       "_blank"
     );
   };
 
   const printAttestation = () => {
     window.open(
-      `/api/terms/attestation/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      `/api/annualExams/attestation/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
       "_blank"
     );
   };
@@ -219,7 +221,7 @@ export default function termDetails() {
                       type="number"
                       name={`point_${s._id}`}
                       style={{ width: "50px" }}
-                      value={term[`point_${s._id}`]}
+                      value={exam[`point_${s._id}`]}
                       onChange={handleChange}
                     />{" "}
                     {s.name}{" "}

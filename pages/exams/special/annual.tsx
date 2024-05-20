@@ -159,14 +159,14 @@ export default function termDetails() {
 
   const printTD = () => {
     window.open(
-      `/api/terms/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      `/api/annualExams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
       "_blank"
     );
   };
 
   const printAttestation = () => {
     window.open(
-      `/api/terms/attestation/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      `/api/annualExams/attestation/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
       "_blank"
     );
   };

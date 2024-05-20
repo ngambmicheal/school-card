@@ -7,20 +7,14 @@ import { getTotalExam } from "../jsx/resultsDynamicActions";
 import { getTotal } from "../jsx/resultsUiStats";
 
 
-export default function attestationFr(result:ExamResultInterface, term:TermInterface ) {
-
+export default function attestationFr(result:ExamResultInterface, term:TermInterface, is_annual = false ) {
+    console.log({s: getTotalExam(term.terms[0].exams[0]),sd: term.terms[0].exams[0] })
     const totalMarks = getTotal(result)
-    const totalPoints = term.exams?.length ? getTotalExam(term.exams[0]) : 0;
+    const totalPoints =  is_annual ? getTotalExam(term.terms[0].exams[0]) :   term.exams?.length ? getTotalExam(term.exams[0]) : 0;
     const average = ((totalMarks / totalPoints) * 20).toFixed(2) 
 
     const fontSize = term.class?.school?.attestation_font_size ?? `35px`;
     const fontSizeName =  term.class?.school?.attestation_font_size_name ?? `40px`;
-
-    console.log({
-        fontSize, 
-        fontSizeName,
-        term: term.class?.school
-    })
 
     return (
         <div style={{  

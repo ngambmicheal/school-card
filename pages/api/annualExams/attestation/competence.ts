@@ -6,57 +6,35 @@ import { studentSchema } from "../../../../models/student";
 import * as pdf from "pdf-creator-node";
 import fs from "fs";
 import { examResultSchema } from "../../../../models/examResult";
-import { competenceSchema } from "../../../../models/competence";
-import { subjectSchema } from "../../../../models/subject";
-import { getCompetencesLenght } from "./print-result";
-import resultsActions from "../../../../assets/jsx/resultsActions";
 import ReactDOMServer from "react-dom/server";
 import archiver from "archiver";
 import { schoolSchema } from "../../../../models/school";
-import { courseSchema } from "../../../../models/course";
 import { classeSchema } from "../../../../models/classe";
-import { sectionSchema } from "../../../../models/section";
-import {
-  getTotal,
-  getTotalPoints,
-  getTotals,
-} from "../../../../assets/jsx/resultsUiStats";
-import resultsDynamicActions from "../../../../assets/jsx/resultsDynamicActions";
 import TermInterface, { termSchema } from "../../../../models/terms";
 import { replaceAll } from "../../../../services/utils";
-import thFr from "../../../../assets/td/td_fr";
+import attestationFr from "../../../../assets/attestation/attestation_fr";
 import AnnualExamInterface, { annualExamSchema } from "../../../../models/annualExam";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  const { term_id, annualExam_id } = req.query;
+  const { annualExam_id } = req.query;
 
-  let term: TermInterface | AnnualExamInterface;
-  if(term_id){
-    term = await termSchema
-      .findOne({ _id: term_id })
-      .populate({ path: "class", model: classeSchema, populate: { path: "school", model: schoolSchema }})
-      .populate({ path: "exams", model: examSchema });
-  }
-  else{
-    term = await annualExamSchema
+  const term: TermInterface | AnnualExamInterface = await annualExamSchema
       .findOne({ _id: annualExam_id })
       .populate({ path: "class", model: classeSchema, populate: { path: "school", model: schoolSchema }})
-      .populate({ path: "terms", model: termSchema });
-  }
-
+      .populate({ path: "terms", model: termSchema, populate: { path: "exams", model: examSchema } });
 
   const totalResults = await examResultSchema
-    .find({ term_id, th: true })
+    .find({ annualExam_id, th: true })
     .populate({ path: "student", model: studentSchema });
 
-  const zipName = `${replaceAll(" ", "_", term.class?.name)}_td__${term.name}`;
-  var dir = `./tmp/td/${zipName}`;
-  var termsDir = "./public/td";
-  var zipOutput = fs.createWriteStream(`./public/td/${zipName}.zip`);
-  var zipDir = `./public/td/${zipName}.zip`;
+  const zipName = `${replaceAll(" ", "_", term.class?.name)}_attestation__${term.name}`;
+  var dir = `./tmp/attestation/${zipName}`;
+  var termsDir = "./public/attestation";
+  var zipOutput = fs.createWriteStream(`./public/attestation/${zipName}.zip`);
+  var zipDir = `./public/attestation/${zipName}.zip`;
   var archive = archiver("zip");
 
   if (!fs.existsSync(dir)) {
@@ -86,7 +64,7 @@ export default async function handler(
       },
     };
 
-    let html = ReactDOMServer.renderToStaticMarkup(thFr(results, term));
+    let html = ReactDOMServer.renderToStaticMarkup(attestationFr(results, term, true));
     html += `
         <style>
             .b{

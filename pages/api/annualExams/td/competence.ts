@@ -31,25 +31,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  const { term_id, annualExam_id } = req.query;
+  const { annualExam_id } = req.query;
 
-  let term: TermInterface | AnnualExamInterface;
-  if(term_id){
-    term = await termSchema
-      .findOne({ _id: term_id })
-      .populate({ path: "class", model: classeSchema, populate: { path: "school", model: schoolSchema }})
-      .populate({ path: "exams", model: examSchema });
-  }
-  else{
-    term = await annualExamSchema
+  const term: TermInterface | AnnualExamInterface = await annualExamSchema
       .findOne({ _id: annualExam_id })
       .populate({ path: "class", model: classeSchema, populate: { path: "school", model: schoolSchema }})
-      .populate({ path: "terms", model: termSchema });
-  }
-
+      .populate({ path: "terms", model: termSchema, populate: { path: "exams", model: examSchema } });
 
   const totalResults = await examResultSchema
-    .find({ term_id, th: true })
+    .find({ annualExam_id, th: true })
     .populate({ path: "student", model: studentSchema });
 
   const zipName = `${replaceAll(" ", "_", term.class?.name)}_td__${term.name}`;
@@ -86,7 +76,7 @@ export default async function handler(
       },
     };
 
-    let html = ReactDOMServer.renderToStaticMarkup(thFr(results, term));
+    let html = ReactDOMServer.renderToStaticMarkup(thFr(results, term, true));
     html += `
         <style>
             .b{

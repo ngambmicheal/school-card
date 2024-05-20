@@ -10,7 +10,7 @@ import { getTotal } from "../jsx/resultsUiStats";
 export default function thEn(result:ExamResultInterface, term:TermInterface ) {
 
     const totalMarks = getTotal(result)
-    const totalPoints = term.exams?.length ? getTotalExam(term.exams[0]) : 0;
+    const totalPoints =  is_annual ? getTotalExam(term.terms[0].exams[0]) :   term.exams?.length ? getTotalExam(term.exams[0]) : 0;
     const average = ((totalMarks / totalPoints) * 20).toFixed(2) 
 
     const fontSize = term.class?.school?.td_font_size ?? `35px`;

@@ -290,6 +290,9 @@ export class Api {
   getAnnualExamResult(annualExamId: string) {
     return axios.get(`/api/annualExams/results?annualExam_id=${annualExamId}`);
   }
+  updateAnnualExam(id: any, data: any) {
+    return axios.post("/api/annualExams/update", data);
+  }
 
   deleteAnnualExam(annualExamId: any) {
     return axios.post("/api/annualExams/delete", { _id: annualExamId });
