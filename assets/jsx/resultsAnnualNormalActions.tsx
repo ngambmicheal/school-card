@@ -164,7 +164,7 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
                         })
                     }
                     <th >
-                        TERM1
+                        {term.name.substr(0,4)}
                     </th>
                     <th colSpan={2}>
                         APPRECIATION CODE

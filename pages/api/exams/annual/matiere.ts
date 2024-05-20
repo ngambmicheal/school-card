@@ -46,7 +46,7 @@ export default async function handler(
       .sort({ rank: 1 })
   ).filter((re) => getTotal(re) != 0);
 
-  const termsSearch = term.terms?.map((t) => t.toString());
+  const termsSearch = term.terms?.map((t) => t._id.toString());
 
   const subjects = await subjectSchema
     .find({ school: term.class?.school, report_type: term.report_type })
