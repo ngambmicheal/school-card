@@ -56,3 +56,54 @@ td.center{
 input[type='checkbox']{
   transform: scale(2);
 }
+
+.delete-action{
+  color:#dc3545
+}
+
+.update-action{
+  color: #0d5835
+}
+
+.choose-action{
+  color: white; 
+  padding: 5px;
+  background: grey;
+  border-radius: 5px;
+}
+
+
+.btn {
+  margin-top: 12px;
+}
+
+a{
+  cursor: pointer;
+}
+
+.end{
+  float: right;
+}
+
+.form-group{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.form-group label{
+  font-weight: 900;
+}
+
+
+.table-striped tr:nth-child(even){
+  background: #dfdfdf;
+}
+
+.table-striped tr:nth-child(odd){
+  background: #fffafa;
+}
+
+input, select{
+  border: 1px solid #41464b !important;
+  border-radius: 5px;
+}

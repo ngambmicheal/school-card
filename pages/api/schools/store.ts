@@ -1,25 +1,40 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
-import ClasseInterface, { classeSchema } from '../../../models/classe';
-import SchoolInterface, { schoolSchema } from '../../../models/school';
+import type { NextApiRequest, NextApiResponse } from "next";
+import ClasseInterface, { classeSchema } from "../../../models/classe";
+import SchoolInterface, { schoolSchema } from "../../../models/school";
+import logger from "../../../utils/logger";
 
 type Data = {
-  name: string
-}
+  name: string;
+};
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<{data?:SchoolInterface, success:boolean, message:string}>
+  res: NextApiResponse<{
+    data?: SchoolInterface;
+    success: boolean;
+    message: string;
+  }>
 ) {
+  const schoolQuery = req.body;
 
-    const schoolQuery = req.body;
+  const existingSchool = await schoolSchema.findOne({ code: schoolQuery.code });
 
-    const school = new schoolSchema(schoolQuery)
-    school.save().then(()=>{
-                    res.status(200).json({data:school, success:true, message:'done'});
-                })
-                .catch(() => {
-                    res.status(400).json({message:'Could not be sent', success:false });
-                })
+  if (existingSchool) {
+    res
+      .status(400)
+      .json({ message: "School with code already exist", success: false });
+    return false;
+  }
 
+  const school = new schoolSchema(schoolQuery);
+  school
+    .save()
+    .then(() => {
+      res.status(200).json({ data: school, success: true, message: "done" });
+    })
+    .catch((e) => {
+      logger.error(e, { message: "Could not Create School" });
+      res.status(400).json({ message: e.message, success: false });
+    });
 }

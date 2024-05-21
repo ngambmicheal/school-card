@@ -1,0 +1,23 @@
+{
+    "translation":{
+        "title":{
+                "add-school":"Ajouter une ecole",
+                "add-class":"Ajouter une classe",
+                "name":"Nom", 
+                "school":"Ecole",
+                "teacher":"Enseignant",
+                "section":"Section",
+                "action":"Action",
+                "list-class":"Liste de classes",
+                "update-teacher": "Choisir L'Enseignant"
+                }, 
+        "action":{
+            "delete": "Supprimer",
+            "add":"Ajouter",
+            "view":"Voir",
+            "update":"Enregistrer",
+            "save":"Enregistrer", 
+            "choose":"Choisir"
+        }
+    }
+}

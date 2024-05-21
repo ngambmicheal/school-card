@@ -46,13 +46,16 @@ export const getAdmis = (total:number, results:ExamResultInterface[] ) => {
 }
 
 
-export default function resultsNormalUiStats(exam:ExamInterface, subjects:SubjectInterface[], results: ExamResultInterface[], statResults:ExamResultInterface[]){
+export default function resultsNormalUiStats(exam:ExamInterface, subjects:SubjectInterface[], results: ExamResultInterface[], statResults:ExamResultInterface[], school: SchoolInterface){
 
     const points = getTotalPoints(exam);
     const statsResults = statResults.filter(s => getTotal(s) >0 );
     const stat = getAdmis(points, statsResults);
+    // const displayName = displayNameFn(school)
+
     return (
         <>
+    <div className="bg-logo"></div>
             <div className='py-3'>
                 <h3>Classe : {exam?.class_id?.name} </h3>
                 <h4>Examen : {exam?.name} </h4>
@@ -162,7 +165,7 @@ export default function resultsNormalUiStats(exam:ExamInterface, subjects:Subjec
     )
 }
 
-const reducer = (previousValue:any, currentValue:any) => parseFloat(previousValue??0) + parseFloat(currentValue??0)
+const reducer = (previousValue:any, currentValue:any) => getFloat(previousValue??0) + getFloat(currentValue??0)
 
 export function ExamResult({result, subjects, points}:{subjects:SubjectInterface[], result:ExamResultInterface|any, points:number }){
 

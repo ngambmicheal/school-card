@@ -4,13 +4,15 @@ import ExamInterface from "../../models/exam";
 import { useState } from "react";
 import SubjectInterface from "../../models/subject";
 import { getGeneralAverage } from "./resultsActions";
+import { getFloat } from "../../utils/calc";
+import SchoolInterface from "../../models/school";
 
 export const getTotalPoints = (exam:ExamInterface) => { 
     let sum = 0; 
     console.log(sum)
     for(const el in exam){
         if(el.includes('point_')){
-            sum+=parseFloat(exam[el])??0
+            sum+=getFloat(exam[el])??0
         }
     }
   
@@ -21,7 +23,7 @@ export const getTotal = (result:ExamResultInterface) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
    return sum; 
@@ -30,9 +32,13 @@ export const getTotal = (result:ExamResultInterface) => {
 export const getTotals = (subject:SubjectInterface, result:ExamResultInterface) => {
     let total = 0; 
             subject.courses?.map(cc => {
-                total+=parseFloat(result[`subject_${cc._id}`] ?? 0); 
+                total+=getFloat(result[`subject_${cc._id}`] ?? 0); 
             })
     return total; 
+}
+
+export const displayNameFn = (school?:SchoolInterface) =>{
+    return [undefined, '1', '2', 1, 2].includes(school?.name_display_stats as unknown as string)
 }
 
 export const getAdmis = (total:number, results:ExamResultInterface[] ) => {
@@ -45,13 +51,16 @@ export const getAdmis = (total:number, results:ExamResultInterface[] ) => {
 }
 
 
-export default function resultsUiStats(exam:ExamInterface, competences:CompetenceInterface[], results: ExamResultInterface[], statResults:ExamResultInterface[]){
+export default function resultsUiStats(exam:ExamInterface, competences:CompetenceInterface[], results: ExamResultInterface[], statResults:ExamResultInterface[], school: SchoolInterface){
 
     const points = getTotalPoints(exam);
     const statsResults = statResults.filter(s => getTotal(s) >0 );
     const stat = getAdmis(points, statsResults);
+    const displayName = displayNameFn(school)
+
     return (
         <>
+    <div className="bg-logo"></div>
             <div className='py-3'>
                 <h3>Classe : {exam?.class_id?.name} </h3>
                 <h4>Examen : {exam?.name} </h4>
@@ -61,22 +70,24 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                 <thead>
                     <tr>
                         <th></th>
-                        <th></th>
+                        {displayName && <th></th>}
                         {competences && competences.map(s=> {
-                            return <th key={s._id} colSpan={s.subjects?.length*4}> {s.slug || s.name} </th>
+                            const spans = s.subjects?.reduce((a,b) => {
+                                    return a + (b.courses?.length) +  (school?.sub_total_display?1:0)
+                            }, 0)
+
+                            return <th key={s._id} colSpan={spans}> {s.slug || s.name} </th>
                         })}
-                        <th></th>
-                        <th></th>
-                        <th></th>
+
                     </tr>
                     <tr>
                         <th>
                             N
                         </th>
-                        <th>Nom</th>
+                        {displayName && <th>Nom</th>}
                         {competences && competences.map(competence=> {
                             return competence.subjects?.map(subject => {
-                                return <th key={subject._id} colSpan={subject.courses?.length+1} > {subject.slug || subject.name} </th>
+                                return <th key={subject._id} colSpan={subject.courses?.length+(school?.sub_total_display?1:0)} > {subject.slug || subject.name} </th>
                             })
                         })}
                     </tr>
@@ -84,19 +95,19 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                         <th>
 
                         </th>
-                        <th>
+                        {displayName && <th>
 
-                        </th>
+                        </th>}
                         {competences && competences.map(competence=> {
                             return competence.subjects?.map(subject => {
                                 return (
                                     <>
                                         {subject.courses?.map(course => {
                                         return <th key={course._id} > 
-                                                    {course.name.substr(0,3)} 
+                                                    {course.name.substr(0,school?.subject_display??3)} 
                                                 </th>
                                         })}
-                                    <th> Tot</th>
+                                    { school?.sub_total_display && <th> Tot</th> }
                                     </>
                                 )
                             })
@@ -104,12 +115,11 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                         <th>Totaux / {points} </th>
                         <th>Moyenne</th>
                         <th>Rang</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                 { results && competences.length && results.map( result=> {
-                    return <ExamResult  key={`exam-${result._id}`} result={result} competences={competences} exam={exam} points={points} />
+                    return <ExamResult  key={`exam-${result._id}`} result={result} competences={competences} exam={exam} points={points} school={school} displayName={displayName}/>
                 })}
                 </tbody>
             </table>
@@ -165,7 +175,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
 
         <div style={{pageBreakAfter:"always"}}>
 
-            <table>
+            <table className="table3">
                 <thead>
                     <tr>
                             
@@ -202,15 +212,15 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
     )
 }
 
-const reducer = (previousValue:any, currentValue:any) => parseFloat(previousValue??0) + parseFloat(currentValue??0)
+const reducer = (previousValue:any, currentValue:any) => getFloat(previousValue??0) + getFloat(currentValue??0)
 
-export function ExamResult({ result, competences, exam, points}:{competences:CompetenceInterface[], result:ExamResultInterface|any, exam:any, points:any}){
+export function ExamResult({ result, competences, exam, points, school, displayName}:{competences:CompetenceInterface[], result:ExamResultInterface|any, exam:any, points:any, school:SchoolInterface, displayName:boolean}){
 
     const total = getTotal(result);
 
    return  <tr>
         <td>{result?.student?.number}</td>
-        <td>{result?.student?.name} </td>
+        {displayName && <td>{ school?.name_display_stats == 1 ? result?.student?.name?.split(' ')[0] : result?.student?.name} </td>}
         {competences && competences.map(competence=> {
             return competence.subjects?.map(subject => {
                 return (
@@ -218,7 +228,7 @@ export function ExamResult({ result, competences, exam, points}:{competences:Com
                         {subject.courses?.map(course => {
                                 return course._id && <td key={course._id}> {result[`subject_${course._id}`]}</td>
                         })}
-                    <th>  {getTotals(subject, result)} </th>
+                    { school?.sub_total_display &&<td>  {getTotals(subject, result)} </td>}
                     </>
                 )
             })

@@ -5,6 +5,7 @@ import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import { act } from "../../pages/exams/mat/[_id]";
 import { checkSvg } from "../../services/constants";
+import { getFloat } from "../../utils/calc";
 
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -77,7 +78,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
     return sum; 
@@ -87,7 +88,7 @@ const getTotalExam = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('point_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
     return sum; 
@@ -100,6 +101,7 @@ export default function resultsMatActions(competences:CompetenceInterface[], res
 
     return (
         <>
+    <div className="bg-logo"></div>
     <table className='table2' style={{fontSize:'14px'}}>
     <tr>
         <th className='center' style={{width:'40%'}}>

@@ -3,6 +3,7 @@ import fs from 'fs';
 import SubjectInterface from "../../models/subject";
 import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
+import { getFloat } from "../../utils/calc";
 
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -83,7 +84,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
     return sum; 
@@ -93,7 +94,7 @@ const getTotalExam = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('point_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
     return sum; 
@@ -107,8 +108,8 @@ export default function resultsActions(competences:CompetenceInterface[], result
         let total = 0 ; 
         let pointTotal = 0;
         subject.courses?.map(c => {
-            total+=parseFloat(results[`subject_${c._id}`]??0);
-            pointTotal+=parseFloat(results.exam_id[`point_${c._id}`]??0);
+            total+=getFloat(results[`subject_${c._id}`]??0);
+            pointTotal+=getFloat(results.exam_id[`point_${c._id}`]??0);
         })
 
         const app = getCompetenceAppreciation(total, pointTotal, subject.slug);
@@ -116,12 +117,13 @@ export default function resultsActions(competences:CompetenceInterface[], result
         return {total, app, pointTotal}
     }
 
-    const totalMarks = getTotal(results)
+    const totalMarks = getFloat(getTotal(results))
     const totalPoints = getTotalExam(results?.exam_id)
     const average = (totalMarks / totalPoints) * 20;
 
     return (
         <>
+    <div className="bg-logo"></div>
     <table className='table2' style={{fontSize:'14px'}}>
     <tr>
         <th className='center' style={{width:'40%'}}>
@@ -322,7 +324,6 @@ export default function resultsActions(competences:CompetenceInterface[], result
             </td>
         </tr> */}
     </table>
-
 </>
 );
 }

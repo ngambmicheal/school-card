@@ -5,6 +5,7 @@ import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import { checkSvg } from "../../services/constants";
 import { nurseryActs } from "../../pages/exams/nursery/[_id]";
+import { getFloat } from "../../utils/calc";
 
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -77,7 +78,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
     return sum; 
@@ -91,6 +92,7 @@ export default function resultsNurseryActions(competences:CompetenceInterface[],
 
     return (
         <>
+    <div className="bg-logo"></div>
     <table className='table2' style={{fontSize:'14px'}}>
     <tr>
         <th className='center' style={{width:'40%'}}>

@@ -99,6 +99,7 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
 
     return (
         <>
+    <div className="bg-logo"></div>
     <table className='table2' style={{fontSize:'14px'}}>
     <tr>
         <th className='center' style={{width:'40%'}}>

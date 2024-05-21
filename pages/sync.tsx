@@ -1,10 +1,12 @@
-import type { NextPage } from 'next'
-import api from '../services/api'
+import type { NextPage } from "next";
+import { useEffect } from "react";
+import api from "../services/api";
 
 const Synced: NextPage = () => {
+  useEffect(() => {
     api.sync();
-    return (<></>)
-}   
+  }, []);
+  return <></>;
+};
 
-export default Synced
-  
+export default Synced;

@@ -1,44 +1,50 @@
 import Link from 'next/link'
+import { useSession, signIn, signOut } from "next-auth/react"
+import { helperService } from '../services'
+import useSchool from '../hooks/useSchool'
+import useUser from '../hooks/useUser'
+import { UserType } from '../utils/enums'
 
 type NavbarProps = {
     user: any,
-    logout: () => void
 }
 
-export default function Navbar({user, logout}:NavbarProps){
+export default function Navbar(){
+    const { data: session } = useSession()
+    const {school} = useSchool();
+    const {user} = useUser(session); 
+
     return (
-        <nav className='navbar navbar-dark bg-dark navbar-expand-lg '>
+        <nav className='navbar navbar-dark bg-dark navbar-expand sticky-top '>
         <div className='collapse navbar-collapse'>
             <ul className='navbar-nav mr-auto'>
-                {/* {user?
+        <Link href={`/schools/${school?._id}/settings`}><a className='nav-link'>{school?.name}</a></Link>
+        {!session && <Link href='/' ><a className='nav-link'>Accueil</a></Link>}
+
+        { helperService.getSchoolId() && session && user?.type===UserType.ADMIN && <>
+        <Link href='/classes' ><a className='nav-link'>Classes</a></Link>
+        <Link href='/students' ><a className='nav-link'>Elèves</a></Link>
+            {/* <Link href='/schools' ><a className='nav-link'>Ecoles</a></Link> */}
+            <Link href='/sections'><a className='nav-link'>Sections</a></Link>
+            <Link href='/competences'><a className='nav-link'>Compétences</a></Link>
+            <Link href='/subjects'><a className='nav-link'>Matières</a></Link>
+            <Link href='/courses'><a className='nav-link'>Courses</a></Link>
+            <Link href='/staff'><a className='nav-link'>Staff</a></Link>
+        </>}
+            </ul>
+        </div>
+        <div className='collapse navbar-collapse'>
+        <ul className='navbar-nav mr-0'>
+            {session?
                 <>
-                    <li className='navbar-item'>
-                        <Link href='/admin/users' ><a className='nav-link'>Users</a></Link>
-                    </li>
-                    <li className='navbar-item'>
-                        <Link href='/admin/users'>Logout</Link>
-                    </li>
+                    <Link href='/auth/profile' ><a className='nav-link'>{session.user?.name}</a></Link>
+                    <a className='nav-link' href='#' onClick={() => signOut({callbackUrl:'/'})}>Logout</a>
                 </> 
                 :
                 <>
-                    <li className='navbar-item'>
-                        <Link  href='/auth/login'><a className='nav-link'>Login</a></Link>
-                    </li>
-                    <li className='navbar-item'>
-                        <Link  href='/auth/register'><a className='nav-link'>Register</a></Link>
-                    </li>
+                    {school && <a href='#' className='nav-link' onClick={() => signIn('credentials',{callbackUrl:`/auth/profile`})}>Sign in</a> }
                 </>
-                } */}
-
-        <Link href='/' ><a className='nav-link'>Accueil</a></Link>
-        <Link href='/schools' ><a className='nav-link'>Ecoles</a></Link>
-        <Link href='/sections'><a className='nav-link'>Sections</a></Link>
-        <Link href='/classes' ><a className='nav-link'>Classes</a></Link>
-        <Link href='/students' ><a className='nav-link'>Elèves</a></Link>
-        <Link href='/competences'><a className='nav-link'>Compétences</a></Link>
-        <Link href='/subjects'><a className='nav-link'>Matières</a></Link>
-        <Link href='/courses'><a className='nav-link'>Courses</a></Link>
-
+                }
             </ul>
         </div>
     </nav>

@@ -8,8 +8,9 @@ export default interface ClasseInterface {
     name:string,
     school?:SchoolInterface & string,
     section?:SectionInterface & string,
-    teacher:string,
     promoted?: string
+    teacher:string;
+    teacher_id:string;
 }
 
 
@@ -29,7 +30,8 @@ const ClasseSchema = new mg.Schema({
         ref:'Section',
     },
      details: {type:String},
-     teacher:{type:String}
+     teacher:{type:String},
+     teacher_id: {type: String}
     },
     {
     timestamps:true,

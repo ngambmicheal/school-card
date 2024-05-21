@@ -5,6 +5,7 @@ import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import { getSubjectTotal } from "../../pages/exams/[_id]";
 import { getGeneralAverage } from "./resultsActions";
+import { getFloat } from "../../utils/calc";
 
 let comT:string[] = [];
 
@@ -79,7 +80,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
     return sum; 
@@ -89,7 +90,7 @@ const getTotalExam = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('point_')){
-            sum+=parseFloat(result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
     return sum; 
@@ -100,12 +101,13 @@ export default function resultsSpecialActions(subjects:SubjectInterface[], resul
 
     comT = [];
 
-    const totalMarks = getTotal(results)
+    const totalMarks = getFloat(getTotal(results))
     const totalPoints = getTotalExam(results?.exam_id)
     const average = (totalMarks / totalPoints) * 20;
 
     return (
         <>
+    <div className="bg-logo"></div>
     <table className='table2' style={{fontSize:'14px'}}>
     <tr>
         <th className='center' style={{width:'40%'}}>
