@@ -108,6 +108,6 @@ export function DynamicExamModal({
   );
 }
 
-export default function () {
+export default function NothingName() {
   return "";
 }

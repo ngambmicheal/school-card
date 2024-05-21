@@ -269,6 +269,6 @@ function Submit(
   return <div>Uploading ...</div>;
 }
 
-export default function () {
+export default function NothingName() {
   return "";
 }

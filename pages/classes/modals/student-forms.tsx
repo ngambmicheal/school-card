@@ -151,6 +151,6 @@ export function CreateStudentModal({
   );
 }
 
-export default function () {
+export default function NothingName() {
   return "";
 }
