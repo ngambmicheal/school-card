@@ -17,6 +17,7 @@ import { courseSchema } from "../../../../models/course";
 import { getTotal } from "../../../../assets/jsx/resultsUiStats";
 import { sectionSchema } from "../../../../models/section";
 import resultsMatActions from "../../../../assets/jsx/resultsMatActions";
+import { bgImgStyle } from "../../../../utils/styles";
 
 export const getCompetencesLenght = (competence: CompetenceInterface) => {
   let total = 0;

@@ -134,7 +134,6 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
     return (
         <>
     <div className="bg-logo"></div>
-            <div className="bg-logo"></div>
 
     <table className='table2' style={{fontSize:'14px'}}>
     <tr>
@@ -157,7 +156,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 </table>
 
 <div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION : {term.name}  2021/2022
+    BULLETIN D'EVALUATION : {term.name}  2023/2024
 </div>
 
 <div>

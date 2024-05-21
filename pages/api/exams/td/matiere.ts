@@ -35,7 +35,7 @@ export default async function handler(
 
   const term: TermInterface = await termSchema
     .findOne({ _id: term_id })
-    .populate({ path: "class", model: classeSchema })
+    .populate({ path: "class", model: classeSchema, populate: { path: "school", model: schoolSchema }})
     .populate({ path: "exams", model: examSchema });
   const totalResults = await examResultSchema
     .find({ term_id, th: true })

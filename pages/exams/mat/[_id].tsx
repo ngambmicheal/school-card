@@ -186,7 +186,7 @@ export default function examDetails() {
   };
 
   const printTD = () => {
-    window.open(`/api/exams/td/mat?exam_id=${examId}`, "_blank");
+    window.open(`/api/exams/attestation/mat?exam_id=${examId}`, "_blank");
   };
 
   const handleChangeToggle = async (event) => {
@@ -198,14 +198,13 @@ export default function examDetails() {
       
       result[subjectName] = at;
       promises.push(api.updateExamResult(result));
+      return result
     })
 
-    setTimeout(() => {
-      setResults(results)
-    }, 100);
-
     await Promise.all(promises).then(() => {
-  
+      setTimeout(() => {
+        setResults(results)
+      }, 100);
     })
     
   }
@@ -389,6 +388,18 @@ export function ExamResult({
     });
   };
 
+  const clearNotes = () => {
+
+    competences.map((c) => {
+      c.subjects?.map((s) => {
+        res[`subject_${s._id}`] = undefined
+      });
+    });
+
+    setRes(() => res)
+
+  } 
+
   const handleChange = (e) => {
     const key = e.target.name;
     const value =
@@ -439,6 +450,14 @@ export function ExamResult({
           name="th"
           checked={res.th == "true"}
           onClick={handleChange}
+          value="true"
+        />
+      </th>
+      <th>
+        <input
+          type="checkbox"
+          name={`subject_all`}
+          onClick={clearNotes}
           value="true"
         />
       </th>

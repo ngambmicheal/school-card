@@ -19,6 +19,7 @@ import { sectionSchema } from "../../../../models/section";
 import { getTotal } from "../../../../assets/jsx/resultsNormalUiStats";
 import TermInterface, { termSchema } from "../../../../models/terms";
 import resultsDynamicNormalActions from "../../../../assets/jsx/resultsDynamicNormalActions";
+import { bgImgStyle } from "../../../../utils/styles";
 
 export const getCompetencesLenght = (competence: CompetenceInterface) => {
   let total = 0;

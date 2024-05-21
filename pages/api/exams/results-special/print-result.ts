@@ -18,6 +18,7 @@ import resultsNormalActions from "../../../../assets/jsx/resultsNormalActions";
 import { sectionSchema } from "../../../../models/section";
 import { getTotal } from "../../../../assets/jsx/resultsNormalUiStats";
 import resultsSpecialActions from "../../../../assets/jsx/resultsSpecialActions";
+import { bgImgStyle } from "../../../../utils/styles";
 
 export const getCompetencesLenght = (competence: CompetenceInterface) => {
   let total = 0;

@@ -24,6 +24,8 @@ import {
 import resultsDynamicActions from "../../../../assets/jsx/resultsDynamicActions";
 import TermInterface, { termSchema } from "../../../../models/terms";
 import { replaceAll } from "../../../../services/utils";
+import { bgImgStyle } from "../../../../utils/styles";
+
 
 export default async function handler(
   req: NextApiRequest,
@@ -102,6 +104,8 @@ export default async function handler(
     );
     html += `
         <style>
+        ${bgImgStyle}
+
         .center{
             text-align:center
         }

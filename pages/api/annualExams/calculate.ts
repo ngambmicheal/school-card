@@ -20,6 +20,8 @@ import AnnualExamInterface, {
   annualExamSchema,
 } from "../../../models/annualExam";
 import { getFloat } from "../../../utils/calc";
+import { addNumbers, divideNumber } from '../../../utils/actions';
+
 
 export default async function handler(
   req: NextApiRequest,
@@ -245,10 +247,10 @@ export function getSubjectSum(
 ) {
   let total = 0;
   results.map((r: any) => {
-    total += getFloat(r[`${type}_${subject_id}`] ?? 0);
+    total= addNumbers(total,r[`${type}_${subject_id}`]??0)
   });
 
-  return results.length ? (total / results.length).toFixed(2) : 0;
+  return results.length ? divideNumber(total, results.length) : 0;
 }
 
 export function getTermRank(results: ExamResultInterface[]) {

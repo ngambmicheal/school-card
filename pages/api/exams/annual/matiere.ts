@@ -35,8 +35,10 @@ export default async function handler(
 
   const term: AnnualExamInterface = await annualExamSchema
     .findOne({ _id: annualExam_id })
-    .populate({ path: "class", model: classeSchema });
-  const exams = await examSchema.find({ _id: { $in: term.terms } });
+    .populate({ path: "class", model: classeSchema })
+    .populate({ path: "terms", model: termSchema, populate: { path: "exams" , model: examSchema}});
+  const exams = term.terms;
+
   const totalResults = await (
     await examResultSchema
       .find({ annualExam_id })
@@ -44,7 +46,7 @@ export default async function handler(
       .sort({ rank: 1 })
   ).filter((re) => getTotal(re) != 0);
 
-  const termsSearch = term.terms?.map((t) => t.toString());
+  const termsSearch = term.terms?.map((t) => t._id.toString());
 
   const subjects = await subjectSchema
     .find({ school: term.class?.school, report_type: term.report_type })

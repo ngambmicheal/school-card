@@ -143,7 +143,14 @@ export default function examDetails() {
 
   const printTD = () => {
     window.open(
-      `/api/exams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${examId}`,
+      `/api/annualExams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${examId}`,
+      "_blank"
+    );
+  };
+
+  const printAttestation = () => {
+    window.open(
+      `/api/annualExams/attestation/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${annualExam?._id}`,
       "_blank"
     );
   };
@@ -231,6 +238,11 @@ export default function examDetails() {
       <button className="mx-3 btn btn-dark" onClick={() => printTD()}>
         {" "}
         Imprimer Tableau D
+      </button>
+
+      <button className="mx-3 btn btn-dark" onClick={() => printAttestation()}>
+        {" "}
+        Imprimer Attestation
       </button>
 
       {resultsCsv.length && (
@@ -332,7 +344,7 @@ export default function examDetails() {
 }
 
 const reducer = (previousValue: any, currentValue: any) =>
-  parseFloat(previousValue ?? 0) + parseFloat(currentValue ?? 0);
+  parseFloat( (parseFloat(previousValue ?? 0) + parseFloat(currentValue ?? 0)).toFixed(2));
 
 export function ExamResult({
   result,
@@ -367,7 +379,7 @@ export function ExamResult({
     let sum = 0;
     for (const el in result) {
       if (el.includes("total_")) {
-        sum += result[el];
+        sum = parseFloat((sum + result[el]).toFixed(2));
       }
     }
     setTotal((s) => sum);

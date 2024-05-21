@@ -70,7 +70,7 @@ const getTotal = (result:any) => {
             sum+=getFloat(result[el]??0);
         }
     }
-    return sum; 
+    return getFloat(sum); 
 }
 
 const getTotalExam = (result:any) => {
@@ -80,7 +80,7 @@ const getTotalExam = (result:any) => {
             sum+=getFloat(result[el]??0);
         }
     }
-    return sum; 
+    return getFloat(sum); 
 }
 
 
@@ -120,7 +120,7 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
 </table>
 
 <div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
-    REPORT CARD : {term?.name} 2021/2022
+    REPORT CARD : {term?.name} 2023/2024
 </div>
 
 <div>
@@ -164,7 +164,7 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
                         })
                     }
                     <th >
-                        TERM1
+                        {term.name.substr(0,4)}
                     </th>
                     <th colSpan={2}>
                         APPRECIATION CODE

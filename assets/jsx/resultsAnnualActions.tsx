@@ -89,7 +89,7 @@ const getTotal = (result:any) => {
             sum+=getFloat(result[el]??0);
         }
     }
-    return sum; 
+    return getFloat(sum); 
 }
 
 export const getTotalExam = (result:any) => {
@@ -99,7 +99,7 @@ export const getTotalExam = (result:any) => {
             sum+=getFloat(result[el]??0);
         }
     }
-    return sum; 
+    return getFloat(sum); 
 }
  
 
@@ -157,7 +157,7 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
 </table>
 
 <div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION : {term.name}  2021/2022
+    BULLETIN D'EVALUATION : {term.name}  2023/2024
 </div>
 
 <div>
