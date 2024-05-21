@@ -75,7 +75,7 @@ export default function coursesPage(){
            </table>
 
     <div >
-        BULLETIN D'EVALUATION 2021/2022
+        BULLETIN D'EVALUATION 2022/2023
     </div>
 
     <div>

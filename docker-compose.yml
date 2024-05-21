@@ -1,0 +1,47 @@
+version: '3.7'
+
+services: 
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    restart: always
+    volumes:
+      - ./dbinit/mongo:/docker-entrypoint-initdb.d
+      - ./.docker/mongo:/data/db
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=school
+      - MONGO_NON_ROOT_USERNAME=user
+      - MONGO_NON_ROOT_PASSWORD=password
+      - MONGO_NON_ROOT_ROLE=dbOwner
+    networks:
+      - backend
+
+  memcached:
+    container_name: memcached
+    image: bitnami/memcached:latest
+    ports:
+      - '11211:11211'
+    networks:
+      - backend
+
+  
+  angular:
+    build:
+        context: ./
+    volumes:
+        - ./:/usr/src/app:cached
+    environment:
+        - CHOKIDAR_USEPOLLING=true
+    command: [ "yarn" , "dev" ]
+    ports:
+      - '3000:3000'
+    networks:
+      - backend
+
+networks:
+ backend:
+    driver: 'bridge'

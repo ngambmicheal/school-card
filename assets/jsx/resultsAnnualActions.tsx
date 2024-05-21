@@ -157,7 +157,7 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
 </table>
 
 <div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION : {term.name}  2021/2022
+    BULLETIN D'EVALUATION : {term.name}  2022/2023
 </div>
 
 <div>

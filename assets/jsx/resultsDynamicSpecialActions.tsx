@@ -130,7 +130,7 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
 </table>
 
 <div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
-    BULLETIN D'EVALUATION : {term?.name} 2021/2022
+    BULLETIN D'EVALUATION : {term?.name} 2022/2023
 </div>
 
 <div>

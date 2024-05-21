@@ -168,6 +168,7 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
             <table>
                 <thead>
                     <tr>
+                            
                         <th>
                             Nom
                         </th>
@@ -176,6 +177,9 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                         </th>
                         <th>
                             Moyenne
+                        </th>
+                        <th> 
+                            Total / {points}
                         </th>
                     </tr>
                 </thead>
@@ -186,7 +190,8 @@ export default function resultsUiStats(exam:ExamInterface, competences:Competenc
                             <tr>
                                <td>{statResult.student?.name}</td>    
                                <td>{statResult.rank}</td>  
-                               <td>{  ((total / points) * 20).toFixed(2) } / 20</td>
+                               <td>{  ((total / points) * 20).toFixed(2) } /20</td>
+                               <td style={{textAlign:'right'}}> {total} </td>
                             </tr> 
                         )
                     })}

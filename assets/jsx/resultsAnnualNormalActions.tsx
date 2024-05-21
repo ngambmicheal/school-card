@@ -120,7 +120,7 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
 </table>
 
 <div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
-    REPORT CARD : {term?.name} 2021/2022
+    REPORT CARD : {term?.name} 2022/2023
 </div>
 
 <div>

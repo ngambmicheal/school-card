@@ -142,12 +142,12 @@ export default function resultsActions(competences:CompetenceInterface[], result
     </tr>
 </table>
 
-<div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION : {results.exam_id?.name} 2021/2022
+<div className='center' style={{fontSize:'21px', margin:'20px'}} >
+    BULLETIN D'EVALUATION : {results.exam_id?.name} 2022/2023
 </div>
 
 <div>
-<table className='table1' style={{fontSize:'20px'}} >
+<table className='table1' style={{fontSize:'21px'}} >
  <thead>
      <tr>
          <th colSpan={2}>NOMS ET PRENOMS</th>

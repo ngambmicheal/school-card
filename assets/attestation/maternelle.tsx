@@ -14,8 +14,8 @@ export default function AttestationMaternelleFr(result:ExamResultInterface, term
 
     return (
         <div style={{  
-            // backgroundImage: "url(" + thBG + ")",
-            backgroundImage: "url("+ bgEn + ")",
+            backgroundImage: "url(" + thBG + ")",
+           // backgroundImage: "url("+ bgEn + ")",
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',

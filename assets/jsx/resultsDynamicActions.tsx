@@ -153,7 +153,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 </table>
 
 <div className='center' style={{fontSize:'20px', margin:'20px'}} >
-    BULLETIN D'EVALUATION : {term.name}  2021/2022
+    BULLETIN D'EVALUATION : {term.name}  2022/2023
 </div>
 
 <div>
@@ -264,7 +264,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
                                                             </>
                                                     })
                                                 }
-                                                 <th>{!isExcluded ?to.total:'--'}</th> 
+                                                 <th>{!isExcluded ? ( Math.round(to.total * 100) / 100) :'--'}</th> 
                                              </tr>
                                              { ( competenceIndex==2 && (subjectIndex +1  == competence.subjects?.length) )&& <><tr style={{border:'none !important', pageBreakAfter:'always' }}><td colSpan={0} style={{border:'white 1px inset'}} > <div style={{pageBreakAfter:'always' }}> </div ></td></tr></>}
                                      </>
