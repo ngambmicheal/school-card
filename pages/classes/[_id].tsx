@@ -313,6 +313,16 @@ export default function ClasseDetails() {
             return (
               <tr key={term._id}>
                 <td> {term.name} </td>
+                <th>Slug</th>
+                <td>
+                  {" "}
+                  <input
+                    type="text"
+                    name="slug"
+                    value={term?.slug}
+                    onChange={(e) => handleTermChange(term, e.target.value)}
+                  />
+                </td>
                 {classe?.section?.report_type == "Maternelle" && (
                   <td>
                     {" "}
