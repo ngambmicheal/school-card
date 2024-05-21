@@ -28,6 +28,7 @@ import AnnualExamInterface, {
   annualExamSchema,
 } from "../../../../models/annualExam";
 import resultsAnnualActions from "../../../../assets/jsx/resultsAnnualActions";
+import { bgImgStyle } from "../../../../utils/styles";
 
 export default async function handler(
   req: NextApiRequest,
@@ -109,6 +110,8 @@ export default async function handler(
     );
     html += `
         <style>
+        ${bgImgStyle}
+
         .center{
             text-align:center
         }

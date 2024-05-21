@@ -121,7 +121,7 @@ export default function examDetails() {
     console.log(sum);
     for (const el in exam) {
       if (el.includes("point_")) {
-        sum += getFloat(exam[el]) ?? 0;
+        sum = addNumbers(sum, exam[el] ?? 0);
         console.log(exam[el]);
       }
     }
@@ -144,7 +144,14 @@ export default function examDetails() {
 
   const printTD = () => {
     window.open(
-      `/api/exams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${examId}`,
+      `/api/annualExams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${examId}`,
+      "_blank"
+    );
+  };
+
+  const printAttestation = () => {
+    window.open(
+      `/api/annualExams/attestation/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${annualExam?._id}`,
       "_blank"
     );
   };
@@ -232,6 +239,11 @@ export default function examDetails() {
       <button className="mx-3 btn btn-dark" onClick={() => printTD()}>
         {" "}
         Imprimer Tableau D
+      </button>
+
+      <button className="mx-3 btn btn-dark" onClick={() => printAttestation()}>
+        {" "}
+        Imprimer Attestation
       </button>
 
       {resultsCsv.length && (
@@ -333,7 +345,7 @@ export default function examDetails() {
 }
 
 const reducer = (previousValue: any, currentValue: any) =>
-  parseFloat(previousValue ?? 0) + parseFloat(currentValue ?? 0);
+  parseFloat( (parseFloat(previousValue ?? 0) + parseFloat(currentValue ?? 0)).toFixed(2));
 
 export function ExamResult({
   result,

@@ -83,7 +83,7 @@ const getTotal = (result:any) => {
             sum+=getFloat(result[el]??0);
         }
     }
-    return sum; 
+    return getFloat(sum); 
 }
 
 const getTotalExam = (result:any) => {
@@ -93,7 +93,7 @@ const getTotalExam = (result:any) => {
             sum+=getFloat(result[el]??0);
         }
     }
-    return sum; 
+    return getFloat(sum); 
 }
 
 
@@ -132,7 +132,7 @@ export default function resultsDynamicSpecialActions(subjects:SubjectInterface[]
 </table>
 
 <div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
-    BULLETIN D'EVALUATION : {term?.name} 2022/2023
+    BULLETIN D'EVALUATION : {term?.name} 2023/2024
 </div>
 
 <div>

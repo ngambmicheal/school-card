@@ -147,6 +147,7 @@ export default function SchoolSettingImpression({
               </span>
           </div>
           </div>
+          
          <div className="col-md-6">
            <h3>Reports Page</h3>
            <div className="form-group">
@@ -156,6 +157,56 @@ export default function SchoolSettingImpression({
                 disabled={!editable}
                 name="police_reports"
                 value={school?.police_reports}
+                onChange={handleChange}
+              ></input>
+            </div>
+
+            <hr />
+
+            <h3 className="py-2">Tableau D'honneur Page</h3>
+           <div className="form-group">
+              <h4>Police Ecriture </h4>
+              <input
+                className="form-control"
+                disabled={!editable}
+                name="td_font_size"
+                value={school?.td_font_size}
+                onChange={handleChange}
+              ></input>
+            </div>
+
+            <div className="form-group">
+              <h4>Police Nom </h4>
+              <input
+                className="form-control"
+                disabled={!editable}
+                name="td_font_size_name"
+                value={school?.td_font_size_name}
+                onChange={handleChange}
+              ></input>
+            </div>
+
+            <hr />
+
+            <h3 className="py-2">Attestation</h3>
+            <div className="form-group">
+              <h4>Police Ecriture </h4>
+              <input
+                className="form-control"
+                disabled={!editable}
+                name="attestation_font_size"
+                value={school?.attestation_font_size}
+                onChange={handleChange}
+              ></input>
+            </div>
+
+            <div className="form-group">
+              <h4>Police Nom </h4>
+              <input
+                className="form-control"
+                disabled={!editable}
+                name="attestation_font_size_name"
+                value={school?.attestation_font_size_name}
                 onChange={handleChange}
               ></input>
             </div>

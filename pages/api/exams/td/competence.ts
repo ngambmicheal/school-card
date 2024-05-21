@@ -25,17 +25,29 @@ import resultsDynamicActions from "../../../../assets/jsx/resultsDynamicActions"
 import TermInterface, { termSchema } from "../../../../models/terms";
 import { replaceAll } from "../../../../services/utils";
 import thFr from "../../../../assets/td/td_fr";
+import AnnualExamInterface, { annualExamSchema } from "../../../../models/annualExam";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  const { term_id } = req.query;
+  const { term_id, annualExam_id } = req.query;
 
-  const term: TermInterface = await termSchema
-    .findOne({ _id: term_id })
-    .populate({ path: "class", model: classeSchema })
-    .populate({ path: "exams", model: examSchema });
+  let term: TermInterface | AnnualExamInterface;
+  if(term_id){
+    term = await termSchema
+      .findOne({ _id: term_id })
+      .populate({ path: "class", model: classeSchema, populate: { path: "school", model: schoolSchema }})
+      .populate({ path: "exams", model: examSchema });
+  }
+  else{
+    term = await annualExamSchema
+      .findOne({ _id: annualExam_id })
+      .populate({ path: "class", model: classeSchema, populate: { path: "school", model: schoolSchema }})
+      .populate({ path: "terms", model: termSchema });
+  }
+
+
   const totalResults = await examResultSchema
     .find({ term_id, th: true })
     .populate({ path: "student", model: studentSchema });

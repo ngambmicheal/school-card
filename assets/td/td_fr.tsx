@@ -1,22 +1,30 @@
 
 import ExamResultInterface from "../../models/examResult";
 import TermInterface from "../../models/terms";
-import { tdfr } from "../jsx/thfr";
+import { th_fr } from "../jsx/image";
 import { base64_encode } from "../jsx/resultsActions";
 import { getTotalExam } from "../jsx/resultsDynamicActions";
 import { getTotal } from "../jsx/resultsUiStats";
 
 
-export default function thFr(result:ExamResultInterface, term:TermInterface ) {
+export default function thFr(result:ExamResultInterface, term:TermInterface, is_annual = false ) {
 
     const totalMarks = getTotal(result)
-    const totalPoints = term.exams?.length ? getTotalExam(term.exams[0]) : 0;
+    const totalPoints =  is_annual ? getTotalExam(term.terms[0].exams[0]) :   term.exams?.length ? getTotalExam(term.exams[0]) : 0;
     const average = ((totalMarks / totalPoints) * 20).toFixed(2) 
+
+    const fontSize = term.class?.school?.td_font_size ?? `35px`;
+    const fontSizeName =  term.class?.school?.td_font_size_name ?? `40px`;
+
+    console.log({
+        fontSize, 
+        fontSizeName,
+        term: term.class?.school
+    })
 
     return (
         <div style={{  
-            backgroundImage: "url(" + tdfr + ")",
-            // backgroundImage: "url("+ thBg + ")",
+            backgroundImage: "url('data:image/png;base64," + th_fr + "')",
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
@@ -26,33 +34,19 @@ export default function thFr(result:ExamResultInterface, term:TermInterface ) {
 
           <div  style={{
                     position: 'absolute', 
-                    top: '42%',
-                    left: '1%',
-                    paddingLeft:'10%',
+                    top: '40%',
+                    paddingLeft:'8%',
                     paddingRight:'10%',
-                    textAlign:'left',
-                    fontSize: '22px',
-                    fontWeight: 'normal',
-                    display: 'flex',
-                    justifyContent: 'center'
+                    transform: 'translate(-50%, -50%)',
+                    // textAlign:'center',
+                    lineHeight:'40px'
                 }}
                 >
-            <div className="d">
-                <h2 style={{
-                        fontWeight: 'normal'
-                    }}>
-                    Je soussignée Mme, <span style={{ fontWeight: 'bolder', fontSize: '40px', color: '#000065', fontFamily: 'Bradley Hand ITC', marginLeft: '30px'}}>DASSI Armande</span>
-                </h2>
-                <h2 style={{
-                        fontWeight: 'normal'
-                    }}>
-                    Directrice du Groupe Scolaire Bilingue Privé Laïc La Semence atteste que l'eleve <br />
-                    <div style={{ fontWeight: 'bolder', fontSize: '60px', color: '#000065', fontFamily: 'Bradley Hand ITC', textAlign: 'center'}}>{result.student.name}</div>
-                    a achevé avec succès le cycle primaire au cours de cette année scolaire.
-                    En foi de quoi la présente ATTESTATION lui a été décernée pour servir et valoir ce que de droit.
-
-                </h2>
-            </div>
+            <h2 style={{fontSize}}>Je soussignée, Mme <b style={{color:'#020066', fontWeight: 'bolder', fontSize: fontSizeName}}>DASSI Armande</b></h2>
+            <h2  style={{fontSize}}>
+                Directrice du Groupe Scolaire Bilingue Privé Laïc La Semence atteste que :
+            </h2>
+            <h2  style={{fontSize, lineHeight:'45px'}}>L'élève <b style={{color:'#020066', fontWeight:900, fontSize: fontSizeName}}>{result.student.name}</b> de la classe <b style={{color:'#020066',fontWeight:900, fontSize: fontSizeName}}>{term.class?.name} </b> a mérité d'être inscrit au tableau d'honneur pour sa conduite et son travail pendant le <b style={{color:'#020066',fontWeight:900, fontSize: fontSizeName}}> {term.name} </b>   avec une moyenne de <b style={{color:'#020066',fontWeight:900, fontSize: fontSizeName}}> {average} / 20 </b> </h2>
           </div>
         </div>
     )

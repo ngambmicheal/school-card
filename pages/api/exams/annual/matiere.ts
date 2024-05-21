@@ -35,8 +35,10 @@ export default async function handler(
 
   const term: AnnualExamInterface = await annualExamSchema
     .findOne({ _id: annualExam_id })
-    .populate({ path: "class", model: classeSchema });
-  const exams = await examSchema.find({ _id: { $in: term.terms } });
+    .populate({ path: "class", model: classeSchema })
+    .populate({ path: "terms", model: termSchema, populate: { path: "exams" , model: examSchema}});
+  const exams = term.terms;
+
   const totalResults = await (
     await examResultSchema
       .find({ annualExam_id })

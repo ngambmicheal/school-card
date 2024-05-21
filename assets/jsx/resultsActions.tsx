@@ -87,7 +87,7 @@ const getTotal = (result:any) => {
             sum+=getFloat(result[el]??0);
         }
     }
-    return sum; 
+    return getFloat(sum); 
 }
 
 const getTotalExam = (result:any) => {
@@ -97,7 +97,7 @@ const getTotalExam = (result:any) => {
             sum+=getFloat(result[el]??0);
         }
     }
-    return sum; 
+    return getFloat(sum); 
 }
 
 
@@ -144,12 +144,12 @@ export default function resultsActions(competences:CompetenceInterface[], result
     </tr>
 </table>
 
-<div className='center' style={{fontSize:'21px', margin:'20px'}} >
-    BULLETIN D'EVALUATION : {results.exam_id?.name} 2022/2023
+<div className='center' style={{fontSize:'20px', margin:'20px'}} >
+    BULLETIN D'EVALUATION : {results.exam_id?.name} 2023/2024
 </div>
 
 <div>
-<table className='table1' style={{fontSize:'21px'}} >
+<table className='table1' style={{fontSize:'20px'}} >
  <thead>
      <tr>
          <th colSpan={2}>NOMS ET PRENOMS</th>

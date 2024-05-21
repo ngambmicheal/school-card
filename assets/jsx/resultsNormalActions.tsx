@@ -67,7 +67,7 @@ const getTotal = (result:any) => {
             sum+=getFloat(result[el]??0);
         }
     }
-    return sum; 
+    return getFloat(sum); 
 }
 
 const getTotalExam = (result:any) => {
@@ -77,7 +77,7 @@ const getTotalExam = (result:any) => {
             sum+=getFloat(result[el]??0);
         }
     }
-    return sum; 
+    return getFloat(sum); 
 }
 
 
@@ -113,7 +113,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
 </table>
 
 <div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
-    REPORT CARD : {results.exam_id?.name} 2022/2023
+    REPORT CARD : {results.exam_id?.name} 2023/2024
 </div>
 
 <div>
@@ -141,7 +141,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
 </table>
 </div>
 
-            <table className='table1' style={{fontSize:'22px'}}>
+            <table className='table1' style={{fontSize:'20px'}}>
                 <thead>
                 <tr>
                     <th  colSpan={2}>

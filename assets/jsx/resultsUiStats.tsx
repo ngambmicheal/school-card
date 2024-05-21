@@ -16,7 +16,7 @@ export const getTotalPoints = (exam:ExamInterface) => {
         }
     }
   
-    return sum;
+    return getFloat(sum);
 }
 
 export const getTotal = (result:ExamResultInterface) => {
@@ -26,7 +26,7 @@ export const getTotal = (result:ExamResultInterface) => {
             sum+=getFloat(result[el]??0);
         }
     }
-   return sum; 
+   return getFloat(sum); 
 }
 
 export const getTotals = (subject:SubjectInterface, result:ExamResultInterface) => {
@@ -34,7 +34,7 @@ export const getTotals = (subject:SubjectInterface, result:ExamResultInterface) 
             subject.courses?.map(cc => {
                 total+=getFloat(result[`subject_${cc._id}`] ?? 0); 
             })
-    return total; 
+    return getFloat(total); 
 }
 
 export const displayNameFn = (school?:SchoolInterface) =>{

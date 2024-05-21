@@ -12,29 +12,27 @@ import ExamResultInterface from "../../../models/examResult";
 import TermInterface from "../../../models/terms";
 import { toast } from "@chakra-ui/toast";
 import AnnualEInterface from "../../../models/annualExam";
-import ExamInterface from "../../../models/exam";
-import { addNumbers } from "../../../utils/actions";
 
-export const getSubjectTotal = (result:ExamResultInterface|any) => {
-    let sum = 0; 
-    for(const el in result){
-        if(el.includes('subject_')){
-            sum= addNumbers(sum,result[el]);
-        }
+export const getSubjectTotal = (result: ExamResultInterface | any) => {
+  let sum = 0;
+  for (const el in result) {
+    if (el.includes("subject_")) {
+      sum +=  parseFloat(parseFloat(result[el]).toFixed(2));
     }
   }
-  return sum;
+  return parseFloat(sum.toFixed(2));
 };
 
 export default function termDetails() {
   const [term, setTerm] = useState<TermInterface>();
-  const [exam, setExam] = useState<ExamInterface>();
   const [annualExam, setAnnualE] = useState<AnnualEInterface>();
   const [courses, setCourses] = useState<CourseInterface[]>([]);
   const [subjects, setSubjects] = useState<SubjectInterface[]>([]);
   const [students, setStudents] = useState<StudentInterface[]>([]);
   const [results, setResults] = useState<any>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const [exam, setExam] = useState<any>({});
 
   const [points, setPoints] = useState(0);
   const [ImportIsOpen, setImportIsOpen] = useState(false);
@@ -45,9 +43,9 @@ export default function termDetails() {
   useEffect(() => {
     if (termId) {
       api.getAnnualExam(termId).then(({ data: { data } }: any) => {
-        setExam(data.terms[0].exams[0])
         setAnnualE(data);
         setTerm(data.terms[0]);
+        setExam(data.terms[0].exams[0]);
       });
 
       api.getAnnualExamResult(termId).then(({ data: { data } }: any) => {
@@ -70,39 +68,39 @@ export default function termDetails() {
   }, [term]);
 
   useEffect(() => {
-    if (results && term) {
+    if (results && annualExam) {
       getTotalPoints();
     }
   }, [results]);
 
   const printResults = () => {
     window.open(
-      `/api/terms/annual/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      `/api/exams/annual/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
       "_blank"
     );
   };
 
   const printStats = () => {
     window.open(
-      `/api/terms/annual/${annualExam?.report_type?.toLocaleLowerCase()}-stats?annualExam_id=${termId}`,
+      `/api/exams/annual/${annualExam?.report_type?.toLocaleLowerCase()}-stats?annualExam_id=${termId}`,
       "_blank"
     );
   };
 
   useEffect(() => {
-    if (term?._id) {
-      // api.updateTerm(term._id, term).then(({data:{data}} : any) => {
+    if (annualExam?._id) {
+      // api.updateAnnualExam(annualExam._id, annualExam).then(({data:{data}} : any) => {
       //     //setTerm(data)
       // })
     }
-  }, [term]);
+  }, [annualExam]);
 
   const handleChange = (e) => {
     const key = e.target.name;
     const value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
 
-    setTerm((inputData) => ({
+    setAnnualE((inputData) => ({
       ...inputData,
       [key]: value,
     }));
@@ -150,18 +148,32 @@ export default function termDetails() {
 
   const getTotalPoints = () => {
     let sum = 0;
-    console.log(sum);
-    for (const el in term) {
+    for (const el in exam) {
       if (el.includes("point_")) {
-        sum= addNumbers(sum, exam[el]??0)
+        sum += parseFloat(parseFloat(exam[el]).toFixed(2)) ?? 0;
+        console.log(exam[el]);
       }
     }
     setPoints((s) => sum);
   };
 
-    const printTD = () => {
-        window.open(`/api/annualExams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`, '_blank')
-    }
+  const getRank = () => {
+    api.calculateAnnualExam(termId);
+  };
+
+  const printTD = () => {
+    window.open(
+      `/api/annualExams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      "_blank"
+    );
+  };
+
+  const printAttestation = () => {
+    window.open(
+      `/api/annualExams/attestation/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      "_blank"
+    );
+  };
 
   return (
     <>
@@ -190,6 +202,11 @@ export default function termDetails() {
         Imprimer Tableau D
       </button>
 
+      <button className="mx-3 btn btn-dark" onClick={() => printAttestation()}>
+        {" "}
+        Imprimer Attestation
+      </button>
+
       <table className="table table-hover table-striped table-bordered my-3 ">
         <thead>
           <tr>
@@ -204,7 +221,7 @@ export default function termDetails() {
                       type="number"
                       name={`point_${s._id}`}
                       style={{ width: "50px" }}
-                      value={term[`point_${s._id}`]}
+                      value={exam[`point_${s._id}`]}
                       onChange={handleChange}
                     />{" "}
                     {s.name}{" "}

@@ -114,7 +114,7 @@ export default function resultsNurseryActions(competences:CompetenceInterface[],
 </table>
 
 <div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
-    REPORT CARD : {results.exam_id?.name} 2022/2023
+    REPORT CARD : {results.exam_id?.name} 2023/2024
 </div>
 
 <div>

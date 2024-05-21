@@ -1,58 +1,47 @@
 
 import ExamResultInterface from "../../models/examResult";
 import TermInterface from "../../models/terms";
-import { priEn } from "../jsx/priEn";
+import { th_en, th_fr } from "../jsx/image";
 import { base64_encode } from "../jsx/resultsActions";
 import { getTotalExam } from "../jsx/resultsDynamicActions";
 import { getTotal } from "../jsx/resultsUiStats";
 
 
-export default function thEn(result:ExamResultInterface, term:TermInterface ) {
+export default function thEn(result:ExamResultInterface, term:TermInterface, is_annual = false) {
 
     const totalMarks = getTotal(result)
-    const totalPoints = term.exams?.length ? getTotalExam(term.exams[0]) : 0;
+    const totalPoints =  is_annual ? getTotalExam(term.terms[0].exams[0]) :   term.exams?.length ? getTotalExam(term.exams[0]) : 0;
     const average = ((totalMarks / totalPoints) * 20).toFixed(2) 
+
+    const fontSize = term.class?.school?.td_font_size ?? `35px`;
+    const fontSizeName =  term.class?.school?.td_font_size_name ?? `40px`;
 
     return (
         <div style={{  
-            backgroundImage: "url(" + priEn + ")",
-            // backgroundImage: "url("+ thBg + ")",
+            backgroundImage: "url('data:image/png;base64," + th_en + "')",
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             minHeight:'100%',
             position:'relative'
           }}>
+          
 
           <div  style={{
                     position: 'absolute', 
-                    top: '45%',
-                    left: '1%',
-                    paddingLeft:'10%',
+                    top: '40%',
+                    paddingLeft:'8%',
                     paddingRight:'10%',
-                    textAlign:'left',
-                    fontSize: '22px',
-                    fontWeight: 'normal',
-                    display: 'flex',
-                    justifyContent: 'center'
+                    transform: 'translate(-50%, -50%)',
+                    // textAlign:'center',
+                    lineHeight:'40px'
                 }}
                 >
-            <div className="d">
-                <h2 style={{
-                        fontWeight: 'normal'
-                    }}>
-                    I, the undersigned Mrs, <span style={{ fontWeight: 'bolder', fontSize: '40px', color: '#000065', fontFamily: 'Bradley Hand ITC', marginLeft: '30px'}}>DASSI Armande</span>
-                </h2>
-                <h2 style={{
-                        fontWeight: 'normal'
-                    }}>
-                    Headmistress    of    GSBPL   La   SEMENCE    attests   that   the   pupil <br />
-                    <div style={{ fontWeight: 'bolder', fontSize: '60px', color: '#000065', fontFamily: 'Bradley Hand ITC', textAlign: 'center'}}>{result.student.name}</div>
-                    has successfully completed the primary cycle this school year.
-                    In witness whereof this Attestation has been awarded to serve and assert the rights where necessary.
-
-                </h2>
-            </div>
+            <h2 style={{fontSize}}>I, the undersigned Mrs, <b style={{color:'#020066', fontWeight: 'bolder', fontSize:fontSizeName}}>DASSI Armande</b></h2>
+            <h2  style={{fontSize}}>
+                 Headmistress    of    GSBPL   La   SEMENCE    attests   that   the   pupil :
+            </h2>
+            <h2  style={{fontSize, lineHeight:'50px'}}>The pupil <b style={{color:'#020066', fontWeight:900, fontSize:fontSizeName}}>{result.student.name}</b> of the class  <b style={{color:'#020066',fontWeight:900,fontSize:fontSizeName,}}>{term.class?.name} </b> deserved to be inscribed on the honor roll for his conduct and work during the <b style={{color:'#020066',fontWeight:900, fontSize:fontSizeName,}}> {term.name} </b>   with an average of <b style={{color:'#020066',fontWeight:900, fontSize:fontSizeName,}}> {average} / 20 </b> </h2>
           </div>
         </div>
     )

@@ -9,14 +9,14 @@ import ExamResultInterface from "../../../models/examResult";
 import ExamInterface from "../../../models/terms";
 import { toast } from "@chakra-ui/toast";
 import AnnualEInterface from "../../../models/annualExam";
+import { getFloat } from "../../../utils/calc";
 import { addNumbers } from "../../../utils/actions";
 
-export const getSubjectTotal = (result:ExamResultInterface|any) => {
-    let sum = 0; 
-    for(const el in result){
-        if(el.includes('subject_')){
-            sum = addNumbers(sum, result[el]);
-        }
+export const getSubjectTotal = (result: ExamResultInterface | any) => {
+  let sum = 0;
+  for (const el in result) {
+    if (el.includes("subject_")) {
+      sum = addNumbers(sum, result[el]);
     }
   }
   return sum;
@@ -159,7 +159,14 @@ export default function termDetails() {
 
   const printTD = () => {
     window.open(
-      `/api/terms/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      `/api/annualExams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
+      "_blank"
+    );
+  };
+
+  const printAttestation = () => {
+    window.open(
+      `/api/annualExams/attestation/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
       "_blank"
     );
   };
@@ -189,6 +196,11 @@ export default function termDetails() {
       <button className="mx-3 btn btn-dark" onClick={() => printTD()}>
         {" "}
         Imprimer Tableau D
+      </button>
+
+      <button className="mx-3 btn btn-dark" onClick={() => printAttestation()}>
+        {" "}
+        Imprimer Attestation
       </button>
 
       <table className="table table-hover table-striped table-bordered my-3 ">

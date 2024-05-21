@@ -4,14 +4,16 @@ import ExamInterface from "../../models/exam";
 import { useState } from "react";
 import SubjectInterface from "../../models/subject";
 import { getGeneralAverage } from "./resultsActions";
-import { addNumbers } from "../../utils/actions";
+import { getFloat } from "../../utils/calc";
+import SchoolInterface from "../../models/school";
+import { displayNameFn } from "./resultsUiStats";
 
 export const getTotalPoints = (exam:ExamInterface) => { 
     let sum = 0; 
     console.log(sum)
     for(const el in exam){
         if(el.includes('point_')){
-            sum = addNumbers(sum, exam[el]??0)
+            sum+=getFloat(exam[el])??0
         }
     }
   
@@ -22,18 +24,18 @@ export const getTotal = (result:ExamResultInterface) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum = addNumbers(sum, result[el]??0);
+            sum+=getFloat(result[el]??0);
         }
     }
-   return sum; 
+   return getFloat(sum); 
 }
 
 export const getTotals = (subject:SubjectInterface, result:ExamResultInterface) => {
     let total = 0; 
             subject.courses?.map(cc => {
-                total = addNumbers(total, result[`subject_${cc._id}`] ?? 0); 
+                total+=getFloat(result[`subject_${cc._id}`] ?? 0); 
             })
-    return total; 
+    return getFloat(total); 
 }
 
 export const getAdmis = (total:number, results:ExamResultInterface[] ) => {
@@ -51,7 +53,7 @@ export default function resultsNormalUiStats(exam:ExamInterface, subjects:Subjec
     const points = getTotalPoints(exam);
     const statsResults = statResults.filter(s => getTotal(s) >0 );
     const stat = getAdmis(points, statsResults);
-    // const displayName = displayNameFn(school)
+    const displayName = displayNameFn(school)
 
     return (
         <>

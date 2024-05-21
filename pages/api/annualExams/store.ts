@@ -27,4 +27,9 @@ export default function handler(
     .catch((e) => {
       res.status(400).json({ message: e.message, success: false });
     });
+
+
+  const [term] = annualExamQuery.terms;
+
+  
 }
