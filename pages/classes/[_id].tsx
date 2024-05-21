@@ -491,7 +491,7 @@ export default function ClasseDetails() {
           class_id={classeId}
         />
       )}
-      {classeId && (
+      {classeId && classe &&  (
         <AnnualExamModal
         report_type={classe.section?.report_type}
           terms={terms}
