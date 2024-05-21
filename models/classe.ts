@@ -8,6 +8,7 @@ export default interface ClasseInterface {
     name:string,
     school?:SchoolInterface & string,
     section?:SectionInterface & string,
+    promoted?: string
     teacher:string;
     teacher_id:string;
 }

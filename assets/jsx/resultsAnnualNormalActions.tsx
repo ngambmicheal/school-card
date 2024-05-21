@@ -8,7 +8,7 @@ import { getGeneralAverage } from "./resultsActions";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
 import AnnualExamInterface from "../../models/annualExam";
-import { getFloat } from "../../utils/calc";
+import { addNumbers } from "../../utils/actions";
 
 let comT:string[] = [];
 
@@ -67,7 +67,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=getFloat(result[el]??0);
+            sum=addNumbers(sum,result[el]??0);
         }
     }
     return sum; 
@@ -77,7 +77,7 @@ const getTotalExam = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('point_')){
-            sum+=getFloat(result[el]??0);
+            sum= addNumbers(sum,result[el]??0);
         }
     }
     return sum; 
@@ -89,12 +89,13 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
     comT = [];
 
     const examWithPoint = exams[0].exams as ExamInterface[];
-    const totalMarks = getFloat(getTotal(results))
+    const totalMarks = getTotal(results)
     const totalPoints = getTotalExam(examWithPoint[0])
     const average = (totalMarks / totalPoints) * 20;
 
     const total1Marks = examResults.length ? getTotal(examResults[0]) : 0;
     const total2Marks = examResults.length ? getTotal(examResults[1]) : 0;
+    const total3Marks = examResults.length> 2 ? getTotal(examResults[2]) : 0;
 
     return (
         <>
@@ -120,7 +121,7 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
 </table>
 
 <div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
-    REPORT CARD : {term?.name} 2021/2022
+    REPORT CARD : {term?.name} 2022/2023
 </div>
 
 <div>
@@ -159,12 +160,12 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
                     </th>
                     {exams.map((exam, index) => {
                         return <th>
-                        {exam.name.substr(0,4)}
+                        {exam.slug}
                         </th>
                         })
                     }
                     <th >
-                        TERM1
+                        ANNUAL
                     </th>
                     <th colSpan={2}>
                         APPRECIATION CODE
@@ -209,7 +210,7 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
         <tr>
             <td>Average</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td rowSpan={5}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td rowSpan={6}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
             <td> Conduct Warning</td>
             <td  style={{fontSize:'15px'}}>  <input type='checkbox' /> Yes <input type='checkbox' /> No  </td>
         </tr>
@@ -237,12 +238,19 @@ export default function resultsAnnualNormalActions(subjects:SubjectInterface[], 
             <td> </td>
             <td colSpan={2}> </td>
         </tr> */}
-           {exams.length>1 && <tr>
-            <td> {exams[0].name.substr(0,4)} Average </td>
+           {exams.length>1 && <><tr>
+            <td> {exams[0].slug} Average </td>
             <td>  { ((total1Marks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td> {exams[1].name.substr(0,4)} Average </td>
+            <td> {exams[1].slug} Average </td>
             <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
         </tr>
+        <tr>
+            <td> {exams[2].slug} Average</td>
+            <td>  { ((total3Marks / totalPoints) * 20).toFixed(2) } /20 </td>
+            <td>{average > 10 ? 'Admitted in ' : 'Repeating '}</td>
+            <td>{average > 10 ? term.class?.promoted : term.class?.name}</td>
+        </tr>
+        </>
         }
         <tr>
             <td colSpan={2}> Teacher's Visa</td>

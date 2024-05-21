@@ -7,8 +7,10 @@ export default interface ExamResultInterface{
     name: string,
     student : string & StudentInterface,
     exam_id: string ,
-    number:string
-
+    number:string,
+    total:any,
+    rank:any,
+    average:any
 }
 
 

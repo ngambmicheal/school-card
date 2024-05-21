@@ -279,6 +279,8 @@ export class Api {
   getTerm(term_id: string) {
     return axios.get(`/api/terms/${term_id}`);
   }
+  updateTerms(data:any) { return axios.post('/api/terms/update', data) }
+
 
   //annualExams
   getAnnualExams(classeId?: string) {

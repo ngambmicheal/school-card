@@ -2,7 +2,7 @@ import { useState } from "react";
 import ExamInterface from "../../../models/exam";
 import Modal from "react-modal";
 import { customStyles } from "../../../services/constants";
-import TermInterface from "../../../models/terms";
+import TermInterface, { reportType } from "../../../models/terms";
 import api from "../../../services/api";
 
 type CreateExamModalProps = {
@@ -70,6 +70,7 @@ type AnnualExamModalProps = {
   closeModal: () => void;
   save: (student: any) => void;
   terms: TermInterface[];
+  report_type:reportType | undefined
 };
 export function AnnualExamModal({
   modalIsOpen,
@@ -77,6 +78,7 @@ export function AnnualExamModal({
   save,
   class_id,
   terms,
+  report_type
 }: AnnualExamModalProps) {
   const [termSelected, setTermSelected] = useState<string[]>([]);
   const [name, setName] = useState("");
@@ -99,8 +101,6 @@ export function AnnualExamModal({
   }
 
   const generate = () => {
-    const report_type: string =
-      terms[0].class?.section?.report_type || "Competence";
     api
       .saveAnnualExam({
         report_type,
@@ -168,6 +168,7 @@ export function AnnualExamModal({
   );
 }
 
-export default function () {
-  return "";
+
+export default function NothingName () {
+  return '';
 }

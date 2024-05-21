@@ -74,6 +74,7 @@ export default function Classes() {
             <th>{t("title.school")}</th>
             <th>{t("title.section")}</th>
             <th>{t("title.teacher")}</th>
+            <th>Promoted To</th>
             <th>{t("title.action")}</th>
           </tr>
         </thead>
@@ -117,6 +118,7 @@ export function ClasseRow({
   isAdmin
 }: ClasseRowInterface) {
   const [teacher, setTeacher] = useState(classe.teacher_id);
+  const [promoted, setPromoted] = useState(classe.promoted);
 
   const updateTeacher = (event) => {
     const tt = event.target.value;
@@ -126,6 +128,11 @@ export function ClasseRow({
       api.updateClasse({ _id: classe._id, teacher_id: tt, teacher: tea?.name });
     }
   };
+  const updatePromoted = (event) => {
+    const tt = event.target.value; 
+    setPromoted(tt);
+    api.updateClasse({_id:classe._id, promoted:tt});
+  }
   return (
     <tr key={classe._id}>
       <td>{classe.name}</td>
@@ -144,6 +151,7 @@ export function ClasseRow({
           ))}
         </select>
       </td>
+      <td><input  value={promoted} onChange={updatePromoted} /> </td>
       <td>
         {session &&  (
           <>

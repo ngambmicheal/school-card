@@ -93,6 +93,11 @@ export default function ClasseDetails() {
 
   const saveAnnualExam = () => {};
 
+    const handleTermChange = (term:TermInterface, value:string ) => {
+      term.slug = value;
+      api.updateTerms(term)
+    }
+
   const closeImportModal = () => {
     setImportIsOpen((s) => false);
   };
@@ -488,6 +493,7 @@ export default function ClasseDetails() {
       )}
       {classeId && (
         <AnnualExamModal
+        report_type={classe.section?.report_type}
           terms={terms}
           modalIsOpen={annualExamIsOpen}
           closeModal={closeAnnualExamModal}

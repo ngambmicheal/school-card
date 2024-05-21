@@ -1,22 +1,25 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import * as pdf from "pdf-creator-node";
-import fs from "fs";
-import ReactDOMServer from "react-dom/server";
-import resultsUiStats from "../../../../assets/jsx/resultsUiStats";
-import { examSchema } from "../../../../models/exam";
-import { examResultSchema } from "../../../../models/examResult";
-import { schoolSchema } from "../../../../models/school";
-import { competenceSchema } from "../../../../models/competence";
-import { studentSchema } from "../../../../models/student";
-import { subjectSchema } from "../../../../models/subject";
-import { courseSchema } from "../../../../models/course";
-import { classeSchema } from "../../../../models/classe";
-import resultsNormalUiStats from "../../../../assets/jsx/resultsNormalUiStats";
-import { sectionSchema } from "../../../../models/section";
-import { termSchema } from "../../../../models/terms";
-import { replaceAll } from "../../../../services/utils";
+import * as  pdf from 'pdf-creator-node';
+import fs from 'fs'
+import ReactDOMServer from 'react-dom/server';
+import resultsUiStats from '../../../../assets/jsx/resultsUiStats';
+import { examSchema } from '../../../../models/exam';
+import { examResultSchema } from '../../../../models/examResult';
+import { schoolSchema } from '../../../../models/school';
+import { competenceSchema } from '../../../../models/competence';
+import { studentSchema } from '../../../../models/student';
+import { subjectSchema } from '../../../../models/subject';
+import { courseSchema } from '../../../../models/course';
+import { classeSchema } from '../../../../models/classe';
+import resultsNormalUiStats from '../../../../assets/jsx/resultsNormalUiStats';
+import { sectionSchema } from '../../../../models/section';
+import { termSchema } from '../../../../models/terms';
+import { replaceAll } from '../../../../services/utils';
+import AnnualExamInterface, { annualExamSchema } from '../../../../models/annualExam';
+import { bgImgStyle } from "../../../../utils/styles";
+  
 
 export default async function handler(
   req: NextApiRequest,

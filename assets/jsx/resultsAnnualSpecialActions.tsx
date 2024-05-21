@@ -6,7 +6,7 @@ import ExamResultInterface from "../../models/examResult";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
 import AnnualExamInterface from "../../models/annualExam";
-import { getFloat } from "../../utils/calc";
+import { addNumbers } from "../../utils/actions";
 
 let comT:string[] = [];
 
@@ -81,7 +81,7 @@ const getTotal = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('subject_')){
-            sum+=getFloat(result[el]??0);
+            sum = addNumbers(sum, result[el]??0);
         }
     }
     return sum; 
@@ -91,7 +91,7 @@ const getTotalExam = (result:any) => {
     let sum = 0; 
     for(const el in result){
         if(el.includes('point_')){
-            sum+=getFloat(result[el]??0);
+            sum = addNumbers(sum, result[el]??0);
         }
     }
     return sum; 
@@ -103,12 +103,13 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
     comT = [];
 
     const examWithPoint = exams[0].exams as ExamInterface[];
-    const totalMarks = getFloat(getTotal(results))
+    const totalMarks = getTotal(results)
     const totalPoints = getTotalExam(examWithPoint[0])
     const average = (totalMarks / totalPoints) * 20;
 
     const total1Marks = examResults.length ? getTotal(examResults[0]) : 0;
     const total2Marks = examResults.length ? getTotal(examResults[1]) : 0;
+    const total3Marks = examResults.length >2 ? getTotal(examResults[2]) : 0; 
 
     return (
         <>
@@ -134,7 +135,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
 </table>
 
 <div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
-    BULLETIN D'EVALUATION : {term?.name} 2021/2022
+    BULLETIN D'EVALUATION : {term?.name} 2022/2023
 </div>
 
 <div>
@@ -192,7 +193,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
                             <> 
                                     <tr>
                                         <td colSpan={2}> {subject.name} </td>
-                                        <td>{exams[0][`point_${subject._id}`]}</td>
+                                        <td>{examWithPoint[0][`point_${subject._id}`]}</td>
                                         {examResults.map((result, index) => {
                                             return <>
                                                         <td>{result[`subject_${subject._id}`] ?? 0}</td> 
@@ -200,7 +201,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
                                             })
                                         }
                                         <td>{results[`subject_${subject._id}`] ?? 0}</td> 
-                                        <td>{getAppreciation((results[`subject_${subject._id}`] ?? 0), exams[0][`point_${subject._id}`], false, subject.name)}</td>
+                                        <td>{getAppreciation((results[`subject_${subject._id}`] ?? 0), examWithPoint[0][`point_${subject._id}`], false, subject.name)}</td>
                                         </tr>
                                     </>
                                 )
@@ -223,7 +224,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
         <tr>
             <td>Moyenne</td>
             <td> { ((totalMarks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td rowSpan={5}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
+            <td rowSpan={6}>  {getAppreciation(Math.round((totalMarks / totalPoints)*20),20)} </td>
             <td> Avertissement Conduite</td>
             <td  style={{fontSize:'15px'}}>  <input type='checkbox' /> Oui <input type='checkbox' /> Non  </td>
         </tr>
@@ -251,12 +252,19 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
             <td> </td>
             <td colSpan={2}> </td>
         </tr> */}
-           {exams.length>1 && <tr>
-            <td> Moyenne de {exams[0].name.substr(0,4)}</td>
-            <td>  { ((total1Marks / totalPoints) * 20).toFixed(2) } /20 </td>
-            <td> Moyenne de {exams[1].name.substr(0,4)}</td>
-            <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
-        </tr>
+           {exams.length>1 && <><tr>
+                <td> Moyenne du {exams[0].slug}</td>
+                <td>  { ((total1Marks / totalPoints) * 20).toFixed(2) } /20 </td>
+                <td> Moyenne du {exams[1].slug}</td>
+                <td> { ((total2Marks / totalPoints) * 20).toFixed(2) } /20 </td>
+            </tr>
+            <tr>
+                <td> Moyenne du {exams[2].slug}</td>
+                <td>  { ((total3Marks / totalPoints) * 20).toFixed(2) } /20 </td>
+                <td>{average > 10 ? 'Admis en classe de' : 'Redouble la classe de'}</td>
+                <td>{average > 10 ? term.class?.promoted : term.class?.name}</td>
+            </tr>
+            </>
         }
         <tr>
             <td colSpan={2}> Observation de l'enseignant(e)</td>
@@ -272,6 +280,9 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
                         return <li>{s}</li>
                     }) : <li style={{fontStyle:'italic', fontSize:'18px', marginBottom:'30px'}}>RAS</li>}
                 </ul>
+
+                <br />
+                Redouble le CM2 en cas d'échec du CEP
             </td>
             <td></td>
             <td colSpan={2}></td>

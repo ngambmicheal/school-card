@@ -113,7 +113,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
 </table>
 
 <div className='center' style={{fontSize:'25px', margin:'30px 0'}} >
-    REPORT CARD : {results.exam_id?.name} 2021/2022
+    REPORT CARD : {results.exam_id?.name} 2022/2023
 </div>
 
 <div>
@@ -141,7 +141,7 @@ export default function resultsNormalActions(subjects:SubjectInterface[], result
 </table>
 </div>
 
-            <table className='table1' style={{fontSize:'20px'}}>
+            <table className='table1' style={{fontSize:'22px'}}>
                 <thead>
                 <tr>
                     <th  colSpan={2}>

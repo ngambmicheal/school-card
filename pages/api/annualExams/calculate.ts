@@ -1,25 +1,21 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
-import TermInterface, { termSchema } from "../../../models/terms";
-import ExamResultInterface, {
-  examResultSchema,
-} from "../../../models/examResult";
-import { examSchema } from "../../../models/exam";
-import CompetenceInterface, {
-  competenceSchema,
-} from "../../../models/competence";
-import { schoolSchema } from "../../../models/school";
-import SubjectInterface, { subjectSchema } from "../../../models/subject";
-import CourseInterface, { courseSchema } from "../../../models/course";
-import { sectionSchema } from "../../../models/section";
-import { classeSchema } from "../../../models/classe";
-import { studentSchema } from "../../../models/student";
-import { ExamResult } from "../../../assets/jsx/resultsUiStats";
-import { getSubjectTotal } from "../../exams/[_id]";
-import AnnualExamInterface, {
-  annualExamSchema,
-} from "../../../models/annualExam";
-import { getFloat } from "../../../utils/calc";
+import type { NextApiRequest, NextApiResponse } from 'next'
+import TermInterface, { termSchema } from '../../../models/terms';
+import ExamResultInterface, { examResultSchema } from '../../../models/examResult';
+import { examSchema } from '../../../models/exam';
+import CompetenceInterface, { competenceSchema } from '../../../models/competence';
+import { schoolSchema } from '../../../models/school';
+import SubjectInterface, { subjectSchema } from '../../../models/subject';
+import CourseInterface, { courseSchema } from '../../../models/course';
+import { sectionSchema } from '../../../models/section';
+import { classeSchema } from '../../../models/classe';
+import { studentSchema } from '../../../models/student';
+import { ExamResult } from '../../../assets/jsx/resultsUiStats';
+import { getSubjectTotal } from '../../exams/[_id]';
+import AnnualExamInterface, { annualExamSchema } from '../../../models/annualExam';
+import { addNumbers, divideNumber } from '../../../utils/actions';
+
+
 
 export default async function handler(
   req: NextApiRequest,
@@ -245,7 +241,7 @@ export function getSubjectSum(
 ) {
   let total = 0;
   results.map((r: any) => {
-    total += getFloat(r[`${type}_${subject_id}`] ?? 0);
+    total= addNumbers(total,r[`${type}_${subject_id}`]??0)
   });
 
   return results.length ? (total / results.length).toFixed(2) : 0;

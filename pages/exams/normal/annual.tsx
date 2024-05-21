@@ -12,12 +12,15 @@ import ExamResultInterface from "../../../models/examResult";
 import TermInterface from "../../../models/terms";
 import { toast } from "@chakra-ui/toast";
 import AnnualEInterface from "../../../models/annualExam";
+import ExamInterface from "../../../models/exam";
+import { addNumbers } from "../../../utils/actions";
 
-export const getSubjectTotal = (result: ExamResultInterface | any) => {
-  let sum = 0;
-  for (const el in result) {
-    if (el.includes("subject_")) {
-      sum += parseFloat(parseFloat(result[el]).toFixed(2));
+export const getSubjectTotal = (result:ExamResultInterface|any) => {
+    let sum = 0; 
+    for(const el in result){
+        if(el.includes('subject_')){
+            sum= addNumbers(sum,result[el]);
+        }
     }
   }
   return sum;
@@ -25,6 +28,7 @@ export const getSubjectTotal = (result: ExamResultInterface | any) => {
 
 export default function termDetails() {
   const [term, setTerm] = useState<TermInterface>();
+  const [exam, setExam] = useState<ExamInterface>();
   const [annualExam, setAnnualE] = useState<AnnualEInterface>();
   const [courses, setCourses] = useState<CourseInterface[]>([]);
   const [subjects, setSubjects] = useState<SubjectInterface[]>([]);
@@ -41,6 +45,7 @@ export default function termDetails() {
   useEffect(() => {
     if (termId) {
       api.getAnnualExam(termId).then(({ data: { data } }: any) => {
+        setExam(data.terms[0].exams[0])
         setAnnualE(data);
         setTerm(data.terms[0]);
       });
@@ -148,23 +153,15 @@ export default function termDetails() {
     console.log(sum);
     for (const el in term) {
       if (el.includes("point_")) {
-        sum += parseFloat(parseFloat(term[el]).toFixed(2)) ?? 0;
-        console.log(term[el]);
+        sum= addNumbers(sum, exam[el]??0)
       }
     }
     setPoints((s) => sum);
   };
 
-  const getRank = () => {
-    api.calculateAnnualExam(termId);
-  };
-
-  const printTD = () => {
-    window.open(
-      `/api/terms/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`,
-      "_blank"
-    );
-  };
+    const printTD = () => {
+        window.open(`/api/annualExams/td/${annualExam?.report_type?.toLocaleLowerCase()}?annualExam_id=${termId}`, '_blank')
+    }
 
   return (
     <>
