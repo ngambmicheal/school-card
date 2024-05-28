@@ -212,7 +212,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
                              competence.subjects?.map((subject, subjectIndex) => {
 
                                 const to = getSubjectTotal(subject);
-                                const isExcluded = !excludedClass(results.exam_id.class_id?.name, subject._id);
+                                const isExcluded = !excludedClass(results.exam_id.class_id?.name, subject._id!);
                                  return (
                                      <> 
                                          {subject.courses?.map((course, courseIndex) => {

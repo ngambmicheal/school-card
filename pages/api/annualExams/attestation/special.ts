@@ -39,7 +39,7 @@ export default async function handler(
       .populate({ path: "terms", model: termSchema, populate: { path: "exams", model: examSchema } });
 
   const totalResults = await examResultSchema
-    .find({ annualExam_id, th: true })
+    .find({ annualExam_id })
     .populate({ path: "student", model: studentSchema });
 
   const zipName = `${replaceAll(" ", "_", term.class?.name)}_td__${term.name}`;

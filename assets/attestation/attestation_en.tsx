@@ -1,7 +1,7 @@
 
 import ExamResultInterface from "../../models/examResult";
 import TermInterface from "../../models/terms";
-import { th_en, th_fr } from "../jsx/image";
+import { attestation_en } from "../jsx/image";
 import { base64_encode } from "../jsx/resultsActions";
 import { getTotalExam } from "../jsx/resultsDynamicActions";
 import { getTotal } from "../jsx/resultsUiStats";
@@ -18,7 +18,7 @@ export default function attestationEn(result:ExamResultInterface, term:TermInter
 
     return (
         <div style={{  
-            backgroundImage: "url('data:image/png;base64," + th_en + "')",
+            backgroundImage: "url('data:image/png;base64," + attestation_en + "')",
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
