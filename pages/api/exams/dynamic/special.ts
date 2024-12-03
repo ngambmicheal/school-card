@@ -22,6 +22,8 @@ import { replaceAll } from "../../../../services/utils";
 import resultsDynamicNormalActions from "../../../../assets/jsx/resultsDynamicNormalActions";
 import TermInterface, { termSchema } from "../../../../models/terms";
 import resultsDynamicSpecialActions from "../../../../assets/jsx/resultsDynamicSpecialActions";
+import { bgImgStyle } from "../../../../utils/styles";
+
 
 export default async function handler(
   req: NextApiRequest,
