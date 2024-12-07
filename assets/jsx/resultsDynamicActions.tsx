@@ -185,13 +185,13 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 </table>
 </div>
 
- <table className='table1' >
+ <table className='table1' style={{fontSize:'20px'}}>
      <thead>
      <tr>
-         <th rowSpan={2} >
+         <th rowSpan={2}>
              COMPETENCES
          </th>
-         <th rowSpan={2} >
+         <th rowSpan={2}  >
              SOUS-COMPETENCES
          </th>
          <th colSpan={2}>

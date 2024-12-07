@@ -136,6 +136,7 @@ export default function resultsAnnualActions(competences:CompetenceInterface[], 
 
     return (
         <>
+    {zoomStyle}
     <div className="bg-logo"></div>
     <table className='table2' style={{fontSize:'14px'}}>
     <tr>

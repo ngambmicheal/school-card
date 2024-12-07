@@ -54,6 +54,7 @@ export default function resultsMatStats(exam:ExamInterface, competences:Competen
     const stat = getAdmis(points, statsResults);
     return (
         <>
+    {zoomStyle}
     <div className="bg-logo"></div>
             <div className='py-3'>
                 <h3>Classe : {exam?.class_id?.name} </h3>

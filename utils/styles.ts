@@ -16,6 +16,7 @@ export const bgImgStyle = `
     }
 
     .table1{
+        font-size:10px !important
     }
 
 `
