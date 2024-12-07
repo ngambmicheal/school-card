@@ -28,10 +28,12 @@ export default function Students() {
     });
   };
 
-  const saveStudent = (student: any) => {
+  const saveStudent = (student: any, file:any) => {
     api
-      .saveStudent(student)
-      .then(() => {
+      .saveStudent(student, file)
+      .then(async (response) => {
+        api.uploadFile(file, 'STUDENT', response.data.data._id);
+
         toast(successMessage("Student Created successfully!"));
         getStudents();
       })
@@ -55,6 +57,7 @@ export default function Students() {
             <th>Matricule</th>
             <th>Numéro de téléphone</th>
             <th>Email</th>
+            <th>Sex</th>
             <th>Classe</th>
             <th>Action</th>
           </tr>
@@ -67,6 +70,7 @@ export default function Students() {
                 <td>{student.matricule}</td>
                 <td>{student.phone}</td>
                 <td>{student.email}</td>
+                <td>{student.sex}</td>
                 <td>{student.class_id?.name} </td>
                 <td>
                   <Link href={`students/${student._id}`}>Voir</Link>

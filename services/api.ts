@@ -12,6 +12,7 @@ import StudentInterface from "../models/student";
 import SubjectInterface from "../models/subject";
 import TermInterface from "../models/terms";
 import UserInterface from "../models/user";
+import { fileTypeEnum } from "./constants";
 
 type ApiResponse<T> = AxiosResponse<{data:T, message:String}>
 
@@ -39,7 +40,7 @@ axios.interceptors.request.use(
 export class Api {
   schoolId = helperService.getSchoolId();
   //classes
-  getClasses() {
+  getClasses(): Promise<ApiResponse<ClasseInterface[]>> {
     return axios.get("/api/classes");
   }
   saveClasse(data: ClasseInterface) {
@@ -72,7 +73,7 @@ export class Api {
   deleteStudent(studentId: string) {
     return axios.post("/api/students/delete", { _id: studentId });
   }
-  saveStudent(data: StudentInterface) {
+  saveStudent(data: StudentInterface, file: any):Promise<StudentInterface> {
     return axios.post("/api/students/store", data);
   }
   updateStudent(data: StudentInterface) {
@@ -232,6 +233,12 @@ export class Api {
   saveExam(data: ExamInterface) {
     return axios.post("/api/exams/store", data);
   }
+  saveExamForClasses(exam:ExamInterface, classes:string[]) {
+    return axios.post('/api/exams/store-for-classes', {
+      exam, 
+      classes
+    })
+  }
   updateExam(id: any, data: any) {
     return axios.post("/api/exams/update", data);
   }
@@ -350,6 +357,20 @@ export class Api {
 
   syncSchoolSession(){
     return axios.post("/api/schools/sync-sessions")
+  }
+
+
+  /** Services */
+  uploadFile(file: any, path: fileTypeEnum, filename: string): Promise<ApiResponse<FileResponse>> {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("fileType", path);
+    formData.append("filename", filename);
+    return axios.post("/api/services/upload-file", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   }
 }
 

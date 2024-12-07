@@ -6,6 +6,8 @@ import SessionInterface from "../../../models/session";
 import api from "../../../services/api";
 import { customStyles } from "../../../services/constants";
 import { errorMessage, successMessage } from "../../../utils/messages";
+import ExamInterface from "../../../models/exam";
+import ClasseInterface from "../../../models/classe";
 
 type InfoSettingsParams = {
   school: SchoolInterface;
@@ -18,26 +20,42 @@ export default function SchoolSettingInfo({
 }: InfoSettingsParams) {
   const [school, setSchool] = useState<SchoolInterface | undefined>(schol);
   const [schoolSessions, setSchoolSessions] = useState<SessionInterface[]>([])
+  const [classes, setClasses] = useState<ClasseInterface[]>([])
   const [sessionModal, setSessionModal] = useState(false);
+  const [addExamModal, setAddExamModal] = useState(false);
 
   const updateSchool = () => {
     if (school) {
-      api.updateSchool(school).then(() => { toast(successMessage('School Updated successfully!'))});
+      api.updateSchool(school).then(() => { toast(successMessage('School Updated successfully!')) });
     }
   };
-  const toast = useToast(); 
+  const toast = useToast();
 
   useEffect(() => {
-    getSessions(); 
+    getSessions();
+    getClasses();
   }, [])
-  
+
   const getSessions = async () => {
     const response = await api.getSessions()
     setSchoolSessions(s => response.data.data)
   }
 
-  const saveSession = (session:SessionInterface) => {
-    api.saveSession(session).then(() => {getSessions(), toast(successMessage('Session added successfully!')) } ).catch(e => toast(errorMessage(e)))
+  const getClasses = async () => {
+    const response = await api.getClasses()
+    setClasses(s => response.data.data)
+  }
+
+  const saveSession = (session: SessionInterface) => {
+    api.saveSession(session).then(() => { getSessions(), toast(successMessage('Session added successfully!')) }).catch(e => toast(errorMessage(e)))
+  }
+
+  const saveExam = (exam: ExamInterface, classes: string[]) => {
+    api.saveExamForClasses(exam,  classes).then(() => { 
+      getSessions();
+      toast(successMessage('Session added successfully!'));
+      setAddExamModal(s => false)
+    }).catch(e => toast(errorMessage(e)))
   }
 
   const syncSchoolSession = async () => {
@@ -143,7 +161,10 @@ export default function SchoolSettingInfo({
                   {schoolSessions.map(session => <option key={session._id} value={session._id}>{session.name}</option>)}
                 </select>
                 <button className="btn btn-dark" onClick={() => setSessionModal(true)}>Add School Session</button>
-                {school?.session_id &&  <button className="btn btn-secondary mx-3" onClick={() => syncSchoolSession()}>Sync Session</button> }
+                {school?.session_id && <button className="btn btn-secondary mx-3" onClick={() => syncSchoolSession()}>Sync Session</button>}
+                <hr className="my-3"></hr>
+
+                <button className="btn btn-danger" onClick={() => setAddExamModal(true)}>Add Exam</button>
               </div>
             )}
           </div>
@@ -164,7 +185,8 @@ export default function SchoolSettingInfo({
         )}
       </div>
 
-        {sessionModal && school?._id && <CreateSessionModal modalIsOpen={sessionModal} closeModal={() => setSessionModal(false)} save={saveSession} schoolId={school._id}></CreateSessionModal>}
+      {sessionModal && school?._id && <CreateSessionModal modalIsOpen={sessionModal} closeModal={() => setSessionModal(false)} save={saveSession} schoolId={school._id}></CreateSessionModal>}
+      {addExamModal && school?._id && <CreateExamModal modalIsOpen={addExamModal}  classes={classes} closeModal={() => setAddExamModal(false)} save={saveExam} schoolId={school._id}></CreateExamModal>}
     </>
   );
 }
@@ -175,7 +197,7 @@ type CreateSessionModalProps = {
   modalIsOpen: boolean;
   closeModal: () => void;
   save: (student: any) => void;
-  schoolId:string
+  schoolId: string
 };
 export function CreateSessionModal({
   modalIsOpen,
@@ -184,8 +206,8 @@ export function CreateSessionModal({
   schoolId
 }: CreateSessionModalProps) {
 
-  const year = new Date().getFullYear(); 
-  const name = `${year} - ${year+1}`
+  const year = new Date().getFullYear();
+  const name = `${year} - ${year + 1}`
 
   const [session, setSession] = useState<SessionInterface>({
     name: name,
@@ -240,4 +262,116 @@ export function CreateSessionModal({
       </Modal>
     </div>
   )
-              }
+}
+
+
+type CreateExamModalProps = {
+  modalIsOpen: boolean;
+  closeModal: () => void;
+  save: (student: any) => void;
+  schoolId: string,
+  classes: ClasseInterface[]
+};
+
+export function CreateExamModal({
+  modalIsOpen,
+  closeModal,
+  save,
+  schoolId,
+  classes
+}: CreateExamModalProps) {
+
+  const year = new Date().getFullYear();
+  const name = `Trimestre 1`
+
+  const [exam, setExam] = useState<ExamInterface>({
+    name: name,
+    school: schoolId
+  });
+
+  const [selectedClasses, setSelectedClasses] = useState<any[]>([])
+
+
+  function handleChange(e: any) {
+    const key = e.target.name;
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+
+    setExam((inputData) => ({
+      ...inputData,
+      [key]: value,
+    }));
+  }
+
+  const handleClasseChange = (e: any) => {
+    const key = e.target.name;
+    const value = e.target.checked;
+    let oldCl = selectedClasses;     
+    oldCl.push(key)
+
+    setSelectedClasses((inputData) => oldCl);
+  }
+
+  return (
+    <div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Add Exam"
+        ariaHideApp={false}
+      >
+        <div className="modal-body" style={{minHeight:"400px"}}>
+          <h2>Ajouter un examin</h2>
+          <div className="form-group my-3">
+            <label>Name </label>
+            <input
+              className="form-control"
+              name="name"
+              value={exam?.name}
+              onChange={handleChange}
+            ></input>
+          </div>
+
+          <div>
+          <div className="table-responsive" style={{maxHeight:"400px", height: "400px"}}>
+            <table className="table" >
+                <thead>
+                    <tr>
+                        <th>Classe</th>
+                        <th>Section</th>
+                        <th>Select</th>
+                    </tr>
+                  </thead> 
+                  <tbody>
+                      {classes.map((classe, index) => {
+                          return <tr key={index}>
+                              <td>{classe.name}</td>
+                              <td>{classe?.section?.name ?? '--'}</td>
+                              <td><input checked={ selectedClasses?.includes(classe._id)} type="checkbox" name={classe._id} value={classe._id} onChange={(e) => handleClasseChange(e)}></input></td>
+                          </tr>
+                      })}
+                  </tbody>
+            </table>
+          </div>
+          </div>
+
+          <div className="from-group">
+            <button
+              onClick={() => save(exam, selectedClasses)}
+              className="btn btn-success"
+              disabled={!exam.name || !selectedClasses.length}
+            >
+              Enregistrer
+            </button>
+            <button onClick={closeModal} className="btn btn-secondary end">
+              Annuler
+            </button>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  )
+}
+
+

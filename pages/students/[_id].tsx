@@ -8,6 +8,7 @@ import { UserType } from "../../utils/enums";
 import Link from "next/link";
 import StudentInterface from "../../models/student";
 
+
 export default function ProfilePage({ ...error }) {
   const { data: session } = useSession();
   const {user} = useUser(session);
@@ -18,15 +19,38 @@ export default function ProfilePage({ ...error }) {
 
   useEffect(() => {
     if (studentId)
-    api.getStudent(studentId as string).then(({data: { data}}: any) => {
-        setStudent(d => data)
-    })
+      api.getStudent(studentId as string).then(({data: { data}}: any) => {
+          setStudent(d => data)
+      })
   }, [studentId]);
+
+  function getProfileImage(){
+    return student?.image ? student.image :  student?.sex == 'M' ? '/images/male-avatar.jpg' : '/images/female-avatar.jpg';
+  }
+
+  const onFileChange = (e: any) => {
+    const file = e.target.files[0];
+    api.uploadFile(file, "STUDENT", studentId as string
+    ).then((response) => {
+        const fileName = `/uploads/${response.data.data.newFilename}`;
+        if(student)
+          api.updateStudent({_id:student._id, image: fileName} as StudentInterface).then(() => {
+              setStudent(d => ({...d, image: fileName}))
+          })
+    })
+  }
 
   return (
     <>
       <h3 className="my-3 ">Information Personelle</h3>
-      <div>
+
+      <div className="avatar">
+        <img className="img img-rounded" src={getProfileImage()} height={200} width={200} />
+
+        <input type="file" onChange={onFileChange} name="Edit" accept=".jpg, .png" />
+      </div>
+
+      <div className="mt-4">
         {" "}
         Name: <b> {student?.name} </b>{" "}
       </div>
@@ -40,7 +64,7 @@ export default function ProfilePage({ ...error }) {
       </div>
       <div>
         {" "}
-        Phone: <b> {user?.phone} </b>{" "}
+        Phone: <b> {user?.phone || student?.phone} </b>{" "}
       </div>
       <div>
         {" "}

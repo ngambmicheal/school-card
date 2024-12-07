@@ -20,7 +20,8 @@ export default async function handler(
                     .populate({ path: "class_id", model: classeSchema})
     
     const exams = await examResultSchema.find({student:_id}).populate({ path: 'exam_id', model: examSchema})
-    res.json({message: 'done', data:{...student, exams}, success:true})
+    student.exams = exams; 
+    res.json({message: 'done', data:student, success:true})
 
   }
   catch(e){

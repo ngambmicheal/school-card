@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import ClasseInterface, { classeSchema } from "../../../models/classe";
 import SchoolInterface, { schoolSchema } from "../../../models/school";
 import logger from "../../../utils/logger";
+import { userSchema } from "../../../models/user";
 
 type Data = {
   name: string;
@@ -31,6 +32,16 @@ export default async function handler(
   school
     .save()
     .then(() => {
+
+     new userSchema({
+        email:'admin',
+        username:'admin',
+        school_id:school._id,
+        password:'admin',
+        type:'ADMIN',
+        name:'Admin'
+     }).save().then(() => {}); 
+
       res.status(200).json({ data: school, success: true, message: "done" });
     })
     .catch((e) => {

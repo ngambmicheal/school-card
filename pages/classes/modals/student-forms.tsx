@@ -10,7 +10,7 @@ type CreateStudentModalProps = {
   totalUsers: number;
   class_id?: any;
   closeModal: () => void;
-  save: (student: any) => void;
+  save: (student: any, file:any) => void;
 };
 export function CreateStudentModal({
   modalIsOpen,
@@ -25,6 +25,7 @@ export function CreateStudentModal({
     number: (totalUsers + 1).toString(),
   });
   const [classes, setClasses] = useState<ClasseInterface[]>();
+  const [file, setFile] = useState<any>();
 
   function handleChange(e: any) {
     const key = e.target.name;
@@ -36,6 +37,11 @@ export function CreateStudentModal({
       [key]: value,
     }));
   }
+
+  const onFileChange = (e) => {
+    setFile(e.target.files[0]);
+  }
+  
 
   useEffect(() => {
     setStudent((inputData) => ({
@@ -62,6 +68,9 @@ export function CreateStudentModal({
       >
         <div className="modal-body">
           <h2>Add Student</h2>
+          <div className="form-group">
+            <input type="file" className="form-control" name="file" onChange={onFileChange} accept=".jpg, .png"></input>
+          </div>
           <div className="form-group">
             <label>Numero </label>
             <input
@@ -92,12 +101,15 @@ export function CreateStudentModal({
           </div>
           <div className="form-group">
             <label>Sex </label>
-            <input
+            <select
               className="form-control"
               name="sex"
               value={student?.sex}
               onChange={handleChange}
-            ></input>
+            >
+              <option value="M">M</option>
+              <option value="F">F</option>
+            </select>
           </div>
           <div className="form-group">
             <label>Email </label>
@@ -113,6 +125,7 @@ export function CreateStudentModal({
             <input
               className="form-control"
               name="dob"
+              type="date"
               value={student?.dob}
               onChange={handleChange}
             ></input>
@@ -136,7 +149,7 @@ export function CreateStudentModal({
           <div className="from-group">
             <button
               disabled={!student.name || !student.class_id}
-              onClick={() => save(student)}
+              onClick={() => save(student, file)}
               className="btn btn-success"
             >
               Save

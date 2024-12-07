@@ -47,13 +47,20 @@ export default function Subjects() {
   return (
     <>
       {session && (
-        <button
+        <><button
           className="btn btn-success"
           onClick={() => setModalIsOpen(true)}
         >
           {" "}
           Ajouter une matière{" "}
         </button>
+
+        <button
+        className=" mx-3 btn btn-primary"
+        onClick={() => setModalIsOpen(true)}
+        >
+          Select from Template
+        </button> </>
       )}
       <table className="table table-hover table-striped table-bordered my-3 ">
         <thead>

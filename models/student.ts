@@ -16,7 +16,8 @@ export default interface StudentInterface{
     matricule?:string,
     user_id?:string,
     place?:string,
-    session_id?:string
+    session_id?:string,
+    image?:string,
 }
 
 const StudentSchema = new mg.Schema({
