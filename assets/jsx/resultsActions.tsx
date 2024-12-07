@@ -4,6 +4,7 @@ import SubjectInterface from "../../models/subject";
 import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import { getFloat } from "../../utils/calc";
+import { zoomStyle } from "../../services/constants";
 
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 

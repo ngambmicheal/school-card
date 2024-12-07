@@ -6,6 +6,7 @@ import SubjectInterface from "../../models/subject";
 import { getGeneralAverage } from "./resultsActions";
 import { getFloat } from "../../utils/calc";
 import SchoolInterface from "../../models/school";
+import { zoomStyle } from "../../services/constants";
 
 export const getTotalPoints = (exam:ExamInterface) => { 
     let sum = 0; 

@@ -120,7 +120,6 @@ export default async function handler(
                 }
                 .table1, .table2, .table3{
                     border-collapse: collapse;
-                    font-weight:bold;
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 0px;
