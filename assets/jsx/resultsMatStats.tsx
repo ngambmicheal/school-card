@@ -5,6 +5,7 @@ import { useState } from "react";
 import SubjectInterface from "../../models/subject";
 import { getGeneralAverage } from "./resultsActions";
 import { getFloat } from "../../utils/calc";
+import { zoomStyle } from "../../services/constants";
 
 export const getTotalPoints = (exam:ExamInterface) => { 
     let sum = 0; 
@@ -53,6 +54,7 @@ export default function resultsMatStats(exam:ExamInterface, competences:Competen
     const stat = getAdmis(points, statsResults);
     return (
         <>
+    {zoomStyle}
     <div className="bg-logo"></div>
             <div className='py-3'>
                 <h3>Classe : {exam?.class_id?.name} </h3>

@@ -7,6 +7,7 @@ import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
 import AnnualExamInterface from "../../models/annualExam";
 import { getFloat } from "../../utils/calc";
+import { zoomStyle } from "../../services/constants";
 
 let comT:string[] = [];
 
@@ -112,6 +113,7 @@ export default function resultsAnnualSpecialActions(subjects:SubjectInterface[],
 
     return (
         <>
+    {zoomStyle}
     <div className="bg-logo"></div>
     <table className='table2' style={{fontSize:'14px'}}>
     <tr>

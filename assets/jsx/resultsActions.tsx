@@ -4,6 +4,7 @@ import SubjectInterface from "../../models/subject";
 import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
 import { getFloat } from "../../utils/calc";
+import { zoomStyle } from "../../services/constants";
 
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -123,6 +124,7 @@ export default function resultsActions(competences:CompetenceInterface[], result
 
     return (
         <>
+    {zoomStyle}
     <div className="bg-logo"></div>
     <table className='table2' style={{fontSize:'14px'}}>
     <tr>

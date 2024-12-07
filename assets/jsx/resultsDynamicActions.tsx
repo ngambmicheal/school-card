@@ -6,6 +6,7 @@ import ExamResultInterface from "../../models/examResult";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
 import { getFloat } from "../../utils/calc";
+import { zoomStyle } from "../../services/constants";
 
 const getCompetencesLenght = (competence:CompetenceInterface) => {
     let total = 0; 
@@ -160,7 +161,7 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
 </div>
 
 <div>
-<table className='table1' style={{fontSize:'20px'}} >
+<table className='table1' >
  <thead>
      <tr>
          <th colSpan={2}>NOMS ET PRENOMS</th>
@@ -187,10 +188,10 @@ export default function resultsDynamicActions(competences:CompetenceInterface[],
  <table className='table1' style={{fontSize:'20px'}}>
      <thead>
      <tr>
-         <th rowSpan={2} style={{width:'250px'}}>
+         <th rowSpan={2}>
              COMPETENCES
          </th>
-         <th rowSpan={2}  style={{width:'350px'}}>
+         <th rowSpan={2}  >
              SOUS-COMPETENCES
          </th>
          <th colSpan={2}>

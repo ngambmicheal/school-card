@@ -3,7 +3,7 @@ import fs from 'fs';
 import SubjectInterface from "../../models/subject";
 import { logo } from "./image";
 import ExamResultInterface from "../../models/examResult";
-import { checkSvg } from "../../services/constants";
+import { checkSvg, zoomStyle } from "../../services/constants";
 import { nurseryActs } from "../../pages/exams/nursery/[_id]";
 import { getFloat } from "../../utils/calc";
 

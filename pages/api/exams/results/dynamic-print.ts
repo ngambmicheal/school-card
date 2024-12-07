@@ -124,7 +124,6 @@ export default async function handler(
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 0px;
-                    font-size:9px;
                     z-index:1;
                     }
                     .com, b{

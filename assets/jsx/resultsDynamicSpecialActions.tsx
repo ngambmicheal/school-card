@@ -6,6 +6,7 @@ import ExamResultInterface from "../../models/examResult";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
 import { getFloat } from "../../utils/calc";
+import { zoomStyle } from "../../services/constants";
 
 let comT:string[] = [];
 

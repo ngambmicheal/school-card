@@ -6,6 +6,7 @@ import ExamResultInterface from "../../models/examResult";
 import { getSubjectTotal } from "../../pages/exams/[_id]";
 import { getGeneralAverage } from "./resultsActions";
 import { getFloat } from "../../utils/calc";
+import { zoomStyle } from "../../services/constants";
 
 let comT:string[] = [];
 
