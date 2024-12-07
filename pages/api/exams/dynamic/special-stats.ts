@@ -92,7 +92,7 @@ export default async function handler(
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 20px;
-                    font-size:6px;
+                    font-size:6px !important;
                     }
                     .com, b{
                     font-weight: bold;
