@@ -15,7 +15,7 @@ export const bgImgStyle = `
         height: 100%;
     }
 
-    .table1{
+    .table1, .table2, .table3{
         font-size:10px !important
     }
 

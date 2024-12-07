@@ -89,7 +89,7 @@ export default async function handler(
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 20px;
-                    font-size:${school?.police_stats??6}px;
+                    font-size:${school?.police_stats??6}px !important;
                     }
                     .com, b{
                     font-weight: bold;

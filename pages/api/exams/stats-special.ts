@@ -17,6 +17,7 @@ import resultsNormalUiStats from "../../../assets/jsx/resultsNormalUiStats";
 import { sectionSchema } from "../../../models/section";
 import { differenceBy } from "lodash";
 import { findSchool, findSchoolById } from "../schools";
+import { bgImgStyle } from "../../../utils/styles";
 
 export default async function handler(
   req: NextApiRequest,
@@ -84,7 +85,7 @@ export default async function handler(
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 20px;
-                    font-size:${school?.police_stats??6}px;
+                    font-size:${school?.police_stats??6}px !important;
                     }
                     .com, b{
                     font-weight: bold;

@@ -88,7 +88,7 @@ export default async function handler(
                     width: 100%;
                     margin-top: 10px;
                     margin-bottom: 20px;
-                    font-size:${school?.police_stats??6}px;
+                    font-size:${school?.police_stats??6}px !important;
                     }
                     .com, b{
                     font-weight: bold;
@@ -107,7 +107,7 @@ export default async function handler(
                     }
 
                 .table3{
-                  font-size:${school?.police_stats??13}px;
+                  font-size:${school?.police_stats??10}px !important;
                 }
 
                 .table3 tr:nth-child(even), .table1 tr:nth-child(even){
