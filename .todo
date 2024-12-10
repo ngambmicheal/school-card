@@ -1,0 +1,2 @@
+mongorestore -h ip:port  --db school_js 
+mongorestore -h <host>:<port> -u <username> -p <password> -d <DBNAME> /path/to/destination/directory/<DBNAME>

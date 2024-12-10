@@ -30,8 +30,7 @@ export default function ProfilePage({ ...error }) {
 
   const onFileChange = (e: any) => {
     const file = e.target.files[0];
-    api.uploadFile(file, "STUDENT", studentId as string
-    ).then((response) => {
+    api.uploadFile(file, "STUDENT", studentId as string).then((response) => {
         const fileName = `/uploads/${response.data.data.newFilename}`;
         if(student)
           api.updateStudent({_id:student._id, image: fileName} as StudentInterface).then(() => {

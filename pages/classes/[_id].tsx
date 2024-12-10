@@ -8,16 +8,17 @@ import Link from "next/link";
 import { customStyles } from "../../services/constants";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
-import { DynamicExamModal } from "./modals/dyname-exam-form";
+import DynamicExamModal from "./modals/dyname-exam-form";
 import AnnualExamInterface from "../../models/annualExam";
-import { CreateStudentModal } from "./modals/student-forms";
+import CreateStudentModal  from "./modals/student-forms";
 import { ImportStudents } from "./modals/import-students";
 import { AnnualExamModal, CreateExamModal } from "./modals/annual-exam";
 import { CSVLink } from "react-csv";
 import { useSession } from "next-auth/react";
 import useSchool from "../../hooks/useSchool";
-import { useToast } from "@chakra-ui/react";
+import { Button, Menu, MenuButton, MenuItem, MenuList, useToast } from "@chakra-ui/react";
 import { successMessage } from "../../utils/messages";
+import Header from "../../layouts/header";
 
 export default function ClasseDetails() {
   const [classe, setClasse] = useState<ClasseInterface>();
@@ -160,6 +161,7 @@ export default function ClasseDetails() {
 
   return (
     <>
+      <Header title="Classe Details" description="Classe Details" />
       <div className="">Name : {classe?.name}</div>
 
       <button onClick={downloadToCsv} className="btn btn-secondary mx-3">
@@ -533,6 +535,7 @@ export default function ClasseDetails() {
         <thead>
           <tr>
             <th>No </th>
+            <th>Image</th>
             <th>Matricule</th>
             <th>Name</th>
             <th>Phone</th>
@@ -618,6 +621,10 @@ export function StudentRow({ stud, deleteStudent, terms }: StudentProps) {
           onChange={handleChange}
         />{" "}
       </td>
+      <td>
+        <img
+          src={student?.image} style={{height:'40px', width:'40px'}} />
+      </td>
       <td>{student.matricule}</td>
       <td>
         {" "}
@@ -678,31 +685,41 @@ export function StudentRow({ stud, deleteStudent, terms }: StudentProps) {
             Update
           </a>
         )}
-        {session.data && (
-          <a
-            className="delete-action"
-            onClick={() => deleteStudent(student._id)}
-          >
-            {" "}
-            | Delete
-          </a>
-        )}
-        {terms.map((term, index) => {
-          return (
-            <>
-              {" "}
-              <a
-                href={`/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?_id=${
-                  term._id
-                }&student_id=${student._id}`}
-                target="_blank"
-              >
-                {" "}
-                | {term.name}{" "}
-              </a>{" "}
-            </>
-          );
-        })}
+        
+        
+        <Menu>
+          <MenuButton as={Button}>
+            Actions
+          </MenuButton>
+          <MenuList>
+          <MenuItem>
+              <Link href={`/students/${student._id}`} target="_blank">View</Link>
+          </MenuItem>
+            {terms.map((term, index) => {
+              return (
+                <MenuItem>
+                  <a
+                    href={`/exams/dynamic/${term.report_type?.toLocaleLowerCase()}?_id=${
+                      term._id
+                    }&student_id=${student._id}`}
+                    target="_blank"
+                  >
+                  {term.name}
+                  </a>
+                </MenuItem>
+              );
+            })}
+             {session.data && (
+              <MenuItem><a
+                  className="delete-action"
+                  onClick={() => deleteStudent(student._id)}
+                >
+                  {" "}
+                Delete
+                </a></MenuItem>
+              )}
+          </MenuList>
+        </Menu>
       </td>
     </tr>
   );

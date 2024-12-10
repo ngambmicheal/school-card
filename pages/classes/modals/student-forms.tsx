@@ -12,7 +12,8 @@ type CreateStudentModalProps = {
   closeModal: () => void;
   save: (student: any, file:any) => void;
 };
-export function CreateStudentModal({
+
+export default function CreateStudentModal({
   modalIsOpen,
   closeModal,
   save,
@@ -39,7 +40,11 @@ export function CreateStudentModal({
   }
 
   const onFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const file = e.target.files[0];
+    api.uploadFile(file, "STUDENT", student.number??'').then((response) => {
+        const fileName = `/uploads/${response.data.data.newFilename}`;
+        setStudent(d => ({...d, image: fileName}))
+    })
   }
   
 
@@ -66,7 +71,7 @@ export function CreateStudentModal({
         style={customStyles}
         contentLabel="Add Student"
       >
-        <div className="modal-body">
+        <div >
           <h2>Add Student</h2>
           <div className="form-group">
             <input type="file" className="form-control" name="file" onChange={onFileChange} accept=".jpg, .png"></input>
@@ -125,7 +130,7 @@ export function CreateStudentModal({
             <input
               className="form-control"
               name="dob"
-              type="date"
+              type=""
               value={student?.dob}
               onChange={handleChange}
             ></input>
@@ -162,8 +167,4 @@ export function CreateStudentModal({
       </Modal>
     </div>
   );
-}
-
-export default function () {
-  return "";
 }
