@@ -11,7 +11,7 @@ type DynamicExamModalProps = {
   save: (student: any) => void;
   exams: ExamInterface[];
 };
-export function DynamicExamModal({
+export default function DynamicExamModal({
   modalIsOpen,
   closeModal,
   save,
@@ -108,6 +108,3 @@ export function DynamicExamModal({
   );
 }
 
-export default function () {
-  return "";
-}

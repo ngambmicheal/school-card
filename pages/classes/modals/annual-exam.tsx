@@ -168,6 +168,6 @@ export function AnnualExamModal({
   );
 }
 
-export default function () {
+export default function DefaultAnnualExam() {
   return "";
 }
