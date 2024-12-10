@@ -13,7 +13,7 @@ type CreateStudentModalProps = {
   save: (student: any, file:any) => void;
 };
 
-export default function CreateStudentModal({
+export function CreateStudentModal({
   modalIsOpen,
   closeModal,
   save,
@@ -167,4 +167,8 @@ export default function CreateStudentModal({
       </Modal>
     </div>
   );
+}
+
+export default function DefaultStudentForm() {
+  return <div></div>;
 }

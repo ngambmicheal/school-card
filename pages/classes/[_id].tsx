@@ -8,7 +8,7 @@ import Link from "next/link";
 import { customStyles } from "../../services/constants";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
-import DynamicExamModal from "./modals/dyname-exam-form";
+import {DynamicExamModal} from "./modals/dyname-exam-form";
 import AnnualExamInterface from "../../models/annualExam";
 import CreateStudentModal  from "./modals/student-forms";
 import { ImportStudents } from "./modals/import-students";
