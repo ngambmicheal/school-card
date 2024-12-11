@@ -40,7 +40,7 @@ export default async function handler(
             orientation: "portrait",
             border: "10mm",
             header: {
-                height: "2mm",
+                height: "0mm",
 
             },
             footer: {

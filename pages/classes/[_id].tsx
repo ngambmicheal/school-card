@@ -19,6 +19,7 @@ import useSchool from "../../hooks/useSchool";
 import { Button, Menu, MenuButton, MenuItem, MenuList, useToast } from "@chakra-ui/react";
 import { successMessage } from "../../utils/messages";
 import Header from "../../layouts/header";
+import Dropdown from "../../components/dropdown";
 
 export default function ClasseDetails() {
   const [classe, setClasse] = useState<ClasseInterface>();
@@ -151,6 +152,57 @@ export default function ClasseDetails() {
     api.downloadToPdf(classeId);
   };
 
+  const getExamLink:string = (report_type, exam_id) => {
+    switch (report_type) {
+      case "Maternelle":
+        return `/exams/mat/${exam_id}`;
+      case "Nursery":
+        return `/exams/nursery/${exam_id}`;
+      case "Matiere":
+        return `/exams/${exam_id}`;
+      case "Competence":
+        return `/exams/ui/${exam_id}`;
+      case "Special":
+        return `/exams/special/${exam_id}`;
+      default:
+        return `/exams/${exam_id}`;
+    }
+  }
+
+  const getTermLink = (report_type, term_id) => {
+    switch (report_type) {
+      case "Maternelle":
+        return `/exams/mat/dynamic?term_id=${term_id}`;
+      case "Nursery":
+        return `/exams/nursery/dynamic?term_id=${term_id}`;
+      case "Matiere":
+        return `/exams/normal/dynamic?term_id=${term_id}`;
+      case "Competence":
+        return `/exams/ui/dynamic?term_id=${term_id}`;
+      case "Special":
+        return `/exams/special/dynamic?term_id=${term_id}`;
+      default:
+        return `/exams/dynamic?term_id=${term_id}`;
+    }
+  }
+
+  const getAnnualExamLink = (report_type, term_id) => {
+    switch (report_type) {
+      case "Maternelle":
+        return `/exams/mat/annual?annualExam_id=${term_id}`;
+      case "Nursery":
+        return `/exams/nursery/annual?annualExam_id=${term_id}`;
+      case "Matiere":
+        return `/exams/normal/annual?annualExam_id=${term_id}`;
+      case "Competence":
+        return `/exams/ui/annual?annualExam_id=${term_id}`;
+      case "Special":
+        return `/exams/special/annual?annualExam_id=${term_id}`;
+      default:
+        return `/exams/annual?annualExam_id=${term_id}`;
+    }
+  }
+
   const studentHeaders = [
     { label: "Numero", key: "number" },
     { label: "Nom", key: "name" },
@@ -164,19 +216,19 @@ export default function ClasseDetails() {
       <Header title="Classe Details" description="Classe Details" />
       <div className="">Name : {classe?.name}</div>
 
-      <button onClick={downloadToCsv} className="btn btn-secondary mx-3">
+      {/* <button onClick={downloadToCsv} className="btn btn-secondary mx-3">
         {" "}
         Download to CSV{" "}
       </button>
       <button onClick={downloadToPdf} className="btn btn-secondary mx-2">
         {" "}
         Download to Pdf{" "}
-      </button>
+      </button> */}
 
-      <Link href={`/exams/`}> Bulletin de fin d'annee </Link>
+      {/* <Link href={`/exams/`}> Bulletin de fin d'annee </Link> */}
 
-      <h3 className="mt-3">
-        Exams
+      <div>
+      <h2 className="mt-3"> Exams </h2>
         {editable && (
           <span className="pull-right">
             <button
@@ -187,27 +239,14 @@ export default function ClasseDetails() {
             </button>
           </span>
         )}
-      </h3>
+      </div>
+  
 
       <table className="table table-hover table-striped table-bordered my-3 ">
         <thead>
           <tr>
             <th>Name</th>
-            {classe?.section?.report_type == "Maternelle" && (
-              <th>Exam Type Maternelle</th>
-            )}
-            {classe?.section?.report_type == "Nursery" && (
-              <th>Exam Type Nursery</th>
-            )}
-            {classe?.section?.report_type == "Matiere" && (
-              <th>Exam Type Normal </th>
-            )}
-            {classe?.section?.report_type == "Competence" && (
-              <th>Exam Type Competence</th>
-            )}
-            {classe?.section?.report_type == "Special" && (
-              <th>Exam Type Special</th>
-            )}
+            <th> Exam Type {classe?.section?.report_type} </th>
             {editable && <th>Action</th>}
           </tr>
         </thead>
@@ -216,44 +255,7 @@ export default function ClasseDetails() {
             return (
               <tr key={exam._id}>
                 <td> {exam.name} </td>
-                {classe?.section?.report_type == "Maternelle" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/mat/${exam._id}`}>
-                      Entree les donnees
-                    </Link>
-                  </td>
-                )}
-                {classe?.section?.report_type == "Nursery" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/nursery/${exam._id}`}>Fill Marks</Link>
-                  </td>
-                )}
-                {classe?.section?.report_type == "Matiere" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/${exam._id}`}>
-                      Entree les donnees
-                    </Link>{" "}
-                  </td>
-                )}
-                {classe?.section?.report_type == "Competence" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/ui/${exam._id}`}>
-                      Entree les donnees
-                    </Link>{" "}
-                  </td>
-                )}
-                {classe?.section?.report_type == "Special" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/special/${exam._id}`}>
-                      Entree les donnees
-                    </Link>{" "}
-                  </td>
-                )}
+                <td> <Link href={ getExamLink(classe?.section?.report_type ,  exam._id)}>   Entree les donnees</Link> </td>
                 {editable && (
                   <td>
                     {" "}
@@ -272,7 +274,7 @@ export default function ClasseDetails() {
 
       <h3 className="mt-3"> Trimestre </h3>
       {exams.length && editable && (
-        <span className="px-13">
+        <span className="px-13 pull-right">
           <button
             className="btn btn-xs btn-success"
             onClick={() => setDynamicExamIsOpen((s) => true)}
@@ -287,21 +289,7 @@ export default function ClasseDetails() {
         <thead>
           <tr>
             <th>Name</th>
-            {classe?.section?.report_type == "Maternelle" && (
-              <th>Exam Type Maternelle</th>
-            )}
-            {classe?.section?.report_type == "Nursery" && (
-              <th>Exam Type Maternelle</th>
-            )}
-            {classe?.section?.report_type == "Matiere" && (
-              <th>Exam Type Normal </th>
-            )}
-            {classe?.section?.report_type == "Competence" && (
-              <th>Exam Type Competence</th>
-            )}
-            {classe?.section?.report_type == "Special" && (
-              <th>Exam Type Special</th>
-            )}
+            <th>Exam Type {classe?.section?.report_type} </th>
             {editable && <th>Action</th>}
           </tr>
         </thead>
@@ -310,46 +298,7 @@ export default function ClasseDetails() {
             return (
               <tr key={term._id}>
                 <td> {term.name} </td>
-                {classe?.section?.report_type == "Maternelle" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/mat/dynamic?term_id=${term._id}`}>
-                      Mat
-                    </Link>
-                  </td>
-                )}
-                {classe?.section?.report_type == "Nursery" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/nursery/dynamic/?term_id=${term._id}`}>
-                      Nursery
-                    </Link>
-                  </td>
-                )}
-                {classe?.section?.report_type == "Matiere" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/normal/dynamic?term_id=${term._id}`}>
-                      View
-                    </Link>{" "}
-                  </td>
-                )}
-                {classe?.section?.report_type == "Competence" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/ui/dynamic?term_id=${term._id}`}>
-                      UI
-                    </Link>{" "}
-                  </td>
-                )}
-                {classe?.section?.report_type == "Special" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/special/dynamic?term_id=${term._id}`}>
-                      UI/Special
-                    </Link>{" "}
-                  </td>
-                )}
+                <td> <Link href={getTermLink(classe?.section?.report_type, term._id)}>Entree les donnes</Link> </td>
                 {editable && (
                   <td>
                     {" "}
@@ -368,9 +317,11 @@ export default function ClasseDetails() {
         </tbody>
       </table>
 
+      <hr></hr>
+
       <h3 className="mt-3"> Bulletin Annuelle </h3>
       {exams.length && editable && (
-        <span className="px-13">
+        <span className="px-13 pull-rightt">
           <button
             className="btn btn-xs btn-success"
             onClick={() => setAnnualExamIsOpen((s) => true)}
@@ -385,21 +336,7 @@ export default function ClasseDetails() {
         <thead>
           <tr>
             <th>Name</th>
-            {classe?.section?.report_type == "Maternelle" && (
-              <th>Exam Type Maternelle</th>
-            )}
-            {classe?.section?.report_type == "Nursery" && (
-              <th>Exam Type Maternelle</th>
-            )}
-            {classe?.section?.report_type == "Matiere" && (
-              <th>Exam Type Normal </th>
-            )}
-            {classe?.section?.report_type == "Competence" && (
-              <th>Exam Type Competence</th>
-            )}
-            {classe?.section?.report_type == "Special" && (
-              <th>Exam Type Special</th>
-            )}
+            <th>Exam Type {classe?.section?.report_type}</th>
             {editable && <th>Action</th>}
           </tr>
         </thead>
@@ -408,52 +345,7 @@ export default function ClasseDetails() {
             return (
               <tr key={term._id}>
                 <td> {term.name} </td>
-                {classe?.section?.report_type == "Maternelle" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/mat/annual?annualExam_id=${term._id}`}>
-                      Mat
-                    </Link>
-                  </td>
-                )}
-                {classe?.section?.report_type == "Nursery" && (
-                  <td>
-                    {" "}
-                    <Link
-                      href={`/exams/nursery/annual/?annualExam_id=${term._id}`}
-                    >
-                      Nursery
-                    </Link>
-                  </td>
-                )}
-                {classe?.section?.report_type == "Matiere" && (
-                  <td>
-                    {" "}
-                    <Link
-                      href={`/exams/normal/annual?annualExam_id=${term._id}`}
-                    >
-                      View
-                    </Link>{" "}
-                  </td>
-                )}
-                {classe?.section?.report_type == "Competence" && (
-                  <td>
-                    {" "}
-                    <Link href={`/exams/ui/annual?annualExam_id=${term._id}`}>
-                      UI
-                    </Link>{" "}
-                  </td>
-                )}
-                {classe?.section?.report_type == "Special" && (
-                  <td>
-                    {" "}
-                    <Link
-                      href={`/exams/special/annual?annualExam_id=${term._id}`}
-                    >
-                      UI/Special
-                    </Link>{" "}
-                  </td>
-                )}
+                <td> <Link href={getAnnualExamLink(classe?.section?.report_type,term._id)}>Entree les donnes</Link></td>
                 {editable && (
                   <td>
                     {" "}

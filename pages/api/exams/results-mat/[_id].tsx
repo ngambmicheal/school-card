@@ -74,6 +74,7 @@ export default async function handler(
     fs.mkdirSync(dir, { recursive: true });
   }
 
+
   totalResults.map((results) => {
     var options = {
       format: "A4",
@@ -84,12 +85,6 @@ export default async function handler(
       },
       footer: {
         height: "0mm",
-        contents: {
-          // first: 'Cover page',
-          // 2: 'Second page', // Any page number is working. 1-based index
-          // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-          // last: 'Last Page'
-        },
       },
     };
 
@@ -149,14 +144,8 @@ export default async function handler(
       type: "",
     };
 
-    pdf
+    return pdf
       .create(document, options)
-      .then((response: any) => {})
-      .catch((error: any) => {
-        console.error(error);
-        res.json({ message: error.message, success: false });
-        console.log("thisfile isnot react");
-      });
   });
 
   archive.pipe(zipOutput);

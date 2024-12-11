@@ -9,6 +9,7 @@ import SchoolInterface from "../../models/school";
 import useSchool from "../../hooks/useSchool";
 import { helperService } from "../../services";
 import { useSession } from "next-auth/react";
+import Dropdown from "../../components/dropdown";
 
 export const report_types = [
   "Competence",
@@ -73,17 +74,14 @@ export default function Sections() {
                 <td>{section.school?.name}</td>
                 <th>{section.report_type}</th>
                 <td>
-                  <Link href={`sections/${section._id}`}>Voir</Link>{" "}
-                  {session && (
-                    <a
-                      className="delete-action"
-                      href="#"
-                      onClick={() => deleteSection(section._id)}
-                    >
-                      {" "}
-                      | Delete{" "}
-                    </a>
-                  )}
+                <Dropdown
+                  buttonTitle="Actions"
+                  items={[
+                    // { name: "Edit", action: () => console.log("Edit") },
+                    { name: "View", href:`sections/${section._id}`},
+                    { name: "Delete", action: () => deleteSection(section._id), className:"delete-action" },
+                  ]}
+                />
                 </td>
               </tr>
             );

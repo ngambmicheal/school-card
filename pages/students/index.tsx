@@ -11,6 +11,7 @@ import { errorMessage, successMessage } from "../../utils/messages";
 
 export default function Students() {
   const [students, setStudents] = useState<Classe[]>([]);
+  const [filteredStudents, setFilteredStudents] = useState<Classe[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const toast = useToast();
 
@@ -22,9 +23,18 @@ export default function Students() {
     setModalIsOpen((s) => false);
   };
 
+  const filterStudent= (e) => {
+    const filter = e.target.value; 
+    const filteredStudents = students.filter(student => 
+      student.name.toLowerCase().includes(filter.toLowerCase()) || student.matricule?.toLowerCase().includes(filter.toLowerCase())
+    );
+    setFilteredStudents(filteredStudents);
+  }
+
   const getStudents = () => {
     api.getStudents().then(({ data: { data } }: any) => {
       setStudents((s) => data);
+      setFilteredStudents((s) => data);
     });
   };
 
@@ -50,9 +60,16 @@ export default function Students() {
         Ajouter un élève{" "}
       </button>
       <h3 className="my-3">Liste des eleves</h3>
+      <div className="table-responsive" style={{maxHeight:'20%'}}>
       <table className="table table-hover table-striped table-bordered my-3 ">
         <thead>
           <tr>
+            <th colspan='8'>
+              <input placeholder="Search for student..." className='form-control' onChange={filterStudent} />
+            </th>
+          </tr>
+          <tr>
+            <th></th>
             <th>Nom</th>
             <th>Matricule</th>
             <th>Numéro de téléphone</th>
@@ -63,9 +80,10 @@ export default function Students() {
           </tr>
         </thead>
         <tbody>
-          {students.map((student) => {
+          {filteredStudents.map((student) => {
             return (
               <tr key={student._id}>
+                <td><img src={student.image} style={{height:'30px', width:'30px'}} /> </td>
                 <td>{student.name}</td>
                 <td>{student.matricule}</td>
                 <td>{student.phone}</td>
@@ -80,6 +98,7 @@ export default function Students() {
           })}
         </tbody>
       </table>
+      </div>
 
       <CreateStudentModal
         totalUsers={students.length}

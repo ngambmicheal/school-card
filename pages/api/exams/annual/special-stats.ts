@@ -17,6 +17,8 @@ import resultsNormalUiStats from "../../../../assets/jsx/resultsNormalUiStats";
 import { sectionSchema } from "../../../../models/section";
 import { termSchema } from "../../../../models/terms";
 import { replaceAll } from "../../../../services/utils";
+import { bgImgStyle } from "../../../../utils/styles";
+
 
 export default async function handler(
   req: NextApiRequest,

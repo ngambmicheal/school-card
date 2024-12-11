@@ -17,6 +17,7 @@ import { courseSchema } from "../../../../models/course";
 import { getTotal } from "../../../../assets/jsx/resultsUiStats";
 import { sectionSchema } from "../../../../models/section";
 import resultsMatActions from "../../../../assets/jsx/resultsMatActions";
+import { bgImgStyle } from "../../../../utils/styles";
 
 export const getCompetencesLenght = (competence: CompetenceInterface) => {
   let total = 0;
@@ -64,7 +65,7 @@ export default async function handler(
         orientation: "portrait",
         border: "10mm",
         header: {
-          height: "6.5mm",
+          height: "0mm",
 
           contents: {
             2: "",
@@ -74,7 +75,7 @@ export default async function handler(
           },
         },
         footer: {
-          height: "10mm",
+          height: "0mm",
           contents: {
             first: "",
             // 2: 'Second page', // Any page number is working. 1-based index

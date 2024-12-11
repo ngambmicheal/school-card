@@ -19,6 +19,8 @@ import { sectionSchema } from "../../../../models/section";
 import { getTotal } from "../../../../assets/jsx/resultsNormalUiStats";
 import TermInterface, { termSchema } from "../../../../models/terms";
 import resultsDynamicNormalActions from "../../../../assets/jsx/resultsDynamicNormalActions";
+import { bgImgStyle } from "../../../../utils/styles";
+
 
 export const getCompetencesLenght = (competence: CompetenceInterface) => {
   let total = 0;
@@ -68,16 +70,10 @@ export default async function handler(
         orientation: "portrait",
         border: "10mm",
         header: {
-          height: "2mm",
+          height: "0mm",
         },
         footer: {
-          height: "19mm",
-          contents: {
-            // first: 'Cover page',
-            // 2: 'Second page', // Any page number is working. 1-based index
-            // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-            // last: 'Last Page'
-          },
+          height: "1mm",
         },
       };
 

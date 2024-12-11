@@ -67,10 +67,10 @@ export default async function handler(
     orientation: "landscape",
     border: "8mm",
     header: {
-      height: "10mm",
+      height: "0mm",
     },
     footer: {
-      height: "10mm",
+      height: "1mm",
       contents: {
         // first: 'Cover page',
         // 2: 'Second page', // Any page number is working. 1-based index

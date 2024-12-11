@@ -13,6 +13,8 @@ import UserInterface from "../../models/user";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 import useUser from "../../hooks/useUser";
+import Dropdown from "../../components/dropdown";
+import Header from "../../layouts/header";
 
 export default function Classes() {
   const [classes, setClasses] = useState<Classe[]>([]);
@@ -57,6 +59,7 @@ export default function Classes() {
 
   return (
     <>
+    <Header title="Class List"></Header>
       {session && isAdmin && (
         <button
           className="btn btn-success"
@@ -128,7 +131,7 @@ export function ClasseRow({
   };
   return (
     <tr key={classe._id}>
-      <td>{classe.name}</td>
+      <td> <Link href={`classes/${classe._id}`}>{classe.name}</Link></td>
       <td>{classe.school?.name}</td>
       <td>{classe.section?.name}</td>
       <td>
@@ -145,19 +148,13 @@ export function ClasseRow({
         </select>
       </td>
       <td>
-        {session &&  (
-          <>
-            {" "}
-            <Link href={`classes/${classe._id}`}>{t("action.view")}</Link>{" "}
-            {isAdmin && <a
-              className="delete-action"
-              onClick={() => deleteClasse(classe._id)}
-            >
-              {" "}
-              | {t("action.delete")}
-            </a>}
-          </>
-        )}
+            <Dropdown
+              buttonTitle="Actions"
+              items={[
+                // { name: "Edit", action: () => console.log("Edit") },
+                { name: "Delete", action: () => deleteClasse(classe._id), className:"delete-action" },
+              ]}
+            />
       </td>
     </tr>
   );

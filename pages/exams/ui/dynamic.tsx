@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import TermInterface from "../../../models/terms";
 import { CSVLink } from "react-csv";
 import { getFloat } from "../../../utils/calc";
+import Dropdown from "../../../components/dropdown";
 
 export default function examDetails() {
   const [exam, setExam] = useState<ExamInterface>();
@@ -449,13 +450,23 @@ export function ExamResult({
         </td>{" "}
       </th>
       <th>
-        {" "}
-        <Link
-          href={`/api/exams/results/dynamic-print?term_id=${res.term_id}&student_id=${res.student._id}`}
-        >
-          Imprimer
-        </Link>{" "}
-        | <a onClick={() => deleteResult(res._id)}> Delete</a>{" "}
+        <Dropdown buttonTitle="Actions" items={
+          [
+            {
+              name:"View Student",
+              href:`/students/${res.student._id}`
+            },
+            {
+              name: "Imprimer",
+              href: `/api/exams/results/dynamic-print?term_id=${res.term_id}&student_id=${res.student._id}`,
+            },
+            {
+              name: "Delete",
+              onClick: () => deleteResult(res._id),
+              className: "delete-action"
+            },
+          ]
+        } />
       </th>
     </tr>
   );

@@ -18,6 +18,8 @@ import { getTotal } from "../../../../assets/jsx/resultsUiStats";
 import { sectionSchema } from "../../../../models/section";
 import resultsMatActions from "../../../../assets/jsx/resultsMatActions";
 import resultsNurseryActions from "../../../../assets/jsx/resultsNurseryActions";
+import { bgImgStyle } from "../../../../utils/styles";
+
 
 export const getCompetencesLenght = (competence: CompetenceInterface) => {
   let total = 0;
@@ -65,23 +67,10 @@ export default async function handler(
         orientation: "portrait",
         border: "10mm",
         header: {
-          height: "6.5mm",
-
-          contents: {
-            2: "",
-            // 2: 'Second page', // Any page number is working. 1-based index
-            // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-            // last: 'Last Page'
-          },
+          height: "0mm",
         },
         footer: {
-          height: "10mm",
-          contents: {
-            first: "",
-            // 2: 'Second page', // Any page number is working. 1-based index
-            // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-            // last: 'Last Page'
-          },
+          height: "1mm",
         },
       };
 

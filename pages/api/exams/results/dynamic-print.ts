@@ -19,6 +19,7 @@ import { sectionSchema } from "../../../../models/section";
 import TermInterface, { termSchema } from "../../../../models/terms";
 import resultsDynamicActions from "../../../../assets/jsx/resultsDynamicActions";
 import { bgImgStyle } from "../../../../utils/styles";
+import path from 'path';
 
 export const getCompetencesLenght = (competence: CompetenceInterface) => {
   let total = 0;
@@ -67,28 +68,17 @@ export default async function handler(
           populate: { path: "courses", model: courseSchema },
         });
 
+        console.log(path.resolve('./public'));
+
       var options = {
         format: "A4",
         orientation: "portrait",
         border: "10mm",
         header: {
           height: "0mm",
-
-          contents: {
-            2: "",
-            // 2: 'Second page', // Any page number is working. 1-based index
-            // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-            // last: 'Last Page'
-          },
         },
         footer: {
-          height: "12mm",
-          contents: {
-            first: "",
-            // 2: 'Second page', // Any page number is working. 1-based index
-            // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-            // last: 'Last Page'
-          },
+          height: "1mm",
         },
       };
 
