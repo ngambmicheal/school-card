@@ -10,7 +10,6 @@ import TermInterface from "../../models/terms";
 import { getFloat } from "../../utils/calc";
 import { zoomStyle } from "../../services/constants";
 import { studentHeader } from "./semence-util";
-import { studentHeader } from "./semence-util";
 
 let comT: string[] = [];
 
