@@ -38,8 +38,8 @@ export default function Students() {
   };
 
   const syncPhotos = () => {
-    api.syncPhotos().then(() => {
-      toast(successMessage("Photos synchronisées avec succès!"));
+    api.syncPhotos().then((response) => {
+      toast(successMessage(response.data.message));
       getStudents();
     }).catch((error) =>
       toast(errorMessage(error.response?.data?.message ?? error.message))
