@@ -19,3 +19,9 @@ export function base64_encode(file:string) {
 }
 
 export default serverPath;
+
+
+export function base64_to_file(base64: string, file: string) {
+  const staticFilePath = serverPath(file)
+  fs.writeFileSync(staticFilePath,  base64, 'base64');
+}

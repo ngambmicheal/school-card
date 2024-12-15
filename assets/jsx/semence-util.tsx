@@ -1,5 +1,6 @@
+import SchoolInterface from "../../models/school";
 import StudentInterface from "../../models/student";
-import serverPath, { base64_encode } from "../../services/serverpath";
+import serverPath, { base64_encode} from "../../services/serverpath";
 
 const fileUrl = (file: string) => {
   const publicFile = "public/" + file;
@@ -58,3 +59,7 @@ export const studentHeader = (
     </div>
   );
 };
+
+export const schoolLogo = (school:SchoolInterface, key:'logo'|'th_en'|'th_fr') => {
+  return fileUrl(school[key] ? school[key] : "/images/smc/logo.png");
+}

@@ -23,16 +23,26 @@ export default async function handler(
     const uploadDir =`./public/uploads/`;
     const form = new IncomingForm({ uploadDir, keepExtensions: true });
 
-    const [fields, files] = await form.parse(req);
+    let [fields, files] = await form.parse(req);
+    const uploadedFiles = Array.isArray(files.file) ? files.file : [files.file];
 
-    const file = files.file[0];
+    const processedFiles = uploadedFiles.map((file) => ({
+      originalName: file.originalFilename,
+      newName: file.newFilename,
+      mimetype: file.mimetype,
+      size: file.size,
+      src: `/uploads/${file.newFilename}`, // Path for public access
+    }));
+
+
+    let file = processedFiles[0];
 
     if (!file) {
       res.status(400).json({ message: "No file uploaded", success: false });
       return;
     }
  
-    res.status(200).json({ success: true, message: "done", data:file });
+    res.status(200).json({ success: true, message: "done", data: processedFiles[0] });
 
   }
 

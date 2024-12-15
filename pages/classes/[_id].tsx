@@ -4,7 +4,6 @@ import ClasseInterface from "../../models/classe";
 import StudentInterface from "../../models/student";
 import api from "../../services/api";
 import Modal from "react-modal";
-import Link from "next/link";
 import { customStyles } from "../../services/constants";
 import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
@@ -20,6 +19,8 @@ import { Button, Menu, MenuButton, MenuItem, MenuList, useToast } from "@chakra-
 import { successMessage } from "../../utils/messages";
 import Header from "../../layouts/header";
 import Dropdown from "../../components/dropdown";
+import Link from "../../components/link";
+
 
 export default function ClasseDetails() {
   const [classe, setClasse] = useState<ClasseInterface>();
@@ -254,7 +255,7 @@ export default function ClasseDetails() {
           {exams.map((exam) => {
             return (
               <tr key={exam._id}>
-                <td> {exam.name} </td>
+                <td>  {exam.name} </td>
                 <td> <Link href={ getExamLink(classe?.section?.report_type ,  exam._id)}>   Entree les donnees</Link> </td>
                 {editable && (
                   <td>

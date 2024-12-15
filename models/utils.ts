@@ -1,5 +1,7 @@
 export interface FileResponse{
-    data:{
         newFilename:string,
-    }
+        originalName:string,
+        mimetype:string,
+        size:number,
+        src:string
 }

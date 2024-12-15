@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Classe from "../../models/classe";
-import Link from "next/link";
 import api from "../../services/api";
 import ClasseInterface from "../../models/classe";
 import Modal from "react-modal";
@@ -15,6 +14,7 @@ import { t } from "i18next";
 import useUser from "../../hooks/useUser";
 import Dropdown from "../../components/dropdown";
 import Header from "../../layouts/header";
+import Link from "../../components/link";
 
 export default function Classes() {
   const [classes, setClasses] = useState<Classe[]>([]);
@@ -89,6 +89,7 @@ export default function Classes() {
                 classe={classe}
                 deleteClasse={deleteClasse}
                 isAdmin={isAdmin}
+                key={`class_row_${classe._id}`}
               />
             );
           })}
@@ -131,7 +132,7 @@ export function ClasseRow({
   };
   return (
     <tr key={classe._id}>
-      <td> <Link href={`classes/${classe._id}`}>{classe.name}</Link></td>
+      <td> <Link href={`classes/${classe._id}`} className="link-action">{classe.name}</Link></td>
       <td>{classe.school?.name}</td>
       <td>{classe.section?.name}</td>
       <td>

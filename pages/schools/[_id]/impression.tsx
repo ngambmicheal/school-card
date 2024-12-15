@@ -16,9 +16,7 @@ export default function SchoolSettingImpression({
   school: schol,
   editable,
 }: ImpressionSettingsParams) {
-  const [school, setSchool] = useState<SchoolInterface | undefined>(schol);
-  const [schoolSessions, setSchoolSessions] = useState<SessionInterface[]>([])
-  const [sessionModal, setSessionModal] = useState(false);
+  const [school, setSchool] = useState<SchoolInterface>(schol);
 
   const updateSchool = () => {
     if (school) {
@@ -37,6 +35,18 @@ export default function SchoolSettingImpression({
       ...inputData,
       [key]: value,
     }));
+  }
+
+  function handleChangeLogo(e: any, key:string  ) {
+    const file = e.target.files[0];
+    if (file) {
+      api.uploadFile(file, 'SCHOOL', school?._id).then((response) => {
+        setSchool((inputData) => ({
+          ...inputData,
+          [key]: response.data.data.src,
+        }));
+      })
+    }
   }
 
   return (
@@ -161,6 +171,26 @@ export default function SchoolSettingImpression({
             </div>
          </div>
         </div>
+
+        <div className="my-3">
+        <hr />
+        </div>
+
+        <div className="row">
+          <div className="col-sm-3 px-3">
+            <img src={school?.logo}  className="preview-image"/>
+            <input type="file" name="logo" onChange={e => handleChangeLogo(e, 'logo')} accept=".jpg, .png" className="form-control" />
+          </div>
+          <div className="col-sm-3 px-3">
+            <img src={school?.th_fr}  className="preview-image"/>
+            <input type="file" name="logo" onChange={e => handleChangeLogo(e, 'th_fr')} accept=".jpg, .png" className="form-control"  />
+          </div>
+          <div className="col-sm-3 px-3">
+            <img src={school?.th_en}  className="preview-image"/>
+            <input type="file" name="logo" onChange={e => handleChangeLogo(e, 'th_en')} accept=".jpg, .png" className="form-control"  />
+          </div>
+        </div>
+
 
         {editable && (
           <div className="row">

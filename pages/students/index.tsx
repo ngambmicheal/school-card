@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import Classe from "../../models/student";
-import Link from "next/link";
 import api from "../../services/api";
 import ClasseInterface from "../../models/student";
 import Modal from "react-modal";
-import { customStyles } from "../../services/constants";
 import { CreateStudentModal } from "../classes/modals/student-forms";
 import { useToast } from "@chakra-ui/react";
 import { errorMessage, successMessage } from "../../utils/messages";
+import Link from "../../components/link";
 
 export default function Students() {
   const [students, setStudents] = useState<Classe[]>([]);
@@ -38,6 +37,15 @@ export default function Students() {
     });
   };
 
+  const syncPhotos = () => {
+    api.syncPhotos().then(() => {
+      toast(successMessage("Photos synchronisées avec succès!"));
+      getStudents();
+    }).catch((error) =>
+      toast(errorMessage(error.response?.data?.message ?? error.message))
+    );  
+  }
+
   const saveStudent = (student: any, file:any) => {
     api
       .saveStudent(student, file)
@@ -55,12 +63,19 @@ export default function Students() {
 
   return (
     <>
-      <button className="btn btn-success" onClick={() => setModalIsOpen(true)}>
-        {" "}
-        Ajouter un élève{" "}
-      </button>
-      <h3 className="my-3">Liste des eleves</h3>
-      <div className="table-responsive" style={{maxHeight:'20%'}}>
+      <div style={{width:'100%'}} className='py-3 my-3'>
+        <h3 className="my-3" style={{float:'left'}}>Liste des eleves </h3>
+          <span className="pull-right mb-3">
+            <button className="btn btn-secondary mx-3" onClick={() => syncPhotos()} >
+              Sync Photos
+            </button>
+            <button className="btn btn-success"  onClick={() => setModalIsOpen(true)} >
+              Ajouter un élève
+            </button>
+          </span>
+      </div>
+
+      <div  style={{maxHeight:'20%'}}>
       <table className="table table-hover table-striped table-bordered my-3 ">
         <thead>
           <tr>
@@ -84,7 +99,7 @@ export default function Students() {
             return (
               <tr key={student._id}>
                 <td><img src={student.image} style={{height:'30px', width:'30px'}} /> </td>
-                <td>{student.name}</td>
+                <td><Link href={`students/${student._id}`}>{student.name}</Link></td>
                 <td>{student.matricule}</td>
                 <td>{student.phone}</td>
                 <td>{student.email}</td>

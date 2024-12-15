@@ -13,6 +13,7 @@ import SubjectInterface from "../models/subject";
 import TermInterface from "../models/terms";
 import UserInterface from "../models/user";
 import { fileTypeEnum } from "./constants";
+import { FileResponse } from "../models/utils";
 
 type ApiResponse<T> = AxiosResponse<{data:T, message:String}>
 
@@ -357,6 +358,10 @@ export class Api {
 
   syncSchoolSession(){
     return axios.post("/api/schools/sync-sessions")
+  }
+
+  syncPhotos() {
+    return axios.post("/api/students/sync-photos");
   }
 
 

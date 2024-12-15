@@ -115,3 +115,25 @@ input, select{
 h3 {
   font-size: large;
 }
+
+.link-action{
+  color: #0d5835;
+  padding: 5px;
+  border-radius: 5px;
+  min-width: 100px;
+
+  &:hover{
+    background: #0d5835;
+    color: white;
+  }
+}
+
+h3{
+  font-size: large;
+  font-weight: bold;
+}
+
+.preview-image{
+  width: 100%;
+  height: 100px;
+}

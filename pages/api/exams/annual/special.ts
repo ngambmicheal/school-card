@@ -9,7 +9,6 @@ import { examResultSchema } from "../../../../models/examResult";
 import { competenceSchema } from "../../../../models/competence";
 import { subjectSchema } from "../../../../models/subject";
 import { getCompetencesLenght } from "./print-result";
-import resultsActions from "../../../../assets/jsx/resultsActions";
 import ReactDOMServer from "react-dom/server";
 import archiver from "archiver";
 import { schoolSchema } from "../../../../models/school";
