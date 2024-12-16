@@ -18,7 +18,7 @@ export const studentHeader = (
   return (
     <div>
       <div style={{ width: "85%", float: "left", fontSize: "20px" }}>
-        <table className="table1" style={{ fontSize: "12px !important" }}>
+        <table className="table1">
           <thead>
             <tr>
               <th colSpan={2}>
