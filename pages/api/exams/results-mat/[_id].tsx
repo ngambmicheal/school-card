@@ -89,7 +89,7 @@ export default async function handler(
     };
 
     let html = ReactDOMServer.renderToStaticMarkup(
-      resultsMatActions(competences, results, totalResults.length, totalResults)
+      resultsMatActions(competences, results, totalResults.length, totalResults, competences[0].school!)
     );
     html += `
                  <style>
