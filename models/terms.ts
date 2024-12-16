@@ -1,3 +1,4 @@
+import { Model } from "mongoose"
 import mg from "../services/mg"
 import ClasseInterface, { classeSchema } from "./classe"
 import ExamInterface, { examSchema } from "./exam"
@@ -32,4 +33,4 @@ const TermSchema = new mg.Schema({
 
 examSchema
 classeSchema
-export const termSchema = mg.models.Term || mg.model('Term', TermSchema)
+export const termSchema:Model<TermInterface> = mg.models.Term || mg.model('Term', TermSchema)

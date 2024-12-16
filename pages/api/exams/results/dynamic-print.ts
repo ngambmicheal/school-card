@@ -19,7 +19,6 @@ import { sectionSchema } from "../../../../models/section";
 import TermInterface, { termSchema } from "../../../../models/terms";
 import resultsDynamicActions from "../../../../assets/jsx/resultsDynamicActions";
 import { bgImgStyle } from "../../../../utils/styles";
-import path from 'path';
 
 export const getCompetencesLenght = (competence: CompetenceInterface) => {
   let total = 0;
@@ -37,9 +36,17 @@ export default async function handler(
 ) {
   const { term_id, student_id } = req.query;
 
-  const term: TermInterface = await termSchema
+  const term = await termSchema
     .findOne({ _id: term_id })
-    .populate({ path: "class", model: classeSchema });
+    .populate({ path: "class", model: classeSchema, populate:{
+      path: "school",
+      model: schoolSchema
+    } });
+
+  if (!term) {
+    return res.json({ status: 400, message: 'Term not found' })
+  }
+
   const exams = await examSchema.find({ _id: { $in: term.exams } });
   const examResults = await examResultSchema.find({
     student: student_id,
@@ -68,8 +75,6 @@ export default async function handler(
           populate: { path: "courses", model: courseSchema },
         });
 
-        console.log(path.resolve('./public'));
-
       var options = {
         format: "A4",
         orientation: "portrait",
@@ -97,7 +102,8 @@ export default async function handler(
           totalResults,
           examResults,
           exams,
-          term
+          term,
+          term.class!.school!
         )
       );
       html += `
@@ -164,7 +170,7 @@ export default async function handler(
           res.setHeader("Content-Type", "application/pdf");
           res.setHeader(
             `Content-Disposition`,
-            `attachment; filename=${results.student.name}.pdf`
+            `attachment; filename=${results!.student.name}.pdf`
           );
           file.pipe(res);
           console.log("thie file isreac");

@@ -1,0 +1,12 @@
+12- cmd pour synchroniser l'application à une nouvelle bd
+11- la modification de l'année scolaire dans les paramètres doit s'appliquer sur les bulletins
+utiliser le menu paramètre pour importer les fichiers images pour les tableaux d'honneur et attestation (manipuler le code et convertir les images en x64 est très pénibles)
+9- automatisation des tableaux d'honneur selon les critères ( sil-cp 17-20, CE1&2 16-20, CM1&2 15-20)  définis dans les paramètres ou directement dans le code
+8- l'appli ne support pas plus de 3 utilisateurs connectés, ou même sur le même navigateur
+7- lorsque le fichier .env est utilisé l'accès à l'application en utilisant la machine seveur n'est possible
+6- insertion des notes de la maternelle en csv en fessant l'équivalence chiffre et mention c'est à dire 1 pour acquis, 2 pour en cours d'acquisition, 3.....
+5- possibilité d'imprimer individuellement les bulletins de chaque élève
+4- créer un menu examens et définir toutes les classes ou l'examen s'applique
+3- ignorer l'examen d'un élève qui n'a de notes doit être automatique sans supprimer la possibilité manuelle
+2- permettre l'insertion des photos pendant l'ajout des élèves et faire apparaître la photo sur son bulletin
+1- ajouter les cases à cocher devant chaque noms d'élèves pour mettre une suppression multiple ou tout

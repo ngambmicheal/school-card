@@ -6,19 +6,15 @@ import { studentSchema } from "../../../../models/student";
 import * as pdf from "pdf-creator-node";
 import fs from "fs";
 import { examResultSchema } from "../../../../models/examResult";
-import { competenceSchema } from "../../../../models/competence";
 import { subjectSchema } from "../../../../models/subject";
-import { getCompetencesLenght } from "./print-result";
 import ReactDOMServer from "react-dom/server";
 import archiver from "archiver";
 import { schoolSchema } from "../../../../models/school";
-import { courseSchema } from "../../../../models/course";
 import { classeSchema } from "../../../../models/classe";
 import { sectionSchema } from "../../../../models/section";
 import resultsNormalActions from "../../../../assets/jsx/resultsNormalActions";
 import { getTotal } from "../../../../assets/jsx/resultsNormalUiStats";
 import { replaceAll } from "../../../../services/utils";
-import resultsDynamicNormalActions from "../../../../assets/jsx/resultsDynamicNormalActions";
 import TermInterface, { termSchema } from "../../../../models/terms";
 import resultsDynamicSpecialActions from "../../../../assets/jsx/resultsDynamicSpecialActions";
 import AnnualExamInterface, {
@@ -26,6 +22,7 @@ import AnnualExamInterface, {
 } from "../../../../models/annualExam";
 import resultsAnnualSpecialActions from "../../../../assets/jsx/resultsAnnualSpecialActions";
 import { bgImgStyle } from "../../../../utils/styles";
+import { HeadersEnum } from "../../../../utils/enums";
 
 export default async function handler(
   req: NextApiRequest,
@@ -33,9 +30,17 @@ export default async function handler(
 ) {
   const { annualExam_id } = req.query;
 
-  const term: AnnualExamInterface = await annualExamSchema
+  const school = await schoolSchema.findOne({ _id: req.headers[HeadersEnum.SchoolId] });
+
+  const term = await annualExamSchema
     .findOne({ _id: annualExam_id })
     .populate({ path: "class", model: classeSchema });
+
+  if (!term) {
+    return res.json({ status: 400, message: 'Term not found' })
+  }
+
+
   const exams = await examSchema.find({ _id: { $in: term.terms } });
   const termsSearch = term.terms?.map((t) => t.toString());
   const totalResults = await (
@@ -74,12 +79,6 @@ export default async function handler(
       },
       footer: {
         height: "0mm",
-        contents: {
-          // first: 'Cover page',
-          // 2: 'Second page', // Any page number is working. 1-based index
-          // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-          // last: 'Last Page'
-        },
       },
     };
 
@@ -96,7 +95,8 @@ export default async function handler(
         totalResults,
         examResults,
         exams,
-        term
+        term,
+        school
       )
     );
     html += `
@@ -150,7 +150,7 @@ export default async function handler(
 
     pdf
       .create(document, options)
-      .then((response: any) => {})
+      .then((response: any) => { })
       .catch((error: any) => {
         console.error(error);
         res.json({ message: error.message, success: false });

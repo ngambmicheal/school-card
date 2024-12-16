@@ -1,3 +1,4 @@
+import { Model } from "mongoose"
 import mg from "../services/mg"
 import CompetenceInterface, { competenceSchema } from "./competence"
 import CourseInterface, { courseSchema } from "./course"
@@ -11,9 +12,10 @@ export default interface SubjectInterface{
     slug?:string,
     courses?:CourseInterface[],
     report_type?:string,
+    details?:string,
 }
 
-const SubjectSchema = new mg.Schema({
+const SubjectSchema = new mg.Schema<SubjectInterface>({
     name: {type:String, required:true},
     details: {type:String},
     report_type:{type:String, required:true},
@@ -41,4 +43,4 @@ const SubjectSchema = new mg.Schema({
 
 schoolSchema
 courseSchema
-export const subjectSchema = mg.models.Subject || mg.model('Subject', SubjectSchema)
+export const subjectSchema:Model<SubjectInterface> = mg.models.Subject || mg.model<SubjectInterface>('Subject', SubjectSchema)

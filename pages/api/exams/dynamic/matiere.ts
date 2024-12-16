@@ -6,21 +6,17 @@ import { studentSchema } from "../../../../models/student";
 import * as pdf from "pdf-creator-node";
 import fs from "fs";
 import { examResultSchema } from "../../../../models/examResult";
-import { competenceSchema } from "../../../../models/competence";
 import { subjectSchema } from "../../../../models/subject";
-import { getCompetencesLenght } from "./print-result";
 import ReactDOMServer from "react-dom/server";
 import archiver from "archiver";
 import { schoolSchema } from "../../../../models/school";
-import { courseSchema } from "../../../../models/course";
 import { classeSchema } from "../../../../models/classe";
-import { sectionSchema } from "../../../../models/section";
-import resultsNormalActions from "../../../../assets/jsx/resultsNormalActions";
 import { getTotal } from "../../../../assets/jsx/resultsNormalUiStats";
 import { replaceAll } from "../../../../services/utils";
 import resultsDynamicNormalActions from "../../../../assets/jsx/resultsDynamicNormalActions";
 import TermInterface, { termSchema } from "../../../../models/terms";
 import { bgImgStyle } from "../../../../utils/styles";
+
 
 
 export default async function handler(
@@ -29,9 +25,16 @@ export default async function handler(
 ) {
   const { term_id } = req.query;
 
-  const term: TermInterface = await termSchema
+  const term = await termSchema
     .findOne({ _id: term_id })
-    .populate({ path: "class", model: classeSchema });
+    .populate({ path: "class", model: classeSchema, populate: {
+      path:'class',
+    } });
+
+  if (!term) {
+    return res.json({ status: 400, message: 'Term not found' })
+  }
+
   const exams = await examSchema.find({ _id: { $in: term.exams } });
   const totalResults = await (
     await examResultSchema
@@ -41,7 +44,7 @@ export default async function handler(
   ).filter((re) => getTotal(re) != 0);
 
   const subjects = await subjectSchema
-    .find({ school: term.class.school, report_type: term.report_type })
+    .find({ school: term.class?.school, report_type: term.report_type })
     .populate({ path: "school", model: schoolSchema });
 
   const zipName = `${replaceAll(" ", "_", term.class?.name)}__${term.name}`;
@@ -69,12 +72,6 @@ export default async function handler(
       },
       footer: {
         height: "0mm",
-        contents: {
-          // first: 'Cover page',
-          // 2: 'Second page', // Any page number is working. 1-based index
-          // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-          // last: 'Last Page'
-        },
       },
     };
 
@@ -91,7 +88,8 @@ export default async function handler(
         totalResults,
         examResults,
         exams,
-        term
+        term,
+        term.class!.school!
       )
     );
     html += `

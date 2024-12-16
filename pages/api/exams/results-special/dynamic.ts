@@ -79,7 +79,8 @@ export default async function handler(
           subjects,
           results,
           totalResults.length,
-          totalResults
+          totalResults,
+          school!
         )
       );
       html += `

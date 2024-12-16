@@ -9,7 +9,8 @@ import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
 import { getFloat } from "../../utils/calc";
 import { zoomStyle } from "../../services/constants";
-import { studentHeader } from "./semence-util";
+import { schoolLogo, studentHeader } from "./semence-util";
+import SchoolInterface from "../../models/school";
 
 let comT: string[] = [];
 
@@ -79,6 +80,7 @@ export default function resultsDynamicNormalActions(
   examResults: ExamResultInterface[],
   exams: ExamInterface[],
   term: TermInterface,
+  school: SchoolInterface
 ) {
   comT = [];
 
@@ -101,7 +103,7 @@ export default function resultsDynamicNormalActions(
             <i>BP: 1661 DOUALA TEL: (237) 699717529/33089582</i> <br />
           </th>
           <th className="" style={{ width: "20%" }}>
-            <img src={`data:image/jpeg;base64, ${logo}`} height={100} />
+            <img src={`data:image/jpeg;base64, ${schoolLogo(school, 'logo')}`} height={100} />
           </th>
           <th className="center" style={{ width: "40%" }}>
             <b> REPUBLIC OF CAMEROON</b> <br />

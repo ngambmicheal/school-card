@@ -1,3 +1,4 @@
+import { Model } from "mongoose"
 import mg from "../services/mg"
 import SchoolInterface, { schoolSchema } from "./school"
 import SubjectInterface, { subjectSchema } from "./subject"
@@ -34,4 +35,4 @@ const CompetenceSchema = new mg.Schema({
 
 schoolSchema
 subjectSchema
-export const competenceSchema = mg.models.Competence || mg.model('Competence', CompetenceSchema)
+export const competenceSchema:Model<CompetenceInterface> = mg.models.Competence || mg.model('Competence', CompetenceSchema)

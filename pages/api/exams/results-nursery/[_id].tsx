@@ -35,7 +35,7 @@ export default async function handler(
   const exam = await examSchema.findOne({ _id: exam_id }).populate({
     path: "class_id",
     model: classeSchema,
-    populate: { path: "section", sectionSchema },
+    populate: { path: "section", model:sectionSchema },
   });
 
   const totalResults = await await examResultSchema
@@ -53,8 +53,8 @@ export default async function handler(
     .sort({ rank: 1 });
   const competences = await competenceSchema
     .find({
-      school: exam.class_id.school,
-      report_type: exam.class_id.section.report_type,
+      school: exam?.class_id?.school,
+      report_type: exam!.class_id?.section!.report_type,
     })
     .populate({ path: "school", model: schoolSchema })
     .populate({
@@ -63,7 +63,7 @@ export default async function handler(
       populate: { path: "courses", model: courseSchema },
     });
 
-  const zipName = `${replaceAll(" ", "_", exam.class_id.name)}__${exam.name}`;
+  const zipName = `${replaceAll(" ", "_", exam!.class_id?.name)}__${exam!.name}`;
   var dir = `./tmp/exams/${zipName}`;
   var zipOutput = fs.createWriteStream(`./public/exams/${zipName}.zip`);
   var zipDir = `./public/exams/${zipName}.zip`;
@@ -91,7 +91,8 @@ export default async function handler(
         competences,
         results,
         totalResults.length,
-        totalResults
+        totalResults,
+        competences[0].school!
       )
     );
     html += `

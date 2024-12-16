@@ -34,7 +34,6 @@ export default async function handler(
   res: NextApiResponse<any>
 ) {
   const { result } = req.query;
-
   examResultSchema
     .findOne({ _id: result })
     .populate({ path: "student", model: studentSchema })
@@ -50,8 +49,8 @@ export default async function handler(
     .then(async (results) => {
       const competences = await competenceSchema
         .find({
-          school: results.exam_id.class_id.school,
-          report_type: results.exam_id.class_id.section.report_type,
+          school: results?.exam_id.class_id!.school,
+          report_type: results?.exam_id.class_id?.section?.report_type,
         })
         .populate({ path: "school", model: schoolSchema })
         .populate({
@@ -66,22 +65,9 @@ export default async function handler(
         border: "10mm",
         header: {
           height: "0mm",
-
-          contents: {
-            2: "",
-            // 2: 'Second page', // Any page number is working. 1-based index
-            // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-            // last: 'Last Page'
-          },
         },
         footer: {
           height: "0mm",
-          contents: {
-            first: "",
-            // 2: 'Second page', // Any page number is working. 1-based index
-            // default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-            // last: 'Last Page'
-          },
         },
       };
 
@@ -97,7 +83,8 @@ export default async function handler(
           competences,
           results,
           totalResults.length,
-          totalResults
+          totalResults,
+          competences[0].school!
         )
       );
       html += `

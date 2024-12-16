@@ -26,6 +26,7 @@ import AnnualExamInterface, {
   annualExamSchema,
 } from "../../../../models/annualExam";
 import resultsAnnualActions from "../../../../assets/jsx/resultsAnnualActions";
+import { HeadersEnum } from "../../../../utils/enums";
 
 export default async function handler(
   req: NextApiRequest,
@@ -33,12 +34,19 @@ export default async function handler(
 ) {
   const { annualExam_id } = req.query;
 
-  const term: AnnualExamInterface = await annualExamSchema
+  const school = await schoolSchema.findOne({_id: req.headers[HeadersEnum.SchoolId]});
+
+  const term = await annualExamSchema
     .findOne({ _id: annualExam_id })
     .populate({ path: "class", model: classeSchema });
-  const termsSearch = term.terms?.map((t) => t.toString());
+
+  if(!term){
+    return res.json({status:400, message:'Term not found'})
+  }
+
+  const termsSearch = term?.terms?.map((t) => t.toString());
   const exams = await termSchema
-    .find({ _id: { $in: term.terms } })
+    .find({ _id: { $in: term?.terms } })
     .populate({ path: "exams", model: examSchema });
   const totalResults = await (
     await examResultSchema
@@ -47,7 +55,7 @@ export default async function handler(
       .sort({ rank: 1 })
   ).filter((re) => getTotal(re) != 0);
   const competences = await competenceSchema
-    .find({ school: term.class?.school, report_type: term.report_type })
+    .find({ school: term?.class?.school, report_type: term?.report_type })
     .populate({ path: "school", model: schoolSchema })
     .populate({
       path: "subjects",
@@ -55,7 +63,7 @@ export default async function handler(
       populate: { path: "courses", model: courseSchema },
     });
 
-  const zipName = `${replaceAll(" ", "_", term.class?.name)}__${term.name}`;
+  const zipName = `${replaceAll(" ", "_", term?.class?.name)}__${term?.name}`;
   var dir = `./tmp/terms/${zipName}`;
   var termsDir = "./public/terms";
   var zipOutput = fs.createWriteStream(`./public/terms/${zipName}.zip`);
@@ -102,7 +110,8 @@ export default async function handler(
         totalResults,
         examResults,
         exams,
-        term
+        term!,
+        school
       )
     );
     html += `

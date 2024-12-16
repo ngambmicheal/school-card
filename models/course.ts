@@ -5,10 +5,11 @@ export default interface CourseInterface{
     _id?:string,
     name:string,
     subject:SubjectInterface & string,
-    point:number
+    point:number,
+    details:string
 }
 
-const CourseSchema = new mg.Schema({
+const CourseSchema = new mg.Schema<CourseInterface>({
     name: {type:String, required:true},
     details: {type:String},
     subject: {

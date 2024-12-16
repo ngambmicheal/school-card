@@ -1,3 +1,4 @@
+import { Model } from "mongoose"
 import mg from "../services/mg"
 import ClasseInterface from "./classe"
 import SessionInterface from "./session"
@@ -7,10 +8,11 @@ export default interface ExamInterface{
     class_id?:string & ClasseInterface,
     session_id?:string & SessionInterface
     name: string
+    details:string
 }
 
 
-const ExamSchema = new mg.Schema({
+const ExamSchema = new mg.Schema<ExamInterface>({
     name: {type:String, required:true},
     details: {type:String},
     class_id : {
@@ -29,4 +31,4 @@ const ExamSchema = new mg.Schema({
 )
 
 
-export const examSchema = mg.models.Exam || mg.model('Exam', ExamSchema)
+export const examSchema:Model<ExamInterface> = mg.models.Exam || mg.model('Exam', ExamSchema)

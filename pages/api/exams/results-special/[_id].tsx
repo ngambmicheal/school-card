@@ -6,18 +6,12 @@ import { studentSchema } from "../../../../models/student";
 import * as pdf from "pdf-creator-node";
 import fs from "fs";
 import { examResultSchema } from "../../../../models/examResult";
-import { competenceSchema } from "../../../../models/competence";
 import { subjectSchema } from "../../../../models/subject";
-import { getCompetencesLenght } from "./dynamic-print";
-import resultsActions from "../../../../assets/jsx/resultsActions";
 import ReactDOMServer from "react-dom/server";
 import archiver from "archiver";
 import { schoolSchema } from "../../../../models/school";
-import { courseSchema } from "../../../../models/course";
 import { classeSchema } from "../../../../models/classe";
 import { sectionSchema } from "../../../../models/section";
-import resultsNormalActions from "../../../../assets/jsx/resultsNormalActions";
-import { getTotal } from "../../../../assets/jsx/resultsNormalUiStats";
 import { replaceAll } from "../../../../services/utils";
 import resultsSpecialActions from "../../../../assets/jsx/resultsSpecialActions";
 import { bgImgStyle } from "../../../../utils/styles";
@@ -87,7 +81,8 @@ export default async function handler(
         subjects,
         results,
         totalResults.length,
-        totalResults
+        totalResults,
+        school!
       )
     );
     html += `

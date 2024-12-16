@@ -7,7 +7,8 @@ import { getSubjectTotal } from "../../pages/exams/[_id]";
 import { getGeneralAverage } from "./resultsActions";
 import { getFloat } from "../../utils/calc";
 import { zoomStyle } from "../../services/constants";
-import { studentHeader } from "./semence-util";
+import { schoolLogo, studentHeader } from "./semence-util";
+import SchoolInterface from "../../models/school";
 
 let comT: string[] = [];
 
@@ -74,6 +75,7 @@ export default function resultsNormalActions(
   results: any,
   totalUsers: number,
   statsResults: ExamResultInterface[],
+  school: SchoolInterface
 ) {
   comT = [];
 
@@ -93,7 +95,7 @@ export default function resultsNormalActions(
             <i>BP: 1661 DOUALA TEL: (237) 699717529/33089582</i> <br />
           </th>
           <th className="" style={{ width: "20%" }}>
-            <img src={`data:image/jpeg;base64, ${logo}`} height={100} />
+            <img src={`data:image/jpeg;base64, ${schoolLogo(school, 'logo')}`} height={100} />
           </th>
           <th className="center" style={{ width: "40%" }}>
             <b> REPUBLIC OF CAMEROON</b> <br />

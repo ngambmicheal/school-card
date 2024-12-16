@@ -14,9 +14,7 @@ import { schoolSchema } from "../../../../models/school";
 import { subjectSchema } from "../../../../models/subject";
 import { classeSchema } from "../../../../models/classe";
 import { courseSchema } from "../../../../models/course";
-import { getTotal } from "../../../../assets/jsx/resultsUiStats";
 import { sectionSchema } from "../../../../models/section";
-import resultsMatActions from "../../../../assets/jsx/resultsMatActions";
 import resultsNurseryActions from "../../../../assets/jsx/resultsNurseryActions";
 import { bgImgStyle } from "../../../../utils/styles";
 
@@ -52,8 +50,8 @@ export default async function handler(
     .then(async (results) => {
       const competences = await competenceSchema
         .find({
-          school: results.exam_id.class_id.school,
-          report_type: results.exam_id.class_id.section.report_type,
+          school: results!.exam_id.class_id!.school,
+          report_type: results!.exam_id.class_id!.section!.report_type,
         })
         .populate({ path: "school", model: schoolSchema })
         .populate({
@@ -84,7 +82,8 @@ export default async function handler(
           competences,
           results,
           totalResults.length,
-          totalResults
+          totalResults,
+          competences[0].school!
         )
       );
       html += `

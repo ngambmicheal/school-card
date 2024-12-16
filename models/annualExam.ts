@@ -1,3 +1,4 @@
+import { Model } from "mongoose"
 import mg from "../services/mg"
 import ClasseInterface, { classeSchema } from "./classe"
 import ExamInterface, { examSchema } from "./exam"
@@ -32,4 +33,4 @@ const AnnualExamSchema = new mg.Schema({
 examSchema
 classeSchema
 termSchema
-export const annualExamSchema = mg.models.AnnualExam || mg.model('AnnualExam', AnnualExamSchema)
+export const annualExamSchema:Model<AnnualExamInterface> = mg.models.AnnualExam || mg.model('AnnualExam', AnnualExamSchema)

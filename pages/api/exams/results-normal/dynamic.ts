@@ -6,15 +6,11 @@ import { studentSchema } from "../../../../models/student";
 import * as pdf from "pdf-creator-node";
 import fs from "fs";
 import CompetenceInterface, {
-  competenceSchema,
 } from "../../../../models/competence";
 import ReactDOMServer from "react-dom/server";
-import resultsActions from "../../../../assets/jsx/resultsActions";
 import { schoolSchema } from "../../../../models/school";
 import { subjectSchema } from "../../../../models/subject";
 import { classeSchema } from "../../../../models/classe";
-import { courseSchema } from "../../../../models/course";
-import resultsNormalActions from "../../../../assets/jsx/resultsNormalActions";
 import { sectionSchema } from "../../../../models/section";
 import { getTotal } from "../../../../assets/jsx/resultsNormalUiStats";
 import resultsDynamicNormalActions from "../../../../assets/jsx/resultsDynamicNormalActions";
@@ -51,8 +47,8 @@ export default async function handler(
     .then(async (results) => {
       const subjects = await subjectSchema
         .find({
-          school: results.exam_id.class_id.school,
-          report_type: results.exam_id.class_id.section.report_type,
+          school: results?.exam_id.class_id?.school,
+          report_type: results?.exam_id.class_id?.section?.report_type,
         })
         .populate({ path: "school", model: schoolSchema });
 
@@ -80,7 +76,8 @@ export default async function handler(
           subjects,
           results,
           totalResults.length,
-          totalResults
+          totalResults,
+          subjects[0].school
         )
       );
       html += `

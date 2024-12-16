@@ -17,7 +17,6 @@ import { courseSchema } from "../../../../models/course";
 import { getTotal } from "../../../../assets/jsx/resultsUiStats";
 import { sectionSchema } from "../../../../models/section";
 import serverPath from "../../../../services/serverpath";
-import { logo } from "../../../../assets/jsx/image";
 import { bgImgStyle } from "../../../../utils/styles";
 
 export const getCompetencesLenght = (competence: CompetenceInterface) => {
@@ -55,8 +54,8 @@ export default async function handler(
       .then(async (results) => {
         const competences = await competenceSchema
           .find({
-            school: results.exam_id.class_id.school,
-            report_type: results.exam_id.class_id.section.report_type,
+            school: results?.exam_id.class_id?.school,
+            report_type: results?.exam_id.class_id?.section?.report_type,
           })
           .populate({ path: "school", model: schoolSchema })
           .populate({
@@ -79,7 +78,7 @@ export default async function handler(
 
         const totalResults = await (
           await examResultSchema
-            .find({ exam_id: results.exam_id, ignore: { $ne: true } })
+            .find({ exam_id: results?.exam_id, ignore: { $ne: true } })
             .populate({ path: "student", model: studentSchema })
             .sort({ rank: 1 })
         ).filter((re) => getTotal(re) != 0);
@@ -89,7 +88,8 @@ export default async function handler(
             competences,
             results,
             totalResults.length,
-            totalResults
+            totalResults, 
+            competences[0].school!
           )
         );
         html += `
@@ -137,8 +137,6 @@ export default async function handler(
                 </style>
                 `;
 
-        console.log(html);
-
         var document = {
           html: html,
           data: {
@@ -161,7 +159,7 @@ export default async function handler(
             res.setHeader("Content-Type", "application/pdf");
             res.setHeader(
               `Content-Disposition`,
-              `attachment; filename=${results.student.name}.pdf`
+              `attachment; filename=${results?.student.name}.pdf`
             );
             file.pipe(res);
             console.log("thie file isreac");

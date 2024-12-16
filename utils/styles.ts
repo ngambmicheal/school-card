@@ -1,4 +1,6 @@
-import { logo } from "../assets/jsx/image";
+import serverPath, { base64_encode } from "../services/serverpath"
+
+const logo = base64_encode(serverPath('/assets/images/smc/logo.png'));
 
 export const bgImgStyle = `  
  

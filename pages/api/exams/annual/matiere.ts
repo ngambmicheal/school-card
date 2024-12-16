@@ -17,13 +17,12 @@ import { sectionSchema } from "../../../../models/section";
 import resultsNormalActions from "../../../../assets/jsx/resultsNormalActions";
 import { getTotal } from "../../../../assets/jsx/resultsNormalUiStats";
 import { replaceAll } from "../../../../services/utils";
-import resultsDynamicNormalActions from "../../../../assets/jsx/resultsDynamicNormalActions";
-import TermInterface, { termSchema } from "../../../../models/terms";
 import AnnualExamInterface, {
   annualExamSchema,
 } from "../../../../models/annualExam";
 import resultsAnnualNormalActions from "../../../../assets/jsx/resultsAnnualNormalActions";
 import { bgImgStyle } from "../../../../utils/styles";
+import { HeadersEnum } from "../../../../utils/enums";
 
 export default async function handler(
   req: NextApiRequest,
@@ -31,10 +30,18 @@ export default async function handler(
 ) {
   const { annualExam_id } = req.query;
 
-  const term: AnnualExamInterface = await annualExamSchema
+  const school = await schoolSchema.findOne({_id: req.headers[HeadersEnum.SchoolId]});
+
+  const term = await annualExamSchema
     .findOne({ _id: annualExam_id })
     .populate({ path: "class", model: classeSchema });
+
+  if(!term){
+    return res.json({status:400, message:'Term not found'})
+  }
+
   const exams = await examSchema.find({ _id: { $in: term.terms } });
+
   const totalResults = await (
     await examResultSchema
       .find({ annualExam_id })
@@ -95,7 +102,8 @@ export default async function handler(
         totalResults,
         examResults,
         exams,
-        term
+        term,
+        school
       )
     );
     html += `
