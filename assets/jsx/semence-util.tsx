@@ -18,7 +18,7 @@ export const studentHeader = (
   return (
     <div>
       <div style={{ width: "85%", float: "left", fontSize: "20px" }}>
-        <table className="table1">
+        <table className="table1" style={{fontSize:"20px"}}>
           <thead>
             <tr>
               <th colSpan={2}>
@@ -49,9 +49,9 @@ export const studentHeader = (
         <img
           src={`data:image/jpeg;base64,${fileUrl(student?.image ? student.image : student?.sex == "M" ? "/images/male-avatar.jpg" : "/images/female-avatar.jpg")}`}
           style={{
-            width: "90px",
-            height: "90px",
-            marginTop: "-10px",
+            width: "130px",
+            height: "130px",
+            marginTop: "-40px",
             paddingBottom: "10px",
           }}
         />

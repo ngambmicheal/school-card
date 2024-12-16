@@ -1,8 +1,5 @@
 import { logo } from "../assets/image";
 
-
-console.log(logo)
-
 export const bgImgStyle = `  
  
     .bg-logo{
