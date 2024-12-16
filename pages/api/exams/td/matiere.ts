@@ -6,26 +6,13 @@ import { studentSchema } from "../../../../models/student";
 import * as pdf from "pdf-creator-node";
 import fs from "fs";
 import { examResultSchema } from "../../../../models/examResult";
-import { competenceSchema } from "../../../../models/competence";
-import { subjectSchema } from "../../../../models/subject";
-import { getCompetencesLenght } from "./print-result";
-import resultsActions from "../../../../assets/jsx/resultsActions";
 import ReactDOMServer from "react-dom/server";
 import archiver from "archiver";
-import { schoolSchema } from "../../../../models/school";
-import { courseSchema } from "../../../../models/course";
 import { classeSchema } from "../../../../models/classe";
-import { sectionSchema } from "../../../../models/section";
-import {
-  getTotal,
-  getTotalPoints,
-  getTotals,
-} from "../../../../assets/jsx/resultsUiStats";
-import resultsDynamicActions from "../../../../assets/jsx/resultsDynamicActions";
 import TermInterface, { termSchema } from "../../../../models/terms";
 import { replaceAll } from "../../../../services/utils";
 import thFr from "../../../../assets/td/td_fr";
-import thEn from "../../../../assets/td/td_en";
+import { schoolSchema } from "../../../../models/school";
 
 export default async function handler(
   req: NextApiRequest,
@@ -35,7 +22,9 @@ export default async function handler(
 
   const term: TermInterface = await termSchema
     .findOne({ _id: term_id })
-    .populate({ path: "class", model: classeSchema })
+    .populate({ path: "class", model: classeSchema, populate:{
+      path:"school", model: schoolSchema
+    } })
     .populate({ path: "exams", model: examSchema });
   const totalResults = await examResultSchema
     .find({ term_id, th: true })

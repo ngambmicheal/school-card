@@ -1,7 +1,6 @@
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { useEffect, useState } from "react";
-import { logo } from "../../../assets/jsx/image";
 import CompetenceInterface from "../../../models/competence";
 import { courseSchema } from "../../../models/course";
 import api from "../../../services/api";
@@ -30,7 +29,6 @@ export default function coursesPage() {
 
   const getCompetencesLenght = (competence: CompetenceInterface) => {
     let total = 0;
-    console.log(total);
     competence.subjects &&
       competence.subjects.map((s) => {
         total += s.courses?.length ?? 0;
@@ -55,7 +53,6 @@ export default function coursesPage() {
       <input placeholder="parent email" width={100} />
       <div
         className="show-logo"
-        style={{ backgroundImage: `url('data:image/jpeg;base64, ${logo}')` }}
       >
         <table className="table2">
           <tr>

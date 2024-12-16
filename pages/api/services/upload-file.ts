@@ -1,7 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import StudentInterface from "../../../models/student";
-import { uploadFile } from "../services";
-import { filePaths, fileTypeEnum } from "../../../services/constants";
 import { IncomingForm } from "formidable";
 import { FileResponse } from "../../../models/utils";
 
@@ -28,7 +25,7 @@ export default async function handler(
 
     const processedFiles = uploadedFiles.map((file) => ({
       originalName: file.originalFilename,
-      newName: file.newFilename,
+      newFilename: file.newFilename,
       mimetype: file.mimetype,
       size: file.size,
       src: `/uploads/${file.newFilename}`, // Path for public access

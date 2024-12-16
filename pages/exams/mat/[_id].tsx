@@ -2,6 +2,7 @@ import { useRouter } from "next/dist/client/router";
 import { useEffect, useState } from "react";
 import CourseInterface from "../../../models/course";
 import SubjectInterface from "../../../models/subject";
+import { useToast } from "@chakra-ui/react";
 import api from "../../../services/api";
 import { customStyles } from "../../../services/constants";
 import Modal from "react-modal";
@@ -12,8 +13,8 @@ import ExamResultInterface from "../../../models/examResult";
 import CompetenceInterface from "../../../models/competence";
 import ExamInterface from "../../../models/exam";
 import FileUpload, { validateFiles } from "../../../components/dropzone";
-import { toast } from "@chakra-ui/toast";
 import { useForm } from "react-hook-form";
+import useSchool from "../../../hooks/useSchool";
 
 export const act = [
   { slug: "A", name: "Acquis" },
@@ -25,10 +26,12 @@ export default function examDetails() {
   const [exam, setExam] = useState<ExamInterface>();
   const [competences, setCompetences] = useState<CompetenceInterface[]>([]);
   const [points, setPoints] = useState(0);
+  const toast = useToast();
 
   const [students, setStudents] = useState<StudentInterface[]>([]);
   const [results, setResults] = useState<any>([]);
   const [ImportIsOpen, setImportIsOpen] = useState(false);
+  const {school} = useSchool();
 
   const router = useRouter();
   const { _id: examId } = router.query;
@@ -113,7 +116,7 @@ export default function examDetails() {
 
   const importResults = (file: File | null) => {
     api
-      .importResults({
+      .importResultsMat({
         file: file,
         exam_id: examId,
       })
@@ -124,7 +127,7 @@ export default function examDetails() {
           description: `Loaded `,
         });
 
-        setTimeout(() => router.push("/soft-leads"), 2000);
+        setTimeout(() => window.location.reload(), 2000);
       })
       .catch((e) => {
         console.log(e);
@@ -226,14 +229,21 @@ export default function examDetails() {
             <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button> */}
 
       <button className="mx-3 btn btn-dark" onClick={() => printStats(true)}>
-        {" "}
         Imprimer Statistics
       </button>
 
       <button className="mx-3 btn btn-dark" onClick={() => printTD()}>
-        {" "}
         Imprimer Attestation
       </button>
+
+      {school && school.allowUpdate && (
+        <button
+          className="mx-3 btn btn-success"
+          onClick={() => setImportIsOpen(true)}
+        >
+          Upload Results
+        </button>
+      )}
 
       <table className="table table-striped">
         <thead>

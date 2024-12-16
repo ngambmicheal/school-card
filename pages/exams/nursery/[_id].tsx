@@ -12,7 +12,7 @@ import ExamResultInterface from "../../../models/examResult";
 import CompetenceInterface from "../../../models/competence";
 import ExamInterface from "../../../models/exam";
 import FileUpload, { validateFiles } from "../../../components/dropzone";
-import { toast } from "@chakra-ui/toast";
+import { useToast } from "@chakra-ui/toast";
 import { useForm } from "react-hook-form";
 
 export const nurseryActs = [
@@ -32,6 +32,7 @@ export default function examDetails() {
   const [ImportIsOpen, setImportIsOpen] = useState(false);
 
   const router = useRouter();
+  const toast = useToast();
   const { _id: examId } = router.query;
 
   useEffect(() => {
@@ -114,7 +115,7 @@ export default function examDetails() {
 
   const importResults = (file: File | null) => {
     api
-      .importResults({
+      .importResultsMat({
         file: file,
         exam_id: examId,
       })
@@ -125,7 +126,7 @@ export default function examDetails() {
           description: `Loaded `,
         });
 
-        setTimeout(() => router.push("/soft-leads"), 2000);
+        setTimeout(() => window.location.reload(), 2000);
       })
       .catch((e) => {
         console.log(e);
@@ -222,10 +223,10 @@ export default function examDetails() {
         Imprimer Resultats{" "}
       </button>
 
-      {/* <button className='mx-3 btn btn-success' onClick={() => getRank()} > get Rank</button>
+      {/* <button className='mx-3 btn btn-success' onClick={() => getRank()} > get Rank</button> */}
 
             <button className='mx-3 btn btn-success' onClick={() => setImportIsOpen(true)} > Upload Results</button>
-            */}
+           
       <button className="mx-3 btn btn-dark" onClick={() => printStats(true)}>
         {" "}
         Imprimer Statistics

@@ -12,7 +12,7 @@ import ExamResultInterface from "../../../models/examResult";
 import CompetenceInterface from "../../../models/competence";
 import ExamInterface from "../../../models/exam";
 import FileUpload, { validateFiles } from "../../../components/dropzone";
-import { toast } from "@chakra-ui/toast";
+import { useToast } from "@chakra-ui/toast";
 import { useForm } from "react-hook-form";
 import { CSVLink } from "react-csv";
 import { getFloat } from "../../../utils/calc";
@@ -27,6 +27,7 @@ export default function examDetails() {
   const [students, setStudents] = useState<StudentInterface[]>([]);
   const [results, setResults] = useState<any>([]);
   const [ImportIsOpen, setImportIsOpen] = useState(false);
+  const toast = useToast();
 
   const router = useRouter();
   const { _id: examId } = router.query;
@@ -125,7 +126,7 @@ export default function examDetails() {
           description: `Loaded `,
         });
 
-        setTimeout(() => router.push("/soft-leads"), 2000);
+        setTimeout(() => window.location.reload(), 2000);
       })
       .catch((e) => {
         console.log(e);

@@ -1,10 +1,9 @@
 
 import ExamResultInterface from "../../models/examResult";
 import TermInterface from "../../models/terms";
-import { th_fr } from "../jsx/image";
-import { base64_encode } from "../jsx/resultsActions";
 import { getTotalExam } from "../jsx/resultsDynamicActions";
 import { getTotal } from "../jsx/resultsUiStats";
+import { schoolLogo } from "../jsx/semence-util";
 
 
 export default function thFr(result:ExamResultInterface, term:TermInterface ) {
@@ -15,7 +14,7 @@ export default function thFr(result:ExamResultInterface, term:TermInterface ) {
 
     return (
         <div style={{  
-            backgroundImage: "url('data:image/png;base64," + th_fr + "')",
+            backgroundImage: "url('data:image/png;base64," + schoolLogo(term.class?.school!, 'th_fr' )+ "')",
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',

@@ -116,6 +116,18 @@ export class Api {
       },
     });
   }
+  importResultsMat(data: any) {
+    var formData = new FormData();
+    formData.append("file", data.file);
+    formData.append("mapping", JSON.stringify(data.mapping));
+    formData.append("exam_id", data.exam_id);
+
+    return axios.post("/api/exams/import-mat", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  }
 
   //subjects
   getSchoolSubjects(data: { school: string; report_type?: string }) {

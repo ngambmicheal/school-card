@@ -11,6 +11,8 @@ import SubjectInterface, { subjectSchema } from "../../../models/subject";
 import { examSchema } from "../../../models/exam";
 import { examResultSchema } from "../../../models/examResult";
 import { schoolSchema } from "../../../models/school";
+import { classeSchema } from "../../../models/classe";
+import { sectionSchema } from "../../../models/section";
 import { IncomingForm } from "formidable";
 
 
@@ -18,9 +20,8 @@ export default async function importStudent(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const form = new IncomingForm({});
-
-  let [fields, files] = await form.parse(req);
+    const form = new IncomingForm({});
+    let [fields, files] = await form.parse(req);
 
   if (!files.file || !fields.exam_id)
     return res.status(400).json({ error: "Missing file or mapping" });
@@ -29,33 +30,36 @@ export default async function importStudent(
     //@ts-ignore
     const f = files.file as formidable.File;
 
-    const exam = await examSchema.findOne({ _id: fields.exam_id });
+    const exam = await examSchema.findOne({ _id: fields.exam_id }).populate({
+      path: "class_id",
+      model: classeSchema,
+      populate: { path: "section", model: sectionSchema },
+    });
     const competences = await competenceSchema
-      .find()
-      .populate({ path: "school", model: schoolSchema })
-      .populate({
+        .find({
+            school: exam?.class_id?.school,
+            report_type: exam?.class_id?.section?.report_type,
+          })
+        .populate({ path: "school", model: schoolSchema })
+        .populate({
         path: "subjects",
         model: subjectSchema,
         populate: { path: "courses", model: courseSchema },
-      });
-    const students = await studentSchema.find({ class_id: exam.class_id });
+        });
 
     let mapping: any = {};
     let pointMapping: any = {};
     competences.map((competence) =>
-      competence.subjects?.map((subject: SubjectInterface) => {
-        subject.courses?.map((course: CourseInterface) => {
-          mapping[`subject_${course._id}`] = course._id;
-          pointMapping[`point_${course._id}`] = course._id;
-        });
-      })
+        competence.subjects?.map((course: SubjectInterface) => {
+            mapping[`subject_${course._id}`] = course._id;
+            pointMapping[`point_${course._id}`] = course._id;
+        })
     );
 
     const output = await new Promise<{
       loadedCount: number;
       totalCount: number;
     }>((resolve, reject) => {
-
       const filecontent = fs.createReadStream(f[0].filepath);
       filecontent.setEncoding("utf8");
 
@@ -69,22 +73,14 @@ export default async function importStudent(
         header: true,
         skipEmptyLines: true,
         dynamicTyping: true,
-        chunkSize: 25,
+        chunkSize: 250,
         encoding: "utf8",
 
         chunk: async (out: any) => {
           let data = out.data.map((r: any, index: number) => {
-            if (index == 0) {
-              const newResult = {
-                ...applyMapping(r, pointMapping),
-              };
-              examSchema
-                .findOneAndUpdate({ _id: fields.exam_id }, newResult)
-                .then((examUpdate) => {
-                  //console.log(examUpdate)
-                });
+            if (index === 0) {
+              
             } else {
-              //console.log(r);
               const newResult = {
                 ...applyMapping(r, mapping),
               };
@@ -95,12 +91,10 @@ export default async function importStudent(
                   newResult
                 )
                 .then((result) => {
-                  //console.log(result);
+                  console.log(result);
                 });
             }
           });
-
-          //console.log(data[0]);
 
           totalCount += data.length;
 
@@ -128,30 +122,11 @@ export default async function importStudent(
 
     return res.json(output)
   } catch (e) {
-     console.log(e);
-     return res.status(500).json(e)
+    console.log(e);
+    return res.status(500).json(e)
   }
 }
 
-type ParsedForm = {
-  error: Error | string;
-  //@ts-ignore
-  fields: formidable.Fields;
-  //@ts-ignore
-  files: formidable.Files;
-};
-
-function parseRequestForm(req: NextApiRequest): Promise<ParsedForm> {
-  const form = formidable({ encoding: "utf8" });
-
-  return new Promise((resolve, reject) => {
-    form.parse(req, (err: any, fields: any, files: any) => {
-      if (err) reject({ err });
-
-      resolve({ error: err, fields, files });
-    });
-  });
-}
 
 function applyMapping(
   data: Record<string, any>,
@@ -159,14 +134,35 @@ function applyMapping(
 ): Partial<any> {
   return Object.fromEntries(
     Object.entries(mapping).map(([leadField, csvField]) => {
+    
       const parsed = stripBomFromKeys(data);
+      const value = getValue(parsed[csvField] as string)
+
       return [
         leadField,
-        parseFloat((parsed[csvField] ?? 0).toString().replace(",", ".")),
+        value,
       ];
     })
   );
 }
+
+
+function getValue(key:string){
+    if(!key){
+        return undefined;
+    }
+    switch(key.toString()){
+        case '1':
+            return 'A';
+        case '2':
+            return 'ECA';
+        case '3':
+            return 'NA'
+        default : 
+            return key
+    }
+}
+
 
 export const config = {
   api: {

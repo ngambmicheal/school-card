@@ -13,13 +13,17 @@ import { examResultSchema } from "../../../models/examResult";
 import { schoolSchema } from "../../../models/school";
 import { classeSchema } from "../../../models/classe";
 import { sectionSchema } from "../../../models/section";
+import { IncomingForm } from "formidable";
+
 
 export default async function importStudent(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { files, fields } = await parseRequestForm(req);
-  if (!files.file || !fields.exam_id)
+  const form = new IncomingForm({});
+    let [fields, files] = await form.parse(req);
+    
+    if (!files.file || !fields.exam_id)
     return res.status(400).json({ error: "Missing file or mapping" });
 
   try {
@@ -51,7 +55,7 @@ export default async function importStudent(
       loadedCount: number;
       totalCount: number;
     }>((resolve, reject) => {
-      const filecontent = fs.createReadStream(f.path);
+      const filecontent = fs.createReadStream(f[0].filepath);
       filecontent.setEncoding("utf8");
 
       let loadedCount = 0;

@@ -1,21 +1,22 @@
 
 import ExamResultInterface from "../../models/examResult";
 import TermInterface from "../../models/terms";
-import { th_en, th_fr } from "../jsx/image";
-import { base64_encode } from "../jsx/resultsActions";
 import { getTotalExam } from "../jsx/resultsDynamicActions";
 import { getTotal } from "../jsx/resultsUiStats";
+import { schoolLogo } from "../jsx/semence-util";
 
 
 export default function thEn(result:ExamResultInterface, term:TermInterface ) {
 
     const totalMarks = getTotal(result)
     const totalPoints = term.exams?.length ? getTotalExam(term.exams[0]) : 0;
-    const average = ((totalMarks / totalPoints) * 20).toFixed(2) 
+    const average = ((totalMarks / totalPoints) * 20).toFixed(2);
+    
+    
 
     return (
         <div style={{  
-            backgroundImage: "url('data:image/png;base64," + th_en + "')",
+            backgroundImage: "url('data:image/png;base64," + schoolLogo(term.class?.school!, 'th_en') + "')",
             backgroundPosition: 'center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',

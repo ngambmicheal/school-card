@@ -22,7 +22,6 @@ import {
   getTotals,
 } from "../../../../assets/jsx/resultsUiStats";
 import { replaceAll } from "../../../../services/utils";
-import { logo } from "../../../../assets/jsx/image";
 
 export default async function handler(
   req: NextApiRequest,
@@ -53,8 +52,8 @@ export default async function handler(
   ).filter((re) => getTotal(re) != 0);
   const competences = await competenceSchema
     .find({
-      school: exam.class_id.school,
-      report_type: exam.class_id.section.report_type,
+      school: exam?.class_id?.school,
+      report_type: exam?.class_id?.section?.report_type,
     })
     .populate({ path: "school", model: schoolSchema })
     .populate({
@@ -63,7 +62,7 @@ export default async function handler(
       populate: { path: "courses", model: courseSchema },
     });
 
-  const zipName = `${replaceAll(" ", "_", exam.class_id.name)}__${exam.name}`;
+  const zipName = `${replaceAll(" ", "_", exam?.class_id?.name)}__${exam?.name}`;
   var dir = `./tmp/exams/${zipName}`;
   var zipOutput = fs.createWriteStream(`./public/exams/${zipName}.zip`);
   var zipDir = `./public/exams/${zipName}.zip`;
@@ -93,7 +92,7 @@ export default async function handler(
     };
 
     let html = ReactDOMServer.renderToStaticMarkup(
-      resultsActions(competences, results, totalResults.length, totalResults)
+      resultsActions(competences, results, totalResults.length, totalResults, competences[0].school!)
     );
     html += `
         <style>
@@ -104,7 +103,6 @@ export default async function handler(
         .bg-logo{
             position:fixed;
             top:20%;
-            background-image:url('data:image/jpeg;base64, ${logo}');
             background-position: 50% 0;
             background-repeat: no-repeat;
             background-size: contain;
