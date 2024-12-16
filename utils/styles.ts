@@ -2,6 +2,8 @@ import serverPath, { base64_encode } from "../services/serverpath"
 
 const logo = base64_encode(serverPath('/assets/images/smc/logo.png'));
 
+console.log(logo)
+
 export const bgImgStyle = `  
  
     .bg-logo{
@@ -15,10 +17,6 @@ export const bgImgStyle = `
         z-index:-1;
         width: 100%;
         height: 100%;
-    }
-
-    .table1, .table2, .table3{
-        font-size:10px !important
     }
 
 `
