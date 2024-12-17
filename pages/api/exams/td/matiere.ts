@@ -11,8 +11,8 @@ import archiver from "archiver";
 import { classeSchema } from "../../../../models/classe";
 import TermInterface, { termSchema } from "../../../../models/terms";
 import { replaceAll } from "../../../../services/utils";
-import thFr from "../../../../assets/td/td_fr";
 import { schoolSchema } from "../../../../models/school";
+import thEn from "../../../../assets/td/td_en";
 
 export default async function handler(
   req: NextApiRequest,
