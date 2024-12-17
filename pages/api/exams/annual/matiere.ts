@@ -74,7 +74,7 @@ export default async function handler(
     var options = {
       format: "A4",
       orientation: "portrait",
-      border: "10mm",
+      border: "6mm",
       header: {
         height: "0mm",
       },

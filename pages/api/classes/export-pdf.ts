@@ -33,7 +33,7 @@ export default async function handler(
     var options = {
       format: "A3",
       orientation: "portrait",
-      border: "10mm",
+      border: "6mm",
       header: {
         height: "45mm",
         contents: '<div style="text-align: center;">Author: Shyam Hajare</div>',

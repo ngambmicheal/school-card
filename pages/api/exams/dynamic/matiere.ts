@@ -28,7 +28,8 @@ export default async function handler(
   const term = await termSchema
     .findOne({ _id: term_id })
     .populate({ path: "class", model: classeSchema, populate: {
-      path:'class',
+      path:'school',
+      model: schoolSchema
     } });
 
   if (!term) {
@@ -66,7 +67,7 @@ export default async function handler(
     var options = {
       format: "A4",
       orientation: "portrait",
-      border: "10mm",
+      border: "6mm",
       header: {
         height: "0mm",
       },
