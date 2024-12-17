@@ -21,7 +21,9 @@ export default interface SchoolInterface{
 
     logo:string, 
     th_en:string, 
-    th_fr:string
+    th_fr:string,
+    attestation_fr:string,
+    attestation_en:string
 }
 
 const SchoolSchema = new mg.Schema({
@@ -46,6 +48,8 @@ const SchoolSchema = new mg.Schema({
 
     th_en: {type:String},
     th_fr: {type:String},
+    attestation_fr: {type:String},
+    attestation_en: {type:String},
     logo: {type:String}
     
    },

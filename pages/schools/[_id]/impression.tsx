@@ -177,21 +177,35 @@ export default function SchoolSettingImpression({
         </div>
 
         <div className="row">
-          <div className="col-sm-3 px-3">
+          <div className="col-sm-3 p-3">
             <h3>Logo</h3>
             <img src={school?.logo}  className="preview-image"/>
             <input type="file" name="logo" onChange={e => handleChangeLogo(e, 'logo')} accept=".jpg, .png" className="form-control" />
           </div>
-          <div className="col-sm-3 px-3">
+          <div className="col-sm-3 p-3">
             <h3>Tableau D'honneur Fr</h3>
             <img src={school?.th_fr}  className="preview-image"/>
             <input type="file" name="logo" onChange={e => handleChangeLogo(e, 'th_fr')} accept=".jpg, .png" className="form-control"  />
           </div>
-          <div className="col-sm-3 px-3">
+          <div className="col-sm-3 p-3">
             <h3>Tableau D'honneur En</h3>
             <img src={school?.th_en}  className="preview-image"/>
             <input type="file" name="logo" onChange={e => handleChangeLogo(e, 'th_en')} accept=".jpg, .png" className="form-control"  />
           </div>
+          <div className="col-sm-3 p-3">
+            <h3>Attestation Fr</h3>
+            <img src={school?.attestation_fr}  className="preview-image"/>
+            <input type="file" name="logo" onChange={e => handleChangeLogo(e, 'attestation_fr')} accept=".jpg, .png" className="form-control"  />
+          </div>
+          <div className="col-sm-3 p-3">
+            <h3>Attestation En</h3>
+            <img src={school?.attestation_en}  className="preview-image"/>
+            <input type="file" name="logo" onChange={e => handleChangeLogo(e, 'attestation_en')} accept=".jpg, .png" className="form-control"  />
+          </div>
+        </div>
+
+        <div className="my-3">
+        <hr />
         </div>
 
 

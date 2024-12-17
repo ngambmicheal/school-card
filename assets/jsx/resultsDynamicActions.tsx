@@ -321,7 +321,7 @@ export default function resultsDynamicActions(
         <tr>
           <td>Moyenne</td>
           <td> {((totalMarks / totalPoints) * 20).toFixed(2)} /20 </td>
-          <td rowSpan={5}>
+          <td rowSpan={ exams.length > 2 ? 6: 5}>
             {getCompetenceAppreciation(
               Math.round((totalMarks / totalPoints) * 20),
               20,
@@ -373,6 +373,13 @@ export default function resultsDynamicActions(
             <td> {((total1Marks / totalPoints) * 20).toFixed(2)} /20 </td>
             <td>Moyenne de {exams[1].name.substr(0, 4)} </td>
             <td> {((total2Marks / totalPoints) * 20).toFixed(2)} /20 </td>
+          </tr>
+        )}
+        {exams.length > 2 && (
+          <tr>
+            <td>Moyenne de {exams[2].name.substr(0, 4)} </td>
+            <td> {((total1Marks / totalPoints) * 20).toFixed(2)} /20 </td>
+            <td colSpan={2}>  </td>
           </tr>
         )}
         <tr>

@@ -14,5 +14,11 @@ export const bgImgStyle = `
         width: 100%;
         height: 100%;
     }
+    ${
+        process.env.PLATFORM === 'linux' ? `    
+            html{
+                zoom: 0.65;
+            }` : ''
+    }
 
 `
