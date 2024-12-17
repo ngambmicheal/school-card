@@ -136,6 +136,7 @@ export default function resultsDynamicActions(
 
   const total1Marks = examResults.length ? getTotal(examResults[0]) : 0;
   const total2Marks = examResults.length ? getTotal(examResults[1]) : 0;
+  const total3Marks = examResults.length && examResults.length > 2? getTotal(examResults[2]) : 0;
 
   return (
     <>
@@ -378,7 +379,7 @@ export default function resultsDynamicActions(
         {exams.length > 2 && (
           <tr>
             <td>Moyenne de {exams[2].name.substr(0, 4)} </td>
-            <td> {((total1Marks / totalPoints) * 20).toFixed(2)} /20 </td>
+            <td> {((total3Marks / totalPoints) * 20).toFixed(2)} /20 </td>
             <td colSpan={2}>  </td>
           </tr>
         )}
