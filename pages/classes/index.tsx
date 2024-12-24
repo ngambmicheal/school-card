@@ -142,9 +142,9 @@ export function ClasseRow({
           className="form-control"
           onChange={updateTeacher}
         >
-          <option value="">-- Select Teacher --</option>
+          <option value="" key={`option_teacher_null`}>-- Select Teacher --</option>
           {teachers.map((tr) => (
-            <option value={tr._id}>{tr.name}</option>
+            <option value={tr._id} key={`option_teacher_${tr._id}`}>{tr.name}</option>
           ))}
         </select>
       </td>
@@ -217,13 +217,13 @@ export function CreateClassModal({
               name="section"
               onChange={handleChange}
             >
-              <option value=""> Choisir </option>
+              <option value="" key={`choose_section_null`}> Choisir </option>
               {sections
                 .filter((s) => s.school?._id == classe.school)
                 .map((section) => {
                   return (
                     <option
-                      key={section._id}
+                      key={`option_${section._id}`}
                       value={section._id}
                       selected={classe.section == section._id}
                     >

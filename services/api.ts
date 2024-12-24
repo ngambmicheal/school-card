@@ -261,6 +261,12 @@ export class Api {
   getExamResults(examId?: any) {
     return axios.get(`/api/exams/results?exam_id=${examId}`);
   }
+  getExamResultsByStudent(studentId: string, session_id: string) {
+    return axios.get(
+      `/api/exams/results-student?student_id=${studentId}&session_id=${session_id}`
+    );
+  }
+
   getResults(resultsId?: any) {
     return axios.get(`/api/exams/results/result?result_id=${resultsId}`);
   }

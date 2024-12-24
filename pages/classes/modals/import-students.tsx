@@ -206,7 +206,7 @@ function generateColumns(props: GenerateColumnsProps) {
               value={values && values[field]}
               onChange={(e) => setValue({ ...values, [field]: e.target.value })}
             >
-              <option value={undefined}></option>
+              <option value={undefined} key={`select_student`}></option>
               {foundFields.map((op) => (
                 <option value={op} key={`field/${field}/${op}`}>
                   {op}

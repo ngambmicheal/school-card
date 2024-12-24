@@ -7,10 +7,12 @@ import api from "../../services/api";
 import { UserType } from "../../utils/enums";
 import Link from "next/link";
 import StudentInterface from "../../models/student";
+import SessionInterface from "../../models/session";
 
 
 export default function ProfilePage({ ...error }) {
   const { data: session } = useSession();
+  const [sessions, setSessions] = useState<SessionInterface[]>([]);
   const {user} = useUser(session);
   const [student, setStudent] = useState<StudentInterface>()
 
@@ -22,10 +24,18 @@ export default function ProfilePage({ ...error }) {
       api.getStudent(studentId as string).then(({data: { data}}: any) => {
           setStudent(d => data)
       })
+
+    getSessions();
   }, [studentId]);
 
   function getProfileImage(){
     return student?.image ? student.image :  student?.sex == 'M' ? '/images/male-avatar.jpg' : '/images/female-avatar.jpg';
+  }
+
+  function getSessions(){
+    api.getSessions().then(({data: {data}}: any) => {
+      setSessions(d => data)
+    })
   }
 
   const onFileChange = (e: any) => {
@@ -43,31 +53,31 @@ export default function ProfilePage({ ...error }) {
     <>
       <h3 className="my-3 ">Information Personelle</h3>
 
-      <div className="avatar">
-        <img className="img img-rounded" src={getProfileImage()} height={200} width={200} />
+      <div className="row">
+        <div className="col-md-4">
+          <div className="avatar">
+            <img className="img img-rounded" src={getProfileImage()} height={200} width={200} />
 
-        <input type="file" onChange={onFileChange} name="Edit" accept=".jpg, .png" />
-      </div>
-
-      <div className="mt-4">
-        {" "}
-        Name: <b> {student?.name} </b>{" "}
-      </div>
-      <div>
-        {" "}
-        Email: <b> {student?.email} </b>{" "}
-      </div>
-      <div>
-        {" "}
-        Type: <b> {user?.type} </b>{" "}
-      </div>
-      <div>
-        {" "}
-        Phone: <b> {user?.phone || student?.phone} </b>{" "}
-      </div>
-      <div>
-        {" "}
-        matricule: <b> {user?.matricule} </b>{" "}
+            <input type="file" onChange={onFileChange} name="Edit" accept=".jpg, .png" className="form-control" />
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="mt-4">
+            Name: <b> {student?.name} </b>
+          </div>
+          <div>
+            Email: <b> {student?.email} </b>
+          </div>
+          <p>Sex: <b>{student?.sex}</b></p>
+          <p>Type: <b> {user?.type}</b> </p>
+          <p>
+            Phone: <b> {user?.phone || student?.phone} </b>
+          </p>
+          <p>
+          Matricule: <b> {user?.matricule} </b>
+        </p>
+          <p>Class: <b> {student?.class_id?.name}</b></p>
+        </div>
       </div>
 
       {user?.type == UserType.STAFF && (
@@ -98,6 +108,66 @@ export default function ProfilePage({ ...error }) {
           </table>
         </>
       )}
+
+      {
+        sessions.map((session) => {
+          return <UserDataPerSession session={session} user={user} > </UserDataPerSession>
+        })
+      }
     </>
   );
+}
+
+type UserDataPerSessionProps = {
+  session: SessionInterface;
+  user: any;
+}
+
+function UserDataPerSession(props: UserDataPerSessionProps){
+  const {session, user} = props;
+  const [exams, setExams] = useState<any[]>([]);
+
+  useEffect(() => {
+    getExams();
+  }, [session, user]);
+
+  const getExams = () => {
+    if(session?._id && user){
+      api.getExamResultsByStudent(user._id, session._id).then(({data: {data}}: any) => {
+        setExams(d => data)
+      })
+    }
+  }
+
+  return <>
+    {exams.length && <div className="my-3">
+      <hr />
+      <h3 className="my-3">Session: {session.name}</h3>
+
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Exam</th>
+            <th>Score</th>
+            <th>Appreciation</th>
+          </tr>
+        </thead>
+        <tbody>
+          {exams.map((exam) => {
+            return (
+              <tr>
+                <td>{exam.exam_id.name}</td>
+                <td>{exam.score}</td>
+                <td>{exam.appreciation}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+        </table>
+
+    </div>
+  }
+  
+  </>
+
 }

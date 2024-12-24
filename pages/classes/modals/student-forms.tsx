@@ -112,8 +112,8 @@ export function CreateStudentModal({
               value={student?.sex}
               onChange={handleChange}
             >
-              <option value="M">M</option>
-              <option value="F">F</option>
+              <option value="M" key={`option_m`}>M</option>
+              <option value="F" key={`option_f`}>F</option>
             </select>
           </div>
           <div className="form-group">
@@ -144,9 +144,9 @@ export function CreateStudentModal({
               value={student?.class_id}
               onChange={handleChange}
             >
-              <option value="">---Select class</option>
+              <option value="" key={`select_class_option`}>---Select class</option>
               {classes?.map((classe) => (
-                <option value={classe._id}>{classe.name}</option>
+                <option value={classe._id} key={`classe_${classe.id}`}>{classe.name}</option>
               ))}
             </select>
           </div>

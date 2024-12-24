@@ -134,7 +134,7 @@ export function AnnualExamModal({
               </tr>
               {terms.map((exam) => {
                 return (
-                  <tr>
+                  <tr key={`exam_${exam._id}`}>
                     <td>
                       <input
                         type="checkbox"
