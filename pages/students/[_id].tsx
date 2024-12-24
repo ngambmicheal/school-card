@@ -111,7 +111,7 @@ export default function ProfilePage({ ...error }) {
 
       {
         sessions.map((session) => {
-          return <UserDataPerSession session={session} user={user} > </UserDataPerSession>
+          return <UserDataPerSession session={session} user={user} student={student} > </UserDataPerSession>
         })
       }
     </>
@@ -121,26 +121,31 @@ export default function ProfilePage({ ...error }) {
 type UserDataPerSessionProps = {
   session: SessionInterface;
   user: any;
+  student: StudentInterface;
 }
 
 function UserDataPerSession(props: UserDataPerSessionProps){
-  const {session, user} = props;
+  const {session, user, student} = props;
   const [exams, setExams] = useState<any[]>([]);
 
   useEffect(() => {
     getExams();
-  }, [session, user]);
+  }, [session, student]);
 
   const getExams = () => {
-    if(session?._id && user){
-      api.getExamResultsByStudent(user._id, session._id).then(({data: {data}}: any) => {
+    if(session?._id && student?._id){
+      api.getExamResultsByStudent(student._id, session._id, "exam").then(({data: {data}}: any) => {
         setExams(d => data)
       })
     }
+
+
   }
 
   return <>
-    {exams.length && <div className="my-3">
+
+  {/* EXAM */}
+    {exams.length ? <div className="my-3">
       <hr />
       <h3 className="my-3">Session: {session.name}</h3>
 
@@ -148,26 +153,35 @@ function UserDataPerSession(props: UserDataPerSessionProps){
         <thead>
           <tr>
             <th>Exam</th>
-            <th>Score</th>
-            <th>Appreciation</th>
+            <th>Rank</th>
+            <th>Average</th>
           </tr>
         </thead>
         <tbody>
           {exams.map((exam) => {
             return (
-              <tr>
-                <td>{exam.exam_id.name}</td>
-                <td>{exam.score}</td>
-                <td>{exam.appreciation}</td>
+              <tr key={`exam_${exam._id}`}>
+                <td>{exam.exam_id?.name}</td>
+                <td>{exam.rank}</td>
+                <td>{getAverage(exam.exam_id, exam)}</td>
               </tr>
             );
           })}
+
         </tbody>
         </table>
 
-    </div>
+    </div> : <></>
   }
   
+
   </>
 
+}
+
+function getAverage(exam, results){
+  const total = Object.keys(exam).filter(key => key.startsWith("point_")).reduce((acc, key) => { return acc + exam[key]}, 0); 
+  const totalResults = Object.keys(results).filter(key => key.startsWith("subject_")).reduce((acc, key) => { return acc + results[key]}, 0);
+
+  return Number(((totalResults / total) * 20)).toFixed(2);
 }

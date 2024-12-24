@@ -261,9 +261,9 @@ export class Api {
   getExamResults(examId?: any) {
     return axios.get(`/api/exams/results?exam_id=${examId}`);
   }
-  getExamResultsByStudent(studentId: string, session_id: string) {
+  getExamResultsByStudent(studentId: string, session_id: string, type: string = "exam") {
     return axios.get(
-      `/api/exams/results-student?student_id=${studentId}&session_id=${session_id}`
+      `/api/exams/results-student?student_id=${studentId}&session_id=${session_id}&type=${type}`
     );
   }
 

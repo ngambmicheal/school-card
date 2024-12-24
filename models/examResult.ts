@@ -25,12 +25,17 @@ const ExamResultSchema = new mg.Schema<ExamResultInterface>({
         type: mg.Schema.Types.ObjectId,
         ref: 'Exam'
     },
+    term_id:{
+        type: mg.Schema.Types.ObjectId, 
+        ref: 'Term'
+    },
     number:{type:String}
    },
    {
    timestamps:true,
    strict:false,
-   strictQuery:false
+   strictQuery:false, 
+   strictPopulate:false
    }
 )
 
