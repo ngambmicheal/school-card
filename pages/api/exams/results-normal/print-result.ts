@@ -80,7 +80,8 @@ export default async function handler(
           subjects,
           results,
           totalResults.length,
-          totalResults
+          totalResults, 
+          subjects[0].school!
         )
       );
       html += `
