@@ -26,7 +26,7 @@ export default function thFr(result:ExamResultInterface, term:TermInterface ) {
                     position: 'absolute', 
                     top: '40%',
                     paddingLeft:'8%',
-                    paddingRight:'10%',
+                    paddingRight:'8%',
                     transform: 'translate(-50%, -50%)',
                     // textAlign:'center',
                     lineHeight:'40px'

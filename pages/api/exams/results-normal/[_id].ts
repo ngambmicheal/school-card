@@ -98,7 +98,7 @@ export default async function handler(
     };
 
     let html = ReactDOMServer.renderToStaticMarkup(
-      resultsNormalActions(subjects, results, totalResults.length, statResults)
+      resultsNormalActions(subjects, results, totalResults.length, statResults, subjects[0].school!)
     );
     html += `
                  <style>
