@@ -18,9 +18,8 @@ import useSchool from "../../hooks/useSchool";
 import { Button, Menu, MenuButton, MenuItem, MenuList, useToast } from "@chakra-ui/react";
 import { successMessage } from "../../utils/messages";
 import Header from "../../layouts/header";
-import Dropdown from "../../components/dropdown";
 import Link from "../../components/link";
-
+import {getAnnualExamLink, getExamLink, getTermLink} from '../../services/helper'
 
 export default function ClasseDetails() {
   const [classe, setClasse] = useState<ClasseInterface>();
@@ -153,56 +152,6 @@ export default function ClasseDetails() {
     api.downloadToPdf(classeId);
   };
 
-  const getExamLink:string = (report_type, exam_id) => {
-    switch (report_type) {
-      case "Maternelle":
-        return `/exams/mat/${exam_id}`;
-      case "Nursery":
-        return `/exams/nursery/${exam_id}`;
-      case "Matiere":
-        return `/exams/${exam_id}`;
-      case "Competence":
-        return `/exams/ui/${exam_id}`;
-      case "Special":
-        return `/exams/special/${exam_id}`;
-      default:
-        return `/exams/${exam_id}`;
-    }
-  }
-
-  const getTermLink = (report_type, term_id) => {
-    switch (report_type) {
-      case "Maternelle":
-        return `/exams/mat/dynamic?term_id=${term_id}`;
-      case "Nursery":
-        return `/exams/nursery/dynamic?term_id=${term_id}`;
-      case "Matiere":
-        return `/exams/normal/dynamic?term_id=${term_id}`;
-      case "Competence":
-        return `/exams/ui/dynamic?term_id=${term_id}`;
-      case "Special":
-        return `/exams/special/dynamic?term_id=${term_id}`;
-      default:
-        return `/exams/dynamic?term_id=${term_id}`;
-    }
-  }
-
-  const getAnnualExamLink = (report_type, term_id) => {
-    switch (report_type) {
-      case "Maternelle":
-        return `/exams/mat/annual?annualExam_id=${term_id}`;
-      case "Nursery":
-        return `/exams/nursery/annual?annualExam_id=${term_id}`;
-      case "Matiere":
-        return `/exams/normal/annual?annualExam_id=${term_id}`;
-      case "Competence":
-        return `/exams/ui/annual?annualExam_id=${term_id}`;
-      case "Special":
-        return `/exams/special/annual?annualExam_id=${term_id}`;
-      default:
-        return `/exams/annual?annualExam_id=${term_id}`;
-    }
-  }
 
   const studentHeaders = [
     { label: "Numero", key: "number" },
@@ -295,26 +244,9 @@ export default function ClasseDetails() {
           </tr>
         </thead>
         <tbody>
-          {terms.map((term) => {
-            return (
-              <tr key={term._id}>
-                <td> {term.name} </td>
-                <td> <Link href={getTermLink(classe?.section?.report_type, term._id)}>Entree les donnes</Link> </td>
-                {editable && (
-                  <td>
-                    {" "}
-                    {term._id && (
-                      <a onClick={() => calculateTerm(term._id)}>
-                        {" "}
-                        Calculer |{" "}
-                      </a>
-                    )}{" "}
-                    <a onClick={() => deleteTerm(term._id)}>Delete</a>{" "}
-                  </td>
-                )}
-              </tr>
-            );
-          })}
+          {terms.map((term) => (
+            <TermRow classe={classe} term={term} key={term._id} deleteTerm={deleteTerm} calculateTerm={calculateTerm} editable={editable}/>
+          ))}
         </tbody>
       </table>
 
@@ -613,6 +545,59 @@ export function StudentRow({ stud, deleteStudent, terms }: StudentProps) {
               )}
           </MenuList>
         </Menu>
+      </td>
+    </tr>
+  );
+}
+
+export function TermRow({classe, term, deleteTerm, calculateTerm , editable}: any) {
+  const [termData, setTermData] = useState(term);
+  const [hasUpdated, setHasUpdated] = useState(false);
+  const session = useSession();
+  function handleChange(e: any) {
+    const key = e.target.name;
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+
+    setTermData((inputData) => ({
+      ...inputData,
+      [key]: value,
+    }));
+    setHasUpdated(true);
+  }
+  const updateTerm = () => {
+    api.updateTerm(termData).then(() => {
+      setHasUpdated(false);
+    });
+  };
+
+
+  return <tr>
+    <td> {term.name} </td>
+    <td> <Link href={getTermLink(classe?.section?.report_type, term._id)}>Entree les donnes</Link> </td>
+    {editable && (
+      <td>
+        {" "}
+        {term._id && (
+          <a onClick={() => calculateTerm(term._id)}>
+            {" "}
+            Calculer |{" "}
+          </a>
+        )}{" "}
+        <a onClick={() => deleteTerm(term._id)}>Delete</a>{" "}
+      </td>
+    )}
+  </tr>
+}
+
+
+export function ExamRow({ exam, deleteExam }: any) {
+  return (
+    <tr>
+      <td> {exam.name} </td>
+      <td>
+        {" "}
+        <a onClick={() => deleteExam(exam._id)}>Delete</a>{" "}
       </td>
     </tr>
   );
