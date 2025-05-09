@@ -60,6 +60,6 @@ export const studentHeader = (
   );
 };
 
-export const schoolLogo = (school:SchoolInterface, key:'logo'|'th_en'|'th_fr' | 'attestation_en' | 'attestation_fr') => {
+export const schoolLogo = (school:SchoolInterface, key: keyof SchoolInterface) => {
   return fileUrl(school[key] ? school[key] : "/images/smc/logo.png");
 }

@@ -10,6 +10,7 @@ export default interface ClasseInterface {
     section?:SectionInterface & string,
     teacher:string;
     teacher_id:string;
+    tb_note:number;
 }
 
 
@@ -30,7 +31,8 @@ const ClasseSchema = new mg.Schema({
     },
      details: {type:String},
      teacher:{type:String},
-     teacher_id: {type: String}
+     teacher_id: {type: String},
+     tb_note: {type:Number, default:12},
     },
     {
     timestamps:true,

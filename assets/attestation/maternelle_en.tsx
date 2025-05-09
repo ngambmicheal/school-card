@@ -8,7 +8,7 @@ export default function AttestationMaternelleEn(result:ExamResultInterface, term
  
     return (
         <div style={{  
-            backgroundImage: "url('data:image/png;base64," + schoolLogo(term.class_id?.school!, 'attestation_en') + "')",
+            backgroundImage: "url('data:image/png;base64," + schoolLogo(term.class_id?.school!, 'attestation_nursery') + "')",
            // backgroundImage: "url("+ bgEn + ")",
             backgroundPosition: 'center',
             backgroundSize: 'cover',

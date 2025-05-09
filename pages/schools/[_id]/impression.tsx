@@ -37,7 +37,7 @@ export default function SchoolSettingImpression({
     }));
   }
 
-  function handleChangeLogo(e: any, key:string  ) {
+  function handleChangeLogo(e: any, key:keyof SchoolInterface ) {
     const file = e.target.files[0];
     if (file) {
       api.uploadFile(file, 'SCHOOL', school?._id).then((response) => {
@@ -201,6 +201,16 @@ export default function SchoolSettingImpression({
             <h3>Attestation En</h3>
             <img src={school?.attestation_en}  className="preview-image"/>
             <input type="file" name="logo" onChange={e => handleChangeLogo(e, 'attestation_en')} accept=".jpg, .png" className="form-control"  />
+          </div>
+          <div className="col-sm-3 p-3">
+            <h3>Attestation Martenelle</h3>
+            <img src={school?.attestation_mat}  className="preview-image"/>
+            <input type="file" name="logo" onChange={e => handleChangeLogo(e, 'attestation_mat')} accept=".jpg, .png" className="form-control"  />
+          </div>
+          <div className="col-sm-3 p-3">
+            <h3>Attestation Nursery</h3>
+            <img src={school?.attestation_nursery}  className="preview-image"/>
+            <input type="file" name="logo" onChange={e => handleChangeLogo(e, 'attestation_nursery')} accept=".jpg, .png" className="form-control"  />
           </div>
         </div>
 

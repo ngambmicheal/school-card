@@ -15,11 +15,13 @@ import { useSession } from "next-auth/react";
 import useUser from "../../../hooks/useUser";
 import { UserType } from "../../../utils/enums";
 import SchoolSettingImpression from "./impression";
+import SchoolSettingExam from "./Exam";
 
 
 enum settingPages {
   Information='Information',
-  Impression='Impression'
+  Impression='Impression',
+  Exam = 'Exam',
 }
 
 export default function Classes() {
@@ -63,8 +65,10 @@ export default function Classes() {
             editable={user?.type === UserType.ADMIN}
           ></SchoolSettingInfo>}
 
-
           {act===settingPages.Impression && <SchoolSettingImpression school={school} editable={true}></SchoolSettingImpression>}
+          {act===settingPages.Exam && <SchoolSettingExam />}
+
+
         </div>
       )}
       {school && !session && (

@@ -23,7 +23,9 @@ export default interface SchoolInterface{
     th_en:string, 
     th_fr:string,
     attestation_fr:string,
-    attestation_en:string
+    attestation_en:string,
+    attestation_mat:string,
+    attestation_nursery:string,
 }
 
 const SchoolSchema = new mg.Schema({
