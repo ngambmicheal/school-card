@@ -239,6 +239,7 @@ export default function ClasseDetails() {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Slug</th>
             <th>Exam Type {classe?.section?.report_type} </th>
             {editable && <th>Action</th>}
           </tr>
@@ -565,6 +566,7 @@ export function TermRow({classe, term, deleteTerm, calculateTerm , editable}: an
     }));
     setHasUpdated(true);
   }
+
   const updateTerm = () => {
     api.updateTerm(termData).then(() => {
       setHasUpdated(false);
@@ -573,11 +575,34 @@ export function TermRow({classe, term, deleteTerm, calculateTerm , editable}: an
 
 
   return <tr>
-    <td> {term.name} </td>
+    <td>  
+    <input
+          style={{ width: "200px" }}
+          className="form-control"
+          type="text"
+          name="name"
+          value={term?.name}
+          onChange={handleChange}
+        />
+    </td>
+    <td> 
+    <input
+      style={{ width: "150px" }}
+      className="form-control"
+      type="text"
+      name="slug"
+      value={term?.slug}
+      onChange={handleChange}
+    /></td>
     <td> <Link href={getTermLink(classe?.section?.report_type, term._id)}>Entree les donnes</Link> </td>
     {editable && (
       <td>
-        {" "}
+        {hasUpdated && (
+          <a className="update-action" onClick={() => updateTerm()}>
+            Update
+          </a>
+        )}
+
         {term._id && (
           <a onClick={() => calculateTerm(term._id)}>
             {" "}
