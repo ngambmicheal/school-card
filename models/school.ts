@@ -26,6 +26,12 @@ export default interface SchoolInterface{
     attestation_en:string,
     attestation_mat:string,
     attestation_nursery:string,
+
+    director:string,
+
+
+    attestation_en_intro:string,
+    attestation_en_body:string,
 }
 
 const SchoolSchema = new mg.Schema({
@@ -52,7 +58,11 @@ const SchoolSchema = new mg.Schema({
     th_fr: {type:String},
     attestation_fr: {type:String},
     attestation_en: {type:String},
-    logo: {type:String}
+    logo: {type:String},
+
+    director: {type:String, default: 'DASSI Armande'},
+    attestation_en_intro: {type:String, default: 'I, the undersigned Mrs,'},
+    attestation_en_body: {type:String, default: 'Headmistress    of    GSBPL   La   SEMENCE    attests   that   the   pupil :'},
     
    },
    {

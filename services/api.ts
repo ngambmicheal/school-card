@@ -287,6 +287,9 @@ export class Api {
   saveTerm(data: TermInterface) {
     return axios.post("/api/terms/store", data);
   }
+  updateTerm(data: TermInterface) {
+    return axios.post("/api/terms/update", data);
+  }
   getTermResult(termId: string) {
     return axios.get(`/api/terms/results?term_id=${termId}`);
   }
@@ -309,6 +312,10 @@ export class Api {
   }
   getAnnualExamResult(annualExamId: string) {
     return axios.get(`/api/annualExams/results?annualExam_id=${annualExamId}`);
+  }
+
+  updateAnnualExam(data: TermInterface) {
+    return axios.post("/api/annualExams/update", data);
   }
 
   deleteAnnualExam(annualExamId: any) {

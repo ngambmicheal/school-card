@@ -246,12 +246,12 @@ export default function ClasseDetails() {
         </thead>
         <tbody>
           {terms.map((term) => (
-            <TermRow classe={classe} term={term} key={term._id} deleteTerm={deleteTerm} calculateTerm={calculateTerm} editable={editable}/>
+            <TermRow classe={classe} term={term} key={term._id} deleteTerm={deleteTerm} calculateTerm={calculateTerm} editable={editable} openLink={getTermLink(classe?.section?.report_type, term._id)}/>
           ))}
         </tbody>
       </table>
 
-      <hr></hr>
+      <hr />
 
       <h3 className="mt-3"> Bulletin Annuelle </h3>
       {exams.length && editable && (
@@ -276,23 +276,7 @@ export default function ClasseDetails() {
         </thead>
         <tbody>
           {annualExams.map((term) => {
-            return (
-              <tr key={term._id}>
-                <td> {term.name} </td>
-                <td> <Link href={getAnnualExamLink(classe?.section?.report_type,term._id)}>Entree les donnes</Link></td>
-                {editable && (
-                  <td>
-                    {" "}
-                    {term._id && (
-                      <a onClick={() => calculateAnnualExam(term._id)}>
-                        Calculer |{" "}
-                      </a>
-                    )}{" "}
-                    <a onClick={() => deleteAnnualResult(term._id)}>Delete</a>{" "}
-                  </td>
-                )}
-              </tr>
-            );
+            return ( <TermRow classe={classe} term={term} key={term._id} deleteTerm={deleteAnnualResult} calculateTerm={calculateAnnualExam} editable={editable} openLink={getAnnualExamLink(classe?.section?.report_type, term._id)} isAnnual={true}/>)
           })}
         </tbody>
       </table>
@@ -551,7 +535,7 @@ export function StudentRow({ stud, deleteStudent, terms }: StudentProps) {
   );
 }
 
-export function TermRow({classe, term, deleteTerm, calculateTerm , editable}: any) {
+export function TermRow({classe, term, deleteTerm, calculateTerm , editable, openLink, isAnnual}: any) {
   const [termData, setTermData] = useState(term);
   const [hasUpdated, setHasUpdated] = useState(false);
   const session = useSession();
@@ -568,9 +552,17 @@ export function TermRow({classe, term, deleteTerm, calculateTerm , editable}: an
   }
 
   const updateTerm = () => {
-    api.updateTerm(termData).then(() => {
-      setHasUpdated(false);
-    });
+    if(isAnnual){
+      api.updateAnnualExam(termData).then(() => {
+        setHasUpdated(false);
+      }
+      );
+    }
+    else{
+      api.updateTerm(termData).then(() => {
+        setHasUpdated(false);
+      });
+    }
   };
 
 
@@ -581,7 +573,7 @@ export function TermRow({classe, term, deleteTerm, calculateTerm , editable}: an
           className="form-control"
           type="text"
           name="name"
-          value={term?.name}
+          value={termData?.name}
           onChange={handleChange}
         />
     </td>
@@ -591,10 +583,10 @@ export function TermRow({classe, term, deleteTerm, calculateTerm , editable}: an
       className="form-control"
       type="text"
       name="slug"
-      value={term?.slug}
+      value={termData?.slug}
       onChange={handleChange}
     /></td>
-    <td> <Link href={getTermLink(classe?.section?.report_type, term._id)}>Entree les donnes</Link> </td>
+    <td> <Link href={openLink}>Entree les donnes</Link> </td>
     {editable && (
       <td>
         {hasUpdated && (
@@ -627,3 +619,4 @@ export function ExamRow({ exam, deleteExam }: any) {
     </tr>
   );
 }
+

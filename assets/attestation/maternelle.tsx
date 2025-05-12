@@ -31,20 +31,6 @@ export default function AttestationMaternelleFr(result:ExamResultInterface, term
                     justifyContent: 'center'
                 }}
                 >
-            {/* <div className="fran">
-                <h2 style={{
-                        lineHeight:'50px',
-                        fontWeight: 'normal'
-                    }}>Je soussignée Mme, <span style={{ fontWeight: 'bolder', fontSize: '40px', color: '#000065', fontFamily: 'Bradley Hand ITC', marginLeft: '30px'}}>DASSI Armande</span></h2>
-                <h2 style={{
-                        lineHeight:'50px',
-                        fontWeight: 'normal'
-                    }}>
-                    Directrice du Groupe Scolaire Bilingue Privé Laïc La SEMENCE atteste que l'eleve <br />
-                    <div style={{ fontWeight: 'bolder', fontSize: '60px', color: '#000065', fontFamily: 'Bradley Hand ITC', textAlign: 'center'}}>{result.student.name}</div>
-                    a suivi avec succes le Cycle Maternel et est promu(e) en ce jour au Cycle Primaire.
-                </h2>
-            </div> */}
             <div className="anglais">
                 <h2 style={{
                         fontWeight: 'normal'

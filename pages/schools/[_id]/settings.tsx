@@ -16,12 +16,14 @@ import useUser from "../../../hooks/useUser";
 import { UserType } from "../../../utils/enums";
 import SchoolSettingImpression from "./impression";
 import SchoolSettingExam from "./Exam";
+import SchoolSettingAttestation from "./Attestation";
 
 
 enum settingPages {
   Information='Information',
   Impression='Impression',
   Exam = 'Exam',
+  Attestation = 'Attestation',
 }
 
 export default function Classes() {
@@ -66,7 +68,8 @@ export default function Classes() {
           ></SchoolSettingInfo>}
 
           {act===settingPages.Impression && <SchoolSettingImpression school={school} editable={true}></SchoolSettingImpression>}
-          {act===settingPages.Exam && <SchoolSettingExam />}
+          {act===settingPages.Exam && <SchoolSettingExam school={school} editable={true} />}
+          {act===settingPages.Attestation && <SchoolSettingAttestation school={school} editable={true} /> }
 
 
         </div>

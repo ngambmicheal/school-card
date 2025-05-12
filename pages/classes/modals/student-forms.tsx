@@ -146,7 +146,7 @@ export function CreateStudentModal({
             >
               <option value="">---Select class</option>
               {classes?.map((classe) => (
-                <option value={classe._id}>{classe.name}</option>
+                <option value={classe._id} key={classe._id}>{classe.name}</option>
               ))}
             </select>
           </div>
