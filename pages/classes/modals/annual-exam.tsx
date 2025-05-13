@@ -68,8 +68,9 @@ type AnnualExamModalProps = {
   modalIsOpen: boolean;
   class_id?: any;
   closeModal: () => void;
-  save: (student: any) => void;
+  save: (exam: {name?:string, slug?:string}) => void;
   terms: TermInterface[];
+  isGeneral?: boolean;
 };
 export function AnnualExamModal({
   modalIsOpen,
@@ -77,9 +78,11 @@ export function AnnualExamModal({
   save,
   class_id,
   terms,
+  isGeneral = false,
 }: AnnualExamModalProps) {
   const [termSelected, setTermSelected] = useState<string[]>([]);
   const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
 
   function handleTermChange(e: any) {
     const key: string = e.target.name;
@@ -98,7 +101,20 @@ export function AnnualExamModal({
     setName(value);
   }
 
+    function handleChangeSlug(e: any) {
+    const key = e.target.name;
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    setSlug(value);
+  }
+
   const generate = () => {
+
+    if(isGeneral) {
+      save({name, slug});
+      return;
+    }
+
     const report_type: string =
       terms[0].class?.section?.report_type || "Competence";
     api
@@ -106,6 +122,7 @@ export function AnnualExamModal({
         report_type,
         terms: termSelected,
         name,
+        slug,
         class: terms[0].class?._id ?? terms[0].class,
       })
       .then(() => {
@@ -125,7 +142,12 @@ export function AnnualExamModal({
           <h2>Ajoute Trimestre</h2>
           <div>
             <div className="form-group">
+              <label> Name </label>
               <input type="" className="form-control" onChange={handleChange} />
+            </div>
+              <div className="form-group">
+              <label> Slug </label>
+              <input type="" className="form-control" onChange={handleChangeSlug} />
             </div>
             <table style={{ width: "100%" }} className="table1">
               <tr>
@@ -154,7 +176,7 @@ export function AnnualExamModal({
           <button
             className="btn btn-success"
             onClick={generate}
-            disabled={termSelected.length < 2}
+            disabled={(termSelected.length < 2 && !isGeneral) || !name}
           >
             {" "}
             Generer{" "}

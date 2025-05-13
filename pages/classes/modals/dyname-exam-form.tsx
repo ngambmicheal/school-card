@@ -8,8 +8,9 @@ type DynamicExamModalProps = {
   modalIsOpen: boolean;
   class_id?: any;
   closeModal: () => void;
-  save: (student: any) => void;
+  save: (exam:{name:string, slug?:string}) => void;
   exams: ExamInterface[];
+  isGeneral?: boolean;
 };
 export function DynamicExamModal({
   modalIsOpen,
@@ -17,9 +18,11 @@ export function DynamicExamModal({
   save,
   class_id,
   exams,
+  isGeneral = false,
 }: DynamicExamModalProps) {
   const [examSelected, setExamSelected] = useState<string[]>([]);
   const [name, setName] = useState("");
+  const [slug, setSlug] = useState("");
 
   function handleExamChange(e: any) {
     const key: string = e.target.name;
@@ -38,7 +41,21 @@ export function DynamicExamModal({
     setName(value);
   }
 
+    function handleChangeSlug(e: any) {
+    const key = e.target.name;
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    setSlug(value);
+  }
+
   const generate = () => {
+    if(isGeneral) {
+      save({name, slug});
+
+      return;
+    }
+
+
     const report_type: string =
       exams[0].class_id?.section?.report_type || "Competence";
     api
@@ -46,6 +63,7 @@ export function DynamicExamModal({
         report_type,
         exams: examSelected,
         name,
+        slug,
         class: exams[0].class_id?._id,
       })
       .then(() => {
@@ -65,7 +83,12 @@ export function DynamicExamModal({
           <h2>Ajoute Trimestre</h2>
           <div>
             <div className="form-group">
+              <label>Name</label>
               <input type="" className="form-control" onChange={handleChange} />
+            </div>
+            <div className="form-group">
+              <label>Slug</label>
+              <input type="" className="form-control" onChange={handleChangeSlug} />
             </div>
             <table style={{ width: "100%" }} className="table1">
               <tr>
@@ -94,7 +117,7 @@ export function DynamicExamModal({
           <button
             className="btn btn-success"
             onClick={generate}
-            disabled={!examSelected.length}
+            disabled={(!examSelected.length && !isGeneral) || !name}
           >
             {" "}
             Generer{" "}

@@ -1,23 +1,30 @@
 import { PropsWithChildren, useEffect, useState } from "react";
 import ClasseInterface from "../../../models/classe";
 import api from "../../../services/api";
-import TermInterface from "../../models/terms";
-import {DynamicExamModal} from "../../modals/dyname-exam-form";
-import AnnualExamInterface from "../../models/annualExam";
+import AnnualExamInterface from "../../../models/annualExam";
+import SchoolInterface from "../../../models/school";
+import { DynamicExamModal } from "../../classes/modals/dyname-exam-form";
+import { AnnualExamModal } from "../../classes/modals/annual-exam";
+import Dropdown from "../../../components/dropdown";
 
-export default function SchoolSettingExam({school, editable}:{school: SchoolInterface, editable: boolean}) {
+
+export default function SchoolSettingExam({ school, editable }: { school: SchoolInterface, editable: boolean }) {
     const [classes, setClasses] = useState<ClasseInterface[]>([]);
     const [selectedClasses, setSelectedClasses] = useState<string[]>([]);
     const [dynamicExamIsOpen, setDynamicExamIsOpen] = useState(false);
     const [annualExamIsOpen, setAnnualExamIsOpen] = useState(false);
-    const [classeId, setClasseId] = useState<string | null>(school?._id);
+    const [classeId, setClasseId] = useState<string | null | undefined>(school?._id);
 
     const [terms, setTerms] = useState<any[]>([]);
     const [exams, setExams] = useState<any[]>([]);
     const [annualExams, setAnnualExams] = useState<AnnualExamInterface[]>([]);
 
     useEffect(() => {
-        if(classeId) {
+        loadData();
+    }, [classeId]);
+
+    const loadData = () => {
+        if (classeId) {
             api.getTerms(classeId).then(({ data: { data } }: any) => {
                 setTerms(data);
             });
@@ -28,23 +35,25 @@ export default function SchoolSettingExam({school, editable}:{school: SchoolInte
                 setAnnualExams(data);
             });
         }
-    }, [classeId]);
+    }
 
-    const saveExam = (exam: any) => {
-        api.saveExam(exam).then(() => {
+
+    const saveTerm = (exam: any) => {
+        api.saveTerm({ ...exam, class: classeId, isGeneral: true, classes: selectedClasses }).then(() => {
             // Optionally, you can show a success message or update the state
             console.log("Exam saved successfully");
             setDynamicExamIsOpen(false);
+            loadData();
         }).catch((error) => {
             console.error("Error saving exam:", error);
         });
     };
 
     const saveAnnualExam = (exam: any) => {
-        api.saveAnnualExam(exam).then(() => {
+        api.saveAnnualExam({ ...exam, isGeneral: true, class: classeId, classes: selectedClasses }).then(() => {
             // Optionally, you can show a success message or update the state
-            console.log("Annual exam saved successfully");
             setAnnualExamIsOpen(false);
+            loadData();
         }).catch((error) => {
             console.error("Error saving annual exam:", error);
         });
@@ -74,7 +83,7 @@ export default function SchoolSettingExam({school, editable}:{school: SchoolInte
         if (selectedClasses.length === classes.length) {
             setSelectedClasses([]);
         } else {
-            const allClassIds = classes.filter((classe) => classe._id).map((classe) => classe._id??'');
+            const allClassIds = classes.filter((classe) => classe._id).map((classe) => classe._id ?? '');
             setSelectedClasses(allClassIds);
         }
     };
@@ -83,8 +92,13 @@ export default function SchoolSettingExam({school, editable}:{school: SchoolInte
         <div>
 
             <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-5">
                     <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th colSpan={3} className="text-center">Choisir les classes</th>
+                            </tr>
+                        </thead>
                         <thead>
                             <tr>
                                 <th scope="col">
@@ -97,59 +111,87 @@ export default function SchoolSettingExam({school, editable}:{school: SchoolInte
                         </thead>
                         <tbody>
                             {classes.map((classe, index) => (
-                                <ClassRow key={index} classe={classe} index={index} handleClassSelection={(classId) => handleClassSelection(classe._id!)} isSelected={selectedClasses.includes(classe._id!)} /> 
+                                <ClassRow key={index} classe={classe} index={index} handleClassSelection={(classId) => handleClassSelection(classe._id!)} isSelected={selectedClasses.includes(classe._id!)} />
                             ))}
                         </tbody>
                     </table>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-7">
 
-                        <hr />
-                            <div className="form-group">
-                                <button className="btn btn-primary" onClick={() => {setDynamicExamIsOpen(true)}}>Add Term Exam</button>
-                            </div>
+                    <hr />
+                    <div className="d-flex justify-content-between align-items-center">
+                        <h3>BULLETIN DU TRIMESTRE</h3>
+                        <button className="btn btn-primary" onClick={() => { setDynamicExamIsOpen(true) }} disabled={!selectedClasses.length}>Ajouter Trimestre</button>
+                    </div>
 
-                        <hr />
-                        <div className="form-group">
-                            <button className="btn btn-primary" onClick={() => {setAnnualExamIsOpen(true)}}>Add Annual</button>
-                        </div>
+                    <table className="table">
+                        {terms.length && <thead>
+                            <tr>
+                                <th> Name</th>
+                                <th> Slug</th>
+                                <th>   </th>
+                            </tr>
+                        </thead>}
 
-                        <hr />
+                        {
+                            terms.map(term => (
+                                <TermRow key={term._id} term={term} />
+                            ))
+                        }
+                    </table>
 
-                        <div className="form-group">
-                            <button className="btn btn-primary" onClick={() => {}}>Print tableaux d'honneur</button>
-                        </div>
+                    <div className="mt-5"> </div>
 
-                        <div className="form-group">
-                            <button className="btn btn-primary" onClick={() => {}}>Print Attestation</button>
-                        </div>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <h3>BULLETIN ANNUELLE</h3>
+                        <button className="btn btn-primary" onClick={() => { setAnnualExamIsOpen(true) }} disabled={!selectedClasses.length}>Add Annual</button>
+                    </div>
+
+                     <table className="table">
+                        {annualExams.length && <thead>
+                            <tr>
+                                <th> Name</th>
+                                <th> Slug</th>
+                                <th></th>
+                            </tr>
+                        </thead>}
+
+                        {
+                            annualExams.map(term => (
+                                <TermRow key={term._id} term={term} />
+                            ))
+                        }
+                    </table>
+
 
                 </div>
-                
+
             </div>
 
-              {classeId && (
+            {classeId && selectedClasses.length && (
                 <DynamicExamModal
-                  exams={exams}
-                  modalIsOpen={dynamicExamIsOpen}
-                  closeModal={() => setDynamicExamIsOpen(false)}
-                  save={saveExam}
-                  class_id={classeId}
+                    exams={exams}
+                    modalIsOpen={dynamicExamIsOpen}
+                    closeModal={() => setDynamicExamIsOpen(false)}
+                    save={saveTerm}
+                    class_id={classeId}
+                    isGeneral={true}
                 />
-              )}
-              {classeId && (
+            )}
+            {classeId && selectedClasses.length && (
                 <AnnualExamModal
-                  terms={terms}
-                  modalIsOpen={annualExamIsOpen}
-                  closeModal={() => setAnnualExamIsOpen(false)}
-                  save={saveAnnualExam}
-                  class_id={classeId}
+                    terms={terms}
+                    modalIsOpen={annualExamIsOpen}
+                    closeModal={() => setAnnualExamIsOpen(false)}
+                    save={saveAnnualExam}
+                    class_id={classeId}
+                    isGeneral={true}
                 />
-              )}
+            )}
 
         </div>
 
-        
+
     )
 }
 
@@ -159,13 +201,13 @@ type classRowProps = {
     handleClassSelection: (classId: string) => void;
     isSelected: boolean;
 }
-const ClassRow = ({index, classe, handleClassSelection, isSelected}: PropsWithChildren<classRowProps>) => {
+const ClassRow = ({ index, classe, handleClassSelection, isSelected }: PropsWithChildren<classRowProps>) => {
     const [tbNote, setTbNote] = useState(classe.tb_note);
     const handleTbNoteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
         setTbNote(newValue);
         // Here you can also make an API call to update the tb_note in the database
-        api.updateClasse({...classe, tb_note:tbNote}).then(() => {
+        api.updateClasse({ ...classe, tb_note: tbNote }).then(() => {
             // Optionally, you can show a success message or update the state
             console.log("TB Note updated successfully");
         }).catch((error) => {
@@ -173,11 +215,33 @@ const ClassRow = ({index, classe, handleClassSelection, isSelected}: PropsWithCh
         });
     };
     return (
-        <tr key={index} onClick={() => {}} >
-            <th scope="row"><input type="checkbox" checked={isSelected} onChange={() => handleClassSelection(classe._id!)}  />  </th>
+        <tr key={index} onClick={() => { }} >
+            <th scope="row"><input type="checkbox" checked={isSelected} onChange={() => handleClassSelection(classe._id!)} />  </th>
             <td>{classe.name}</td>
             {/* <td>{classe.section?.name}</td> */}
-            <td><input type="number" value={tbNote} onChange={handleTbNoteChange} className="form-control" style={{width:'80px'}} /> </td>
+            <td><input type="number" value={tbNote} onChange={handleTbNoteChange} className="form-control" style={{ width: '80px' }} /> </td>
         </tr>
     )
+}
+
+
+const TermRow = ({term}: {term:TermInterface}) => {
+    return <tr key={term._id}>
+        <td>{term.name}</td>
+        <td>{term.slug}</td>
+        <td>  
+            <Dropdown
+              buttonTitle="Actions"
+              items={[
+                { name: 'Edit', action: () => console.log("Edit") },
+                { name: 'Sync', action: () => console.log("Sync") },
+                { name: 'Calculer Bulletin', action: () => console.log("Calculer Bulletin") },
+                { name: 'Print Bulletin', action: () => console.log("Print Bulletin") },
+                { name: 'Print Attestation', action: () => console.log("Print Attestation") },
+                { name: 'Print Tableau D\'Honneur ', action: () => console.log("Print Reports") },
+                { name: 'Delete', action: () => console.log("Delete"), className:"delete-action" },
+              ]}
+            />
+        </td>
+    </tr>
 }
