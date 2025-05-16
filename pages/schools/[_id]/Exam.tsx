@@ -164,6 +164,13 @@ export default function SchoolSettingExam({ school, editable }: { school: School
                     </table>
 
 
+                    <div className="mt-5"> </div>
+
+                    <div className="d-flex justify-content-between align-items-center">
+                       { !selectedClasses.length? <button className="btn" disabled >Imprimer Attestation</button> :  <a href={'/api/schools/actions/print-attestation?classes='+selectedClasses.join(',')} target="_blank" className="btn btn-primary" onClick={() => { }} >Imprimer Attestation</a> }
+                    </div>
+
+
                 </div>
 
             </div>
