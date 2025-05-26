@@ -214,7 +214,7 @@ const ClassRow = ({ index, classe, handleClassSelection, isSelected }: PropsWith
         const newValue = e.target.value;
         setTbNote(newValue);
         // Here you can also make an API call to update the tb_note in the database
-        api.updateClasse({ ...classe, tb_note: tbNote }).then(() => {
+        api.updateClasse({ ...classe, tb_note: newValue }).then(() => {
             // Optionally, you can show a success message or update the state
             console.log("TB Note updated successfully");
         }).catch((error) => {
@@ -224,7 +224,7 @@ const ClassRow = ({ index, classe, handleClassSelection, isSelected }: PropsWith
     return (
         <tr key={index} onClick={() => { }} >
             <th scope="row"><input type="checkbox" checked={isSelected} onChange={() => handleClassSelection(classe._id!)} />  </th>
-            <td>{classe.name}</td>
+            <td><a href={`/classes/${classe._id}`} target="_blank">{classe.name}</a></td>
             {/* <td>{classe.section?.name}</td> */}
             <td><input type="number" value={tbNote} onChange={handleTbNoteChange} className="form-control" style={{ width: '80px' }} /> </td>
         </tr>

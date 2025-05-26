@@ -13,6 +13,8 @@ import TermInterface, { termSchema } from "../../../../models/terms";
 import { replaceAll } from "../../../../services/utils";
 import { schoolSchema } from "../../../../models/school";
 import thEn from "../../../../assets/td/td_en";
+import { getTotalExam } from "../../../../assets/jsx/resultsDynamicActions";
+import { getTotal } from "../../../../assets/jsx/resultsUiStats";
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,7 +29,7 @@ export default async function handler(
     } })
     .populate({ path: "exams", model: examSchema });
   const totalResults = await examResultSchema
-    .find({ term_id, th: true })
+    .find({ term_id })
     .populate({ path: "student", model: studentSchema });
 
   const zipName = `${replaceAll(" ", "_", term.class?.name)}_td__${term.name}`;
@@ -45,7 +47,12 @@ export default async function handler(
     fs.mkdirSync(termsDir, { recursive: true });
   }
 
-  totalResults.map(async (results) => {
+  totalResults.filter((result) => {
+        const totalMarks = getTotal(result)
+        const totalPoints = term!.exams?.length ? getTotalExam(term!.exams[0]) : 0;
+        const average = ((totalMarks / totalPoints) * 20);
+        return average >= (term!.class?.tb_note??10);
+      }).map(async (results) => {
     var options = {
       format: "A4",
       orientation: "landscape",

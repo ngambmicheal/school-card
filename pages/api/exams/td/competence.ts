@@ -13,6 +13,8 @@ import TermInterface, { termSchema } from "../../../../models/terms";
 import { replaceAll } from "../../../../services/utils";
 import thFr from "../../../../assets/td/td_fr";
 import { schoolSchema } from "../../../../models/school";
+import { getTotal } from "../../../../assets/jsx/resultsUiStats";
+import { getTotalExam } from "../../../../assets/jsx/resultsDynamicActions";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,17 +22,17 @@ export default async function handler(
 ) {
   const { term_id } = req.query;
 
-  const term: TermInterface = await termSchema
+  const term: TermInterface | null = await termSchema
     .findOne({ _id: term_id })
     .populate({ path: "class", model: classeSchema, populate:{
       path:"school", model: schoolSchema
     } })
     .populate({ path: "exams", model: examSchema });
   const totalResults = await examResultSchema
-    .find({ term_id, th: true })
+    .find({ term_id })
     .populate({ path: "student", model: studentSchema });
 
-  const zipName = `${replaceAll(" ", "_", term.class?.name)}_td__${term.name}`;
+  const zipName = `${replaceAll(" ", "_", term?.class?.name)}_td__${term?.name}`;
   var dir = `./tmp/td/${zipName}`;
   var termsDir = "./public/td";
   var zipOutput = fs.createWriteStream(`./public/td/${zipName}.zip`);
@@ -45,7 +47,12 @@ export default async function handler(
     fs.mkdirSync(termsDir, { recursive: true });
   }
 
-  totalResults.map(async (results) => {
+  totalResults.filter((result) => {
+    const totalMarks = getTotal(result)
+    const totalPoints = term!.exams?.length ? getTotalExam(term!.exams[0]) : 0;
+    const average = ((totalMarks / totalPoints) * 20);
+    return average >= (term!.class?.tb_note??10);
+  }).map(async (results) => {
     var options = {
       format: "A4",
       orientation: "landscape",
@@ -58,7 +65,7 @@ export default async function handler(
       },
     };
 
-    let html = ReactDOMServer.renderToStaticMarkup(thFr(results, term));
+    let html = ReactDOMServer.renderToStaticMarkup(thFr(results, term!));
     html += `
         <style>
             .b{

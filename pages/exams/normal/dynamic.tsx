@@ -276,7 +276,7 @@ export default function examDetails() {
             <th>Total / {points} </th>
             <th>Moyenne</th>
             <th>Rank</th>
-            <th>Tableau d'honneur</th>
+            {/* <th>Tableau d'honneur</th> */}
             <th>Ignorer</th>
             <th></th>
           </tr>
@@ -359,14 +359,14 @@ export function ExamResult({
       <td>{total}</td>
       <th> {((total / points) * 20).toFixed(2)} / 20 </th>
       <th> {res.rank}</th>
-      <th>
+      {/* <th>
         <input
           type="checkbox"
           name="th"
           checked={res.th == true}
           onClick={handleChange}
         />
-      </th>
+      </th> */}
       <th>
         {" "}
         <td>
