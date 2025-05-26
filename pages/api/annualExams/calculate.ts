@@ -14,12 +14,13 @@ import CourseInterface, { courseSchema } from "../../../models/course";
 import { sectionSchema } from "../../../models/section";
 import { classeSchema } from "../../../models/classe";
 import { studentSchema } from "../../../models/student";
-import { ExamResult } from "../../../assets/jsx/resultsUiStats";
 import { getSubjectTotal } from "../../exams/[_id]";
 import AnnualExamInterface, {
   annualExamSchema,
 } from "../../../models/annualExam";
 import { getFloat } from "../../../utils/calc";
+import { HeadersEnum } from "../../../utils/enums";
+import { getTotal } from "../../../assets/jsx/resultsUiStats";
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,7 +33,7 @@ export default async function handler(
     .populate({ path: "class", model: classeSchema });
   const exams = await termSchema.find({ _id: { $in: term.terms } });
 
-  studentSchema.find({ class_id: term.class }).then((students) => {
+  studentSchema.find({ class_id: term.class, session_id : req.headers[HeadersEnum.SchoolSessionId] as string  }).then((students) => {
     students.map((student) => {
       examResultSchema
         .update(
@@ -96,18 +97,23 @@ export default async function handler(
             },
           })
           .then((results) => {
+
+            const filteredResults = results.filter(
+              (re) => getTotal(re) != 0
+            );
+            
             competences.map((competence) => {
               competence.subjects?.map((subject: SubjectInterface) => {
                 subject?.courses?.map((course: CourseInterface) => {
                   res[`subject_${course?._id}`] = getSubjectSum(
-                    results,
+                    filteredResults,
                     "subject",
                     course._id
                   );
                 });
 
                 res[`total_${subject?._id}`] = getSubjectSum(
-                  results,
+                  filteredResults,
                   "total",
                   subject._id
                 );
@@ -155,9 +161,13 @@ export default async function handler(
             },
           })
           .then((results) => {
+            const filteredResults = results.filter(
+              (re) => getTotal(re) != 0
+            );
+
             subjects.map((subject: SubjectInterface) => {
               res[`subject_${subject?._id}`] = getSubjectSum(
-                results,
+                filteredResults,
                 "subject",
                 subject._id
               );
@@ -207,15 +217,18 @@ export default async function handler(
             },
           })
           .then((results) => {
+             const filteredResults = results.filter(
+              (re) => getTotal(re) != 0
+            );
+
             subjects2.map((subject: SubjectInterface) => {
               res[`subject_${subject?._id}`] = getSubjectSum(
-                results,
+                filteredResults,
                 "subject",
                 subject._id
               );
             });
 
-            console.log(res);
             examResultSchema
               .findOneAndUpdate({ _id: tResult._id }, res)
               .then((t) => {
