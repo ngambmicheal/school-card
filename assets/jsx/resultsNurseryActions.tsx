@@ -178,7 +178,7 @@ export default function resultsNurseryActions(
         </tbody>
       </table>
 
-      {results.exam_id?.name.toLowerCase() === "3rd TERM".toLowerCase() ? (
+      {['term 3'.toLowerCase(), "3rd TERM".toLowerCase()].includes(results.exam_id?.name.toLowerCase()) ? (
         <>
           <div style={{ marginTop: "5px" }}>
             <span style={{ fontWeight: "bolder" }}>TERM REMARKS</span> :

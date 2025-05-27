@@ -7,7 +7,7 @@ import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
 import { getFloat } from "../../utils/calc";
 import { zoomStyle } from "../../services/constants";
-import { schoolLogo, studentHeader } from "./semence-util";
+import { hasHonorRoll, schoolLogo, studentHeader } from "./semence-util";
 import SchoolInterface from "../../models/school";
 
 const getCompetencesLenght = (competence: CompetenceInterface) => {
@@ -362,7 +362,7 @@ export default function resultsDynamicActions(
             /20
           </td>
           <td> Tableau d'honneur </td>
-          <td> {results.th ? "Oui" : "Non"} </td>
+          <td> {hasHonorRoll(term?.class!, average)  ? "Oui" : "Non"} </td>
         </tr>
         {/* <tr>
             <td> </td>

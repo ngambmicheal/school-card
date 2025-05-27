@@ -9,7 +9,7 @@ import ExamInterface from "../../models/exam";
 import TermInterface from "../../models/terms";
 import { getFloat } from "../../utils/calc";
 import { zoomStyle } from "../../services/constants";
-import { schoolLogo, studentHeader } from "./semence-util";
+import { hasHonorRoll, schoolLogo, studentHeader } from "./semence-util";
 import SchoolInterface from "../../models/school";
 
 let comT: string[] = [];
@@ -223,7 +223,7 @@ export default function resultsDynamicNormalActions(
             /20
           </td>
           <td> Honour Roll</td>
-          <td> {results.th ? "Yes" : "No"}</td>
+          <td> {hasHonorRoll(term?.class!, average) ? "Yes" : "No"}</td>
         </tr>
         {/* <tr>
             <td> </td>

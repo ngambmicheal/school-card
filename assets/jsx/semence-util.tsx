@@ -1,3 +1,4 @@
+import ClasseInterface from "../../models/classe";
 import SchoolInterface from "../../models/school";
 import StudentInterface from "../../models/student";
 import serverPath, { base64_encode} from "../../services/serverpath";
@@ -62,4 +63,8 @@ export const studentHeader = (
 
 export const schoolLogo = (school:SchoolInterface, key: keyof SchoolInterface) => {
   return fileUrl(school[key] ? school[key] : "/images/smc/logo.png");
+}
+
+export const hasHonorRoll = (classe:ClasseInterface, avg:number):boolean => {
+  return avg >= classe.tb_note; 
 }
