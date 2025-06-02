@@ -9,7 +9,7 @@ type MainProps = {
 
 export const metadata = {
     title: 'AcademiX',
-    description: 'The official Coding Beauty home page.',
+    description: 'Système de gestion scolaire moderne',
     icons: {
       icon: '/assets/images/logo.png',
     },
@@ -17,12 +17,14 @@ export const metadata = {
 
 export default function Main({children, user}:MainProps){
     return (
-        <>
+        <div className="page-layout">
             <Header title={metadata.title} description={metadata.description} icon={metadata.icons.icon}/>
-            <Navbar user={user}/>
-            <div className='container mx-auto mt-4'>
-                {children}
-            </div>
-        </>
+            <Navbar />
+            <main className="main-content fade-in">
+                <div className="modern-container">
+                    {children}
+                </div>
+            </main>
+        </div>
     )
 }
