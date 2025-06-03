@@ -100,15 +100,17 @@ export default function Navbar(){
             {/* Sidebar */}
             <nav className={`modern-sidebar ${isSidebarOpen ? 'sidebar-open' : ''}`}>
                 <div className="sidebar-header">
-                    <div className="school-logo">
-                        <div className="logo-icon">🎓</div>
-                        <div className="school-info">
-                            <div className="school-name">
-                                {school?.name || 'AcademiX'}
+                    <Link href={school?._id ? `/schools/${school._id}/settings` : '#'}>
+                        <a className="school-logo">
+                            <div className="logo-icon">🎓</div>
+                            <div className="school-info">
+                                <div className="school-name">
+                                    {school?.name || 'AcademiX'}
+                                </div>
+                                <div className="app-title">École Management</div>
                             </div>
-                            <div className="app-title">École Management</div>
-                        </div>
-                    </div>
+                        </a>
+                    </Link>
                 </div>
 
                 <div className="sidebar-content">
@@ -267,6 +269,21 @@ export default function Navbar(){
                     display: flex;
                     align-items: center;
                     gap: var(--spacing-md);
+                    text-decoration: none;
+                    color: inherit;
+                    padding: var(--spacing-sm);
+                    border-radius: var(--radius-md);
+                    transition: background 0.2s ease;
+                    cursor: pointer;
+                }
+
+                .school-logo:hover {
+                    background: var(--primary-50);
+                    text-decoration: none;
+                }
+
+                .school-logo:hover .school-name {
+                    color: var(--primary-700);
                 }
 
                 .logo-icon {

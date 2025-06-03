@@ -283,10 +283,10 @@ export function ClasseRow({
               👁️ Voir
             </a>
           </Link>
-          {isAdmin && (
+          {isAdmin && classe._id && (
             <button
               className="action-link delete-action"
-              onClick={() => deleteClasse(classe._id)}
+              onClick={() => deleteClasse(classe._id!)}
             >
               🗑️ Supprimer
             </button>
@@ -312,7 +312,7 @@ export function CreateClassModal({
 }: CreateClassModalProps) {
   const [classe, setClasse] = useState<ClasseInterface>({
     name: "",
-    school: helperService.getSchoolId(),
+    school: helperService.getSchoolId() || "",
   });
 
   function handleChange(e: any) {
@@ -363,12 +363,12 @@ export function CreateClassModal({
           </div>
 
           <div className="form-group">
-            <label htmlFor="section_id">Section</label>
+            <label htmlFor="section">Section</label>
             <select
-              id="section_id"
-              name="section_id"
+              id="section"
+              name="section"
               className="form-control"
-              value={classe.section_id || ''}
+              value={classe.section || ''}
               onChange={handleChange}
             >
               <option value="">-- Sélectionner une section --</option>
